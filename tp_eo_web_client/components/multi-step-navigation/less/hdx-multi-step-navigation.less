@@ -1,0 +1,83 @@
+@import "ge-bootstrap/less/hdx-bootstrap.less";
+@import "multi-step-navigation.less";
+@import "hdx-variables.less";
+
+.multi-step-nav{
+	.navbar .nav li a{
+  	background-color: @multistep-button-normal-color;
+  	line-height: @multistep-button-height;
+	}
+	.container{
+    padding-left: 10px;
+    padding-top: 11px;
+	}
+	.nav-pills{
+		li{
+			a{
+				border: 1px solid @multistep-normal-button-border-color;
+				color: @multistep-navbar-text-color;
+				
+			 }
+				//Hover step and complete step look the same
+				&:hover,
+				&.completed{
+					a{
+					
+						background-color: @multistep-navbar-hover-bkg-color;
+						color: @multistep-navbar-hover-link-color;
+						> i[class^="icon-"]{
+							color: @multistep-navbar-hover-link-color;
+						}
+					}
+				}
+				&.completed{
+				 &.active{
+				 	a{
+					
+						color:  @multistep-navbar-active-link-color;
+						> i[class^="icon-"]{
+							color:  @multistep-navbar-active-link-color;
+						}
+						
+					}
+				 }
+				}
+				
+			}
+	}
+	//Overide styles in SupplementaryNavigation.less (for icons)
+	ul.nav-pills {
+	  > li {
+	   	 &:hover > a:hover > i[class^="icon-"] {
+	      		color: @multistep-navbar-hover-link-color;
+	      }
+	      &.active > a:hover > i[class^="icon-"],
+	      &.active > a:hover{
+	      //If active, keep the color the same.
+	      		color:@multistep-navbar-active-link-color;
+	      }
+	
+		    &.active > a,
+		    &.active > a:hover {
+		     	#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+		    }
+		  }
+	}
+	.nav-pills > li > a {
+		.border-radius(@baseBorderRadius - 2);
+	}
+	//Changes to override BS3 navbar changes.
+	.nav {
+		margin-bottom: 0px;
+	}
+	
+	.navbar,
+	.navbar-default {
+
+	 border-radius: 0px !important;
+	 border-color:  @multistep-backgroundColor;
+	 webkit-box-shadow: none; 
+	 box-shadow: none; 
+	}
+		
+}

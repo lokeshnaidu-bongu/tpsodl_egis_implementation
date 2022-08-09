@@ -1,0 +1,12 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Smart Meter with Prepaid	1
+Standard Meter with Prepaid	2
+Smart Meter	3
+AMR Meter	4
+Standard Meter	5
+Others	6

@@ -1,0 +1,44 @@
+
+<div class="pull-left">
+
+    <h5>Activation</h5>
+
+    <label class="checkbox">
+        <input type="checkbox" data-toggle-switch="true" name="nm" value="vl"/>
+        Activated automatically
+    </label>
+
+    <label class="checkbox">
+        <input type="checkbox" class="activate-me" name="nm" value="vl"/>
+        Activated via JavaScript
+    </label>
+
+    <script type="text/javascript">
+        require([
+            'jquery',
+            'toggle-switch'
+        ], function($) {
+            $('.activate-me').toggleSwitch(/*options*/{});
+        });
+    </script>
+</div>
+
+<div class="pull-left" style="margin-left: 50px;">
+
+    <h5>Alternate sizes</h5>
+
+    <label class="checkbox">
+        <input type="checkbox" data-toggle-switch="true" class="switch-mini" name="nm" value="vl"/>
+        Mini
+    </label>
+
+    <label class="checkbox">
+        <input type="checkbox" data-toggle-switch="true" class="switch-small" name="nm" value="vl"/>
+        Small
+    </label>
+
+    <label class="checkbox">
+        <input type="checkbox" data-toggle-switch="true" class="switch-large" name="nm" value="vl"/>
+        Large
+    </label>
+</div>

@@ -1,0 +1,66 @@
+
+@import "ge-bootstrap/less/hdx-bootstrap.less";
+@import "trays.less";
+@import "hdx-variables.less";
+
+.tray {
+  border: 1px solid;
+  background-color: transparent;
+  border-color: transparent;
+  .border-radius(@baseBorderRadius);
+
+  &.in {
+    background-color: @tray_bakground-color;
+    border-color: @tray_border_color;
+
+    &.top {
+       margin-bottom: 12px;
+      .arrow {
+        border-top-color: @tray_border_color;
+
+
+        &:after {
+          content: '';
+          display: inline-block;
+          position: absolute;
+          bottom: 2px;
+          left: -7px;
+          border-left: 7px solid transparent;
+          border-right: 7px solid transparent;
+          border-top: 7px solid   @tray_bakground-color;
+        }
+      }
+    }
+  }
+
+  .filter-rule-group {
+    input {
+      background-color: @tray-input-background-color;
+      .box-sizing(content-box);
+      height: 18px;
+    }
+
+    button {
+      margin-left: 10px;
+    }
+  }
+
+
+  .btn-link,
+  .btn-link:active,
+  .btn-link:hover {
+    padding: 0;
+    background-image: none;
+    background-color: transparent;
+    border-color: transparent;
+    font-weight: normal;
+  }
+
+  .btn-link:hover {
+    color: @tray-link-hover-color;
+  }
+  
+  .btn-lg [class*="icon-"]:not([class*="icon-chevron-"]):not([class*="icon-remove"]) {
+		font-size: 15px;
+	}
+}

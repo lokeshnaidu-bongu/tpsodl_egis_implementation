@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf8">
+      <link href="../css/ge-bootstrap-iidx.min.css" rel="stylesheet">
+      <link href="../ge-bootstrap-iidx.min.css" rel="stylesheet">
+      <script src="../ge-bootstrap.min.js"></script>
+  </head>
+  <body style="margin: 50px;">
+
+    <div class="alert">
+      <strong>Warning!</strong> Best check yo self.
+    </div>
+    <div class="alert alert-error">
+      <strong>Oh snap!</strong> Change a few things up.
+    </div>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <strong>Well done!</strong> You successfully read this.
+    </div>
+    <div class="alert alert-info">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <button class="btn btn-small pull-right">Action</button>
+      <strong>Heads up!</strong> This needs your attention.
+    </div>
+    <div class="alert alert-block">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <h4 class="alert-heading">Warning!</h4>
+      <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    </div>
+    <div class="alert alert-error">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <h4 class="alert-heading">Oh Snap!</h4>
+      <p>Change a few things and try submitting again. Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p>
+      <div class="toolbar">
+        <button class="btn">Action</button>
+      </div>
+    </div>
+
+    <script src="../components/requirejs/require.js"></script>
+    <script src="../js/require.config.js"></script>
+    <script type="text/javascript">
+      requirejs.config({
+        baseUrl: "../"
+      });
+      require(['ge-bootstrap']);
+    </script>
+
+  </body>
+</html>

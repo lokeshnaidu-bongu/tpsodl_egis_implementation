@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+    <!-- Define the xml files for specific collections -->
+    <collection collection_name = "tp_consumer_consumption_data" >
+	<fields field_name = "tp_sc_no" external_name = "SC No" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_new_account_number" external_name = "New Account Number" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_prev_reading" external_name = "Previous Reading in KWH" mandatory = "false" field_type="ds_double" field_size ="" unset_value="" default_value ="" field_index="No" stored_unit="kiloWatt-Hours" mode = "insert" />
+	<fields field_name = "tp_prev_reading_date" external_name = "Previous Reading Date" mandatory = "false" field_type="ds_date" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_reading" external_name = "Current Reading in KWH" mandatory = "false" field_type="ds_double" field_size ="" unset_value="" default_value ="" field_index="No" stored_unit="kiloWatt-Hours" mode = "insert" />
+	<fields field_name = "tp_current_reading_date" external_name = "Current Reading Date" mandatory = "false" field_type="ds_date" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_building" external_name = "Current Building" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_pole" external_name = "Current Pole" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_dt_meter" external_name = "Current DT Meter" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_dt_fl" external_name = "Current DT FL" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_dt_name" external_name = "Current DT Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_feeder_fl" external_name = "Current FDR FL" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_feeder_name" external_name = "Current Feeder Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_pss_fl" external_name = "Current PSS FL" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_pss_name" external_name = "Current PSS Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_last_updated_date" external_name = "Last Updated Date" mandatory = "false" field_type="ds_date" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_device_type" external_name = "Device Type" mandatory = "false" field_type="tp_consumer_device_type" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_gis_sync_flag" external_name = "GIS Updation Flag" mandatory = "false" field_type="tp_updation_flag" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_sap_sync_flag" external_name = "SAP Updation Flag" mandatory = "false" field_type="tp_updation_flag" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_current_section" external_name = "Current Section Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_consumer_name" external_name = "Consumer Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_address" external_name = "Address" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_arrear_amount" external_name = "Arrear Amount( Last billing month)" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_assesment" external_name = "Assesment- Current month Bill" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_last_payment" external_name = "last payment" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_payment_date" external_name = "Payment date" mandatory = "false" field_type="ds_date" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_net_payment" external_name = "Net Payment: Pending Payment" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    </collection>
+   
+</tp_collections>

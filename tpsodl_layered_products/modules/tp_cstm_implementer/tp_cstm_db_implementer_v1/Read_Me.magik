@@ -1,0 +1,21 @@
+## Follow below steps to execute Data model
+## Open case tool and point to electric case create alternative
+## or Checkpoint at Top. Make sure alternative is in Writable mode
+## Open Version Management and select Electric Dataset , create
+## Alternative/ Checkpoint and and Make
+## sure Alternative is in writable Mode 
+
+
+_block
+	sw_module_dialog.open()
+	smallworld_product.load_module(:tp_cstm_db_implementer)	
+	mmm << sw_module_manager.module(:tp_cstm_db_implementer)
+	imps << mmm.datamodel_implementers()
+	##compile in this code
+	de << datamodel_engine.new(:implementers,imps)
+	de.print_installation_status()
+	##should see version number in list as installable
+	de.install_case_database_changes()
+	de.install_database_changes()
+_endblock
+

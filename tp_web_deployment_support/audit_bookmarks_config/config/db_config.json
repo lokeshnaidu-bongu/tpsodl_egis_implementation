@@ -1,0 +1,14 @@
+
+{
+    "host": "dc-gisuat-webm1", 
+    "port": 30022,
+    "database": "bifrostdb",
+    "user": "bifrost_owner",
+    "password": "u98xIbqxfgU=",
+
+    "uaaport": 30447,
+    "uaadatabase": "uaadb",
+    "uaauser": "uaa_owner",
+    "uaapassword": "4Nhks855CQE="
+
+}

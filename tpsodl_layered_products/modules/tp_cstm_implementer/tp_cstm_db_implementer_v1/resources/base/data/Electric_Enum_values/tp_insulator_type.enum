@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+AB cable Dead End clamp	1
+AB cable Suspension clamp	2
+Disc	3
+Disc+Pin	4
+Guy	5
+Mixed	6
+Neutral Conductor Binding	7
+Pin	8
+Shackle	9
+Shackle+Pin	10
+Shackle+Guy	11

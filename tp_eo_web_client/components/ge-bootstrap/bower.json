@@ -1,0 +1,25 @@
+{
+  "name": "ge-bootstrap",
+  "description": "GE brand-themed version of Bootstrap.",
+  "version": "1.10.0",
+  "author": "General Electric",
+  "main": [
+    "js/ge-bootstrap.js",
+    "less/ge-bootstrap.less",
+    "less/responsive.less"
+  ],
+  "ignore": [
+    "components",
+    "css",
+    "node_modules",
+    ".*",
+    "Gruntfile.js"
+  ],
+  "dependencies": {
+ 	"bootstrap": "git+https://github.build.ge.com/smallworld-sw5x/bower-bootstrap-less.git#~3.4.1",
+    "brandkit": "git://github.sw.ge.com/DXC/brandkit.git#master",
+    "prettify": "git://github.sw.ge.com/DXC/prettify.git#~0.2.1",
+    "requirejs": "git://github.com/jrburke/requirejs-bower.git#~2.1.6",
+    "jquery": "git://github.com/components/jquery#~1.10.2"
+  }
+}

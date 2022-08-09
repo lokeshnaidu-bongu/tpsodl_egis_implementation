@@ -1,0 +1,36 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: curator
+  namespace: logging
+  labels:
+    app: curator
+spec:
+  schedule: "15 0 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 120
+  jobTemplate:
+    spec:
+    # To run the curator job manually, use this command:
+    # kubectl create job --from=cronjob/curator curator-manual-job -n logging
+      template:
+        spec:
+          containers:
+          - image: pull.dc-gisuat-webm1:30443/pwr-smallworld/es-curator:V5.8.4
+            name: curator
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+            args: ["--config", "/etc/config/config.yml", "/etc/config/action_file.yml"]
+            volumeMounts:
+            - name: config
+              mountPath: /etc/config
+          volumes:
+          - name: config
+            configMap:
+              name: curator-config
+          imagePullSecrets:
+          - name: regsecret
+          restartPolicy: OnFailure

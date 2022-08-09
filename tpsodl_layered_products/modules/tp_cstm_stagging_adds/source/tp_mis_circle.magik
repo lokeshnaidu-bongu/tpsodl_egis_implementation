@@ -1,0 +1,23 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By:  
+## Date: 
+##
+## Description:
+
+########################################################################
+_package user
+$
+_pragma(classify_level=restricted)
+##
+## 
+##
+def_slotted_exemplar(:tp_mis_circle,
+	{
+	},
+	{:user_ds_record})
+
+$

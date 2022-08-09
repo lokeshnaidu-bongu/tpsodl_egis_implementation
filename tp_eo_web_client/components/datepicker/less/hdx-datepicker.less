@@ -1,0 +1,157 @@
+@import "ge-bootstrap/less/hdx-bootstrap.less";
+@import "datepicker.less";
+
+// copied from components/datepicker/less/datepicker.less
+// all non-color styling has been removed, and colors
+// are updated for our style
+
+// this is the simplest thing possible to make it blend with HDS look n feel (we renamed @blue to @accent)
+@accent: @cyan;
+
+.datepicker {
+	th {
+		font-weight:bold;
+		color:@black;
+	}
+	table > thead > tr:nth-child(1) > th:nth-child(2) {
+	  font-weight: bold;
+	  font-size: 14px;
+	  //color: #acacac;
+	}
+	&:before {
+			content: '';
+			display: inline-block;
+			border-bottom: 7px solid #ccc;
+			border-bottom-color: rgba(0,0,0,.2);
+			position: absolute;
+			top: -7px;
+			left: 6px;
+		}
+		&:after {
+			content: '';
+			display: inline-block;
+			position: absolute;
+			top: -6px;
+			left: 7px;
+		}
+	// Inline display inside a table presents some problems with
+	// border and background colors.
+	.table-striped & table tr {
+		td, th {
+			background-color: transparent;
+		}
+	}
+	table tr td {
+		&.day:hover {
+			background: @grayLighter;
+		}
+		&.old,
+		&.new {
+			color: @grayLight;
+		}
+		&.disabled,
+		&.disabled:hover {
+			color: @grayLight;
+		}
+		&.today,
+		&.today:hover,
+		&.today.disabled,
+		&.today.disabled:hover {
+			background-color: transparent;
+			color: @accent;
+		}
+		&.range,
+		&.range:hover,
+		&.range.disabled,
+		&.range.disabled:hover {
+			background:@grayLighter;
+			.border-radius(0);
+		}
+		&.range.today,
+		&.range.today:hover,
+		&.range.today.disabled,
+		&.range.today.disabled:hover {
+			@todayBackground: mix(@orange, @grayLighter);
+			.buttonBackground(@todayBackground, spin(@todayBackground, 20));
+		}
+		&.selected,
+		&.selected:hover,
+		&.selected.disabled,
+		&.selected.disabled:hover {
+			background-color: @accent;
+			color: #fff;
+			text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+		}
+		&.active,
+		&.active:hover,
+		&.active.disabled,
+		&.active.disabled:hover {
+			background-color: @accent;
+			color: white !important;
+			text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+		}
+		span {
+			&:hover {
+				background: @grayLighter;
+			}
+			&.disabled,
+			&.disabled:hover {
+				background:none;
+				color: @grayLight;
+			}
+			&.active,
+			&.active:hover,
+			&.active.disabled,
+			&.active.disabled:hover {
+				background-color: @accent;
+				color: white !important;
+				text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+			}
+			&.old {
+				color: @grayLight;
+			}
+		}
+	}
+
+	thead tr:first-child th,
+	tfoot tr:first-child th {
+		&:hover{
+			background: @grayLighter;
+		}
+	}
+
+	thead tr:first-child th.cw {
+		cursor: default;
+		background-color: transparent;
+	}
+}
+
+.input-daterange {
+	.add-on {
+		text-shadow: 0 1px 0 @white;
+		background-color: @grayLighter;
+		border: 1px solid #ccc;
+	}
+}
+
+
+/* Override Table Header (Month/Year and arrows) */
+
+.datepicker table > thead > tr:nth-child(1) > th {
+	color: @black;
+}
+
+.datepicker table > thead > tr:nth-child(1) > th:nth-child(2) {
+	color: @black;  // changed from grayDarkest to black to match the design specs
+}
+
+
+/* Override footer (Today) */
+.datepicker tfoot th.today {
+	color: @accent;
+}
+
+
+.datepicker tfoot th.today:hover {
+	background-color: none !important;
+}

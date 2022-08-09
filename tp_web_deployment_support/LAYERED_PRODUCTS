@@ -1,0 +1,103 @@
+sw_core:
+        path    =       %SMALLWORLD_GIS%/sw_core/
+        version =       5.2.8.100
+sw_core_lp:
+        path    =       %SMALLWORLD_GIS%/../core_lp/
+        version =       5.2.8.100
+cambridge_db:
+        path    =       %SMALLWORLD_GIS%/../cambridge_db/
+        version =       5.2.8.100
+cambridge_db_lp:
+        path    =       %SMALLWORLD_GIS%/../cambridge_db_lp/
+        version =       5.2.8.100
+user_resources:
+        path    =       %SMALLWORLD_GIS%/../user_resources/
+        version =       5.2.8.100
+gss:
+        path    =       %SMALLWORLD_GIS%/../gss/geospatial_server/
+        version =       5.2.8.100
+service_framework:
+        path    =       %SMALLWORLD_GIS%/../gss/service_framework/
+        version =       5.2.8.100
+gss_ssm:
+        path    =       %SMALLWORLD_GIS%/../gss/gss_ssm/
+        version =       5.2.8.100
+asset_search:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/AssetSearch/
+        version =       5.2.8.100
+geojson_sketching:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/Sketching/
+        version =       5.2.8.100
+web_apps:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/Web-Apps/
+        version =       5.2.8.100
+web_find:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/Web-Find/
+        version =       5.2.8.100
+web_internals:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/Web-Internals/
+        version =       5.2.8.100
+web_map_location:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/Web-MapLocation/
+        version =       5.2.8.100
+web_plot:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/Web-Plot/
+        version =       5.2.8.100
+web_trace:
+        path    =       %SMALLWORLD_GIS%/../gss/extension-modules/Web-Trace/
+        version =       5.2.8.100
+gss_lp:
+        path    =       %SMALLWORLD_GIS%/../gss_lp/
+        version =       5.2.8.100
+sw_dxf:
+        path    =       %SMALLWORLD_GIS%/../dxf/
+        version =       5.2.8.100
+sw_dxf_lp:
+        path    =       %SMALLWORLD_GIS%/../dxf_lp/
+        version =       5.2.8.100
+fme:
+        path    =       %SMALLWORLD_GIS%/../fme/
+        version =       5.2.8.100
+fme_lp:
+        path    =       %SMALLWORLD_GIS%/../fme_lp/
+        version =       5.2.8.100
+soms:
+        path    =       %SMALLWORLD_GIS%/../soms/
+        version =       5.2.8.100
+soms_lp:
+        path    =       %SMALLWORLD_GIS%/../soms_lp/
+        version =       5.2.8.100
+sw_dm:
+        path    =       %SMALLWORLD_GIS%/../design_manager/
+        version =       5.2.8.100
+sw_dm_lp:
+        path    =       %SMALLWORLD_GIS%/../design_manager_lp/
+        version =       5.2.8.100
+sw_common_office:
+        path    =       %SMALLWORLD_GIS%/../sw_common_office/
+        version =       5.2.8.100
+sw_common_office_lp:
+        path    =       %SMALLWORLD_GIS%/../sw_common_office_lp/
+        version =       5.2.8.100
+sw_land_office:
+        path    =       %SMALLWORLD_GIS%/../land_office/
+        version =       5.2.8.100
+sw_land_office_lp:
+        path    =       %SMALLWORLD_GIS%/../land_office_lp/
+        version =       5.2.8.100
+sw_electric_office:
+        path    =       %SMALLWORLD_GIS%/../electric_office/
+        version =       5.2.8.100
+sw_electric_office_lp:
+        path    =       %SMALLWORLD_GIS%/../electric_office_lp/
+        version =       5.2.8.100
+electric_office_web:
+        path    =       %SMALLWORLD_GIS%/../eo_web/ElectricOfficeWeb/
+        version =       5.2.8.100
+eo_web_lp:
+        path    =       %SMALLWORLD_GIS%/../eo_web_lp/
+        version =       5.2.8.100
+tpsodl_electric_office_web:
+		path	=	%SMALLWORLD_GIS%/../tpsodl_eo/TPSODLElectricOfficeWeb/
+tp_cstm_product:
+		path	=	%SMALLWORLD_GIS%/../tp_cstm_product/

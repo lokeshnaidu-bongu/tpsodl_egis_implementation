@@ -1,0 +1,113 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/labels.less";
+@import "bootstrap/less/badges.less";
+
+// Bootstrap Overrides
+// --------------------------------------------------
+.badge {
+    .border-radius(@badgeRadius);
+	background-color: @btnPrimaryBackground;
+	display: inline-block;
+	line-height: normal;
+	padding: @badgePadding;
+    font-size: @badgeFontSize;
+	text-shadow: none;
+	&-important,
+	&-important[href] {
+		background-color: @errorBackground;
+	}
+	&-warning,
+	&-warning[href] {
+		background-color: @warningBackground;
+	}
+	&-success,
+	&-success[href] {
+		background-color: @successBackground;
+	}
+	&-info,
+	&-info[href] {
+		background-color: @infoBackground;
+	}
+	&-inverse,
+	&-inverse[href] {
+		background-color: @offWhite;
+		border: @labelBadgeTagInverseBorder;
+		color: @gray;
+	}
+}
+
+.label {
+  .border-radius(0px);
+  background-color: @grayDarkest;
+  display: inline-block;
+  font-size: @labelTagFontSize;
+  text-transform: @labelTagTextTransform;
+  font-weight: @labelTagFontWeight;
+  // margin-bottom: 5px;
+  margin-right: 10px;
+  padding: @labelTagPadding;
+  // text-shadow: none;
+  &-important,
+  &-important[href] {
+    background-color: @red;
+  }
+  &-warning,
+  &-warning[href] {
+    background-color: @orange;
+  }
+  &-success,
+  &-success[href] {
+    background-color: @green;
+  }
+  &-info,
+  &-info[href] {
+    background-color: @blue;
+  }
+  &-inverse,
+  &-inverse[href] {
+    background-color: @offWhite;
+    border: @labelBadgeTagInverseBorder;
+    color: @grayDarkest;
+  }
+  &.tag { // namespaced to label sue to conflict with prittify
+    display: inline-block;
+    margin-bottom: 10px;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+    margin-right: 10px;
+    padding: @tagPadding;
+    font-size: @baseFontSize;
+    font-weight: normal;
+    text-shadow: none;
+    text-transform: capitalize;
+    white-space: normal;
+    color: @tagText;
+    border-radius: @tagBorderRadius;
+    .border-radius(40px);
+    background-color: @tagBackground;
+    &:hover {
+      background-color: @tagBackgroundHighlight;
+      color: @tagText;
+      cursor: pointer;
+    }
+  }
+}
+
+
+// MAGIC NUMBER ALERT!
+// These padding values were created to
+// turn what was originally a square <span>
+// into a circle.
+// Any changes to badge font-size or line-height will
+// force these values to be updated.
+// Correct values are:
+// font-size: 14px;
+// line-height: normal;
+.badge {
+	// padding: 9px 12px 6px 12px;
+}
+
+

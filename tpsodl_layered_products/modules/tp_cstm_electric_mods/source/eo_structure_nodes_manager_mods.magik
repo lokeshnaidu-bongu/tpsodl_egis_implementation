@@ -1,0 +1,121 @@
+#% text_encoding = iso8859_1
+##***********************************************************************
+##
+## Project: TPSODL 
+## 
+## Description:
+##        Modified to place structure nodes at end of the conductors.
+##
+##************************************************************************
+
+_package user
+$
+_pragma(classify_level=restricted)
+_method eo_structure_nodes_manager.attach_line_segment(lineseg, _optional struct_geom, force_creation?)
+	## Structure node automation for line_segments
+	## Each vertex of lineseg route geometry is checked for
+	## structures within search tolerance.
+	## @param lineseg -- A line_segment rwo
+	## @param p_struct_geom POINT -- An optional location geometry
+	##      for a preferred structure.  When this parameter is
+	##      provided, the line_segment will attach to this
+	##      structure if all rules are satisfied. 
+	## @param force_creation? - Optional - True if the user is
+	## maually associating 2 objects. - No default is set in this
+	## method as it is just passed to another method.
+	## It is defaulted to False in method attach_to_structure_at
+	## where it is eventually used.
+
+	# It is possible the original chain has been split at a structure
+	# node (based on the manifold rule) in which case we can no
+	# longer forge the association
+	_if (geom << lineseg.route) _isnt _unset _andif geom.is_valid?
+	_then	
+		radius << eo_structure_manager.structure_tolerance(geom) 
+		
+		# Raw structure geometries
+		_if struct_geom _isnt _unset
+		_then
+			geom_set << {struct_geom}
+		_else
+			geom_set << eo_structure_manager.candidate_structures_near ( geom, radius )
+		_endif
+
+		_for structure_geom _over geom_set.fast_elements()
+		_loop
+
+			_if lineseg.structures().includes? ( structure_geom.rwo ) _then _continue _endif 
+			(gl, vertex?) << _self.closest_geom_location_on_line ( geom, structure_geom )
+			_if gl _isnt _unset _andif      #!SP
+			    vertex?                     #!SP
+			_then                           #!SP
+				
+				_self.attach_to_structure_at ( geom, gl, radius, structure_geom,  force_creation?  )
+				_if (opp_gl << _self.closest_fold_in(geom, structure_geom, gl, radius, vertex?)) _isnt _unset
+				_then				
+					_self.attach_to_structure_at ( geom, opp_gl, radius, structure_geom, force_creation? )
+				_endif
+			_endif                          #!SP
+		_endloop
+		
+	_endif
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_structure_nodes_manager.closest_geom_location_on_line ( line_segment_route, coord, _optional helper_line_segment)
+	## 
+	## Return a location on LINE_SEGMENT_ROUTE and a boolean
+	## indicating whether location is a vertex or
+	## not. If only a fragment of the line is of interest, it can
+	## be passed in HELPER_LINE_SEGMENT.
+	##
+	## This is either:
+	## 1) the vertex of LINE_SEGMENT_ROUTE that is closest to 
+	##    COORD...if it is within 2* the distance between (2) and
+	##    COORD 
+	## 2) the point on LINE_SEGMENT_ROUTE closest to COORD
+	##
+
+	# COORD can be an area.  If so, find the centre of its bounds
+	_if coord.geom_type _is :area _orif coord.geom_type _is :simple_area
+	_then
+		coord << coord.bounds.centre
+	_endif
+	helper << helper_line_segment.default(line_segment_route)
+	#Gather up the points for comparison
+	( closest_point, point_distance )   << helper.segpoint_near ( coord )
+
+	segpoint_location << line_segment_route.location_for_length ( line_segment_route.length_to_point ( closest_point ))
+
+	next << segpoint_location.next_vertex(_false).default(segpoint_location)
+	prev << segpoint_location.previous_vertex(_false).default(segpoint_location)
+
+	(vertex_location, vertex_distance) << _if (n_dist << next.distance_to(coord)) < (p_dist << prev.distance_to(coord))
+					      _then						      
+						      >> next, n_dist
+					      _else						      
+						      >> prev, p_dist
+					      _endif
+
+	segpoint_vertex? << segpoint_location.distance_to(line_segment_route.vertex_near(segpoint_location)) = 0
+
+	# Structure node has to place only at ends of the conductors for CSDPCL
+	_if line_segment_route.first_node.as_coord() = vertex_location.as_coord() _orif   #!SP
+	    line_segment_route.last_node.as_coord() = vertex_location.as_coord()          #!SP
+	_then                                                                             #!SP
+		_if vertex_distance <= 2*point_distance _andif 
+		    # Are there any structure nodes already there?
+		    _self.structure_nodes_at_vertex(vertex_location).empty? _andif
+		    _not segpoint_vertex?
+		_then		
+			#We use the vertex; it's close enough
+			_return vertex_location, _true
+		_else		
+			_return segpoint_location, segpoint_vertex?
+		_endif
+	_else                                                                             #!SP
+		_return _unset, _false                                                    #!SP
+	_endif                                                                            #!SP
+_endmethod
+$

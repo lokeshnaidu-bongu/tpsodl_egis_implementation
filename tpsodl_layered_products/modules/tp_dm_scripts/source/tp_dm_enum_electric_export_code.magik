@@ -1,0 +1,32 @@
+_block
+	l_file_path << write_string("D:\EO_528\electric_office\eo_implementers\tp_cstm_land_db_implementer\Scripts\Tp_electric_enum.csv")
+       _local l_soc << gis_program_manager.spatial_object_controller(:electric_dm).dataset_caches(:dd_enumerators)
+	l_enum_file<< external_text_output_stream.new(l_file_path)
+	l_enum_file.write("Enum Type Name",%tab,"Enum Values")
+	l_enum_file.newline()
+	_for a_dataset_name , a_enum_colls  _over l_soc.fast_keys_and_elements()
+	_loop
+		_if a_dataset_name ~= "Electric"
+		_then
+			_continue 
+		_endif
+		
+		_for a_enum_def _over a_enum_colls.fast_elements()
+		_loop
+			#l_enum_file.write(a_enum_def.name,%tab,"Enum Values")
+			#l_enum_file.newline()
+			write("+++ l_str<<" + %" + "" + %" + " +++",a_enum_def.name)
+			l_enum_val<<""
+			_for i _over a_enum_def.sorted_values.elements()
+			_loop
+				
+				l_enum_val +<< i.write_string +";"
+			_endloop
+			l_enum_file.write(a_enum_def.name,%tab,l_enum_val)
+			l_enum_file.newline()
+			
+		_endloop 
+		_endloop 
+	       l_enum_file.close()
+       _endblock
+$

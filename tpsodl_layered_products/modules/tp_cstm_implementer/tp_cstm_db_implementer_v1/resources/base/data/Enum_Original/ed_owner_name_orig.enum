@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Electric Utility-TPSODL	1
+Customer	2
+Electric Utility-ODSP	3
+Electric Utility-TPCODL	4
+Electric Utility-TPNODL	5
+Electric Utility-TPWODL	6
+Cable Company	7
+GE North	8
+GE West	9
+Telephone Company	10
+Unknown	11

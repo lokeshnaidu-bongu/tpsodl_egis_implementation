@@ -1,0 +1,19 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Float Charging	9
+Boost Charging	2
+Float + Boost Charging	3
+#following are the existing enum values
+1 Phase Feed Thru	100
+1 Phase Loop/No Elbows	110
+1 Phase S-Mod/3 Way	120
+3 Phase Feed Thru	130
+3 Phase Loop/No Elbows	140
+3 Phase S-Mod/3 Way	150
+Fuse Cabinet	160
+Submersible Fuse Compartment	170
+Transclosure	180

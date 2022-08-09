@@ -1,0 +1,15 @@
+Steps to be followed
+---------------------------------------------------------------
+Case Archive
+load land/Electric Implementer
+Apply - DM changes to Land/Electric case
+lnd_building - add Field TYpe - land building type
+electric-rated capacity - handle in code
+Apply DM changes to Land/Electric Dataset
+Duplicate Check Electric/Land
+ACE TOP Visibility Electric/Land
+Enum values Import Electric/Land
+Land Styles for New Objects
+Extract Land/Electric DM
+Testing DM Changes
+Reverse Engineer

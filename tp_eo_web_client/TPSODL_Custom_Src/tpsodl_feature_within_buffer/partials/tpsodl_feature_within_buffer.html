@@ -1,0 +1,72 @@
+<section class="module sidebar-module">
+   <form> <b>Select Criteria</b>
+      <select class="col-sm-6 form-control" style="width:100%;margin-bottom:0px;" id="fwb_criteria">
+         <option value="Selection">Non-polygon Object</option>
+         <option value="Point">Trail Point</option>
+         <option value="Polygon">Polygon Object</option>
+         <!-- <option value="bp_number">Consumer BP number</option> -->
+         <!-- <option value="pole">Pole</option> -->
+      </select>
+      <br>
+      <br>
+      <br>
+      <div id="datasetTypeDiv">
+		  <b>Select Dataset</b>
+		  <select class="col-sm-6 form-control" style="width:100%;margin-bottom:0px;" id="fwb_dataset">
+			 <option value="default" selected="selected">-- Search Dataset --</option>
+			 <option value="electric|">Electric</option>
+			 <option value="land|">Land</option>
+			 <option value="special_query">Special Query</option>
+		  </select>
+		  <br>
+		  <br>
+		  <br>
+	  </div>
+	  <div id="specialQueryDiv">
+		  <b>Select Query</b>
+		  <select class="col-sm-6 form-control" style="width:100%;margin-bottom:0px;" id="fwb_specialquery">
+			 <option value="default" selected="selected">-- Search Query --</option>
+			 <option value="missing_bp_buildings">Missing BP-Buildings</option>
+		  </select>
+		  <br>
+		  <br>
+		  <br>
+	  </div>
+      <div id="featureTypeDiv"> <b>Search For Feature</b>
+         <select class="col-sm-6 form-control" style="width:100%;margin-bottom:0px;" id="featureType">
+            <option value="default" selected="selected">-- Search Feature --</option>
+         </select>
+         <br>
+         <br>
+         <br> 
+	</div>
+      <div id="bpnumberDiv"> <b>Enter BP Number</b>
+         <input class="col-sm-4" style="width:100%;" type="text" name="bpnumber" placeholder="BP Number" id="bp_number">
+         <br>
+         <br>
+         <br> </div>
+      <div id="polenumberDiv"> <b>Enter Pole Number</b>
+         <input class="col-sm-4" style="width:100%;" type="text" name="polenumber" placeholder="Pole Number" id="pole_number">
+         <br>
+         <br>
+         <br> </div>
+      <div id="bufferDistance"> <b>Buffer Distance(mts)</b>
+         <br>
+         <input class="col-sm-4" style="width:100%;" onkeydown="return event.keyCode !== 69" type="number" name="distance" id="distance_in_meters" placeholder="Provide value" > </div>
+   </form>
+   <br>
+   <br>
+   <div class="pull-right"> <span id="fwb_spinner" rel="fwb_spinner" class="tpsodl_common_spinner"></span>
+      <button id="tpsodl_fwb_clear" class="btn btn-primary">Clear</button>
+       <!-- <button id="tpsodl_to_get_near_consumers" class="btn tpsodl_main">Get Consumers</button> -->
+      <!-- <button id="showBufferArea" class="btn tpsodl_main">Show Buffer</button> -->
+      <button id="submitFeatureData" class="btn tpsodl_main">Submit</button>
+   </div>
+</section>
+<br>
+
+<section class="module sidebar-module">
+   <div id="FeatureDetails" class="module-body">
+      <footer class="module-footer"></footer>
+   </div>
+</section>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<tp_collections>
+  <!-- Define the xml files for specific collections -->
+  <collection collection_name="tp_consumer_consumption_data">
+    <enum_fields fld_name="tp_consumer_device_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="tp_primary_meter_reading_data">
+    <enum_fields fld_name="tp_meter_device_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_updation_flag">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_device_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+</tp_collections>

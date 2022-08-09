@@ -1,0 +1,15 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Rubber	1
+PVC	2    
+Polyethene	3
+XLPE	4
+PILC	5
+Extra-XLPE	6
+ABC	7
+Oil	8
+Others	9

@@ -1,0 +1,133 @@
+_block
+	l_set << set.new()
+	#l_path<<"C:\Users\ba.Haritha\sw_user_custom\Substation_log.txt"
+	#l_file << external_text_output_stream.new(l_path)
+	#l_file.write("Substation wo Connector Points",",","Connector Segment Installation wo Connector Point")
+	#l_file.newline()
+	ev << gis_program_manager.databases[:electric]
+	l_sub_coll << ev.collections[:sub_substation]
+	l_conn_rope << property_list.new()
+	_for a_sub_rec _over l_sub_coll.fast_elements()
+	_loop
+		l_sub_ext << a_sub_rec.extent
+		l_bounds << l_sub_ext.bounds
+		l_scanner << ev.geometry_scanner(:general)
+		l_scanner.start_scan(l_bounds)
+		
+		_loop
+			l_geom << l_scanner.get()
+			
+			_if l_geom _is _unset 
+			_then
+				_leave
+			_endif 
+			_if l_conn_rope[a_sub_rec.id] _is _unset 
+			_then
+				l_conn_rope[a_sub_rec.id] << rope.new()
+			_endif
+			_if l_geom.rwo_type _is :eo_connector_segment_inst
+			_then
+				l_conn_seg_rec << l_geom.rwo
+				l_last_node << l_conn_seg_rec.route.last_node
+				l_top_level_conn_recs << rope.new()
+				l_cond_recs << rope.new()
+				l_connect_point_recs << rope.new()
+				l_connector_seg_recs << rope.new()
+				_for i _over l_last_node.top_level_geoms()
+				_loop
+					_if i.rwo_type _is :eo_connector_point_inst
+					_then
+						l_connect_point_recs.add_last(i.rwo)
+					_endif
+					_if i.rwo_type _is :eo_cable_segment_inst _orif
+					    i.rwo_type _is :eo_wire_segment_inst
+					_then
+						l_cond_recs.add_last(i.rwo)
+					_endif
+					_if i.rwo_type _is :eo_connector_segment_inst
+					_then
+						l_connector_seg_recs.add_last(i.rwo)
+					_endif
+					
+				_endloop
+				_if l_cond_recs.size > 0 _andif
+				    l_connect_point_recs.size =0 
+				_then
+					l_sub_id << write_string(a_sub_rec.id)
+					l_conn_id << write_string(l_geom.rwo.id)
+					l_conn_seg_rec << l_geom.rwo
+					l_last_node << l_conn_seg_rec.route.last_node
+					ps_pnt<< pseudo_point.new(l_last_node)
+					ps_pnt.world << ev.world
+					l_conn_pt<< ev.collection(:eo_connector_point_inst)
+					l_conn_asset<< ev.collection(:eo_connector_point)
+					l_conn_phase << ev.collection(:eo_connector_point_exi_phase)
+					
+					l_prop_list << property_list.new_with(
+							       :status, l_conn_seg_rec.status,
+							       :network_type,l_conn_seg_rec.network_type,
+							       :nominal_voltage_pp,l_conn_seg_rec.nominal_voltage_pp,
+							       :mounting,"Overhead",
+							       :owner_type,"Unknown",
+							       
+							       :location,ps_pnt)
+					rt<< record_transaction.new_insert(l_conn_pt,l_prop_list)
+					l_connect_inst << rt.run()
+					l_asset_prop_list << property_list.new_with(:device_type,"Service")
+					
+					rt<< record_transaction.new_insert(l_conn_asset,l_asset_prop_list)
+					l_connect_asset_rec << rt.run()
+					l_phase_prop_list << property_list.new_with(:abandoned,_false ,
+										    :normally_energised,_true,
+										    :phase,"ABC",
+										    :asset,l_connect_asset_rec,
+										    :installation,l_connect_inst)
+					rt<< record_transaction.new_insert(l_conn_phase,l_phase_prop_list)
+					l_connect_phase_rec << rt.run()
+					#l_file.write(l_sub_id,",",l_conn_id,",",l_geom.rwo.tp_feeder_name)
+					#l_file.newline()
+				_endif
+
+			_endif
+			
+			
+		_endloop
+	_endloop
+	
+_endblock
+
+
+# _block
+#	      
+#	       l_last_node << l_conn_seg_rec.route.last_node
+#	       ps_pnt<< pseudo_point.new(l_last_node)
+#	       ps_pnt.world << ev.world
+#	       l_conn_pt<< ev.collection(:eo_connector_point_inst)
+#	       l_conn_asset<< ev.collection(:eo_connector_point)
+#	       l_conn_phase << ev.collection(:eo_connector_point_exi_phase)
+#	      
+#	       l_prop_list << property_list.new_with(
+#				      :status, l_rec.status,
+#				      :network_type,l_rec.network_type,
+#				      :mounting,"Overhead",
+#				      :owner_type,"Unknown",
+#				      
+#				      :location,ps_pnt)
+#	       rt<< record_transaction.new_insert(l_conn_pt,l_prop_list)
+#	       l_connect_inst << rt.run()
+#	       l_asset_prop_list << property_list.new_with(:device_type,"Service")
+#	       
+#	       rt<< record_transaction.new_insert(l_conn_asset,l_asset_prop_list)
+#	       l_connect_asset_rec << rt.run()
+#	       l_phase_prop_list << property_list.new_with(:abandoned,_false ,
+#							   :normally_energised,_true,
+#							   :phase,"ABC",
+#							   :asset,l_connect_asset_rec,
+#							   :installation,l_connect_inst)
+#	       rt<< record_transaction.new_insert(l_conn_phase,l_phase_prop_list)
+#	       l_connect_phase_rec << rt.run()
+#	       
+#	       
+#	       
+#	      #l_connect_inst.existing_assets.add(l_connect_asset_rec)
+#       _endblock

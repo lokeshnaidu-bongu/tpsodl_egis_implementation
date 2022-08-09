@@ -1,0 +1,7 @@
+<!-- this file configures the plugins that are available to the framework -->
+
+<config>
+  <plugins>
+    <plugin name="spatial_pred_tool" class_name="tp_spatial_predicate_gui_plugin"/>
+  </plugins>
+</config>

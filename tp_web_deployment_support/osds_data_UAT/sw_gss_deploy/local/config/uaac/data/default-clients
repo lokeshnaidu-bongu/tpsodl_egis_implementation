@@ -1,0 +1,3 @@
+CLIENT_NAME|SECRET|SCOPES|AUTHORITIES|AUTHORIZED_GRANT_TYPES
+client_schedule|${CLIENT_SCHEDULE_SECRET}|gss.admin, all.assets|gss.admin, all.assets|client_credentials
+client_guest|${CLIENT_GUEST_SECRET}|gss.guest|gss.guest|client_credentials

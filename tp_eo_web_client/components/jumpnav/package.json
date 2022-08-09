@@ -1,0 +1,17 @@
+{
+  "name": "jumpnav",
+  "author": "General Electric",
+  "description": "Fix link to top of screen, and show link's target content just below it.",
+  "version": "0.9.0",
+  "private": true,
+  "homepage": "http://gesdh.com/",
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-shell": "~0.4.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-less": "~0.8.1",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-contrib-jshint": "*",
+    "karma-support": "git+https://github.sw.ge.com/DT/karma-support.git#v1.0.5"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "sessionStoreType": "CookieSessionStore",
+  "sessionSecret" : "<changeToSomethingRandomAndHardToGuess>",
+  "cookieOpts" : {
+    "name" : "nvsession",
+    "maxAge" : 86400000,
+    "signed" : true,
+    "httpOnly": true,
+    "sameSite": true
+  }
+}

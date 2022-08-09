@@ -1,0 +1,55 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: table-sweep-task
+  namespace: gss-prod
+spec:
+  # To run the table-sweep job manually, use this command:
+  # kubectl create job --from=cronjob/table-sweep-task -n <GSS_NAMESPACE> table-sweep-task-manual-job
+  # where <GSS_NAMESPACE> is the deployment namespace
+  schedule: "45 10 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: tpsodl-eo-web-table-sweep
+            image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine-curl:0.1.8
+            command: [ "/bin/sh" ]
+            args: [ "/usr/apps/scheduler/script/invoke_via_endpoints.sh" ]
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+            env:
+            - name: task
+              value: admin/tableSweep
+            - name: method
+              value: DELETE
+            - name: username
+              valueFrom:
+                secretKeyRef:
+                  name: client-credential-secret
+                  key: username
+            - name: password
+              valueFrom:
+                secretKeyRef:
+                  name: client-credential-secret
+                  key: password
+            volumeMounts:
+            - name: scheduler-script-volume
+              mountPath: /usr/apps/scheduler/script
+          initContainers:
+          - name: table-sweep-task-uaac-check
+            image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+            imagePullPolicy: IfNotPresent
+            command: ['sh', '-c', 'until nc -z uaa-service 8080; do echo waiting for uaa-service; sleep 2; done;']
+          volumes:
+            - name: scheduler-script-volume
+              configMap:
+                name: scheduler-script-cm
+          imagePullSecrets:
+            - name: regsecret

@@ -1,0 +1,69 @@
+
+span.comments {
+  color: @grayDark;
+}
+span.comments.new {
+  color: @textColor;
+  font-weight: bold;
+}
+
+// list item contents are wrapped in links but have non-link appearance
+.comment-list > .comment-item > a {
+  color: @textColor;
+  text-decoration: none;
+
+  &:hover * {
+    color: @linkColor;
+  }
+}
+
+.comment-list {
+  margin-left: 0;
+  list-style: none;
+  & > .comment-item:not(:first-child) {
+    border-top: 1px solid @grayLight;
+    margin-top: @baseLineHeight / 2;
+    padding-top: @baseLineHeight / 2;
+  }
+  .label {
+    margin-right: 5px;
+  }
+  .comment-status {
+    color: @textColor;
+    display: block;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .comment-time {
+    color: @gray;
+    display: block;
+  }
+  p {
+    margin-bottom: 0;
+  }
+  // Compress the spacing around comments in dropdowns.
+  &.dropdown-menu > .comment-item {
+    &:not(:first-child) {
+      margin-top: 5px;
+      padding-top: 5px;
+    }
+    &.empty {
+      padding: 15px 20px;
+      text-align: center;
+    }
+    a {
+      padding-left: 15px;
+      padding-right: 15px;
+      white-space: normal;
+      width: 220px;
+      &:hover {
+        .comment-title,
+        .comment-time,
+        .comment-status {
+          color: @white;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

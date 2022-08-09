@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://services.sbi.gesmallworld.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DesignEstimateService" targetNamespace="http://services.sbi.gesmallworld.com/">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://services.sbi.gesmallworld.com/" version="1.0">
+      <xs:element name="cost_object" type="tns:costObject" />
+      <xs:element name="designEstimate" type="tns:designEstimate" />
+      <xs:element name="readCostObjectsDTO" type="tns:readCostObjectsDTO" />
+      <xs:element name="uploadCostObjectsDTO" type="tns:uploadCostObjectsDTO" />
+      <xs:element name="work_record" type="tns:workRecord" />
+      <xs:complexType name="readCostObjectsDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="project" type="tns:designEstimate" />
+          <xs:element minOccurs="0" name="error" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="designEstimate">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="cost_object" type="tns:costObject" />
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="work_record" type="tns:workRecord" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" />
+      </xs:complexType>
+      <xs:complexType name="costObject">
+        <xs:sequence />
+        <xs:attribute name="code" type="xs:string" />
+        <xs:attribute name="cost_adder" type="xs:string" />
+        <xs:attribute name="cost_multiplier" type="xs:string" />
+        <xs:attribute name="length_adder" type="xs:string" />
+        <xs:attribute name="id" type="xs:string" />
+        <xs:attribute name="design_status" type="xs:string" />
+        <xs:attribute name="operation" type="xs:string" />
+        <xs:attribute name="quantity" type="xs:string" />
+      </xs:complexType>
+      <xs:complexType name="workRecord">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="cost_object" type="tns:costObject" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" />
+        <xs:attribute name="number" type="xs:int" use="required" />
+        <xs:attribute name="name" type="xs:string" />
+      </xs:complexType>
+      <xs:complexType name="uploadCostObjectsDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="designid" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getDesignEstimateResponse">
+    <wsdl:part name="return" type="tns:readCostObjectsDTO" />
+  </wsdl:message>
+  <wsdl:message name="getDesignEstimate">
+    <wsdl:part name="id" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="createDesignEstimateResponse">
+    <wsdl:part name="return" type="tns:uploadCostObjectsDTO" />
+  </wsdl:message>
+  <wsdl:message name="createDesignEstimate">
+    <wsdl:part name="project" type="tns:designEstimate" />
+  </wsdl:message>
+  <wsdl:portType name="DesignEstimate">
+    <wsdl:operation name="getDesignEstimate">
+      <wsdl:input message="tns:getDesignEstimate" name="getDesignEstimate" />
+      <wsdl:output message="tns:getDesignEstimateResponse" name="getDesignEstimateResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="createDesignEstimate">
+      <wsdl:input message="tns:createDesignEstimate" name="createDesignEstimate" />
+      <wsdl:output message="tns:createDesignEstimateResponse" name="createDesignEstimateResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DesignEstimateServiceSoapBinding" type="tns:DesignEstimate">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getDesignEstimate">
+      <soap:operation soapAction="" style="rpc" />
+      <wsdl:input name="getDesignEstimate">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getDesignEstimateResponse">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createDesignEstimate">
+      <soap:operation soapAction="" style="rpc" />
+      <wsdl:input name="createDesignEstimate">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal" />
+      </wsdl:input>
+      <wsdl:output name="createDesignEstimateResponse">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DesignEstimateService">
+    <wsdl:port binding="tns:DesignEstimateServiceSoapBinding" name="UploadCostObjectsImplPort">
+      <soap:address location="http://localhost:8181/cxf/DesignEstimate" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

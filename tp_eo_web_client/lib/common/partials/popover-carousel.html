@@ -1,0 +1,33 @@
+<div class="{{classType}}-popup popover-content" id="results-list-popover-{{parentComponent}}">
+<header class='panel-header'>
+  <div class='popup-title panel-title voice voice-brand'>
+    <h3 style="line-height:20px">{{data.name}}</h3>
+  </div>
+  <div class='right' style="border:none;">
+    <button class="btn" id="popUpClose" style="padding-top: 8px; padding-bottom: 5px">
+      <i class='icon-remove-sign'></i>
+    </button>
+  </div>
+</header>
+<div id='popupInner' class='carousel slide'>
+  <div class='carousel-inner'>
+    {{carousel}}
+  </div>
+</div>
+<footer class='panel-footer'>
+  <div class='secondary'>
+    {{#isCarousel}}
+    <div class='btn-group'>
+      <button class='btn btn-map btn-carousel' id='recordPrev' title="{{messages.object_details.prevButton}}"><i class='icon-arrow-left'></i>
+      </button>
+      <button class='btn btn-map' id='recordCount'></button>
+      <button class='btn btn-map btn-carousel' id='recordNext' title="{{messages.object_details.nextButton}}"><i class='icon-arrow-right'></i>
+      </button>
+    </div>
+    {{/isCarousel}}
+  </div>
+  <div class='primary'>
+    {{{popoverControlsTemplate}}}
+  </div>
+</footer>
+</div>

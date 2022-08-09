@@ -1,0 +1,146 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+## Description:       Customization made on top of Electic office Report Locator
+##
+## Exemplar Name       : tp!query_mixin
+##
+## Description      : Common Method to be used in applications
+##                    
+## Creation Date    : 18-02-2022
+##
+##
+## Creator Name     : S. Haritha Rani, TCS
+##                    
+## Inheritance      : -
+##
+## Slots            : -
+##                    
+## Constants        : -                    
+##
+## Methods          : init()
+##                    create_work_table()       
+##
+## Dependencies     : -
+##
+## Version No.      : 1.0
+##
+## Major changes
+## =============
+## Date          Name               Change description
+##
+##
+## ===============================================================
+_package sw
+$
+
+_pragma(classify_level=basic, topic={Query_Mixin}, usage={TPSODL})
+##
+## A mixin that can be used by a plugin that is used in an
+## Tp Reports. It is advised that
+## any plugin for the query inherits from this mixin. 
+##
+def_mixin( :tp!query_mixin )
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: create_work_table()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={Query_Mixin}, usage={TPSODL})
+##
+## This method creates the scratch results tables 
+## 
+_method tp!query_mixin.create_work_table(p_tbl_name,p_fields,_optional a_rec,p_keys)
+	## 
+	## Returns table
+	##
+	_local l_keys << p_keys
+	_local l_fields << p_fields
+	_local l_tbl_name << p_tbl_name
+	l_fld_name << ""
+	l_all_fields << _self.external_names   
+
+	# Create Scratch Collection
+	tbl_descr << gis_program_manager.create_scratch_collection(l_tbl_name, l_fields, l_keys.default(1))
+	
+	# Create external names that are a bit prettier here.  Will
+	# use Devices external field names if the match TBLs field names.
+	_for fld _over tbl_descr.all_fields.elements()
+	_loop
+		_if _not fld.is_key?
+		_then			
+			fld.mandatory? << _false
+
+			fld.unset_value << _self.set_unset_value(fld)
+		_endif		
+		
+		_if l_all_fields _isnt _unset _andif
+		    (a_fld << l_all_fields[fld.name]) _isnt _unset 
+		_then
+			l_fld_name << a_fld
+		_else
+			l_fld_name << fld.name.write_string.make_non_escape_string_pretty()			
+		_endif
+
+		_if _self.message(fld.name).index_of_seq(_self.class_name.write_string) _is _unset
+		_then
+			l_fld_name << _self.message(fld.name)
+		_endif 
+		
+		fld.external_name << l_fld_name			
+		
+	_endloop 
+
+	# Make sure we have a name for the view.  Looks better in the editor.
+	_if gis_program_manager.scratch_view.view_name _is _unset 
+	_then
+		gis_program_manager.scratch_view.view_name << "Tata Power Report"
+		
+	_endif
+
+	l_tbl << gis_program_manager.scratch_table(l_tbl_name)
+
+	>> l_tbl, l_tbl_name
+		
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Query_Mixin}, usage={TPSODL})
+_method tp!query_mixin.set_unset_value(p_fld)
+	#
+	## <Req. #> : <Description>
+	## Returns the unset value of the field type.
+	#
+
+	_local l_type << p_fld.type.phys_type	
+	
+	_if l_type _is :ds_uint
+	_then
+		_return 0
+	_elif l_type _is :ds_double
+	_then
+		_return 0.00
+	_elif l_type _is :ds_char16_vec
+	_then		
+		_return ""
+	_elif l_type _is :ds_char16
+	_then		
+		_return ""
+	_elif l_type _is :ds_bool
+	_then
+		_return _false
+	_elif l_type _is :ds_date
+	_then
+		_return date.from_string("01/01/1900")
+	_elif l_type _is :ds_time
+	_then
+		_return date_time.from_string("01/01/1900 00:00:00")
+	_elif l_type _is :ds_kleene
+	_then
+		_return	_maybe 
+	_endif
+	
+_endmethod
+$

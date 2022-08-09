@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Cable Cleating	1
+Cable Ducts	2
+Cable on Soil Bed	3
+Cable Trays	4
+Cable Trenches	5
+Others	6
+Pole	7
+Tower	8
+Wall Bracket	9
+	
+

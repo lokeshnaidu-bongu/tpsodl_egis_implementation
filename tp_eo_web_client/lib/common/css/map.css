@@ -1,0 +1,321 @@
+
+
+#custom-tools
+{
+  background-color: #ffffff;
+  margin: 0px 5px 0px 5px !important;
+  font-size: 21px;
+  height: 30px !important;
+  cursor: pointer;
+  width: 30px;height: 35px;
+  border-radius: 13px;
+  padding: 4px 1px 1px 2px;
+}
+
+#custom-tools-clear
+{
+  /* background: transparent url("../../../components/brandkit/img/icons8-clear-search-48.ico") no-repeat; */
+  background: transparent url("../../../lib/common/partials/icons/marker-off.svg") no-repeat;
+  background-color: #ffffff;
+  /* margin: 0px 5px 0px 5px !important; */
+  /* font-size: 21px; */
+  height: 26px !important;
+  /* padding: 4px 1px 1px 2px; */
+  width: 30px;
+  
+  
+  /* cursor: pointer; */
+  /* width: 30px;height: 35px; */
+  /* /* border-radius: 13px; */ */
+  /* background-color: #ffffff; */
+  /* margin: 0px 5px 0px 5px !important; */
+  /* font-size: 21px; */
+  /* height: 30px !important; */
+  /* cursor: pointer; */
+  /* height: 35px; */
+  /* border-radius: 13px; */
+  /* padding: 4px 1px 1px 2px; */
+}
+
+#custom-tools-osm
+{
+  /* background: transparent url("../../../components/brandkit/img/icons8-clear-search-48.ico") no-repeat; */
+  background: transparent url("../../../components/brandkit/img/osm.ico") no-repeat;
+  background-color: #ffffff;
+  margin: 0px 5px 0px 5px !important;
+  font-size: 20px;
+  height: 30px !important;
+  cursor: pointer;
+  width: 30px;
+  height: 35px;
+  border-radius: 13px;
+  padding: 4px 1px 1px 2px;
+}
+
+#map-custom-tools
+{
+  background-color: black;/*#62a03c;*/
+font-size: 15px;
+cursor: pointer;
+width: 30px;
+height: 30px;
+border-radius: 12px;
+padding: 7px 1px 1px 5px;
+
+}
+
+#map-drag-drop-custom-tools
+{
+  background-color: #62a03c;
+font-size: 15px;
+cursor: pointer;
+width: 30px;
+height: 30px;
+border-radius: 20px;
+padding: 7px 1px 1px 5px;
+
+}
+
+
+.popover-content {
+  padding: 0;
+}
+.popover-content .panel-header .right {
+  border: none;
+}
+
+.popover-content .panel-header .btn {
+  background: transparent;
+  border: none;
+  padding: 10px 9px;
+  line-height: 30px;
+  height: 100%;
+  color: #13161a;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.popover-content .panel-header .btn:hover {
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 1.0;
+  filter: alpha(opacity=100);
+}
+
+.popover-content .panel-header i {
+  font-size: 22px !important;
+}
+
+.popover-content .popup-title {
+  text-align:left;
+  width: 100%;
+  display: block;
+  margin-left: 10px;
+  margin-right: auto;
+  vertical-align: middle;
+}
+
+.popover-content .carousel {
+	margin-bottom: 0px;
+}
+
+.popover-content #popupInner {
+  height: 150px;
+  width: 100%;
+  overflow: auto;
+  padding: 0px;
+}
+
+.popover-content #popupInnerSmall {
+  height: 90px;
+  width: 100%;
+  overflow: auto;
+  padding: 0px;
+}
+
+.popover-content #popupInnerTextArea {
+  height: 60px;
+  margin-top: 4px;
+  width: 100%;
+  overflow: auto;
+  padding: 0px;
+  border: none;
+  background-color: #ffffff;
+  resize: none;
+}
+
+.popover-content .carousel-inner {
+  font-size: 12px;
+  overflow: auto;
+}
+
+.popover-content .carousel-inner table {
+  margin-left:5px;
+  margin-right:5px;
+  width: calc(100% - 10px);
+}
+
+.popover-content .panel-footer .secondary .btn.btn-carousel {
+  width: 30px;
+}
+@media (pointer: coarse) {
+  .popover-content .panel-footer .secondary .btn.btn-carousel {
+    width: 35px;
+  }
+}
+.popover-content .panel-footer .secondary .btn i {
+  font-size: 12px !important;
+  height: 100% !important;
+  width: 100% !important;
+  line-height: 14px !important;
+}
+
+
+.olTileImage {
+  -webkit-transition: opacity 0.1s linear;
+  -moz-transition: opacity 0.1s linear;
+  -o-transition: opacity 0.1s linear;
+  transition: opacity 0.1s linear;
+}
+
+#map.busy, #map.busy * { cursor: wait }
+
+.olPopup {
+  overflow: visible !important;
+}
+
+.olPopup > div:first-child {
+  overflow: visible !important;
+}
+
+.btn-group > .btn + .tooltip + .btn {
+  margin-left: 1px;
+}
+
+#search-group .tooltip-inner {
+  margin-left: 52px;
+}
+.map .btn {
+  padding: 2px 5px;
+}
+
+.typeahead-faceted > ul > li:last-child,
+.facet-results {
+  background-color: #ffffff;
+  border-color: #e1e2e5;
+  border-style: solid;
+  border-width: 1px 0 0 1px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: right;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  width: 80%;
+  margin: 0;
+}
+
+.olImageLoadError {
+/*  display: none !important; */
+}
+
+div.sidebar-control {
+  right: -1px;
+  top: 120px;
+  position: absolute;
+  z-index: 10;
+  border-right: none;
+  border-radius: 10px;
+  border-color: #313337;
+}
+
+.sidebar-control button {
+  height: 50px;
+  width: 25px;
+  padding: 0;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  font-size: 18px
+}
+
+.sidebar-control i {
+  font-size: 18px !important;
+}
+
+.olControlAttribution {
+    font-size: smaller;
+    left: 100px;
+    bottom: 0px;
+    position: absolute;
+    display: block;
+    z-index: 1000;
+}
+
+.olControlZoom {
+  display: none;
+}
+
+.map .zoom_control,.map .base-layer-chooser {
+  z-index: 999
+}
+
+/* Only need to list properties to overwrite from the defaults here for map popovers */
+.map .popover {
+  max-width: 240px;
+  font-family: "GE Sans", "ge-sans", "GE Inspira", "ge-inspira", Helvetica, Arial, sans-serif;
+}
+
+.map .popover .panel-footer {
+  padding: 0 5px 5px 5px;
+}
+
+.map .popover .panel-footer .btn {
+  margin-top: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
+  max-height:25px;
+}
+@media (pointer: coarse) {
+  .map .popover .panel-footer .btn {
+    width: 35px;
+    max-height: 35px;
+  }
+}
+
+.map .popover .panel-header {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 35px;
+  position: relative;
+  overflow: hidden;
+  background: #005cb9;
+}
+.map .popover .panel-header .right {
+  width: auto;
+  line-height: auto;
+}
+
+.map .popover .panel-header .panel-title {
+  padding-top: 8px;
+  padding-left: 7px;
+}
+
+.map .popover .panel-header .panel-title h3,
+.map .popover .panel-header .panel-title p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #ffffff;
+  line-height: 20px;
+  font-size: 17px;
+}
+
+input[type="search"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: searchfield-cancel-button;
+}

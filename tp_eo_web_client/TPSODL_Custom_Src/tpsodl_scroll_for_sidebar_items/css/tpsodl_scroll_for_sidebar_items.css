@@ -1,0 +1,260 @@
+
+.tpsodl_optimal_routing_sequence {
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_optimal_routing_sequence.svg");
+}
+.tpsodl_user_audit_report {
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_user_audit_report.svg");
+}
+.tpsodl_trace{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/icon-trace.svg");
+}
+.tpsodl_smallworld_cube_sm{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/smallworld_cube_sm.svg");
+}
+.tpsodl_consumer_arrears {
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_consumer_arrears.svg");
+}
+.tpsodl_features_within_buffer{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_features_within_buffer.svg");
+}
+.tpsodl_dt_wise_consumers {
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_dt_wise_consumers.svg");
+}
+
+.tpsodl_ss_commission_date{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_ss_commission_date.svg");
+}
+.tpsodl_ss_downstream_equipment{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_ss_downstream_equipment.svg");
+}
+.tpsodl_nsc{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_nsc.svg");
+}
+.tpsodl_proposal_report{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_proposal_report.svg");
+}
+.tpsodl_missing_bp_numbers{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_missing_bp_numbers.svg");
+}
+.tpsodl_export_to_kml{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_export_to_kml.svg");
+}
+.tpsodl_coordinate_to_zone{
+	background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_coordinate_to_zone.svg");
+}
+.tpsodl_lucene_build{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/tpsodl_lucene_build.svg");
+}
+
+.tpsodl_route_trace{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/mapmarker_trace.svg");
+}
+
+.tpsodl_map{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/map.svg");
+}
+
+.tpsodl_download{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/download.svg");
+}
+
+.tpsodl_cube{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/cube.svg");
+}
+
+.tpsodl_printer{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/printer.svg");
+}
+
+.tpsodl_search{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/search.svg");
+}
+
+.tpsodl_bookmarks{
+  background-image: url("../../../TPSODL_Custom_Src/tpsodl_scroll_for_sidebar_items/img/bookmark.svg");
+}
+
+/* START of Csp menu sidebar contoller */
+.tpsodl-menu-btn-selected{
+	background-color: #2184be !important;
+}
+.tpsodl-menu-dropdown {
+	margin-left:10px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 4px;
+  font-size: 16px;
+  border: none;
+  padding: 3px 12px 4px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.tpsodl-menu-dropdown:hover, .tpsodl-menu-dropdown:focus {
+	display: block;
+  background-color: #3e8e41;
+}
+#tpsodl-sidebar-control-item-menu-search {
+  box-sizing: border-box;
+ 
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 5px 1px 5px 15px;
+  width: 100%;
+}
+#tpsodl-sidebar-control-item-menu-search:focus {outline: 3px solid #ddd;}
+.tpsodl-menu-sidebar-contoller {
+  position: relative;
+  display: inline-block;
+}
+.tpsodl-menu-sidebar-contoller-dropdown-content {
+	scrollbar-width: none;
+	height:300px;
+	margin-left:10px;
+	display: none;
+	position: absolute;
+	background-color: #f6f6f6;
+	min-width: 250px;
+	overflow: auto;
+	border: 1px solid #ddd;
+	z-index: 1;
+}
+#tpsodl-sidebar-control-item-menu-dropdown::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.7em
+}
+#tpsodl-sidebar-control-item-menu-dropdown::-webkit-scrollbar-thumb {
+    background: #d4d3d3
+}
+.tpsodl-menu-sidebar-contoller-dropdown-content a {
+  color: black;
+  padding: 8px 10px;
+  text-decoration: none;
+  display: block;
+}
+.tpsodl-menu-sidebar-contoller a:hover {background-color: #ddd;}
+.tpsodl-menu-sidebar-contoller-items-show {display: block;}
+
+/* END of Csp menu sidebar contoller */
+
+
+/* .tpsodl-menu-sidebar-contoller:hover .tpsodl-menu-sidebar-contoller-dropdown-content{ */
+/* display: block; */
+/* } */
+
+/* .tpsodl-menu-sidebar-contoller .tpsodl-menu-sidebar-contoller-dropdown-content{ */
+/* display: none; */
+/* } */
+
+.overlay {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #8cb5d3;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   .overlay a {font-size: 16px !important}
+}
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+  font-size: 30px;
+  top: -5px;
+  right: 10px;
+  }
+
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 60px;
+  background-color: #8cb5d3;
+}
+
+.column a {
+  color: black;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  margin: 2px 3px 2px 5px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.column a:hover {
+  background-color: #2184be;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#tpsodl-menu-slider-sidebar-items::-webkit-scrollbar {
+    width: 0em;
+    height: 0em
+}
+#tpsodl-menu-slider-sidebar-items{
+	height:50px;
+
+
+}
+
+
+.menu-container::-webkit-scrollbar {
+	width:0.5em;
+    height: 0.4em;
+}
+.menu-container::-webkit-scrollbar-thumb {
+    background: #2184be;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {  
+   /* IE10+ specific styles go here */  
+   .menu-container::-webkit-scrollbar {
+	width:0.5em;
+    height: 0.4em;
+}
+.menu-container::-webkit-scrollbar-thumb {
+    background: #2184be;
+}
+}
+
+.menu-container {
+  padding:5px 5px 0px 5px;
+  display: list-item;
+  width: 78%;
+  height:60px;
+
+  margin-left:100px;
+  overflow-x: auto;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+    <!-- Define the xml files for specific collections -->
+    <collection collection_name = "cs_gps_geometry" >
+	
+	<fields field_name = "tp_status" external_name = "Status" mandatory = "false" field_type="eo_status" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_work_order_number" external_name = "Work Order Number" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_work_order_status" external_name = "Work Order Status" mandatory = "false" field_type="eo_status" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	
+	
+    </collection>
+   
+</tp_collections>

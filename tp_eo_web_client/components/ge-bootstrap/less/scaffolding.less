@@ -1,0 +1,30 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/scaffolding.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+body {
+  font-family: @sansFontFamily;
+  font-size: @baseFontSize;
+  line-height: @baseFontSize + 6;
+  color: @textColor;
+  -webkit-font-smoothing: @fontSmoothing;
+  font-smoothing: @fontSmoothing;
+}
+
+a {
+  [class*="icon-"] {
+    &.icon-black {
+      color: @black;
+    }
+    &.icon-white {
+      color: @white;
+    }
+  }
+  -webkit-font-smoothing: @fontSmoothing;
+  font-smoothing: @fontSmoothing;
+}

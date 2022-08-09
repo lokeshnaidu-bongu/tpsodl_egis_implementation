@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<tp_collections>
+  <!-- Define the xml files for specific collections -->
+  <collection collection_name="ed_cabinet">
+    
+    <enum_fields fld_name="tp_ward_number">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_ward_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_cabinet_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_installation_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_city_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_group_with">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_circle_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_circle_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_division_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_division_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_section_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_section_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_sub_division_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_sub_division_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="ed_pole">
+    <enum_fields fld_name="tp_light_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+	
+    <enum_fields fld_name="tp_wire_configuration">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+	
+    <enum_fields fld_name="tp_number">
+     <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value="998" display_value="" />
+	<enum_fld_vals store_value="999" display_value="Unknown" />
+    </enum_fld_type>
+	</enum_fields>
+	
+    <enum_fields fld_name="tp_pole_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value="998" display_value="" />
+	<enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_reinforcement_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value="998" display_value="" />
+	<enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_share_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value="998" display_value="" />
+	<enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_structure_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value="998" display_value="" />
+	<enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+      </enum_fields>
+      <enum_fields fld_name="tp_support_type">
+	<enum_fld_type fld_type="ds_uint">
+	  <enum_fld_vals store_value="998" display_value="" />
+	  <enum_fld_vals store_value="999" display_value="Unknown" />
+	</enum_fld_type>
+      </enum_fields>
+      <enum_fields fld_name="tp_insulator_material">
+	<enum_fld_type fld_type="ds_uint">
+	  <enum_fld_vals store_value="998" display_value="" />
+	  <enum_fld_vals store_value="999" display_value="Unknown" />
+	</enum_fld_type>
+	</enum_fields><enum_fields fld_name="tp_insulator_type">
+	<enum_fld_type fld_type="ds_uint">
+	  <enum_fld_vals store_value="998" display_value="" />
+	  <enum_fld_vals store_value="999" display_value="Unknown" />
+	</enum_fld_type>
+	</enum_fields>
+	<enum_fields fld_name="tp_pole_type">
+	<enum_fld_type fld_type="ds_uint">
+	  <enum_fld_vals store_value="998" display_value="" />
+	  <enum_fld_vals store_value="999" display_value="Unknown" />
+	</enum_fld_type>
+      </enum_fields>
+      
+      <enum_fields fld_name="tp_composite_type">
+	<enum_fld_type fld_type="ds_uint">
+	  <enum_fld_vals store_value="998" display_value="" />
+	  <enum_fld_vals store_value="999" display_value="Unknown" />
+	</enum_fld_type>
+      </enum_fields>
+      <enum_fields fld_name="tp_condition">
+	<enum_fld_type fld_type="ds_uint">
+	  <enum_fld_vals store_value="998" display_value="" />
+	  <enum_fld_vals store_value="999" display_value="Unknown" />
+	</enum_fld_type>
+	</enum_fields>
+	<enum_fields fld_name="tp_crossarm_type">
+	  <enum_fld_type fld_type="ds_uint">
+	    <enum_fld_vals store_value="998" display_value="" />
+	    <enum_fld_vals store_value="999" display_value="Unknown" />
+	  </enum_fld_type>
+	</enum_fields>
+	<enum_fields fld_name="tp_dimensions">
+	  <enum_fld_type fld_type="ds_uint">
+	    <enum_fld_vals store_value="998" display_value="" />
+	    <enum_fld_vals store_value="999" display_value="Unknown" />
+	      </enum_fld_type>
+	</enum_fields>
+      </collection>
+      
+  <collection collection_name="ed_decorative_pole">
+    
+    <enum_fields fld_name="tp_sub_mounting">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  
+  <collection collection_name="eo_power_xfrmr_inst">
+    <enum_fields fld_name="tp_consumption_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_star_rating">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_xfrmr_capacity">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_metering_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>	
+    <enum_fields fld_name="tp_neutral_earthing_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>		
+   
+    <enum_fields fld_name="tp_xfrmr_cooling">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_xfrmr_protection_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_xfrmr_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_xfrmr_winding">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_grounding_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_tapchanger_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_cable_segment">
+   
+    <enum_fields fld_name="tp_cable_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_energy_source">
+    <enum_fields fld_name="tp_battery_cooling">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+ 
+    <enum_fields fld_name="tp_insulation_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_regulation_scheme">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_protection_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+ 
+  <collection collection_name="ed_energy_storage_inst">
+ 
+    <enum_fields fld_name="tp_energy_group_with">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_isolating_eqpt_spec">
+    <enum_fields fld_name="tp_isolating_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+   
+  <collection collection_name="eo_isolating_eqpt_inst">
+    <enum_fields fld_name="tp_allignment">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+
+    <enum_fields fld_name="tp_isolatoing_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_isolating_usage">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="sub_substation">
+    <enum_fields fld_name="tp_fence_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_civil_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    
+    <enum_fields fld_name="tp_extenxion_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+	
+    <enum_fields fld_name="tp_substation_usage">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>	
+	
+  </collection>
+  <collection collection_name="ed_switchgear">
+  
+     <enum_fields fld_name="tp_number_of_ways">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_mechanism">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_switchgear_subtype">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_meter">
+    <enum_fields fld_name="tp_availabiltiy">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_meter_mechanism">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>	
+    <enum_fields fld_name="tp_construction_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_meter_function">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  
+    <enum_fields fld_name="tp_meter_location">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>	
+  
+    <enum_fields fld_name="tp_meter_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_meter_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_phase_connection">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_seal_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_communication_port">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_communication_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_service_connection">
+    <enum_fields fld_name="tp_billing_status">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_tariff_categeory">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+ 
+    <enum_fields fld_name="tp_consumer_fuction">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="et_tower">
+    <enum_fields fld_name="tp_tower_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_connector_point">
+    <enum_fields fld_name="tp_joint_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+ 
+  </collection>
+  <collection collection_name="eo_protective_eqpt_inst">
+ 
+    <enum_fields fld_name="tp_protective_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_protective_material">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+ 
+    <enum_fields fld_name="tp_indication_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_measuring_eqpt">
+  
+    <enum_fields fld_name="tp_measuring_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_measuring_sub_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="eo_wire">
+    <enum_fields fld_name="tp_wire_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+   
+  </collection>
+  <collection collection_name="cs_work_order">
+    <enum_fields fld_name="tp_wo_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+	</enum_fields>
+	<enum_fields fld_name="tp_wo_installation_status">
+	  <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+	<enum_fields fld_name="tp_land_pincode">
+	  <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    
+  </collection>
+</tp_collections>

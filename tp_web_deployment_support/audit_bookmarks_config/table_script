@@ -1,0 +1,14 @@
+CREATE TABLE public.audit_table (id integer GENERATED ALWAYS AS IDENTITY,
+username varchar,
+login timestamp without time zone,
+logout timestamp without time zone,
+ip varchar);
+
+CREATE TABLE public.bookmarks (id integer GENERATED ALWAYS AS IDENTITY,
+username varchar,
+creation_date timestamp without time zone,
+bookmark_name varchar,
+latitude varchar,
+longitude varchar,
+zoom varchar
+);

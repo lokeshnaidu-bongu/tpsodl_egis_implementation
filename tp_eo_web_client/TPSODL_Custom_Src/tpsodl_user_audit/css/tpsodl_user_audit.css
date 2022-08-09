@@ -1,0 +1,26 @@
+#generateReport {
+	background-color: #2184be !important;
+	color: #ffffff !important;
+}
+
+.modal-open .modal {
+	overflow-y: hidden;
+}
+
+.dataTable {
+	width: 100% !important;
+}
+
+.dt-buttons .dt-button-collection {
+	left: -50px !important;
+}
+
+.dt-buttons .dt-button-background {
+	display: none !important;
+}
+
+#auditTable_wrapper {
+	margin-top: 5px;
+	margin-left: 10px;
+	margin-right: 8px;
+}

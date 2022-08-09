@@ -1,0 +1,65 @@
+Collection name schematic_link_annotation	+++ Field Name +++LV Leader Line	Field Count->2
+Collection name eo_connector_point	+++ Field Name +++Date Manufactured	Field Count->2
+Collection name eo_service_point	+++ Field Name +++Network Type	Field Count->2
+Collection name eo_meter	+++ Field Name +++Serial Number	Field Count->2
+Collection name ed_pole	+++ Field Name +++Reduced Level	Field Count->2
+Collection name ed_pole	+++ Field Name +++Depth	Field Count->2
+Collection name ed_pole	+++ Field Name +++Reinforcement Type	Field Count->2
+Collection name ed_switchgear	+++ Field Name +++Rated Voltage	Field Count->2
+Collection name schematic_node	+++ Field Name +++LV Leader Line	Field Count->2
+Collection name data_correction_rwo	+++ Field Name +++Table	Field Count->2
+Collection name eo_measuring_eqpt	+++ Field Name +++Date Manufactured	Field Count->2
+Collection name et_tower	+++ Field Name +++Date Manufactured	Field Count->2
+Collection name facility_information_point	+++ Field Name +++Routine Name	Field Count->2
+Collection name eo_energy_storage	+++ Field Name +++Date Manufactured	Field Count->2
+Collection name ed_cabinet	+++ Field Name +++Rated Voltage	Field Count->2
+Collection name eo_protective_eqpt_inst	+++ Field Name +++Protection Type	Field Count->2
+Collection name eo_protective_eqpt_inst	+++ Field Name +++Name	Field Count->2
+Collection name tp_tpsodl_building	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_green	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_environment	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name lnd_zip	+++ Field Name +++Post Office Name	Field Count->2
+Collection name lnd_railroad	+++ Field Name +++Status	Field Count->2
+Collection name lnd_railroad	+++ Field Name +++Width Right of Way Left	Field Count->2
+Collection name lnd_railroad	+++ Field Name +++Width Right of Way Right	Field Count->2
+Collection name lnd_railroad	+++ Field Name +++Type	Field Count->2
+Collection name lnd_railroad	+++ Field Name +++Right Of Way Right	Field Count->2
+Collection name lnd_railroad	+++ Field Name +++Name	Field Count->2
+Collection name lnd_railroad	+++ Field Name +++Right Of Way Left	Field Count->2
+Collection name lnd_wetland	+++ Field Name +++Name	Field Count->2
+Collection name tp_municipal_ward_boundary	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_builtup	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_village_boundary	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_utility_points	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_cluster_of_trees	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_gate	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_non_builtup	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_tpsodl_boundary	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name lnd_street	+++ Field Name +++Status	Field Count->2
+Collection name lnd_street	+++ Field Name +++Name	Field Count->2
+Collection name lnd_subdivision	+++ Field Name +++Name	Field Count->2
+Collection name lnd_waterbody	+++ Field Name +++Type	Field Count->2
+Collection name lnd_waterbody	+++ Field Name +++Name	Field Count->2
+Collection name tp_slum	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name lnd_landmark	+++ Field Name +++Name	Field Count->2
+Collection name lnd_landmark	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_tree	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_transit_area	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name lnd_building	+++ Field Name +++Type	Field Count->2
+Collection name lnd_building	+++ Field Name +++Addresses	Field Count->2
+Collection name lnd_building	+++ Field Name +++Floors	Field Count->2
+Collection name lnd_building	+++ Field Name +++Name	Field Count->2
+Collection name lnd_building	+++ Field Name +++Created Date in GIS	Field Count->2
+Collection name tp_flood_map	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_right_of_way	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name lnd_street_segment	+++ Field Name +++City	Field Count->2
+Collection name tp_sub_locality	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_footpath	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_estate_land_type	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_shop	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_circle	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_vehicle_demarcated_boundary	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_telecom	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_locality_boundary	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_obstacle	+++ Field Name +++Surveyor Remark	Field Count->2
+Collection name tp_lnd_division	+++ Field Name +++Surveyor Remark	Field Count->2

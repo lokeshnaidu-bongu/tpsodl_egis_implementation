@@ -1,0 +1,55 @@
+// These are BS2 variables not set in BS3 anymore
+.dropdown-menu {
+  background-color: @dropdownBackground;
+	border: 1px solid #cccccc;
+  .divider {
+    .nav-divider(@dropdown-border);
+    border: none;
+  }
+  > li > a {
+    color: @dropdownLinkColor;
+  }
+}
+
+
+.dropdown-menu > li > a {
+  &:hover,
+  &:focus {
+    color: @dropdownLinkColorHover;
+    //background-color: @dropdownLinkBackgroundHover; // This is unneeded since it has a gradient override elsewhere.
+  }
+}
+
+.dropdown-menu > .active > a {
+  &,
+  &:hover,
+  &:focus {
+    color: @dropdownLinkColorActive;
+    //background-color: @dropdownLinkBackgroundActive; // This is unneeded since it has a gradient override elsewhere.
+  }
+}
+
+input.form-control.tt-input {
+  vertical-align: middle!important;
+  border-radius: 4px 0 0 4px!important;
+  margin-bottom: 5px;
+}
+
+.tt-dropdown-menu {
+   padding-bottom: 5px;
+   padding-top: 5px;
+}
+
+.tt-suggestion {
+  color: @grayDark;
+  padding: 3px 20px;
+  line-height: 1;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.tt-suggestion.tt-cursor {
+  color: @white;
+	#gradient > .vertical(lighten(@cyan, 15%), @cyan); }

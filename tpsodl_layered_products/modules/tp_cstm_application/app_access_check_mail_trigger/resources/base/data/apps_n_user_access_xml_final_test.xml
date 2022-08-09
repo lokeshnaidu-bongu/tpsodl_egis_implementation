@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="windows-1252" standalone="yes"?>
+<serial_xml_thing format="1">
+	<keyed class="sw:property_list" size="1">
+	
+		<!--start block to load new access provider -->
+		<entry key="Example">
+			<keyed class="sw:property_list" size="3">
+				<entry key="user_name">
+					<elements class="sw:equality_set" size="">
+						<string>ashok</string>						
+						<string>root</string>
+						</elements>
+				</entry>
+				<entry key="information">
+					<string>Module</string>
+				</entry>
+				<entry key="tracking">
+					<string>False</string>
+				</entry>
+				<entry key="mail">
+					<string>False</string>
+				</entry>
+				<entry key="attachment">
+					<string>True</string>
+				</entry>
+				<entry key="subject">
+					<string>Apps Usage: RI cost calculator used by</string>
+				</entry>
+				<entry key="mail_list">
+					<elements class="sw:rope" size="">
+						<string>asokakumar.geeta@tcs.com</string>	
+						<string>xyz@tatapower.com</string>
+					</elements>
+				</entry>
+				<entry key="mail_content">
+				    <elements class="sw:rope" size="">
+					<string>Dear All,</string>
+					<string>dlp_trace_application used by</string> <!--- Need to always maintain 2nd Line as Application Name -->
+					<string>PFA, Reports</string>
+					<string>With regards,</string>
+					<string>GIS Team</string>
+				    </elements>
+				</entry>
+			</keyed>
+		</entry>
+		<!--end block to load new access provider -->
+		
+	</keyed>
+</serial_xml_thing>

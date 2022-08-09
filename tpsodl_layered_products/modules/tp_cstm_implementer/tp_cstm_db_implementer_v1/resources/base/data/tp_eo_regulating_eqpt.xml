@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+    <!-- Define the xml files for specific collections -->
+    <collection collection_name = "eo_regulating_eqpt" >
+	<fields field_name = "tp_migration_unique_id" external_name = "Migration Unique Id" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_manufacturer" external_name = "Manufacturer Name" mandatory = "false" field_type="ds_char16_vec" field_size ="128" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_mig_phase" external_name = "Mig Phase" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_mig_spec" external_name = "Mig Spec" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+    </collection>
+</tp_collections>

@@ -1,0 +1,36 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: populate-tilecache-task
+  namespace: gss-prod
+spec:
+  # To run the populate-tilecache job manually, use this command:
+  # kubectl create job --from=cronjob/populate-tilecache-task -n <GSS_NAMESPACE> populate-tilecache-task-manual-job
+  # where <GSS_NAMESPACE> is the deployment namespace
+  schedule: "15 1 * * *"  # Run 01:15 every day
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: tpsodl-eo-web-populate-tilecache
+            image: pull.dc-gisuat-webm1:30443/pwr-smallworld/tilecacher:latest
+            command:
+            - node
+            - tilecacher.js
+            - "-v"
+            - "-d"
+            - "/config"
+            volumeMounts:
+            - name: config-volume
+              mountPath: /config
+          imagePullSecrets:
+          - name: regsecret
+          volumes:
+          - name: config-volume
+            configMap:
+              name: cm-tilecacher-config

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+
+<!-- gui.xml for the CU User SWAF Professional application -->
+<gui base="sweo_dm_user_application.gui">
+  <!-- MENUBAR -->
+  <menu name="menubar"> 
+    <submenu name="jobs"/>
+    <submenu name="edit"/>
+    <submenu name="view"/>
+    <submenu name="trail"/>
+    <submenu name="tools"/>
+    <submenu name="applications"/>
+	<!-- 
+    <submenu name="schematics" mnemonic_id="schematics_m">
+      <action name="schematic.create_schematic" mnemonic_id="create_schematic_m"/>
+      <separator/> 
+      <action name="schematic.move_selected_objects" mnemonic_id="move_selected_objects_m"/>
+      <action name="schematic.delete_selected_objects" mnemonic_id="delete_schematic_object_m"/>
+      <action name="schematic.tidy_schematic" mnemonic_id="tidy_schematic_m"/>
+      <action name="schematic.layout_properties" mnemonic_id="layout_properties_m"/>
+      <separator/>
+      <action name="schematic.switch_views" mnemonic_id="switch_views_m"/>
+      <separator/>
+      <action name="schematic.save_schematic" mnemonic_id="save_schematic_m"/>
+    </submenu> 
+	
+	-->
+    <submenu name="window"/>
+    <submenu name="help"/>
+  </menu> 
+
+  <menu path="menubar.applications" >
+    <submenu name="general" mnemonic_id="general_m"></submenu>
+    <submenu name="electric"> </submenu>
+    <submenu name="design"> </submenu>
+	
+	<submenu name="tpsodl">
+		<action name="database_comp.start_application_gui" mnemonic_id="data_comp_m"/>
+		<action name="update_tool.start_application_gui" mnemonic_id="update_tool_m"/>
+		<action name="spatial_pred_tool.activate_spatial_predicate_tool" mnemonic_id="spa_pred_tool_m"/>
+		<action name="versions.activate_version_management" mnemonic_id="activate_version_management_m" /> 
+	 </submenu>
+	   
+  </menu> 
+  
+  <!-- TPSODL's new custom tools added in upgrade-->
+  <dock name="top">
+    <toolbar name="view"/>
+    <toolbar name="objects"/>
+    <toolbar name="transform"/>
+  </dock>
+  <!-- TPSODL's new custom tools added in upgrade-->
+  
+  
+  <!-- WORK AREA -->
+  <work_area>
+    <paned_window side_by_side="no" top_spacing="2" bottom_spacing="2" row_spacing="0">
+
+      <plugin plugin_name="task_bar"/>
+
+      <paned_window side_by_side="yes" stretch="1" col_spacing="0" top_spacing="6" left_spacing="6" right_spacing="6">
+	<!-- The blank paned_window is needed so that separator below does not lose the rowcol to its left 
+             when controls_pane is floated -->
+	<paned_window>  
+	  <paned_window side_by_side="no" row_spacing="0" role="controls_pane">
+	    <border stretch="1" >
+	      <tab_box multiline="yes">
+		<!-- these roles are used by the pane_manager to allow 
+		     the user to switch the visibility of these tabs -->
+		<plugin plugin_name="dm!design_tab_plugin"
+			tab_label_id="project_design_tab" role="project_design_tab"/>
+		<paned_window side_by_side="no" row_spacing="8" stretch="1"
+			      tab_label_id="object_control" role="object_control_tab">
+		  <plugin plugin_name="object_control" role="object_control"/>
+		  <tab_box multiline="yes">
+		    <plugin plugin_name="visibility_override" role="visibility_override"/>
+		    <plugin plugin_name="eo_colour_by"/>
+		  </tab_box>
+		</paned_window>
+		<plugin plugin_name="dlt_app_plugin" cad_tools="no" role="layout_tools"/>
+		<plugin plugin_name="quality_management" gui_type="flag_details"/>
+		<plugin plugin_name="find"/>
+	      </tab_box>
+	    </border>
+
+	    <separator side_by_side="no" minimise_direction="down"/>
+	    
+	    <border>
+	      <paned_window dynamic="no" border="yes">
+		<plugin plugin_name="overviewer" role="overviewer"/>
+	      </paned_window>
+	    </border>
+	  </paned_window>
+	</paned_window>
+	
+	<separator side_by_side="yes" minimise_direction="left"/>
+	
+	<border stretch="1" >
+	  <plugin plugin_name="document_manager">
+	    <document plugin_name="maps" map_type="geographic" />
+	  </plugin>
+	</border>
+	
+	<separator side_by_side="yes" minimise_direction="right"/>
+	
+	<paned_window side_by_side="no" row_spacing="0" role="details_pane">
+	  <border>
+	    <tab_box multiline="yes">
+	      <plugin plugin_name="spatial_context_viewer" role="object_viewer"/>
+	      <plugin plugin_name="asset_viewer" tab_label_id="asset_viewer" role="asset_viewer"/>
+	      <plugin plugin_name="cad_tools_plugin"/>
+	      <plugin plugin_name="map_selection_viewer"/>
+	      <plugin plugin_name="streetview"/>
+	    </tab_box>
+	  </border>
+	  <separator side_by_side="no" minimise_direction="up"/>
+	  
+	  <!-- note: role viewport_mapping means Layouts is allowed to build panes inside this tab -->
+	  
+	  <border stretch="1">
+	    <tab_box role="viewport_mapping">
+	      <plugin plugin_name="editor_manager" role="editor_manager"/>
+	    </tab_box>
+	  </border>
+	</paned_window>
+      </paned_window>
+
+    </paned_window>
+  </work_area>
+  
+  <!-- STATUSBAR -->
+  <statusbar name="test"/>
+
+</gui>

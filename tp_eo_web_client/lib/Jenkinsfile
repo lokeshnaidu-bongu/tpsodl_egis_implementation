@@ -1,0 +1,27 @@
+pipeline {
+  agent { label 'dind' }
+  environment {
+    PROJECT_NAME = 'nig-client'
+    GIT_CREDS = credentials('git_creds')
+    DTR_CREDS = credentials('predix_dtr_creds')
+    ARTIFACTORY_CREDS = credentials('txdst_artifactory_creds')
+  }
+
+  stages {
+    // This is just to kick off the build
+    stage('Build') {
+      steps {
+        script { 
+          build job: "eo-web-client/${env.BRANCH_NAME}", wait: false
+        }
+        script { 
+          build job: "nig-client/${env.BRANCH_NAME}", wait: false
+        }
+        script { 
+          build job: "nv-client/${env.BRANCH_NAME}", wait: false
+        }   
+        sh 'echo Build DONE'
+      }
+    }
+  }
+}

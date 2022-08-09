@@ -1,0 +1,26 @@
+{
+  "name": "multi-step-navigation",
+  "version": "0.7.0",
+  "author": "General Electric",
+  "main": [
+    "js/multi-step-navigation.js",
+    "less/multi-step-navigation.less",
+    "less/multi-step-navigation-responsive.less"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "Gruntfile.js",
+    "package.json",
+    "components",
+    "css",
+    "node_modules",
+    "js/require.config.js"
+  ],
+  "dependencies": {
+    "twitter-bootstrap-wizard": "git@github.sw.ge.com:DXC/twitter-bootstrap-wizard#master",
+    "ge-bootstrap": "git@github.sw.ge.com:DXC/ge-bootstrap#master",
+    "requirejs": "https://github.com/jrburke/requirejs-bower.git#~2.1.11",
+    "jquery": "https://github.com/components/jquery.git#~1.10.2"
+  }
+ }

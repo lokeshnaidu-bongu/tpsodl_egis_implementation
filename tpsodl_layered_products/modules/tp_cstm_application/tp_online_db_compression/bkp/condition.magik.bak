@@ -1,0 +1,67 @@
+#% text_encoding = iso8859_1
+_package user
+
+
+
+
+##This condition is raised when the view is readonly
+#condition.define_condition(:mig_tool_view_readonly,
+#	:user_error,
+#	{:view_dataset} )
+#$
+##This condition is raised when the view is readonly
+#condition.define_condition(:mig_tool_excel_file_not_entered,
+#	:user_error,
+#	{:view_dataset} )
+#$
+#condition.define_condition(:mig_tool_log_dir_not_entered,
+#	:user_error,
+#	{:view_dataset} )
+#
+#$
+#
+##This condition is raised when the collection mentioned in the
+## mapping file doesnot exist
+#condition.define_condition(:mig_tool_invalid_collection_name,
+#	:user_error,
+#	{:coll_name})
+#$
+##This condition is raised when the field and collection name
+## mentioned in the mapping file doesnot exist
+#condition.define_condition(:mig_tool_invalid_field_name,
+#	:user_error,
+#	{:field_name,:coll_name})
+#
+#$
+##This condition is raised when the file is not found in the
+## folder.
+#condition.define_condition(:mig_tool_file_not_found,
+#	:user_error,
+#	{:file_name,:excel_file_folder})
+#
+#$
+##This condition is raised when the user tries to close the
+## window when the engine is running.
+#condition.define_condition(:mig_tool_engine_running,
+#	:user_error,
+#	{})
+#$
+#
+##This condition is raised when the mandatory field data is
+## missing in the data provided in the xml file
+#condition.define_condition(:mig_tool_mandatory_field,
+#			   :user_error,{:field_name,:element_name}
+#	  )
+#$
+#condition.define_condition(:mig_tool_record_exists,
+#	:user_error,{} )
+#$
+#condition.define_condition(:mig_tool_invalid_table_name,
+#	:user_error,{:error_sheet_name} )
+#$
+#condition.define_condition(:mig_tool_comp_pole,
+#	:user_error,{} )
+#$
+#condition.define_condition(:mig_tool_comp_sdp,
+#	:user_error,{} )
+

@@ -1,0 +1,70 @@
+#Remove Jumper Annotation
+
+_block
+       l_ele_view << gis_program_manager.cached_dataset(:electric)
+       wire_col << l_ele_view.collections[:eo_wire_segment_inst]
+       jumper_col << wire_col.select(predicate.eq(:usage,"Jumper"))
+       _for a_jum _over jumper_col.fast_elements()
+       _loop
+		_if a_jum.annotations _isnt _unset 
+		_then
+			a_jum.annotations.delete()
+		_endif
+		_if a_jum.remarks_annotation _isnt _unset
+_then
+			a_jum.remarks_annotation.delete()
+		_endif
+		
+	       
+write("Deleted Annotation for Jumper",%tab,a_jum.tp_migration_unique_id)
+       _endloop
+	       
+       _endblock
+$
+#Remove Service Line Anntoation
+
+_block
+       l_ele_view << gis_program_manager.cached_dataset(:electric)
+       cab_col << l_ele_view.collections[:eo_cable_segment_inst]
+       sl_col << cab_col.select(predicate.eq(:usage,"Service Line"))
+       _for a_sl _over sl_col.fast_elements()
+       _loop
+		_if a_sl.annotations _isnt _unset
+		_then
+			a_sl.annotations.delete()
+		_endif
+		_if a_sl.remarks_annotation _isnt _unset
+			_then
+			a_sl.remarks_annotation.delete()
+		_endif
+		
+	       
+write("Deleted Annotation for Service Line",%tab,a_sl.tp_migration_unique_id)
+       _endloop
+	       
+       _endblock
+$
+
+#Remove Service Point Annoation
+
+_block
+       l_ele_view << gis_program_manager.cached_dataset(:electric)
+       sp_col << l_ele_view.collections[:eo_service_point]
+       
+       _for a_sp _over sp_col.fast_elements()
+       _loop
+		_if a_sp.annotation _isnt _unset 
+		_then
+			a_sp.annotation.delete()
+		_endif
+		_if a_sp.remarks_annotation _isnt _unset
+		_then
+			a_sp.remarks_annotation.delete()
+		_endif
+		
+	       
+write("Deleted Annotation for Service Point",%tab,a_sp.tp_migration_unique_id)
+       _endloop
+	       
+       _endblock
+$

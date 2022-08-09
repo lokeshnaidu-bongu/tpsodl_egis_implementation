@@ -1,0 +1,314 @@
+<!--
+     This file is used to provide dataset, manifold and general
+     trace parameter information for the Electric trace engine.
+     It also contains section for GUI options and enumerator
+     defintions, although the latter two are not used by the engine.
+-->
+
+<config base="cs_base_trace_engine.config.xml">
+  <!--
+       The datasets section contains references to internal dataset
+       names that are relevant for an Electric trace.
+
+       These attributes can be specified:
+       - name (mandatory)
+         An internal name of a dataset. The given name must refer to
+	 a dataset that can be located with the API call
+	 gis_program_manager.cached_dataset( <name> ).
+
+       - alias (optional)
+         A second name for this dataset that allows to reference this dataset
+	 (in application code or other XML sections).
+  -->
+  <datasets>
+      <dataset name="electric"/>
+  </datasets>
+
+   <!--
+       The collections section defines mappings between table names used
+       by application code and the actual table names in a database.
+       This section must be defined *after* the <datasets> section.
+
+       These attributes can be defined:
+       - name (mandatory)
+         A name how a table can be referenced by application code
+
+       - table (mandatory)
+         The internal name of the collection in a (configured) database.
+
+       - dataset (optional)
+         If a table belongs to a dataset that was not configured in the
+	 datasets section, this attribute allows to refer to that dataset.
+  -->
+  <collections>
+      <collection name="wire" table="eo_wire_segment_inst"/>
+      <collection name="cable" table="eo_cable_segment_inst"/>
+      <collection name="connector" table="eo_connector_segment_inst"/>
+      <collection name="energy_source" table="eo_energy_source"/>
+  </collections>
+
+  <!--
+       The manifolds section provides all the (internal) manifold
+       names that are relevant for an Electric trace.
+
+       Only one attribute can be defined:
+       - name (mandatory)
+         The manifold name as specified in the case tool.
+  -->
+  <manifolds>
+	  <manifold name="elec_dist_primary"/>
+	  <manifold name="elec_dist_secondary"/>
+	  <manifold name="elec_trans"/>
+  </manifolds>
+
+  <!--
+       The default_trace_parameters section defines how the engine
+       sets up default values for an Electric trace if those values
+       are not provided by the calling environment.
+  
+       The following attributes are supported:
+       - name (mandatory)
+         The internal name of the trace parameter. Potentially this
+	 parameter will be passed down to the network_follower class.
+
+       - value (mandatory)
+         The value of the trace parameter.
+
+       - type (optional)
+         This attribute specified the type of the value of attribute value.
+	 The default type is string and these types are supported:
+	 integer, float, boolean, string, symbol, and object.
+
+	 Here is an example of a more complex attribute:
+	 <parameter name="interest_range"
+		    value="unit_value.new(500,:feet).convert_to(:cm).value"
+		    type="object"/>
+	 The value of this parameter will be the floating point
+	 number 15240.0.
+	 
+       - used_in_stop_predicates (optional)
+         This is a Boolean attribute that tells the trace engine if
+	 the passed key/value pair can be used in automatically generated
+	 stop predicates or not. The value for this attribute should
+	 either be "yes" or "no"; the default value is "no".
+-->
+  <default_trace_parameters>
+      <parameter name="phasing"             value="ABC" type="string"
+		 used_in_stop_predicates="no"/>
+      <parameter name="nominal_voltage_pp"     value="all" type="symbol"
+		 used_in_stop_predicates="no"/>
+      <parameter name="network_state"       value="Existing" type="symbol"
+		 used_in_stop_predicates="no"/>
+      <parameter name="circuit_id"          value="all" type="symbol"
+		 used_in_stop_predicates="yes"/>
+      <parameter name="mounting"          value="all" type="symbol"
+		 used_in_stop_predicates="no"/>
+      <parameter name="interest_range"      value="100"  type="number"/>
+  </default_trace_parameters>
+
+  <!--
+       The following section contains enumerator definitions.
+       If you need any of the following (special) characters in a string,
+       please use the corresponding entity references:
+       <    &lt;
+       >    &gt;
+       &    &amp;
+       '    &apos;
+       "    &quot;
+
+       These attributes are supported:
+       - name (mandatory)
+         The internal name for this enumerator (e.g. how application
+	 code and other configuration data can refer to this enumerator)
+
+       - label (optional)
+         An external name for this enumerator
+
+       - separator (optional)
+         A single character that defines how values are separated;
+	 defaults to a comma (,).
+
+       - values (optional - if missing derived_strings must be defined)
+         A list of values that define the *internal* enumerator values
+	 (e.g. what is used within application code/Magik).
+
+       - value_type (optional)
+         The type for the internal enumerator values.
+	 Defaults to string but can be any of these types:
+	 integer, float, boolean, string, symbol, and object.
+
+       - default_value_position (optional)
+         Defines which value is interpreted as default value for
+	 this enumerator. Defaults to 1 (e.g. the first element in
+	 the list).
+	 The special value "#" can also be used, which means
+	 the last item in the values list will be the default value.
+	 It is also possible to use the special value "*" which
+	 means that all values will be put in a simple_vector
+	 and represent the default value.
+	 Additionally it is also possible to pick several values
+	 by specifying a comma-separated list of numbers.
+
+	 If the default value should be a vector with one
+	 element, one of these expressions can be used
+	 (e.g. specify a non-existing position or use a trailing comma):
+	 default_value_position="0,1"     or
+	 default_value_position="2,"
+
+      - derived_strings (only evaluated if attribute value is missing)
+	The value of this attribute must be a string with two
+	datums separated by a point (e.g. derived_strings="oh_switch.phasing").
+	The first entry references a collection from the XML
+	collections section. The second provides the internal
+	name of an enumerated field.
+
+      - exclusions (evaluated only with derived_strings)
+        Contains a comma separated string listing untranslated values from the 
+	enumerator in derived_strings to be excluded from the trace enumerations
+
+      - add_all_string (only evaluated when attribute derived_strings is used)
+	The value for this field (either "yes", "true", "no", or "false")
+	determines if the string "All" is added to the derived enumerated
+	list. If this attribute is not specified an all-value will not be added.
+
+      - add_all_last (only evaluated when attribute derived_strings is used)
+	The value for this field (either "yes", "true", "no", or "false")
+	determines if the string "All" is added at the beginning or end of
+	the enumerator list.
+	By default the all-value will be added as first element in the list.
+	If attribute add_all_string is missing (or its value is _false) the
+	attribute has no effect.
+  -->
+  <enumerations>
+      <enumerator name="electric_flow_direction"
+		  values="any,downstream,upstream"
+		  value_type="symbol"
+		  default_value_position="2"/>
+      <enumerator name="eo_manifolds"
+		  values="elec_trans,elec_dist_primary,elec_dist_secondary"
+		  value_type="symbol"
+		  default_value_position="1,2,3"/>
+      <enumerator name="mounting"
+		  values="all,underground,overhead"
+		  value_type="symbol"
+		  default_value_position="1"/>
+      <enumerator name="phasing"
+		  derived_strings="energy_source.phasing"
+		  add_all_string="no"
+		  all_all_last="no"
+		  default_value_position="5"
+		  value_type="string"
+		  exclusions="Unknown"/>
+      <enumerator name="network_state"
+		  values="current, future"
+		  value_type="symbol"
+		  default_value_position="1"/>
+      <enumerator name="nominal_voltage_pp"
+		  derived_strings="wire.nominal_voltage_pp"
+		  add_all_string="yes"
+		  all_all_last="no"
+		  value_type="object"/>
+  </enumerations>
+
+  <!--
+       The gui_options section provides the information about options
+       that should be provided in a GUI interface for the trace engine.
+       This section must be defined after the enumerations section when
+       enumerators are referenced.
+
+       These attributes can be specified:
+       - name
+	 An internal name for this GUI option
+
+       - label
+	 The string that will appear in a label of a GUI widget.
+
+       - enumerator
+	 References an enumerator name from the enumerations XML section.
+
+       - editor
+	 The class name (potentially prefixed by a package name)
+	 of the editor that is supposed to be used in a GUI.
+	 If attribute enumerator was specified, the value defaults
+	 to "sw:in_place_choice_editor". If the latter attribute is
+	 missing, the default value is "sw:in_place_value_editor".
+
+       - default_value
+	 This allows to specify a default value for the widget.
+	 It can be used to override any default value specified
+	 by an enumerator.
+
+       - value_type
+	 Allows to specify the type of the default value. Defaults
+	 to "string". The following types are currently supported:
+	 integer, float, boolean, string, symbol, and object.
+
+       - enabled_callback
+	 A callback on the class that created the GUI widget to decide
+	 if the editor for this option should be active or not.
+	 The value of attribute name is passed to to the method.
+
+       - parameter_name
+	 This attribute allows to specify a symbol that will be used
+	 as a paramter name (instead of the value of attribute name).
+	 Defaults to the value of attribute name.
+
+       - parameter_value_formatter
+	 A callback on the class that created the widgets to format
+	 the value specified by the user into something the Magik
+	 can process.
+
+       - value_changed_notifier
+	 A callback on the class that created the widgets to perform
+	 any required notification or other actions when a parameter
+	 values was changed by a user.
+  -->
+  <gui_options>
+      <option name="direction"
+	      enumerator="electric_flow_direction"
+	      editor="sw:in_place_choice_editor"/>
+      <option name="manifolds"
+	      enumerator="eo_manifolds"
+	      editor="sw:cs_in_place_multi_choice_editor"/>
+      <option name="mounting"
+	      enumerator="mounting"
+	      editor="sw:in_place_choice_editor"/>
+      <option name="nominal_voltage_pp"
+	      editor="sw:eo_in_place_unit_voltage_editor"/>
+      <option name="network_state"
+	      enumerator="network_state"
+	      editor="sw:in_place_choice_editor"/>
+      <option name="phasing"
+	      enumerator="phasing"
+	      editor="sw:in_place_choice_editor"/>
+      <option name="circuit_id"
+	      editor="sw:in_place_value_editor"
+	      parameter_value_formatter="convert_string_values_to_list()"/>
+      <option name="stop_distance"
+	      editor="sw:cs_in_place_unit_length_editor"
+	      parameter_name="max_cost"
+	      parameter_value_formatter="convert_to_database_units()"/>
+
+      <option name="obey_normal_status?"
+	      enumerator="yes_no"
+	      default_value="true"
+	      value_type="boolean"
+	      editor="sw:in_place_boolean_editor"/>
+
+      <option name="include_additional_results?"
+	      enumerator="yes_no"
+	      default_value="false"
+	      value_type="boolean"
+	      editor="sw:in_place_boolean_editor"/>
+
+      <option name="inside_trail?"
+	      parameter_name="inside_trail"
+	      enumerator="yes_no"
+	      default_value="false"
+	      value_type="boolean"
+	      editor="sw:in_place_boolean_editor"
+	      enabled_callback="map_has_closed_trail?()"/>
+      
+  </gui_options>
+</config>
+

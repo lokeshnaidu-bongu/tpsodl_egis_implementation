@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Cold Shrink	1
+Conventional	2
+Epoxy	3
+Heat Shrink	4
+Pre Molded	5
+Push On	6
+Transition	7
+Sealing End	8
+Termination	9
+Straight Through	10
+Others	11

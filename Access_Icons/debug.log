@@ -1,0 +1,8 @@
+[0322/174027.559:ERROR:viz_main_impl.cc(150)] Exiting GPU process due to errors during initialization
+[0322/174027.675:ERROR:viz_main_impl.cc(150)] Exiting GPU process due to errors during initialization
+[0322/174027.686:ERROR:browser_gpu_channel_host_factory.cc(168)] Failed to launch GPU process.
+[0322/174028.907:ERROR:browser_gpu_channel_host_factory.cc(168)] Failed to launch GPU process.
+[0323/143506.084:ERROR:viz_main_impl.cc(150)] Exiting GPU process due to errors during initialization
+[0323/143506.405:ERROR:viz_main_impl.cc(150)] Exiting GPU process due to errors during initialization
+[0323/143506.411:ERROR:browser_gpu_channel_host_factory.cc(168)] Failed to launch GPU process.
+[0323/143507.023:ERROR:browser_gpu_channel_host_factory.cc(168)] Failed to launch GPU process.

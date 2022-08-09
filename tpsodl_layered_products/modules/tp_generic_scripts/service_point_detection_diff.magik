@@ -1,0 +1,43 @@
+_block
+	
+	ev << gis_program_manager.cached_dataset(:electric)
+	a_coll << ev.collection(:eo_service_point)
+	cnt<<0
+	_for a_sp  _over a_coll.fast_elements()
+	_loop
+		cnt<<cnt+1
+		b_loc << a_sp.location
+		_if b_loc _is _unset
+		_then
+			write("no gemotery   ",a_sp.id)
+			_continue 
+		_endif
+	
+		con_geom_cont << b_loc.all_connected_geometry().size
+		_if con_geom_cont >= 3
+		_then
+			_if 
+			_for b_loc _over b_loc.all_connected_geometry().fast_elements()
+			_loop
+				_if b_loc.geom_type _is :point
+#				_then
+#					_continue 
+#				_endif
+#				_if b_loc.geom_type _is :chain
+#				_then
+#				#	write("hello ")
+#					_if b_loc=b.geom_type _is _true
+#					_then
+#					write("overlapping object   ",b_loc.rwo)
+#					b<<b_loc
+#					_endif 
+#				_endif
+			_endloop
+#			write("overlapping object   ",a_sp.id)
+		_endif
+		_if cnt =1000
+		_then
+			_leave
+		_endif 
+	_endloop
+_endblock

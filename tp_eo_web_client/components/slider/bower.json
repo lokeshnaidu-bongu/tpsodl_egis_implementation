@@ -1,0 +1,25 @@
+{
+  "name": "slider",
+  "version": "0.8.0",
+  "author": "General Electric",
+  "main": [
+    "js/slider.js",
+    "less/slider.less"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "Gruntfile.js",
+    "package.json",
+    "components",
+    "css",
+    "node_modules",
+    "js/require.config.js"
+  ],
+  "dependencies": {
+    "ge-bootstrap": "git@github.sw.ge.com:DXC/ge-bootstrap#master",
+    "requirejs": "git://github.com/jrburke/requirejs-bower#~2.1.11",
+    "jquery": "git://github.com/components/jquery#~1.10.2"
+  },
+  "devDependencies": {}
+}

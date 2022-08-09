@@ -1,0 +1,78 @@
+#by ashok
+
+
+
+_block
+
+
+
+soc << gis_program_manager.spatial_object_controller(:electric_dm).dataset_caches(:dd_enumerators)
+_for a_dataset_name , a_enum_colls _over soc.fast_keys_and_elements()
+_loop
+_if a_dataset_name ~= "Land"
+_then
+_continue
+_endif
+_for a_enum_def _over a_enum_colls.fast_elements()
+_loop
+_if a_enum_def.name.write_string.index_of_seq("tp_") _isnt _unset
+_then
+l_file_name << a_enum_def.name.write_string+".enum"
+
+l_file_path <<write_string("D:\EO_528\electric_office\eo_implementers\tp_cstm_land_db_implementer\resources\base\data\Land_enum_values\",l_file_name)
+
+_try
+l_enum_file<< external_text_input_stream.new(l_file_path)
+_when file_does_not_exist
+
+write("+++ File Not Found+++",l_file_path)
+l_enum_file << _unset
+_endtry
+_if l_enum_file _is _unset
+_then
+_continue
+_endif
+_loop
+l_line<<l_enum_file.get_line()
+_if l_line _is _unset
+_then
+_leave
+_endif
+_if l_line.index_of_seq("#") _isnt 1 _andif
+l_line.index_of_seq(" ") _isnt 1
+
+_then
+(new_val, new_id) << (_scatter l_line.trim_spaces().split_by(tab_char))
+_if new_val _isnt _unset _andif
+new_id _isnt _unset
+_then
+l_enum_val <<new_val.write_string
+l_stored_val <<new_id.as_number()
+_try
+l_exi_id << a_enum_def.id_for(l_enum_val)
+
+_when enumerator_value_not_found
+
+l_exi_id << _unset
+_endtry
+
+_if l_exi_id _isnt _unset
+_then
+_continue
+_endif
+a_enum_def.add_extended_pairs_from({l_stored_val,l_enum_val})
+_endif
+_endif
+
+_endloop
+
+
+
+_endif
+
+
+
+_endloop
+_endloop
+
+_endblock

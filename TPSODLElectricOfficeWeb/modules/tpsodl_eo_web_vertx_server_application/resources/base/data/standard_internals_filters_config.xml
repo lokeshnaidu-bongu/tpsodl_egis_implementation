@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<filters_config>
+	<filter world_owner_name="eo_world_owner_mixin" class_name="world_info_filter">
+		<rwos>
+			<rwo name="eo_isolating_eqpt_inst" />
+			<rwo name="eo_protective_eqpt_inst" />
+			<rwo name="eo_regulating_eqpt_inst" />
+			<rwo name="eo_energy_storage_inst" />
+			<rwo name="eo_composite_switch" />
+			<rwo name="eo_dac" />
+			<rwo name="eo_power_xfrmr_inst" />
+			<rwo name="eo_3w_power_xfrmr_inst" />
+		</rwos>
+	</filter>
+	<filter world_owner_name="ed_manhole" class_name="world_info_filter">
+		<rwos>
+			<rwo name="eo_accurate_route" />
+			<rwo name="eo_conduit" />
+		</rwos>
+	</filter>
+</filters_config>

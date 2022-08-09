@@ -1,0 +1,12 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+ODAF/OFAF	1
+OFWF	2
+ONAF	3
+ONAN	4
+Others	5
+Not Available	6

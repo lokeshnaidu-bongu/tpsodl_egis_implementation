@@ -1,0 +1,4 @@
+
+  name: hogan
+  release: e-tag:479c278fb
+  source: https://raw.github.com/twitter/hogan.js/v3.0.0/web/builds/2.0.0/hogan-2.0.0.min.amd.js

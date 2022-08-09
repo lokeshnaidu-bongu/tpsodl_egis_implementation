@@ -1,0 +1,45 @@
+##
+## Procedure to apply :cs_audit_history implementers to
+## LAND datasets
+##
+_global retarget_cs_audit_history_implementers_for_land <<_proc()
+	_local l_land_dataset_name << :land
+	
+	# Ensure cs_audit_history implementers are loaded
+	l_ipa_imps << sw_module_manager.module( :cs_audit_history ).datamodel_implementers( "cs_audit_history" )
+	
+	# Retarget them 
+	_for i_imp _over l_ipa_imps.fast_elements()
+	_loop
+		i_imp.set_property(:dataset_names_method, _unset)
+		
+		l_dataset_names << _if i_imp.property(:dataset_names) _isnt _unset
+				   _then
+					   >> rope.new_from( i_imp.property(:dataset_names ) )
+				   _else
+					   >> rope.new()
+				   _endif 
+		_if _not l_dataset_names.includes?( l_land_dataset_name )
+		_then
+			l_dataset_names.add_last( l_land_dataset_name )
+		_endif
+		
+		i_imp.set_property( :dataset_names, l_dataset_names )
+	_endloop 
+	
+	
+_endproc
+$
+
+_block
+	_global  imp,mmm,de
+	retarget_cs_audit_history_implementers_for_land()
+	imp << sw_module_manager.module(:cs_audit_history)
+	mmm << imp.datamodel_implementers()
+	de << datamodel_engine.new(:implementers, mmm)
+	de.print_installation_status() 
+	de.install_database_changes()	
+_endblock
+$
+
+

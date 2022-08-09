@@ -1,0 +1,126 @@
+#% text_encoding = iso8859_1
+
+_block
+
+	##
+	## This script will query the product histories of the datasets of an EO
+	## database, checking that a number of datamodels have been installed and are
+	## between the minimum and maximum versions required at the current release.
+	##
+	## This script is relevant for both newly created databases and older ones that
+	## have been upgraded.
+	##
+
+
+	_local ace_view           << gis_program_manager.ace_top_view
+	_local electric_view      << gis_program_manager.databases[:electric]
+	_local design_admin_view  << gis_program_manager.databases[:design_admin]
+	_local design_config_view << gis_program_manager.databases[:design_config]
+	_local style_view         << gis_program_manager.style_view
+	_local auth_view          << gis_program_manager.authorisation_view
+	_local gis_view           << gis_program_manager.databases[:gis]
+
+	_local views_property_list << property_list.new_with(
+		"ace view", ace_view,
+		"electric view",electric_view,
+		"design admin view",design_admin_view,
+		"design config view",design_config_view,
+		"style view",style_view,
+		"auth view",auth_view,
+		"gis view",gis_view
+		)
+
+	_for view_name,view _over views_property_list.fast_keys_and_elements()
+	_loop
+		_if view _is _unset
+		_then
+			write(view_name," ERROR - view does not exist. Aborting...")
+			!abort!()
+		_endif
+	_endloop
+
+
+	# Min & max versions are included.  This fixes the versions, but should force
+	# anyone who introduces a new implementer to configure it in correctly.
+	# Some product names are _unset as the product history has datamodels that have changed products.
+	# This makes the product name useless in those records
+	_local expected_datamodel_versions <<
+		property_list.new_with(
+			electric_view,
+			{
+				# A large range here (1-12), due to multiple Install implementers available, but no upgrades between them
+				# Upgrades have been made (arguably incorrectly) to tables created by the eo_spec_datamodel using eo_datamodel implementers
+				# This means that the database will be correct, but having arrived there by a (strictly speaking) incorrect route.
+				{:eo_implementers,:eo_datamodel_implementer,:eo_spec_datamodel,1,14},
+				{_unset,:eo_datamodel_implementer,:eo_datamodel,15,15},
+				{_unset,:layout_area,:layout_area,2,2},
+				{_unset,:eo_extensible_db_implementer,:eo_extensible_db,17,17},
+				{_unset,:cs_audit_history,:cs_audit_history,7,7},
+				{_unset,:co_datamodel_implementer,:schematic_datamodel,4,4},
+				{:sw_common_office,:co_datamodel_implementer,:co_datamodel,4,4},
+				{_unset,:eo_datamodel_optional_implementers,:eo_datamodel,7,7},
+				{:sw_common_office,:co_extensible_db_implementer,:co_extensible_db,4,4},
+				# Stored units implementer commented out as it's not mandatory
+				#{_unset,:eo_stored_units_implementer,:eo_stored_units,2},
+				{:sw_common_office,:qaqc_upgrade,:qaqc_upgrade,1}
+			},
+
+			ace_view,
+			{
+				{_unset,:eo_ace_implementer,:eo_ace,14,14},
+				{_unset,:eo_ace_optional_implementers,:eo_ace,12,12},
+				{_unset,:eo_design_manager_implementer,:eo_design_manager_install,1,2},
+				{:sw_common_office,:cs_audit_history,:cs_audit_history_archive,1,1},
+				{:sw_common_office,:co_ace_implementer,:co_ace,6,6}
+			},
+
+			style_view,
+			{
+				{_unset,:layout_area,:layout_area,1,1},
+				{_unset,:eo_style_implementer,:eo_style,17,17},
+				{:eo_implementers,:eo_style_optional_implementers,:eo_style,7,7},
+				{:sw_common_office,:co_style_implementer,:co_style,3,3}
+			},
+
+			design_admin_view,
+			{
+				{_unset,:eo_design_manager_implementer,:eo_design_manager_config,1,2},
+				{_unset,:eo_auth_implementer,:eo_auth,2,2},
+				{:eo_implementers,:eo_dm_extensible_db_implementer,:eo_dm_extensible_db,1,1}
+			},
+
+			design_config_view,
+			{
+				{_unset,:eo_design_manager_implementer,:eo_design_config,7,7}
+			},
+
+			auth_view,
+			{
+				{:sw_core, :authorisation, :authorisation, 4, 4 },
+				{:sw_common_office,:co_auth_implementer,:co_auth,3,3},
+				{_unset,:eo_auth_implementer,:eo_auth,15,15}
+			},
+
+			gis_view,
+			{
+				{:sw_common_office,:qaqc_upgrade,:qaqc_upgrade,1,1}
+			}
+		)
+
+	_local all_good? << _true
+	_for a_view, edv _over expected_datamodel_versions.fast_keys_and_elements()
+	_loop
+
+		write(newline_char," ",newline_char,a_view, ": ")
+
+		all_good? _and<< a_view.check_datamodel_versions(_scatter edv)
+
+	_endloop
+	_if all_good?
+	_then
+		write("All datamodel installations are good.")
+	_else
+		write("Something is wrong with datamodel installation checks.")
+	_endif
+_endblock
+$

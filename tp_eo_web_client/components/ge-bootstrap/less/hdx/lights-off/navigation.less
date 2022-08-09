@@ -1,0 +1,223 @@
+.navbar {
+  .dropdown-menu {
+    a:hover,
+    > a:hover,
+    > .active > a,
+    > .active > a:hover {
+      #gradient > .vertical(@blue, darken(@blue, 11.5%));
+    }
+  }
+
+  .masthead {
+    .btn.notification {
+      background-color: transparent;
+
+      &.notification-alert {
+        border-color: @red;
+      }
+
+      &.notification-message {
+        border-color: #599B7B; //TODO: Add teal to brandkit?
+      }
+
+      &.notification-suggestion {
+        border-color: @cyanDark;
+      }
+
+      &.notification-task {
+        border-color: @purpleLight;
+      }
+    }
+    .user-utilities .btn.dropdown-toggle,
+    .user-utilities .btn.dropdown-toggle.open {
+      border-color: @grayDarker;
+
+      &:hover {
+        background-color: @grayDarker;
+      }
+    }
+  }
+
+  .primary-navbar {
+    background-color: @grayDarkest;
+
+    .nav > li {
+      > a {
+        color: @grayDark;
+      }
+
+      > a:hover {
+        background-color: transparent;
+        color: @white;
+      }
+
+      &.active > a,
+      &.open > a,
+      a:active, a:focus {
+        #gradient > .vertical(@blue, darken(@blue, 11.5%));
+        color: @white;
+      }
+
+      .dropdown-menu:before {
+        border-bottom-color: lighten(@grayDarker, 14%);
+      }
+    }
+
+    .nav.alt > li {
+      > a {
+        color: @grayDark;
+        background-color: @black;
+      }
+
+      a:hover {
+        color: @white;
+        background-color: @black;
+      }
+
+      &.active > a,
+      a:active {
+        color: @white;
+        #gradient > .vertical(@blue, darken(@blue, 11.5%));
+      }
+    }
+
+    .workspace-history.btn-group {
+      .dropdown-toggle {
+        background: @black;
+        color: @grayDark;
+
+        &:hover {
+          color: @white;
+        }
+      }
+
+      &.open .dropdown-toggle,
+      .dropdown-toggle:active {
+        color: @white;
+        #gradient > .vertical(@blue, darken(@blue, 11.5%));
+      }
+    }
+  }
+
+  .workspace-navbar {
+    background-color: transparent;
+    border-color: lighten(@grayDarker, 14%);
+
+    .nav .btn-group .btn {
+      border-color: @grayDarker;
+      #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+
+      &:hover {
+        color: @white;
+        border-color: @blue;
+        &.btn-remove {
+        
+	        [class^="icon-"], [class*=" icon-"] {
+	          color:@white;
+	        }
+      }
+      }
+
+      &:active {
+        border-color: transparent;
+        #gradient > .vertical(@blue, darken(@blue, 11.5%));
+      }
+    }
+    .nav > .active .btn {
+	  	border-color: transparent;
+        #gradient > .vertical(@blue, darken(@blue, 11.5%));
+      // #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+	}
+    .nav > .active .btn:hover {
+	  #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+      color: @white;
+      border-color: @blue;
+	}
+  }
+
+  .mega-dropdown {
+    border-color: @grayDarker;
+
+    .nav > li > a {
+      color: @grayLightest;
+
+      &:hover {
+        #gradient > .vertical(@blue, darken(@blue, 11.5%));
+      }
+    }
+
+    .nav > li.nav-header > a {
+      color: darken(@grayDark, 10%);
+    }
+
+    .nav-header {
+      font-size: 11px;
+    }
+
+    .arrow:before {
+      border-bottom-color: lighten(@grayDarker, 14%);
+    }
+  }
+}
+/* Moved to navbar/less/hdx-navbar.less
+.secondary-nav {
+  ul.nav-pills {
+    > li > a,
+    .btn-group .btn,
+    .btn-group button {
+      color: @grayDark;
+      border-color: @grayDarker;
+      #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+
+      &:hover,
+      &:hover i[class^="icon-"] {
+        color: @white;
+        #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+      }
+    }
+
+    > li {
+      > a:active,
+      &.active > a,
+      &.open > a {
+        #gradient > .vertical(@blue, darken(@blue, 11.5%));
+      }
+    }
+  }
+
+  .btn-group {
+    .btn {
+      #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+      border-color: @grayDarker;
+    }
+
+    button {
+      #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+
+      &:hover {
+        color: @white;
+        #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+      }
+    }
+
+    .dropdown-toggle:hover i[class^="icon-"] {
+      background: none;
+    }
+
+    &.open .btn.dropdown-toggle {
+      #gradient > .vertical(@blue, darken(@blue, 11.5%));
+    }
+  }
+}*/
+
+.breadcrumb {
+  li,
+  li.divider,
+  li a {
+    color: lighten(@grayDarker, 16%);
+  }
+
+  li.active {
+    color: @linkColor;
+  }
+}

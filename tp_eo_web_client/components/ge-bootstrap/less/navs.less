@@ -1,0 +1,293 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/navs.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+// Nav
+.nav {
+  margin-bottom: @baseLineHeight;
+}
+.nav > li > a:hover,
+.nav > li > a:focus,
+.nav > li > a:active {
+  text-decoration: none;
+}
+
+
+// Pills
+.nav-pills {
+	> li > a {
+        .border-radius(0);
+        color: @navPillItemTextColor;
+        background-color: @navPillItemBackgroundColor;
+		line-height: @navPillItemLineHeight;
+		padding: @navPillItemPadding;
+		margin: @navPillItemMargin;
+		font-size: 15px;
+		[class^="icon-"],
+		[class*=" icon-"] {
+			color: @grayDark;
+			font-size: 12px;
+		}
+		&:hover {
+			border-color: @grayLighter;
+			background-color: @grayLighter;
+			[class^="icon-"],
+			[class*=" icon-"] {
+				color: @grayDarker;
+			}
+		}
+	}
+	> li:first-child > a {
+		.border-radius(@btnBorderRadius 0 0 @btnBorderRadius);
+	}
+	> li:last-child > a {
+		.border-radius(0 @btnBorderRadius @btnBorderRadius 0);
+	}
+	&.nav-stacked > li:first-child > a {
+		.border-radius( @btnBorderRadius @btnBorderRadius 0 0 );
+	}
+	&.nav-stacked > li:last-child > a {
+		.border-radius( 0 0 @btnBorderRadius @btnBorderRadius );
+	}
+}
+.nav-pills .dropdown-menu {
+	.border-radius(@btnBorderRadius);
+}
+.nav-pills.nav-stacked > li > a {
+	margin-bottom: 1px;
+}
+
+.nav-pills > li + li {
+  margin-left: 0;
+}
+
+// Tabs
+.nav-tabs {
+	> li > a {
+		color: @textColor;
+		font-size: @navTabFontSize;
+		line-height: 26px;
+		padding: 4px 12px;
+    outline: none;
+		[class^="icon-"],
+		[class*=" icon-"] {
+			color: @grayDark;
+		}
+		&:hover {
+			border-color: @grayLighter;
+			background-color: @grayLighter;
+			[class^="icon-"],
+			[class*=" icon-"] {
+				color: @grayDarker;
+			}
+		}
+	}
+	> li.active > a,
+	> li.active > a:hover {
+		color: @linkColor;
+		background: @white;
+	}
+}
+.nav-pills > li.open > a,
+.nav-tabs > li.open > a {
+	background-color: @grayLightest;
+	color: @textColor;
+	[class^="icon-"],
+	[class*=" icon-"] {
+		color: @textColor;
+	}
+}
+
+// Make the list-items overlay the bottom border
+.nav-stacked > li + li {
+  margin-top: 0;
+  margin-bottom: -1px;
+}
+
+.nav-stacked > li > a {
+  margin-right: 0; // no need for the gap between nav items
+}
+
+.nav-tabs.nav-stacked {
+  border-bottom: 0;
+}
+.nav-tabs.nav-stacked > li > a {
+  border: 1px solid #ddd;
+  .border-radius(0);
+}
+.nav-tabs.nav-stacked > li:first-child > a {
+  .border-top-radius(4px);
+}
+.nav-tabs.nav-stacked > li:last-child > a {
+  .border-bottom-radius(4px);
+}
+.nav-tabs.nav-stacked > li > a:hover,
+.nav-tabs.nav-stacked > li > a:focus {
+  border-color: #ddd;
+  z-index: 2;
+}
+
+// Dividers (basically an hr) within the dropdown
+.nav-list .divider {
+  .nav-divider();
+}
+
+// List
+.nav-list {
+	background-color: @grayLightest;
+	a {
+		color: @textColor;
+		font-size: @baseFontSize - 2;
+		text-shadow: none;
+		&:hover {
+			border-color: @grayLighter;
+			background-color: @grayLighter;
+		}
+	}
+	.divider {
+		height: 0;
+		margin: 9px -15px;
+	}
+	.nav-header {
+		text-shadow: none;
+		white-space: nowrap;
+	}
+}
+.nav-header,
+.nav .nav-header {
+	text-shadow: none;
+}
+
+.nav-list {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 0;
+}
+.nav-list > li > a,
+.nav-list .nav-header {
+  margin-left:  -15px;
+  margin-right: -15px;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+ul, ol {
+  .nav-header {
+    display: block;
+    padding: 3px 15px;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: @baseLineHeight;
+    color: @grayLight;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    text-transform: uppercase;
+  }
+}
+.nav-list > li > a {
+  padding: 3px 15px;
+}
+.nav-list > .active > a,
+.nav-list > .active > a:hover,
+.nav-list > .active > a:focus {
+  color: @white;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  background-color: @linkColor;
+}
+.nav-list [class^="icon-"],
+.nav-list [class*=" icon-"] {
+  margin-right: 2px;
+}
+
+// BOTTOM
+// ------
+
+.tabs-below > .nav-tabs {
+  border-top: 1px solid #ddd;
+}
+.tabs-below > .nav-tabs > li {
+  margin-top: -1px;
+  margin-bottom: 0;
+}
+.tabs-below > .nav-tabs > li > a {
+  .border-radius(0 0 4px 4px);
+  &:hover,
+  &:focus {
+    border-bottom-color: transparent;
+    border-top-color: #ddd;
+  }
+}
+.tabs-below > .nav-tabs > .active > a,
+.tabs-below > .nav-tabs > .active > a:hover,
+.tabs-below > .nav-tabs > .active > a:focus {
+  border-color: transparent #ddd #ddd #ddd;
+}
+
+// LEFT & RIGHT
+// ------------
+
+// Common styles
+.tabs-left, .tabs-right {
+  .clearfix;
+}
+.tabs-left > .nav-tabs > li,
+.tabs-right > .nav-tabs > li {
+  float: none;
+}
+.tabs-left > .nav-tabs > li > a,
+.tabs-right > .nav-tabs > li > a {
+  min-width: 74px;
+  margin-right: 0;
+  margin-bottom: 3px;
+}
+
+// Tabs on the left
+.tabs-left > .nav-tabs {
+  float: left;
+  margin-right: 19px;
+  border-right: 1px solid #ddd;
+}
+.tabs-left > .nav-tabs > li > a {
+  margin-right: -1px;
+  .border-radius(4px 0 0 4px);
+}
+.tabs-left > .nav-tabs > li > a:hover,
+.tabs-left > .nav-tabs > li > a:focus {
+  border-color: @grayLighter #ddd @grayLighter @grayLighter;
+}
+.tabs-left > .nav-tabs .active > a,
+.tabs-left > .nav-tabs .active > a:hover,
+.tabs-left > .nav-tabs .active > a:focus {
+  border-color: #ddd transparent #ddd #ddd;
+  *border-right-color: @white;
+}
+
+// Tabs on the right
+.tabs-right > .nav-tabs {
+  float: right;
+  margin-left: 19px;
+  border-left: 1px solid #ddd;
+}
+.tabs-right > .nav-tabs > li > a {
+  margin-left: -1px;
+  .border-radius(0 4px 4px 0);
+}
+.tabs-right > .nav-tabs > li > a:hover,
+.tabs-right > .nav-tabs > li > a:focus {
+  border-color: @grayLighter @grayLighter @grayLighter #ddd;
+}
+.tabs-right > .nav-tabs .active > a,
+.tabs-right > .nav-tabs .active > a:hover,
+.tabs-right > .nav-tabs .active > a:focus {
+  border-color: #ddd #ddd #ddd transparent;
+  *border-left-color: @white;
+}
+
+// Remove border on bottom, left, right
+.tabs-below > .nav-tabs,
+.tabs-right > .nav-tabs,
+.tabs-left > .nav-tabs {
+  border-bottom: 0;
+}

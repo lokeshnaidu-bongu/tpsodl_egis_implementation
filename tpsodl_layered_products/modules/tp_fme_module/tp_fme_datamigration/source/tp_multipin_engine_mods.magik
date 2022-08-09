@@ -1,0 +1,451 @@
+########################################################################
+#% text_encoding = iso8859_1
+######################################################################## 
+## 
+## Description: These methods will include the logic to defines
+## the length of the connector based on the isolating equipment
+## installation position.
+##  
+##  
+######################################################################## 
+_package user
+$
+_pragma(classify_level=restricted)
+_private _method multipin_engine.validate_connector_geometry(a_geom, manifold_name)
+	## Modifies the passed geometry to ensure that it is placed
+	## correctly as a connector.  Here are the various things that
+	## it does...
+	## ...validates the length.
+	## ...checks the attach point on a conductor to ensure that the
+	##    split won't make the conductor too short.
+	## ...makes sure that it sits on the same conductor
+	## ...if has more than two pins, ensures that the connector
+	##    runs to the proper pin.
+	## ...makes sure that it doesn't sit on top of any other
+	##    multipin devices
+	##
+	## @param a_geom PSEUDO_CHAIN -- the geometry being placed
+	## @param SYMBOL -- the name of the manifold we're interested
+	##     in
+	## @return PSEUDO_CHAIN -- the modified geometry
+	## @raise MULTIPIN_NO_CONDUCTORS
+	## @raise MULTIPIN_TOO_MANY_CONDUCTORS
+	_dynamic !current_world!
+	a_world << _unset
+	sectors << a_geom.sectors
+
+	#
+	# Make sure we've got the world properly.
+	#
+	_try
+		a_world << .device.dataset.matching_world(a_geom.world)
+	_when does_not_understand
+		a_world << !current_world!
+	_endtry
+
+
+	#
+	# Get the conductors that are in common here.
+	#b
+	c1 << sectors.first_coord.format_for_magik()
+	c2 << sectors.last_coord.format_for_magik()
+	# Debug logger.debug(manifold_name)
+	tc << _self.get_conductor_table_control(manifold_name)
+	fc_conductors << _self.get_chains_at(c1, a_world, tc)
+	lc_conductors << _self.get_chains_at(c2, a_world, tc)
+	common_conductors << fc_conductors.intersection(lc_conductors)
+	write("common_conductors",common_conductors)
+_global k,l,m,n
+n << a_geom
+k << common_conductors
+	_if common_conductors.empty?
+	_then
+#	_self.raise_conductor_placement_condition(:multipin_no_conductors)
+		
+#	_elif common_conductors.size > 1
+#	_then
+#		_self.raise_conductor_placement_condition(:multipin_too_many_conductors)
+	_else
+		conductor_chain << common_conductors.an_element()
+		write("++++ Collections ",conductor_chain.rwo)
+		conductor_secs << conductor_chain.sectors
+		units << _self.get_units( conductor_chain.world )
+#		write("++++ Units of World ",units)
+		min_len << .device.get_shortest_conductor_spec(a_world)
+#		write("conductor min_len",min_len)
+		l << min_len
+		cond_len << unit_value.new(conductor_chain.line_length, units)
+		m << cond_len
+		#!-->ST: Added to set the minimum length.
+		_if a_geom _isnt _unset 
+		_then
+			_local l_len << _self.csp_set_connector_length(a_geom)
+			_global s
+			s << l_len
+			_if l_len _isnt _unset 
+		_then
+				min_len << unit_value.new(0.3281,:feet)
+#				write("min_len",min_len)
+			_endif
+			
+		_endif
+		#!<--ST
+		
+#		_if cond_len.as_float < min_len.convert_to(units).as_float - 0.25
+#		_then
+#			write(cond_len.as_float)
+#			actual_length << cond_len.convert_to(min_len.unit)
+#			condition.raise(:multipin_conductor_too_short,
+#					:min_length, min_len.write_string,
+#					:actual_length, actual_length.write_string)
+#		_else
+#			sectors << _self.get_connector_sectors(conductor_secs, sectors, units, a_world)
+#		_endif
+	_endif
+	_return pseudo_chain.new_for_world(sectors, a_world)
+_endmethod
+$
+
+
+_pragma(classify_level=restricted)
+_private _method multipin_engine.get_connector_sectors(conductor_secs, conn_secs, units, a_world)
+	
+	## Derives the initial route for self's connector. This will be
+	## later modified by validate_connector_after_drag() when the
+	## geometry triggers are fired.
+	##
+	## @param conductor_secs SECTOR_ROPE -- the conductor sectors
+	## @param conn_secs SECTOR_ROPE -- the current connector sectors
+	## @param units SYMBOL -- the units for the sector ropes
+	## @param a_world INT!WORLD -- the world in which the connector
+	##       geometry will reside.
+	## @return SECTOR_ROPE -- the new connector sectors
+	## @raise MULTIPIN_CONDUCTOR_TOO_SHORT
+	## @raise MULTIPIN_CONNECTOR_TOO_LONG
+
+	l_connector_spec_length << .device.get_connector_length_spec(a_world).convert_to(units).as_float
+	l_conductor_length  << conductor_secs.line_length
+
+    	#!-->ST: Added to set the length of connector spec.
+	_local l_conn << .device.get_connector()
+	_if l_conn _isnt _unset 
+	_then
+		_local l_len << _self.csp_set_connector_length(l_conn)
+		_if l_len _isnt _unset 
+		_then
+			l_connector_spec_length << l_len
+		_endif
+	_endif
+	#!<--ST
+	
+	min_len << l_connector_spec_length - 0.25
+	_if l_conductor_length < min_len
+	_then
+		condition.raise(:multipin_conductor_too_short,
+				:min_length, min_len.write_string,
+				:actual_length, l_conductor_length.write_string)
+	_endif
+
+	
+
+	# The minimum conductor sliver that can be left
+	l_min_conductor_length << .device.get_shortest_conductor_spec(a_world).convert_to(units).as_float
+
+	
+
+	# The max length to the anchor if the end point is directed
+	# away from the start point. 
+	l_max_length_anchor_away << l_conductor_length - l_connector_spec_length
+	
+	# The max length to the anchor if the end point is directed
+	# towards the start point.
+	l_max_length_anchor_back << l_conductor_length - l_min_conductor_length
+	
+	l_length_to_anchor << conductor_secs.length_to_point(conn_secs.first_coord)
+	l_length_to_end    << conductor_secs.length_to_point(conn_secs.last_coord)
+
+	
+
+	# Breakpoints for anchor position lengths are increased by one
+	# database unit for the maximum and reduced by one database
+	# unit for the minimum to allow for rounding to the nearest
+	# database unit when the geometry is placed.
+	_if l_length_to_anchor > l_max_length_anchor_away + 0.25 _andif
+	    l_length_to_anchor <> l_conductor_length _andif
+	    l_length_to_end > l_length_to_anchor
+	_then
+		# The anchor point is within a connector length of the far end
+		# of the conductor but not exactly at the far end.
+		#    1----------------------------C----A----------2
+		# The connector end point is between the anchor point and the
+		# far end of the conductor:
+		#    1----------------------------C----A----E-----2
+		# Move the anchor point to a the end of the conductor and
+		# adjust the connector's end point to be a connector away: 
+		#    1----------------------------E---------------A
+		
+		l_length_to_anchor << l_conductor_length
+		l_length_to_end    << l_max_length_anchor_away
+		
+	_elif l_length_to_anchor > l_max_length_anchor_back + 0.25 _andif
+	      l_length_to_anchor <> l_conductor_length _andif
+	      l_length_to_end < l_length_to_anchor
+	_then
+		# The anchor position is beyond a point that will yield a
+		# conductor less than the minimum length permitted:
+		#    1----------------------------C-------M--A----2
+		# The connector end is between the near end of the conductor
+		# and the anchor point:
+		#    1------------------------E---C-------M--A----2
+		# Move the anchor point to the far end of the conductor and
+		# adjust the connector endpoint:
+		#    1----------------------------E-------M-------A
+		l_length_to_anchor << l_conductor_length
+		l_length_to_end    << l_max_length_anchor_away
+
+		
+
+	_elif l_length_to_anchor < l_connector_spec_length - 0.25 _andif
+	      l_length_to_anchor <> 0.0 _andif
+	      l_length_to_end < l_length_to_anchor
+	_then
+		# The anchor point is within a connector length of the near end
+		# of the connector, but not exactly at the near end.
+		#    1-----A---------C----------------------------2
+		# The connector end is between the near end of the conductor
+		# and the anchor point:
+		#    1--E--A---------C----------------------------2
+		# Move the anchor point to the near end of the conductor.
+		#    A---------------E----------------------------2
+		
+		l_length_to_anchor << 0.0
+		l_length_to_end    << l_connector_spec_length
+		
+	_elif l_length_to_anchor < l_min_conductor_length - 0.25 _andif
+	      l_length_to_anchor <> 0.0 _andif
+	      l_length_to_end > l_length_to_anchor
+	_then
+		# The anchor point is within a distance that will yield a
+		# conductor less than the minimum length permitted:
+		#    1---A---M-------C----------------------------2
+		# The connector end point is between the anchor point and the
+		# far end of the conductor:
+		#    1---A---M------------E-----------------------2
+		# Move the anchor point to the near end of the conductor.
+		#    A---------------E----------------------------2
+		l_length_to_anchor << 0.0
+		l_length_to_end    << l_connector_spec_length
+		
+	_elif l_length_to_anchor > l_length_to_end
+	_then
+		# The end point is closer to the near end of the underlying
+		# conductor. The anchor point is either at the far end of the
+		# conductor:         
+		#    1--------------------E-----------------------A
+		# or farther than a connector length from the near end and
+		# closer than the minimum conductor length from the far end.
+		# maximum postion: 
+		#    1---------------C----E--------A------M-------2
+		# Move the end point to a connector length away from the anchor
+		# point closer to the near end of the conductor.
+		l_length_to_end << l_length_to_anchor - l_connector_spec_length
+	_else
+		# The end point is closer to the far end of the underlying
+		# conductor. The anchor point is either at the near end of the
+		# conductor:         
+		#    A--------------------E-----------------------2
+		# or farther than the minimum conductor length from the near
+		# end and closer than a connector length from the far end:
+		#    1-------M---A--------E-------C---------------2
+		# Move the end point to a connector length away from the anchor
+		# point farther from the near end of the conductor.
+		l_length_to_end << l_length_to_anchor + l_connector_spec_length
+	_endif
+
+	
+
+	# Trap situations where we have fallen off the conductor 
+	tol << topology_engine.tolerances.first
+	_if l_length_to_end > l_conductor_length
+	_then
+		_if (l_length_to_end - l_conductor_length).abs > tol _andif 
+		    l_length_to_end.abs > tol
+		_then
+			condition.raise(:multipin_connector_too_long)
+		_else
+			#If we get to here then 
+			l_length_to_end << l_conductor_length 
+		_endif 
+	_endif
+
+	
+
+	# Create the connector sectors.
+	c1 << conductor_secs.location_for_length(l_length_to_anchor)
+	c2 << conductor_secs.location_for_length(l_length_to_end)
+	a_sector << sector.new_with_xy_vector({c1.x, c1.y, c2.x, c2.y})
+	conn_secs << sector_rope.new_with_sectors({a_sector})
+
+	_return conn_secs
+	
+_endmethod
+$
+
+
+_pragma(classify_level=restricted)
+_private _method multipin_engine.validate_target_pin_position(a_pin)
+	## Ensures that the target pin is the correct distance from the
+	## anchor pin (ie: the connector length away), and that it is
+	## properly hooked up to whatever may be there.
+	##
+	## @param a_pin POINT -- the target pin
+	## @raise MULTIPIN_TARGET_WRONG_CONDUCTOR
+
+	_if (conn << .device.get_connector()) _isnt _unset _andif
+	    a_pin _isnt _unset
+	_then
+		units << _self.get_units(a_pin.world)
+		len << .device.get_connector_length_spec(a_pin.world).convert_to(units).as_float
+		dist << conn.first_coord.format_for_magik().distance_to(a_pin)
+		tol << .device.get_tolerance()
+
+		#!-->ST: Added to set the length of connector.
+		_local l_len << _self.csp_set_connector_length(conn)
+		_if l_len _isnt _unset 
+		_then
+			len << l_len
+		_endif
+		#!<--ST
+		
+		_if (dist - len).abs > tol
+		_then
+			ang << .device.get_anchor_pin().coord.format_for_magik().angle_to(a_pin)			
+			a_coord << .device.get_anchor_pin().coord.format_for_magik() + coordinate.new_with_polar(len, ang)
+			old_coord << a_pin.coordinate.format_for_magik()
+			a_transform << transform.translate(a_coord.x - old_coord.x,
+							   a_coord.y - old_coord.y)
+			a_pin.transform(a_transform)
+			a_pin.do_manifold_interaction()
+		_endif
+		
+		_self.validate_target_pin_connections(a_pin)
+	_endif
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method multipin_engine.validate_connector_after_drag()
+	## Check the length of the connector.  If it's off, check
+	## whether or not the anchor is at the correct position.  If it
+	## is, drag the last node of the connector.  If it isn't, drag
+	## the first node of the connector and the anchor.
+	
+	_dynamic !current_coordinate_system!
+	## To get the line length based on world units instead of
+	## coordinate system 
+	!current_coordinate_system! << smallworld_product.application(:sweo_wm_user).coordinate_system
+	
+	_if (ap << .device.get_anchor_pin()) _isnt _unset _andif
+	    (conn << .device.get_connector()) _isnt _unset
+	_then
+		units << _self.get_units(conn.world)
+		len << .device.get_connector_length_spec(conn.world).convert_to(units).as_float
+		tol << .device.get_tolerance()
+
+		#!-->ST: Added to set the length of connector.
+		_local l_len << _self.csp_set_connector_length(conn)
+		_if l_len _isnt _unset 
+		_then
+			len<<l_len
+		_endif
+		#!<--ST
+		
+		_if (conn.line_length - len).abs > tol _andif
+		    _not _self.is_transforming?(conn)
+		_then
+			_self.start_transforming(conn)
+			apc << ap.coord.format_for_magik()
+			ccc << conn.first_coord.format_for_magik()
+			ccl << conn.last_coord.format_for_magik()
+			_if ccc.distance_to(apc) > tol
+			_then	
+				#
+				# Drag pin 1.
+				#
+				ang << ccl.angle_to(ccc)
+				new_ccc << ccl + coordinate.new_with_polar(len, ang)
+				conn.first_node.coordinate << new_ccc	
+			_else
+				#
+				# Drag pin 2.
+				#
+				ang << ccc.angle_to(ccl)
+				new_ccl << ccc + coordinate.new_with_polar(len, ang)
+				conn.last_node.coordinate << new_ccl
+				
+			_endif
+
+			_self.end_transforming(conn)
+		_endif
+	_endif
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method multipin_engine.csp_set_connector_length(p_conn)
+	#!
+	#!ST: Method is to define the size of the connector
+	#!    based on the position of the isolating equipment place,
+	#!    if it placed inside(Sub,Switchgear,Cabinet)length will be 0.1m else at
+	#!    remaing places 0.1m.
+	
+	_if .device.rwo_type _is :eo_isolating_eqpt_inst
+	_then
+		_if p_conn.sectors _isnt _unset
+		_then
+			_local view <<  .device.source_view
+			_local l_pc << pseudo_chain.new_for_world(p_conn.sectors,p_conn.world)
+			_local l_pd  << predicate.overlays(:extent,l_pc)
+			l_sub << view.collections[:sub_substation].select(l_pd)
+			l_switchgear << view.collections[:ed_switchgear].select(l_pd)
+			l_cabinet << view.collections[:ed_cabinet].select(l_pd)
+			_if l_switchgear.empty? _andif l_sub.empty? _andif l_cabinet.empty?
+			_then
+				_return 100
+			_endif
+		_endif
+	_endif 
+_endmethod
+$
+#% text_encoding = iso8859_1
+########################################################################
+## Description: Redefining the minimum length of the conductors on
+##              which the switching devices has to be placed. 
+##
+########################################################################
+_package user
+$
+_pragma(classify_level=basic, usage={redefinable, subclassable})
+_method eo_multipin_device_mixin.get_connector_length_spec(_optional a_world)
+	## Returns the length for the connector.  This should be
+	## subclassed as necessary.
+	## This class has a subclassable method called
+	## get_params_for_length_spec().  This method can be subclassed
+	## and called by get_connector_length_spec() to obtain extra
+	## information that may be useful in determining a length, such
+	## as the world we're in.
+	##
+	## @param a_world INT!WORLD -- the world that zhe connector
+	##     will be in
+	## @return UNIT_VALUE -- the length that the connector should
+	##     be
+	#! CGI-I208 RR(24\03\2020): Modified the method in order to
+	#! change the minimum length of the conductors on which the
+	#! switching device has to be placed. The minimum length was
+	#! not defined in 43 whereas it is raising condition in 522.
+
+	#!-->ST: Modified the length
+	_return unit_value.new(0.3280839895, :feet)
+	#!<--ST
+_endmethod
+$

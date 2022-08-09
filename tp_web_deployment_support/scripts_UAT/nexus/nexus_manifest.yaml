@@ -1,0 +1,51 @@
+id: 'bsf-nexus'
+api_version: '5.3.0'
+targets:
+  - id: 'nexus'
+    products:
+      - id: 'bsf-nexus-k8s'
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local/kubeconfig/.'
+        pdi:
+          image: 'dtr.predix.io/pwr-smallworld/pdi-nexus'
+          tag: '6.0.1'
+        param_groups:
+          - id: 'environment'
+            params:
+              NAMESPACE: 'nexus'
+          - id: 'k8s'
+            params:
+              nexus:
+                imageName: dtr.predix.io/pwr-smallworld/nexus
+                imageTag: 6.0.1-nexus-3.27.0
+                imagePullSecret: regsecret
+                nodeSelector: 
+                  node-role.kubernetes.io/nexus: "true"
+              persistence:
+                storageClass: nfs-storage-class
+                storageSize: 20Gi
+              ingress:
+                rules:
+                  - host: nexus.dc-gisuat-webm1
+                    http:
+                      paths:
+                      - backend:
+                          serviceName: sonatype-nexus-service
+                          servicePort: 8081
+                  - host: pull.dc-gisuat-webm1
+                    http:
+                      paths:
+                      - backend:
+                          serviceName: sonatype-nexus-service
+                          servicePort: 8082
+                  - host: push.dc-gisuat-webm1
+                    http:
+                      paths:
+                      - backend:
+                          serviceName: sonatype-nexus-service
+                          servicePort: 8083
+              nexusBackup:
+                persistence:
+                  enabled: false
+              nexusCloudiam:
+                persistence:
+                  enabled: false

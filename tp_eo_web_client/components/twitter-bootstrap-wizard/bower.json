@@ -1,0 +1,13 @@
+{
+    "name":  "twitter-bootstrap-wizard",
+    "version": "1.1.1",
+    "main": ["jquery.bootstrap.wizard.js"],
+    "dependencies": {
+        "jquery": "https://github.com/components/jquery.git#~1.10.2",
+        "requirejs": "git://github.com/jrburke/requirejs-bower#~2.1.11"
+    },
+    "devDependencies": {
+        "bootstrap": "git://github.com/jozefizso/bower-bootstrap-less.git#~3.2.0"
+
+    }
+}

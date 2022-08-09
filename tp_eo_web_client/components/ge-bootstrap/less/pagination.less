@@ -1,0 +1,39 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/pagination.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+.pagination {
+  > li > a {
+	    margin-right: @paginationItemMargin;
+	}
+	> .active > a,
+	> .active > span {
+		color: @btnSelectedText;
+	}
+	.prev:not(.disabled) a,
+	.next:not(.disabled) a {
+		[class^="icon-"],
+		[class*=" icon-"] {
+			.opacity(0.3);
+			color:@pagination-color;
+		}
+		&:hover [class^="icon-"],
+		&:hover [class*=" icon-"],
+		&:active [class^="icon-"],
+		&:active [class*=" icon-"] {
+			.opacity(100);
+		}
+	}
+}
+.pagination > .disabled > span,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  background-color: @btnDisabledBackground;
+  cursor: default;
+}

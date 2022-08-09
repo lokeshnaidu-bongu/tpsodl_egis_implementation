@@ -1,0 +1,26 @@
+
+// Styles
+// --------------------------------------------------
+
+// Add Widget
+section.module.module-add-widget {
+	background-color: @grayLightest;
+  a {
+    color: @textColor;
+  }
+  &:hover {
+    background-color: @grayLighter;
+    a {
+      color: @linkColor;
+      &:hover {
+        color: @linkColor;
+      }
+      &:active {
+        color: darken(@linkColor, 15%);
+      }
+    }
+  }
+  &:active {
+    background-color: @grayLighter;
+  }
+}

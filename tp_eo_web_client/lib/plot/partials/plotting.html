@@ -1,0 +1,38 @@
+<section class="module sidebar-module">
+  <header class="module-header">
+    <h3 class="voice voice-brand">{{messages.plotting.title}}</h3>
+  </header>
+
+  <div id="plotCollapse" class="module-body">
+    <form id="plotOptions" class="form-horizontal" style="margin-bottom:10px;">
+      <fieldset>
+        <div class="control-group" style="margin-left:0px;margin-bottom:5px" rel="tooltip" title="{{messages.plotting.selectLayoutType}}">
+          <select class="form-control" id="plotLayoutType" style="width:100%;"></select>
+        </div>
+        <div class="control-group" style="margin-left:0px;margin-bottom:5px">
+          <select class="form-control" id="plotLayoutScale" style="width:100%;display:none;" rel="tooltip" title="{{messages.plotting.selectResolution}}"></select>
+        </div>
+        <div class="control-group" id="plotCustomTexts" style="margin-left:0px;margin-bottom:5px">
+        </div>
+      </fieldset>
+    </form>
+    <div class="pull-right">
+      <span id="spinner" rel="spinner" style="display: inline-block;margin-right: 20px;margin-bottom:4px"></span>
+      <button id="reset" class="btn">{{messages.plotting.resetButton}}</button>
+      <button id="plot" class="btn btn-primary">{{messages.plotting.plotButton}}</button>
+    </div>
+    <div id="plots" style="display:none;">
+      <ul>
+      </ul>
+    </div>
+  </div>
+  <footer class="module-footer ">
+    <div class='hr-tip'>
+      <hr> {{{TipSvg}}}
+    </div>
+    <div class="controlDescriptions" style="font-style:italic;">
+      {{{messages.plotting.plotDescription}}}
+    </div>
+  </footer>
+</section>
+

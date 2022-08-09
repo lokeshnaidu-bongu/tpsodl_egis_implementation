@@ -1,0 +1,19 @@
+tp_eo_application	1
+
+description
+	TPSODL Application
+end
+
+requires
+	ldap_gui
+	hotfixes	
+	tp_cstm_land_adds
+	tp_cstm_stagging_adds
+	cs_land
+	swaf_fme_application
+	tp_data_update
+	tp_online_db_compression
+	tp_spatial_predicate_tool
+	tp_circuit_build_mods
+	
+end

@@ -1,0 +1,1181 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 15-02-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+_package user
+
+#===============================================================
+#
+#   E X E M P L A R
+#================================================================
+
+
+_pragma(classify_level=basic,  usage={tpsodl_db_compression_engine})
+def_slotted_exemplar(:tpsodl_db_compression_engine,
+	## 
+	## 
+	## 
+	{
+		#To Store details required
+		{:custom_args,_unset}
+		
+		
+	},
+	:engine_model)
+$
+
+#===================================================
+#
+#   S L O T   A C C E S S 
+#
+#===================================================
+
+
+_pragma(classify_level=basic,  usage={tpsodl_db_compression_engine})
+tpsodl_db_compression_engine.define_slot_access(:custom_args,:writable,:public)
+$
+
+
+
+#-------------------------------------------------------------------
+#
+#     L O C A L   M E T H O D S
+#
+#-------------------------------------------------------------------
+
+_pragma(classify_level=basic,  usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.new()
+	## 
+	## 
+	_return _clone.init()
+_endmethod
+$
+
+_pragma(classify_level=basic,  usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.init()
+	## 
+	## 
+
+	_super.init()
+	
+	.custom_args << property_list.new()
+
+	_return _self
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.compress_hot(src_path,dest_path,p_dialog)
+	## 
+	##
+
+	
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_hot|()|,
+			 src_path,dest_path,p_dialog)
+_endmethod
+$
+
+
+_pragma(classify_level=basic,  usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.int!compress_hot(src_path,dest_path,p_dialog)
+	##
+	## Compresses all datasets.
+	##
+
+	_self.changed(:status, _self.message(:running))
+	_local l_search << src_path
+	_local   l_directory << dest_path
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION STARTED AT THE TIME  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING & INTIALISING ENVIRONMENT SLOTS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	write("          <<<<<<<<<<------>>>>>>>>>  LOADING DS_TRANSFER MODULE  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	write("          <<<<<<<<<<------>>>>>>>>>  OPENING REQUIRED DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	gis_program_manager.open_datasets(:electric_dm)
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING VARIABLES FOR PATH AND DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	       
+	ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+#	tot_data_files << ds_admin.size + ds_cs_config.size + ds_gis.size + ds_land.size + design_manager_design_admin.size + design_manager_design_config.size + design_manager_design_work.size + design_manager_user_work.size + ds_electric.size + os_mapbase.size + ds_audit_history_archive.size
+
+	tot_data_files << 11
+	
+	msg << _self.message(:status,_self.message(:running),"0",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN SATRTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	
+	_for i _over  ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :searchpath, {l_search+"\ds_admin"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+		
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"1",tot_data_files)					
+	_self.changed(:status,msg)
+
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	_for j _over  ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :searchpath, {l_search+"\ds_cs_config"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"2",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for k _over  ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :searchpath, {l_search+"\ds_gis"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"3",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for l _over  ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :searchpath, {l_search+"\ds_land"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"4",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for n _over  design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :searchpath, {l_search+"\design_manager\design_admin"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"5",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for o _over  design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :searchpath, {l_search+"\design_manager\design_config"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"6",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for p _over  design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :searchpath, {l_search+"\design_manager\design_work"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"7",tot_data_files)					
+        _self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for q _over  design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :searchpath, {l_search+"\design_manager\user_work"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"8",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for t _over  ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :searchpath, {l_search+"\ds_electric"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"9",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for x _over  os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :searchpath, {l_search+"\os_mapbase"},# DataBase Source Location Path
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"10",tot_data_files)					
+        _self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for y _over  ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :searchpath, {l_search+"\ds_audit_history_archive"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	msg << _self.message(:status,_self.message(:running),"11",tot_data_files)					
+        _self.changed(:status,msg)
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod 
+
+
+
+_pragma(classify_level=basic, usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.compress_online_start(src_path,dest_path,p_dialog)
+	## 
+	##
+
+	
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_online_start|()|,
+			 src_path,dest_path,p_dialog)
+_endmethod
+$
+
+_pragma(classify_level=basic, usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.int!compress_online_start(src_path,dest_path,p_dialog)
+	##
+	## Compresses all datasets.
+	##
+
+	_self.changed(:status, _self.message(:running))
+	_local l_search << src_path
+	_local   l_directory << dest_path
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION STARTED AT THE TIME  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING & INTIALISING ENVIRONMENT SLOTS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	write("          <<<<<<<<<<------>>>>>>>>>  LOADING DS_TRANSFER MODULE  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	write("          <<<<<<<<<<------>>>>>>>>>  OPENING REQUIRED DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	gis_program_manager.open_datasets(:electric_dm)
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING VARIABLES FOR PATH AND DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	       
+	ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+	tot_data_files << 11
+	
+	msg << _self.message(:status,_self.message(:running),"0",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN SATRTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	
+	_for i _over  ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :searchpath, {l_search+"\ds_admin"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_admin",
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+		
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"1",tot_data_files)					
+	_self.changed(:status,msg)
+
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	_for j _over  ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :searchpath, {l_search+"\ds_cs_config"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_cs_config",
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	msg << _self.message(:status,_self.message(:running),"2",tot_data_files)					
+	_self.changed(:status,msg)
+
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for k _over  ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :searchpath, {l_search+"\ds_gis"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_gis",
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"3",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for l _over  ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :searchpath, {l_search+"\ds_land"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_land",
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"4",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for n _over  design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :searchpath, {l_search+"\design_manager\design_admin"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\design_admin",
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"5",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for o _over  design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :searchpath, {l_search+"\design_manager\design_config"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\design_config",
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"6",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for p _over  design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :searchpath, {l_search+"\design_manager\design_work"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\design_work",
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"7",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for q _over  design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :searchpath, {l_search+"\design_manager\user_work"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\user_work",
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"8",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for t _over  ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :searchpath, {l_search+"\ds_electric"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_electric",
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"9",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for x _over  os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :searchpath, {l_search+"\os_mapbase"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\os_mapbase",
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"10",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for y _over  ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :searchpath, {l_search+"\ds_audit_history_archive"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_audit_history_archive",
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"11",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod 
+
+
+_pragma(classify_level=basic, usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.compress_online_iterative(src_path,dest_path,p_dialog)
+	## 
+	##
+
+	
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_online_iterative|()|,
+			 src_path,dest_path,p_dialog)
+_endmethod
+$
+
+
+_pragma(classify_level=basic, usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.int!compress_online_iterative(src_path,dest_path,p_dialog)
+	##
+	## Compresses all datasets.
+	##
+
+	_self.changed(:status, _self.message(:running))
+	_local l_search << src_path
+	_local   l_directory << dest_path
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION STARTED AT THE TIME  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING & INTIALISING ENVIRONMENT SLOTS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	write("          <<<<<<<<<<------>>>>>>>>>  LOADING DS_TRANSFER MODULE  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	write("          <<<<<<<<<<------>>>>>>>>>  OPENING REQUIRED DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	gis_program_manager.open_datasets(:electric_dm)
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING VARIABLES FOR PATH AND DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	       
+	ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+	tot_data_files << 11
+	
+	msg << _self.message(:status,_self.message(:running),"0",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN SATRTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	
+	_for i _over  ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :online_history_dir, l_search+"\ds_admin",
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+		
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"1",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	_for j _over  ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :online_history_dir, l_search+"\ds_cs_config",
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"2",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for k _over  ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :online_history_dir, l_search+"\ds_gis",
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"3",tot_data_files)					
+	_self.changed(:status,msg)
+
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for l _over  ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :online_history_dir, l_search+"\ds_land",
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"4",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for n _over  design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :online_history_dir, l_search+"\design_manager\design_admin",
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"5",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for o _over  design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :online_history_dir, l_search+"\design_manager\design_config",
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"6",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for p _over  design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :online_history_dir, l_search+"\design_manager\design_work",
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	msg << _self.message(:status,_self.message(:running),"7",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for q _over  design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :online_history_dir, l_search+"\design_manager\user_work",
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"8",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for t _over  ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :online_history_dir, l_search+"\ds_electric",
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"9",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for x _over  os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :online_history_dir, l_search+"\os_mapbase",
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"10",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for y _over  ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :online_history_dir, l_search+"\ds_audit_history_archive",
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"11",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod 
+
+_pragma(classify_level=basic, usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.compress_online_final(src_path,dest_path,p_dialog)
+	## 
+	##
+
+	
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_online_final|()|,
+			 src_path,dest_path,p_dialog)
+_endmethod
+$
+
+_pragma(classify_level=basic, usage={tpsodl_db_compression_engine})
+_method tpsodl_db_compression_engine.int!compress_online_final(src_path,dest_path,p_dialog)
+	##
+	## Compresses all datasets.
+	##
+
+	_self.changed(:status, _self.message(:running))
+	
+	_local l_search << src_path
+	_local   l_directory<< dest_path
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION STARTED AT THE TIME  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING & INTIALISING ENVIRONMENT SLOTS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	write("          <<<<<<<<<<------>>>>>>>>>  LOADING DS_TRANSFER MODULE  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	write("          <<<<<<<<<<------>>>>>>>>>  OPENING REQUIRED DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	gis_program_manager.open_datasets(:electric_dm)
+	write("          <<<<<<<<<<------>>>>>>>>>  SETTING VARIABLES FOR PATH AND DATASETS  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	       
+	ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+	tot_data_files << 11
+	
+	msg << _self.message(:status,_self.message(:running),"0",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN SATRTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())	
+	_for i _over  ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :online_history_dir, l_search+"\ds_admin",
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+		
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"1",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	_for j _over  ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :online_history_dir, l_search+"\ds_cs_config",
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_CS_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"2",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for k _over  ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :online_history_dir, l_search+"\ds_gis",
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_GIS COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"3",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for l _over  ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :online_history_dir, l_search+"\ds_land",
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_LAND COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	
+	msg << _self.message(:status,_self.message(:running),"4",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for n _over  design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :online_history_dir, l_search+"\design_manager\design_admin",
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_ADMIN COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	msg << _self.message(:status,_self.message(:running),"5",tot_data_files)					
+	_self.changed(:status,msg)
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for o _over  design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :online_history_dir, l_search+"\design_manager\design_config",
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_CONFIG COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	msg << _self.message(:status,_self.message(:running),"6",tot_data_files)					
+	_self.changed(:status,msg)
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for p _over  design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :online_history_dir, l_search+"\design_manager\design_work",
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DSEIGN_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	msg << _self.message(:status,_self.message(:running),"7",tot_data_files)					
+	_self.changed(:status,msg)
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for q _over  design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :online_history_dir, l_search+"\design_manager\user_work",
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR USER_WORK COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+
+	msg << _self.message(:status,_self.message(:running),"8",tot_data_files)					
+	_self.changed(:status,msg)
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for t _over  ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :online_history_dir, l_search+"\ds_electric",
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_ELECTRIC COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	msg << _self.message(:status,_self.message(:running),"9",tot_data_files)					
+	_self.changed(:status,msg)
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for x _over  os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :online_history_dir, l_search+"\os_mapbase",
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR OS_MAPBASE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	msg << _self.message(:status,_self.message(:running),"10",tot_data_files)					
+	_self.changed(:status,msg)
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE  STARTED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	_for y _over  ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :online_history_dir, l_search+"\ds_audit_history_archive",
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	write("          <<<<<<<<<<------>>>>>>>>>  COMPRESSION FOR DS_AUDIT_HISTORY_ARCHIVE COMPLETED  <<<<<<<<<<------>>>>>>>>>>          : ",date_time_now())
+	msg << _self.message(:status,_self.message(:running),"11",tot_data_files)					
+	_self.changed(:status,msg)
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod 
+
+
+
+_pragma(classify_level=basic,  usage={tpsodl_db_compression_engine})
+ _method tpsodl_db_compression_engine.message(message_id,_gather args)
+	 ## 
+	 ## 
+	 	>> _self.message_accessor.human_string(
+		   message_id,_unset, _scatter args )
+ _endmethod
+$

@@ -1,0 +1,113 @@
+_package user
+$
+
+#===================================================================
+#
+#   E X E M P L A R
+#
+#===================================================================
+
+remex(:tpsodl_attribute_update_framework)
+def_slotted_exemplar(:tpsodl_attribute_update_framework, 
+	{ },
+	{:gui_framework}
+)
+$
+
+#================================================================================
+#
+#   D E F I N E   S H A R E D   C O N S T A N T S
+#
+#--------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, usage={tpsodl_attribute_update_framework})
+##
+## Action Definitions
+## ------------------
+##
+tpsodl_attribute_update_framework.define_shared_constant(
+	:action_definitions,
+	keyed_set.new_with(
+		# displays the help file 
+		sw_action_def.new(
+			:help,
+			:action_message, :|help_wanted()|,
+			:image, { :help, :ui_resources },
+			:enabled?, _true) ,	
+			
+
+		sw_action_def.new(
+			# quits the framework	
+			:quit,
+			:dialog_control,:button_item,
+			:action_message, :|close()|,
+			:image, { :exit_application, tpsodl_attribute_update_framework.module_name } ,
+			:enabled?, _true)) ,
+			
+	:public )
+$
+
+#-----------------------------------------------------------
+#
+#   D E F I N E   L O C A L   M E T H O D S
+#
+#-----------------------------------------------------------
+
+_pragma(classify_level=basic, usage={tpsodl_attribute_update_framework})
+_method tpsodl_attribute_update_framework.set_status_info( a_string )
+	## 
+	## Description: sets A_STRING to either status bar or label item 
+	## 
+	## Parameters : A_STRING is a string  
+	## 
+	## Returns    : <Nothing> 
+	## 
+
+	# Send a notification with the keys :text and :label. If the
+	# controls exist on the GUI. They get updated
+	# :text - relates to the status bar
+	_self.changed(
+		:status_info,
+		:text,
+		a_string )
+_endmethod
+$
+
+_pragma(classify_level=basic, usage={tpsodl_attribute_update_framework})
+_method tpsodl_attribute_update_framework.close()
+	## 
+	## Description: Checks if the engine is running or not.
+	## 
+	## Parameters : <none>
+	## 
+	## Returns    : <Nothing> 
+	##
+		
+	_super.close()
+_endmethod
+$
+_pragma(classify_level=restricted, topic={tpsodl_attribute_update_framework})
+_method tpsodl_attribute_update_framework.help_wanted()
+	## 
+	## 
+	#Fixme: Needs to be implemented if required.
+
+	write("+++ Inside Helpppppp  +++")
+
+	#own implementation
+
+	f_path << "D:\tp_cstm_product\documents"
+	_if _not (system.file_exists? (f_path))
+	_then 	
+		system.mkdir(f_path)
+	
+	_endif
+
+	_local dir << system.getenv("")
+	_local dialog << file_dialog.new(_self, :path_selected|()|, _unset,:directory, f_path)
+	dialog.filter << {"docx","DOCX"}
+	dialog.activate()
+	
+	
+_endmethod
+$

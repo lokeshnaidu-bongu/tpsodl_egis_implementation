@@ -1,0 +1,15 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+1 Phase Feed Thru	60
+1 Phase Loop/No Elbows	90
+1 Phase S-Mod/3 Way	40
+3 Phase Feed Thru	50
+3 Phase Loop/No Elbows	80
+3 Phase S-Mod/3 Way	30
+Fuse Cabinet	10
+Submersible Fuse Compartment	70
+Transclosure	20

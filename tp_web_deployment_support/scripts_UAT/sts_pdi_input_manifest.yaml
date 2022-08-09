@@ -1,0 +1,30 @@
+id: 'sw_sts_deploy'
+api_version: '5.3.0'
+targets:
+  - id: 'sw-sts'
+    products:
+      - id: 'sts'
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local/'
+        pdi:
+          image: ''
+          tag: ''
+        param_groups:
+          - id: 'environment'
+            params:
+              ######################## MANDATORY
+              # DATASET_NAME: ''
+              # STS_PORT: ''
+              # DOCKER_REGISTRY: ''
+              # ACE_DIR_PATH: ''
+              # MESSAGES_DIR_PATH: ''
+              ######################## MANDATORY for PNI DB
+              # MODELIT_DIR_PATH: ''
+              ######################## OPTIONAL
+              # CONTEXT_DIR_PATH: ''
+              # STS_NAMESPACE: ''
+              # STS_VERSION: ''
+              ######################## Cloud Deployment
+              # DEPLOYMENT_TYPE: ''
+              ######################## DEV ONLY
+              # KUBECONFIG: ''
+              # DOCKER_REPOSITORY: ''

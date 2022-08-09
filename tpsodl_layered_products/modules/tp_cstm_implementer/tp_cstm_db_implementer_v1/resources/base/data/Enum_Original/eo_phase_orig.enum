@@ -1,0 +1,47 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+A	10
+AB	40
+ABC	100
+ABCN	280
+ABCNE	285
+ABN	220
+ABNE	225
+AC	50
+ACB	110
+ACBN	290
+ACN	230
+ACNE	235
+AN	190
+ANE	195
+B	20
+BA	60
+BAC	120
+BACN	300
+BAN	240
+BC	70
+BCA	130
+BCAN	310
+BCN	250
+BCNE	255
+BN	200
+BNE	205
+C	30
+CA	80
+CAB	140
+CABN	320
+CAN	260
+CB	90
+CBA	150
+CBAN	330
+CBN	270
+CN	210
+CNE	215
+Earth	340
+Neutral-Earth	350
+Not Applicable	180
+Static	170

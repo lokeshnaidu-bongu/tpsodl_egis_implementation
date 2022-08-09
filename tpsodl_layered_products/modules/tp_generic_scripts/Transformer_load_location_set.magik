@@ -1,0 +1,20 @@
+_block
+pwr_trans_recs << gis_program_manager.databases[:electric].collections[:eo_power_xfrmr_inst]
+
+_for a_rec _over pwr_trans_recs.fast_elements()
+_loop
+pc << a_rec.location.coordinate
+write(a_rec.id)
+_if pc _isnt _unset
+_then 
+c1<< pseudo_point.new(pc)
+_if a_rec.load_location _isnt  _unset
+_then
+	a_rec.load_location.delete()
+	a_rec.make_geometry(:load_location,c1)
+_else
+	a_rec.make_geometry(:load_location,c1)
+_endif
+_endif 
+_endloop
+_endblock

@@ -1,0 +1,2 @@
+/*! ElectricOfficeWeb 5.0.1 2021-06-16 */
+define(["jquery"],function(a){"use strict";var b=function(b){return a("<div/>").text('<a target="_none" href="'+b.url+'">'+b.description+"</a> <br>").html()},c=function(b){return a("<div/>").text('<label style="margin-bottom:0px;" class="link" data-filename="'+b.path+'"><a href="javascript:;">'+b.description+"</a> </label> <br>").html()},d=function(a){return!(!/^https:/i.test(a)&&!/^http:/i.test(a))},e={makeHttpLink:b,makeFileLink:c,isHttpRequest:d};return e.__TEST_ONLY__={makeHttpLink:b,makeFileLink:c,isHttpRequest:d},e});

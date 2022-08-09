@@ -1,0 +1,154 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Physical & Enumerator Fields for the object tp_tree
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_land_db_implementer.register(:datamodel_name, "tp_cstm_land_db_imp_v34", 
+				     :version, 34,
+				     :implementer_comment,        "Add new fields to to_tree",
+				     :upgrade?, _false,
+				     :case_change_method,         :|v34_adding_new_field_to_tree()|,
+				     :case_change_results_method, :|v34_tree_case_change_results()|,
+				     :dataset_names, {{:land_case, :land}})
+$
+
+
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v34_adding_new_field_to_tree(p_target_case_view)
+	## 
+	##
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_if (l_coll << p_target_case_view.get_case_object(:tp_tree)) _is _unset
+	_then
+		l_new_coord << coordinate.new( -254783,-150661 )
+		l_point << pseudo_point.new_with(l_new_coord)
+		l_point.world<< p_target_case_view.world
+		l_case_obj << l_case_manager.new_case_object(:tp_tree,
+							     property_list.new_with(
+								     :external_name, "Tree",
+								     :record_exemplar_name, :tp_tree,
+								     :description,"New TPSODL Object",
+								     :location,l_point))
+		
+		l_case_obj.set_trigger(:insert, "object_trigger()")
+		l_case_obj.set_trigger(:update, "object_trigger()")
+		l_case_obj.set_trigger(:delete, "object_trigger()")
+		l_case_obj.add_validator("object_validator()")
+	_endif
+	
+	l_fld_map_val << _self.tp_fld_mandatory_mapping_val
+	l_fld_su_map_val << _self.tp_fld_stored_unit_mapping_val
+	l_coll_name << :tp_tree
+	l_tree_fields <<_self.tp_read_flds_from_xml(l_coll_name)
+	_self.int!add_key_field(p_target_case_view,l_coll_name)
+	_for  a_prop_val_key , l_prop_fields _over l_tree_fields.fast_keys_and_elements() 
+	_loop
+		
+		l_fld_name << l_prop_fields[:field_name].as_symbol()
+		l_stored_unit << l_prop_fields[:stored_unit]
+		l_mandatory <<  l_prop_fields[:mandatory].lowercase.as_symbol()
+		l_fld_ext_name << l_prop_fields[:external_name]
+		l_fld_mand << l_fld_map_val[l_mandatory]
+		l_fld_type << l_prop_fields[:field_type].as_symbol()
+		l_fld_size << l_prop_fields[:field_size].as_number()
+		l_fld_unset_val << l_prop_fields[:unset_value]
+		l_fld_def_val << l_prop_fields[:default_value]
+		l_fld_def_su <<  l_fld_su_map_val[l_stored_unit]
+		_if l_fld_map_val[l_fld_type] _isnt _unset 
+		_then
+			l_fld_unset_val<< l_fld_map_val[l_fld_type ]
+			l_fld_def_val<< l_fld_map_val[l_fld_type ]
+		_endif
+		l_props << property_list.new_with(:mandatory?,l_fld_mand,
+						  :field_type,l_fld_type,
+						  :external_name,l_fld_ext_name,
+						  :field_size,l_fld_size,
+						  :unset_value,l_fld_unset_val,
+						  :default_value,l_fld_def_val,
+						  :stored_unit,l_fld_def_su)
+			                          
+		
+		_if l_fld_def_su _is _unset _orif
+		    l_fld_def_su = "NA"
+		_then
+			l_props.remove_key(:stored_unit)
+		_endif
+		
+	
+		_if l_fld_type _is :point
+		_then
+			_self.add_geom_fld_to_tree(l_case_obj,l_fld_name,l_fld_type,l_props)
+		_else
+			l_case_obj.add_physical_field( l_fld_name, l_props)
+		_endif
+		
+		
+	_endloop
+
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.add_geom_fld_to_tree(p_case_obj,p_fld_name,p_fld_type,p_props)
+	## 
+	## 
+	_local l_props << p_props
+	_local l_case_obj << p_case_obj
+	_local l_fld_name << p_fld_name
+	_local l_fld_type << p_fld_type
+#
+	l_props.remove_key(:default_value)
+	l_props.remove_key(:unset_value)
+	l_props.remove_key(:field_size)
+	l_props.remove_key(:stored_unit)
+	l_case_obj.add_geometry_field( l_fld_name,l_fld_type ,l_props)
+	l_geom_fld << l_case_obj.get_field(l_fld_name)
+	l_geom_fld.set_trigger(:attach, "geometry_trigger()")
+	l_geom_fld.set_trigger(:detach, "geometry_trigger()")
+	l_geom_fld.set_trigger(:update, "geometry_trigger()")
+	l_geom_fld.priority << 1
+	l_geom_fld.set_geometry_type(:point)
+	l_geom_fld.set_property(:manifold ,"land")
+	#l_geom_fld.archive_manifold << "land"
+	#l_map_rec << l_geom_fld.archive_mapping({1334, "location_geometry_mapping", False,0 })
+	#l_map_rec.archive_fields({:tp_location})
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v34_tree_case_change_results()
+	## 
+	## 
+	_local ccr_for_dd_extension << case_change_result.new()
+     	ccr_for_dd_extension.add_new(:tp_tree)
+	>> {ccr_for_dd_extension}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

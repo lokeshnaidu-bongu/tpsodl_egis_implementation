@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="ENMAC/NetworkDataSetUpdate" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="ENMAC/NetworkDataSetUpdate" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:documentation>
+#*M-----------------------------------------------------------------------------
+#*M                             MODULE HEADER 
+#*M-----------------------------------------------------------------------------
+#*M
+#*M  File Name  : NetworkDataSetUpdate_OutBound.wsdl
+#*M 
+#*M  Path       : bin/web_services/IncrementalUpdate
+#*M 
+#*M  SOAP Interface version: 2.0 
+#*M 
+#*M  (C) Copyright GE Energy, 2016
+#*M
+#*M-----------------------------------------------------------------------------
+#*M                         MODULE CHANGE HISTORY
+#*M-----------------------------------------------------------------------------
+#*M
+#*M  DATE       BY      CN      DESCRIPTION
+#*M  ----       --      --      -----------
+#*M  16-08-2018 DJ      XXXX    GISA1955 mod: After getting latest from POA, following manual mods were done 
+#*M                             all tagged with "GISA mod"
+#*M                             a. Consumer Operation, Port Type, binding details have been 
+#*M                             commented as GISA doesnt support listening to Consumer messages
+#*M                             This is so that this wsdl represents what GISA supports.
+#*M                             b. Commented include of consumer.xsd file as auto generation of java classes
+#*M                             in GISA fails due to it. 
+#*M  17-10-2017 ST      298730  Factor out Consumer and its response into xsd
+#*M                             file and make wsdl to include it
+#*M  01-06-2016 YMC     249782  Ensure message is not 'doubly' wrapped by 
+#*M                             removing the JobStatusStc element.
+#*M  17-10-2012 DB      164421  Comment out SOAP 1.2 bindings and prefix
+#*M                             Namespace with ENMAC/
+#*M  14-04-2010 RM      103362  Initial version
+#*M
+#*M-----------------------------------------------------------------------------
+#*M                          MODULE DESCRIPTION
+#*M-----------------------------------------------------------------------------
+#*M
+#*M  WSDL for the PowerOn inbound NetworkDataSetUpdate SOAP interface.
+#*M  This WSDL was originally generated from C# project 
+#*M  /src/DotNet/Enmac/WebServices/SOAPOutBound/SOAPOutBound
+#*M  However, it needed to be manually edited because
+#*M  1. Visual Studio cannot express a string that is mandatory and not nillable
+#*M     The declaration:
+#*M         public string myParam;
+#*M     results in minOccurs="0" maxOccurs="1"
+#*M     The following fields have been changed to minOccurs="1":
+#*M      MessageHeaderStc.DataVersion
+#*M      MessageHeaderStc.JobID
+#*M      MessageHeaderStc.JobStatus
+#*M      MessageHeaderStc.Noun
+#*M      MessageHeaderStc.Verb
+#*M  2. The SOAP 1.2 bindings and ports have been commented out as this 
+#*M     confused the AXIS2 application used by Cambridge's EO team to generate
+#*M     their webservice.  
+#*M
+#*M-----------------------------------------------------------------------------
+  </wsdl:documentation>
+
+    <wsdl:types>
+ 
+    <s:schema elementFormDefault="qualified" targetNamespace="ENMAC/NetworkDataSetUpdate">
+      <s:element name="JobStatus" type="tns:JobStatus" />
+      <s:complexType name="JobStatus">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="MessageHeader" type="tns:MessageHeaderStc" />
+          <s:element minOccurs="1" maxOccurs="1" name="MessagePayload" type="tns:MessagePayloadStc" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MessageHeaderStc">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DataVersion" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="JobID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="JobStatus" type="tns:JobStatusType" />
+          <s:element minOccurs="0" maxOccurs="1" name="JobStatusComment" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MessageID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Noun" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Timestamp" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Verb" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MessagePayloadStc">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProcessedCircuit" type="tns:ProcessedCircuitStc" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProcessedCircuitStc">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CircuitID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="JobStatus" type="tns:JobStatusType" />
+          <s:element minOccurs="0" maxOccurs="1" name="JobStatusComment" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="JobStatusType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Queued"/>
+          <s:enumeration value="Creating"/>
+          <s:enumeration value="RetryCreate"/>
+          <s:enumeration value="Created"/>
+          <s:enumeration value="Ready"/>
+          <s:enumeration value="Introducing"/>
+          <s:enumeration value="RetryIntroduce"/>
+          <s:enumeration value="TempIntroduced"/>
+          <s:enumeration value="Removed"/>
+          <s:enumeration value="Accepted"/>
+          <s:enumeration value="Rejected"/>
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="JobStatusResponse" type="tns:JobStatusResponse" />
+      <s:complexType name="JobStatusResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+        </s:sequence>
+      </s:complexType>      
+      <s:element name="GetNetworkDataSetResync">
+        <s:complexType>
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Header" type="tns:HeaderType"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Request" type="tns:GetNetworkDataSetResyncRequestType"/>
+        </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="HeaderType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Verb" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Noun" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Timestamp" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Source" nillable="true" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AsyncReplyFlag" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="MessageID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CorrelationID" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GetNetworkDataSetResyncRequestType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="unbounded" name="Circuit" type="tns:CircuitStc"/>
+          <s:element minOccurs="0" maxOccurs="1" name="User" type="tns:UserType"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CircuitStc">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="mRID" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="ID" nillable="true" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UserType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetNetworkDataSetResyncResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetNetworkDataSetResyncResponseType" type="tns:GetNetworkDataSetResyncResponseType"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GetNetworkDataSetResyncResponseType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Header" type="tns:HeaderType"/>
+          <s:element minOccurs="1" maxOccurs="1" name="Reply" type="tns:ReplyType"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ReplyType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Result" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:ErrorType"/>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ErrorType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="reason" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="JobStatusSoapIn">
+    <wsdl:part name="request" element="tns:JobStatus" />
+  </wsdl:message>
+  <wsdl:message name="JobStatusSoapOut">
+    <wsdl:part name="JobStatusResult" element="tns:JobStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNetworkDataSetResyncSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNetworkDataSetResync"/>
+  </wsdl:message>
+  <wsdl:message name="GetNetworkDataSetResyncSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNetworkDataSetResyncResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="NetworkDataSetUpdateSoap">
+    <wsdl:operation name="JobStatus">
+      <wsdl:input message="tns:JobStatusSoapIn" />
+      <wsdl:output message="tns:JobStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNetworkDataSetResync">
+      <wsdl:input message="tns:GetNetworkDataSetResyncSoapIn"/>
+      <wsdl:output message="tns:GetNetworkDataSetResyncSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetworkDataSetUpdateSoap" type="tns:NetworkDataSetUpdateSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="JobStatus">
+      <soap:operation soapAction="ENMAC/NetworkDataSetUpdate/JobStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNetworkDataSetResync">
+      <soap:operation soapAction="ENMAC/NetworkDataSetUpdate/GetNetworkDataSetResync" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+<!--
+  <wsdl:binding name="NetworkDataSetUpdateSoap12" type="tns:NetworkDataSetUpdateSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="JobStatus">
+      <soap12:operation soapAction="ENMAC/NetworkDataSetUpdate/JobStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNetworkDataSetResync">
+      <soap12:operation soapAction="ENMAC/NetworkDataSetUpdate/GetNetworkDataSetResync" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+-->
+
+  <!-- GISA mod START : commented to suppress INCLUDE of xsd -->
+<!--   <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="ENMAC/NetworkDataSetUpdate">
+      <s:include schemaLocation="schemas/in_out/Consumer.xsd"/>
+    </s:schema>
+  </wsdl:types> -->
+  <!-- GISA mod START : commented to suppress INCLUDE of xsd -->
+
+  <!-- GISA mod START : commented as GISA doesnt support incoming Consumer Messages-->
+<!--     <wsdl:message name="ConsumerSoapIn">
+    <wsdl:part name="request" element="tns:Consumer"/>
+  </wsdl:message>
+  <wsdl:message name="ConsumerSoapOut">
+    <wsdl:part name="ConsumerResult" element="tns:ConsumerResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="NetworkDataSetUpdateSoap">
+    <wsdl:operation name="Consumer">
+      <wsdl:input message="tns:ConsumerSoapIn" />
+      <wsdl:output message="tns:ConsumerSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetworkDataSetUpdateSoap" type="tns:NetworkDataSetUpdateSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Consumer">
+      <soap:operation soapAction="ENMAC/NetworkDataSetUpdate/Consumer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding> -->
+  <!-- GISA mod END : commented as GISA doesnt support incoming Consumer Messages-->
+  
+  <wsdl:service name="NetworkDataSetUpdate">
+    <wsdl:port name="NetworkDataSetUpdateSoap" binding="tns:NetworkDataSetUpdateSoap">
+      <soap:address location="http://localhost/SOAPOutBound/NetworkDataSetUpdate.asmx" />
+    </wsdl:port>
+<!--
+    <wsdl:port name="NetworkDataSetUpdateSoap12" binding="tns:NetworkDataSetUpdateSoap12">
+      <soap12:address location="http://localhost/SOAPOutBound/NetworkDataSetUpdate.asmx" />
+    </wsdl:port>
+-->
+  </wsdl:service>
+</wsdl:definitions>

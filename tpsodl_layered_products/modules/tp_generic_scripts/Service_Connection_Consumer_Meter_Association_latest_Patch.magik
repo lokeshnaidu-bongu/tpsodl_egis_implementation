@@ -1,0 +1,30 @@
+_block
+		ev << gis_program_manager.databases[:electric]
+		m_col<< ev.collections[:eo_meter]
+		sc_col<< ev.collections[:eo_service_connection]
+		sp_col<<ev.collections[:eo_service_point]
+		pred1 << predicate.eq(:device_type,"Consumer")
+		pred2 << predicate.eq(:service_connection,_unset)
+		req_sc_col << m_col.select(pred1 _and pred2)
+			   
+			   _for l_mtr_rec _over req_sc_col.fast_elements()
+       			   _loop
+					sc_nm << l_mtr_rec.tp_sc_number
+					un_mg_id<<l_mtr_rec.tp_migration_unique_id
+					bld_id << l_mtr_rec.tp_building_reference_number
+      					pl_nm <<l_mtr_rec.tp_pole_code
+					un_sp_mg_id<<l_mtr_rec.tp_sp_mig_unq_id
+					sc_pred1 << predicate.eq(:tp_building_reference_number,bld_id)
+					sc_pred2 << predicate.eq(:tp_sc_number,sc_nm)		
+
+					sc_pred << sc_col.select(sc_pred1 _and sc_pred2)
+					l_sc_rec << sc_pred.an_element()
+					_if l_sc_rec _isnt _unset 
+					_then
+					l_sc_rec.tp_mig_pole << pl_nm
+					l_sc_rec.meter << l_mtr_rec
+					_endif 
+       			   _endloop
+	       
+       _endblock
+$

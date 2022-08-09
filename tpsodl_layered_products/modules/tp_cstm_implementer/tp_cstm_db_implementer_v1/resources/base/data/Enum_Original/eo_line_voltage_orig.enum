@@ -1,0 +1,22 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+unit_value((5404319552844595*2.0**-51), :kv)	130
+unit_value((1170935903116329*2.0**-48), :kv)	170
+unit_value((3715469692580659*2.0**-49), :kv)	190
+unit_value((1*2.0**3), :kv)	240
+unit_value((11.0), :kv)	290
+unit_value((7019985919163761*2.0**-49), :kv)	310
+unit_value((3363625971692339*2.0**-47), :kv)	480
+unit_value((33.0), :kv)	550
+unit_value((33*2.0), :kv)	600
+unit_value((55*2.0), :v)	10
+unit_value((115.0), :kv)	650
+unit_value((15*2.0**3), :v)	20
+unit_value((33*2.0**2), :kv)	660
+unit_value((13*2.0**4), :v)	30
+unit_value((55*2.0**2), :v)	40
+unit_value((15*2.0**4), :v)	50

@@ -1,0 +1,136 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add New Enumerator Field Types
+## 
+##setvars()
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 3
+
+tp_cstm_cis_db_implementer.register(:datamodel_name, "tp_cstm_cis_imp_v3", 
+				:version, 3,
+				:implementer_comment,        "Add New Enum Field Types",
+				:upgrade?, _false,
+				:case_change_method,         :|v3_add_new_enum_values()|,
+				:case_change_results_method, :|v3_case_change_results()|,
+				:dataset_names, {{:cis_case, :cis}})
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.v3_add_new_enum_values(p_target_case_view)
+	## 
+	##
+	_local l_cm << case_model.new( p_target_case_view )
+	_local l_tp_coll_enum_def << _self.tp_read_enum_fld_from_xml()
+	
+	_for a_coll_name, a_coll_fld_def _over l_tp_coll_enum_def.fast_keys_and_elements()
+	_loop
+		_for a_fld_name, a_fld_def _over a_coll_fld_def.fast_keys_and_elements()
+		_loop
+			l_enum_name << a_fld_name
+		
+			_for a_fld_type, a_enum_fld_vals _over a_fld_def.fast_keys_and_elements()
+			_loop
+				l_enum_type << a_fld_type
+				write("+++ l_enum_name +++",l_enum_name)
+				
+				l_coll_enum << l_cm.new_case_field_type( l_enum_name,
+									 l_enum_type,
+									 property_list.new_with( :enumerator, :mapped ) )
+				l_coll_enum.enumerator.archive_domain_class << "string"
+				_for a_enum_stored_val,a_enum_display_val _over a_enum_fld_vals.fast_keys_and_elements()
+				_loop
+					l_enum_stored_val << a_enum_stored_val.as_number()
+					l_enum_display_val << a_enum_display_val
+					l_coll_enum.enumerator.add_mapped_values( l_enum_stored_val, l_enum_display_val )
+				_endloop
+			_endloop
+	       _endloop
+       _endloop
+
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.tp_read_enum_fld_from_xml()
+	## 
+	##
+	_local l_tp_colls << sw_module_manager.module(:tp_cstm_cis_db_implementer).get_resource_file("tp_enum_flds.xml","data")
+
+	_local l_path  <<  system.canonicalise(l_tp_colls)
+	
+	str << external_text_input_stream.new(l_path)
+	
+	xml_def << simple_xml.read_element_from( str, sw:editable_xml_thing.new(:tp_collections))
+	
+	l_tp_enum_flds << property_list.new()
+	
+	_for a_tp_Coll _over xml_def.xml_elements()
+	_loop
+		l_coll_name << a_tp_Coll.attributes["collection_name"].as_symbol()
+		_if l_tp_enum_flds[l_coll_name] _is _unset 
+		_then
+			l_tp_enum_flds[l_coll_name] << property_list.new()
+		_endif
+		
+		_for a_each_tp_coll _over a_tp_Coll.xml_elements()
+		_loop
+			l_fld_name << a_each_tp_Coll.attributes["fld_name"].as_symbol()
+			_if l_tp_enum_flds[l_coll_name][l_fld_name] _is _unset 
+			_then
+				l_tp_enum_flds[l_coll_name][l_fld_name] << property_list.new()
+			_endif
+			_for a_enum_fld_def  _over a_each_tp_coll.xml_elements()
+			_loop
+				l_fld_type << a_enum_fld_def.attributes["fld_type"].as_symbol()
+				_if l_tp_enum_flds[l_coll_name][l_fld_name][l_fld_type] _is _unset
+				_then
+					l_tp_enum_flds[l_coll_name][l_fld_name][l_fld_type] << equality_property_list.new()
+				_endif
+				_for a_fld_type  _over a_enum_fld_def.xml_elements()
+				_loop
+					l_fld_str_val << a_fld_type.attributes["store_value"]
+					l_fld_dis_val << a_fld_type.attributes["display_value"]
+					l_tp_enum_flds[l_coll_name][l_fld_name][l_fld_type][l_fld_str_val] << l_fld_dis_val
+				_endloop
+			_endloop
+		_endloop
+	_endloop
+	
+	_return l_tp_enum_flds
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.v3_case_change_results()
+	## 
+	## 
+	_local ccr_for_dd_extension << case_change_result.new()
+        ccr_for_dd_extension.set_file(:cis, "dd_extension.ds")
+   	>> {ccr_for_dd_extension}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

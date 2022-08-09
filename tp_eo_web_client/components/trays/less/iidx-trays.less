@@ -1,0 +1,23 @@
+
+@import "ge-bootstrap/less/iidx-bootstrap.less";
+@import "trays.less";
+.tray {
+  .btn-inverse {
+    background-color: @grayDark;
+    color: @grayLighter;
+    &:hover {
+      background-color: lighten(@grayDark, 10%);
+      color: lighten(@grayLighter, 10%);
+    }
+  }
+  .btn-primary {
+    background-color: @grayLighter;
+    color: @grayDarker;
+    &:hover {
+      color: lighten(@grayDarker, 10%);
+      background-color: lighten(@grayLighter, 10%);
+    }
+  }
+}
+
+

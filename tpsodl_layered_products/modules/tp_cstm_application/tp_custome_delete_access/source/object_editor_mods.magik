@@ -1,0 +1,51 @@
+
+
+_pragma(classify_level=restricted)
+_method object_editor.delete()
+	## 
+	## Deletes the current object.
+	##
+	
+	an_rwo << _self.current_object
+
+	(p_users_and_operations, p_allowed_layers) << _self.get_data_from_xml_file()
+	_global x,y
+	x << p_users_and_operations
+	y << p_allowed_layers
+
+	_if (an_rwo _isnt _unset) _andif
+	    (p_allowed_layers[an_rwo.source_collection.name.write_string] _isnt _unset)
+	_then
+		_if (an_rwo.source_view _isnt _unset) _andif
+		    (an_rwo.source_view.auth_view _isnt _unset) _andif
+		    (an_rwo.source_view.auth_view.current_user _isnt _unset)
+		_then
+			a_cur_user << an_rwo.source_view.auth_view.current_user.name.write_string
+			s_key << write_string(an_rwo.source_collection.name.write_string, a_cur_user)
+			
+			_if p_users_and_operations[s_key] _is _unset _then
+				_self.show_message("Not Authorized to delete the object")
+				_return 
+			_endif 
+		_endif
+	_endif 
+	
+	
+	( confirm?, reason) << an_rwo.delete_confirmation_required?()
+	_if _not confirm? _orif 
+	    _self.show_alert( _self.message( :confirm_deletion, reason ),
+			      _self.message( :ok ),
+			      _self.message( :cancel ) )
+	_then		
+		data << _self.message( :delete_undo_description, _self.collection.external_name )
+		rt << record_transaction.new_delete( an_rwo, data )
+		_self.run_transaction( rt )
+	_endif
+	
+_endmethod
+$
+
+
+
+
+

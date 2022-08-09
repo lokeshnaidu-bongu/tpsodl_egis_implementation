@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+	<collection collection_name = "ed_cabinet" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />
+	</collection>
+	<collection collection_name = "eo_cable_segment_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+    	</collection>
+	<collection collection_name = "eo_circuit" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_conduit" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_comms_device" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_connector_point_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_connector_segment_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "ed_decorative_pole" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>	 
+	<collection collection_name = "eo_energy_source" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />      		
+	</collection>	 
+	<collection collection_name = "eo_energy_storage_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>	 
+	<collection collection_name = "eo_fiber_optic" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>	 
+	<collection collection_name = "eo_isolating_eqpt_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>	  
+	<collection collection_name = "eo_measuring_eqpt_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>	 
+	<collection collection_name = "eo_meter" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />   	
+	</collection>	 
+	<collection collection_name = "ed_pole" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>	
+	<collection collection_name = "eo_power_xfrmr_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_protective_eqpt_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_service_connection" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_service_point" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "sub_substation" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "ed_switchgear" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "et_tower" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+	<collection collection_name = "eo_wire_segment_inst" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />		
+	</collection>
+</tp_collections>

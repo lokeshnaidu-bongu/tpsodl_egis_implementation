@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Canal	1
+Lake	2
+Drainage	3
+Other	4
+Pond	5
+Reservoir	6
+River	7
+Sea	8
+Swimming Pool	9
+Well	10
+Drainage	11

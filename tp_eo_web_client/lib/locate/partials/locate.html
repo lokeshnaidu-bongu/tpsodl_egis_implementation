@@ -1,0 +1,43 @@
+<section class="module sidebar-module">
+    <header class="module-header">
+      <h3 class="voice voice-brand">{{messages.locationSearch.title}}</h3>
+    </header>
+    <div class="module-body">
+      <form id="locationSearchDetails" style="margin-bottom: 10px;">
+        <fieldset>
+          <div class="control-group">
+            <div class="controls" style="margin-left:0px;margin-bottom:5px;">
+              <select id="projectionType" style="width:100%;">
+                {{#projectionTypes}}
+                <option value="{{definition}}">{{display}}</option>
+                {{/projectionTypes}}
+              </select>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls" style="margin-left:0px;margin-bottom:5px;">
+              <input type="text" style="width:calc(100% - 10px);" id="easting" placeholder="{{messages.locationSearch.easting}}" title="{{messages.locationSearch.easting}}"></input>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls" style="margin-left:0px;margin-bottom:5px;">
+              <input type="text" style="width:calc(100% - 10px);" id="northing" placeholder="{{messages.locationSearch.northing}}" title="{{messages.locationSearch.northing}}"></input>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+      <div class="pull-right">
+        <button id="clear" class="btn">{{messages.locationSearch.clear}}</button>
+        <button id="goto" class="btn btn-primary">{{messages.locationSearch.goto}}</button>
+      </div>
+      <div style="display: inline-block; margin-left: 10px; vertical-align: middle;"><span id="emapsSpinner" rel="spinner"></span></div>
+    </div>
+    <footer class="module-footer ">
+      <div class='hr-tip'>
+        <hr> {{{TipSvg}}}
+      </div>
+      <div class="controlDescriptions" style="font-style:italic;">
+        {{{messages.locationSearch.locateDescription}}}
+      </div>
+    </footer>
+</section>

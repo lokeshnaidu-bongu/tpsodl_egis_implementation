@@ -1,0 +1,627 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 12-01-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+_package user
+
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+
+remex(:tp_record_insert_engine)
+$
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+def_slotted_exemplar(:tp_record_insert_engine,
+	## 
+	## 
+	## 
+	{
+		#To Store details required
+		{:custom_args,_unset},
+		# slot variable defined to store excel handle.
+		{:excel_handle,_unset }
+		
+	},
+	:engine_model)
+$
+
+#-------------------------------------------------------------------------------
+# Slot Access
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+tp_record_insert_engine.define_slot_access(:custom_args,:writable,:public)
+$
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+tp_record_insert_engine.define_slot_access(:excel_handle,:writable,:public)
+$
+
+#======================================================================
+#Method: new()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.new()
+	## 
+	## It calls init method to create object.
+	##
+	## Parameters : <None>
+	##
+	## Reture     : <Nothing>
+	
+	_return _clone.init()
+_endmethod
+$
+
+#======================================================================
+#Method: init()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.init()
+	##
+	## Description : Create and return the instance of engine.
+	##
+	## Parameters  : <None>
+	##
+	## Returns     : Instance of engine.
+
+	_super.init()
+	
+	.custom_args << property_list.new()
+
+	.excel_handle << property_list.new()
+
+	_return _self
+	
+_endmethod
+$
+
+#======================================================================
+#Method: import_data()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.import_data(p_file_path,p_log_files_folder,p_dialog)
+	##
+	## Description : Calls int!import_data to insert data.
+	##
+	## Parameters  :  p_file_path - Input file path.
+	##                p_log_files_folder - Directory path to store
+	##                log file.
+	##                              
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!import_data|()|,
+			 p_file_path,p_log_files_folder,p_dialog)
+_endmethod
+$
+
+
+
+#======================================================================
+#Method: int!import_data()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.int!import_data(p_file_path,p_log_files_folder,p_dialog)
+	##
+	## Description : Reads the excel and insert the objects.
+	##
+	## Parameters  :  p_file_path - Input file path.
+	##                p_log_files_folder - Directory path to store
+	##                log file.
+	##                              
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+	
+	
+	_try _with a_cond
+		
+		.excel_handle[:excel_app] << ole_client.openobject("Excel.application")
+		.excel_handle[:workbooks] << .excel_handle[:excel_app].Workbooks()
+		_local workbook << .excel_handle[:workbooks].add(p_file_path)
+		_local sheets << workbook.Sheets
+                _local sheets_count << sheets.count()
+
+		_protect
+			#To get handle of  all the sheets in a loop to readb the data.
+			_for cnt _over 1.upto(sheets_count)
+			_loop
+				
+				.custom_args << property_list.new()
+				.custom_args[:error_info] << rope.new()
+				.custom_args[:start_time] << date_time.now()
+				.custom_args[:summary] << property_list.new()
+				.custom_args[:record] << property_list.new()
+				_local a_sheet << sheets.Item(cnt)	
+				.custom_args[:sheet_cnt] << cnt
+				_local sheet_name << a_sheet.name()
+
+				.custom_args[:sheet_name] << sheet_name
+				_self.changed(:status,sheet_name)
+				_self.read_excel_for_count(a_sheet)
+				
+				#table name of which the details has to be inserted
+				table_column << a_sheet.cells(1,1)
+				table_col_val << table_column.value
+				_local sw_table_name,target_coll,log_report_name
+				_local id_column,first_col,first_col_trim,sw_field_name
+				_local cell_value,object_details,sw_collection,field_name,field_data,msg
+				
+				sw_table_name << table_col_val.as_symbol()
+				.custom_args[:sw_table_name] << sw_table_name
+				#handle on the dataset
+				target_coll << gis_program_manager.databases[:electric].collections[sw_table_name]
+				_if target_coll _is _unset
+				_then
+					_self.changed(:error,_self.message(:update_tool_invalid_dataset_name))
+					_return
+#					condition.raise(:bulk_tool_invalid_collection_name,
+#							:coll_name,sw_table_name)
+				_endif
+
+				log_report_name << sheet_name
+				#handle on the field names of the records
+				_for col_key _over 3.upto(.custom_args[:total_col_count]) 
+				_loop
+					
+					id_column << a_sheet.cells(2,col_key)
+					first_col << id_column.value
+					first_col_trim << first_col.write_string.trim_spaces()
+					
+					sw_field_name << first_col_trim.as_symbol()
+					
+					#Validate if the field name is valid or not
+					_if target_coll.descriptor.field(sw_field_name) _is _unset
+					_then
+
+						_self.changed(:error,_self.message(:update_tool_invalid_field_name))
+						_return
+#						condition.raise(:bulk_tool_invalid_field_name,
+#								:field_name,sw_field_name,
+#								:coll_name,sw_table_name)
+					_endif
+					
+				_endloop
+				
+				#handle on the values record wise(row wise)
+				
+				_for row _over 3.upto(.custom_args[:total_row_count]+2)
+				_loop
+					
+					x_cord << a_sheet.cells(row,1).value.write_string.trim_spaces()	
+					y_cord << a_sheet.cells(row,2).value.write_string.trim_spaces()
+					a_coord<<coordinate.new(x_cord.as_number(),y_cord.as_number())
+					sw_geom<<pseudo_point.new_with(a_coord)
+					sw_geom.world << target_coll.source_view.world
+					.custom_args[:record][target_coll] << property_list.new()
+					.custom_args[:record][target_coll][:location] << sw_geom
+
+					_for col _over 3.upto(.custom_args[:total_col_count]) 
+					_loop
+						
+						cell_value << a_sheet.cells(row,col).value.write_string.trim_spaces()
+						
+						_if cell_value = "unset" _then cell_value << "" _endif  
+						
+						_if cell_value _is _unset
+						_then
+							_self.changed(:error,_self.message(:update_tool_invalid_field_value))
+							_return
+#							condition.raise(:bulk_tool_invalid_field_name,
+#									:field_name,sw_field_name,
+#									:coll_name,sw_table_name)
+						_endif
+						
+						sw_field_name << a_sheet.cells(2,col).value.write_string.trim_spaces().as_symbol()
+						
+						object_details << {target_coll,sw_field_name}
+						(sw_collection,field_name) << (_scatter  object_details)
+						
+						field_data << _self.data_validations(sw_collection,sw_field_name,cell_value)
+						
+						
+						_if  .custom_args[:record][sw_collection] _is _unset
+						_then	
+							.custom_args[:record][sw_collection] << property_list.new()
+						_endif
+
+						.custom_args[:record][sw_collection][field_name] <<   field_data
+						
+					_endloop
+					
+					.custom_args[:current_process_count] << (row-2) 
+					
+					msg << _self.message(:status,log_report_name,(row-2),.custom_args[:total_row_count])
+					
+					_self.changed(:status,msg)
+
+					_for a_collection,proposed_values  _over .custom_args[:record].fast_keys_and_elements()
+					_loop					
+						p_properties << property_list.new_with(_scatter proposed_values)
+						
+						_try _with err_insert
+							
+							rt << record_transaction.new_insert(a_collection,proposed_values)
+							.custom_args[:consumer] << rt.run()
+							
+							write("+++ inserted +++")
+							
+						_when error
+							
+							error_vec << {row,_self.message(:error,err_insert.report_contents_string)}
+							.custom_args[:error_info].add_last(error_vec)
+						_endtry
+						
+						_self.write_log_file(p_log_files_folder,log_report_name)
+						
+					_endloop 						
+				_endloop
+
+
+				.custom_args[:summary][:total_row_count] << .custom_args[:total_row_count]
+				msg << _self.message(:status,.custom_args[:sheet_name],.custom_args[:current_process_count],.custom_args[:total_row_count])
+				msg << _self.changed(:status,msg)
+				
+				.custom_args[:summary][:error_object_cnt] << .custom_args[:error_info].size
+				.custom_args[:success_process_count] << .custom_args[:total_row_count]- (.custom_args[:error_info].size)
+				.custom_args[:summary][:successfully_inserted_object_cnt] << .custom_args[:success_process_count]
+				_self.write_log_file(p_log_files_folder,log_report_name)
+				
+				
+				
+			_endloop
+		_protection
+			sheets.Release_object()
+			workbook.Release_object()
+			
+			.excel_handle[:workbooks].Release_object()
+			.excel_handle[:excel_app].quit()
+			.excel_handle[:excel_app].Release_object()
+			
+		_endprotect
+		
+		_self.changed(:completed,"")
+		gis_program_manager.databases[:electric].commit()
+		
+	_when error,warning
+		
+		_if .excel_handle[:workbooks].error_code="0x80020009 - Exception occurred."
+		_then
+			_self.changed(:error,_self.message(:file_open_state))
+			p_dialog.framework.set_status_info("Ready")
+		_else
+			_self.changed(:error,a_cond.report_contents_string)
+		_endif
+		
+	_endtry 
+_endmethod
+$
+
+#======================================================================
+#Method: read_excel_for_count()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.read_excel_for_count(p_sheet)
+	## 
+	## 
+	## This method is used for getting count of the records present
+	## in each sheet
+	##
+	## Parameters  :  p_sheet - Reference of the sheet.
+	##                 
+	## Returns     : <Nothing>.
+
+	
+	_local l_row_count << 0
+	_local l_col_count << 0
+	_local cell_value
+	#_self.changed(:status,"Reading Excel...")
+	_for row _over 3.upto(p_sheet.Rows().count())
+	_loop @total_rows
+		cell_value << p_sheet.cells(row,1).value
+		_if cell_value _is _unset
+		_then
+			_leave
+		_else
+			l_row_count << l_row_count+1
+		_endif
+	_endloop
+	
+	_for col  _over 1.upto(p_sheet.columns().count())
+	_loop
+		cell_value1 << p_sheet.cells(2,col).value
+		_if cell_value1 _is _unset
+		_then
+			_leave
+		_else
+			l_col_count << l_col_count+1
+		_endif
+	_endloop
+	
+	.custom_args[:total_row_count] <<   l_row_count 
+	.custom_args[:total_col_count] <<   l_col_count
+
+	_self.changed(:status,"Reading Excel Completed")
+
+	
+_endmethod
+$
+
+
+#======================================================================
+#Method: data_validations()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.data_validations(p_sw_collection,p_field_name,p_data)
+	## 
+	## Type casting of data into the smallworld format
+        ## Need to include more depending on the cases that arise.
+	##
+	## Parameters  :   p_sw_collection - Particular collection.
+	##                 p_field_name    - field name of a collection.
+	##                 p_data          - field data.
+	##                 
+	## Returns     : data to update in sw.
+
+	_local sw_field << p_sw_collection.field(p_field_name)
+	_local data << p_data
+	
+	_if sw_field.type _is _unset _andif
+	    sw_field.join_type _is  :text
+	_then
+		_return data
+		
+		#Implemented only string to integer conversion.
+
+		#	 _elif sw_field.type.name _is :cseb_number
+		#	 _then
+		#		 _if data.as_integer() _isnt _unset
+		#		 _then
+		#			  _return data.as_integer().write_string
+		#		 _else
+		#			 _return data
+		#		 _endif	
+
+		
+		#	 _elif sw_field.type.name _is :cseb_eo_status
+		#	 _then
+		#		 enum << sw_field.type.enumerator
+		#		 _if enum _isnt _unset
+		#		 _then
+		#			 _if enum.sorted_values.includes?(data)
+		#			 _then
+		#				 _return data
+		#			 _else
+		#				 _return _unset
+		#			 _endif
+		#		 _endif
+
+
+	_elif sw_field.type _isnt _unset _andif  sw_field.type.enumerator _isnt _unset
+	_then
+		enum << sw_field.type.enumerator
+		_if enum _isnt _unset
+		_then
+			_if enum.sorted_values.includes?(data)
+			_then
+				_return data
+			_else
+				_return _unset
+			_endif
+		_endif
+		
+		
+	_elif  sw_field.type _isnt _unset _andif 
+	       sw_field.type.name _is :ds_float _orif
+	       sw_field.type.name _is :ds_double _orif
+	       sw_field.type.name _is :ds_int _orif 
+	       sw_field.type.name _is :ds_int64 _orif
+	       sw_field.type.name _is :ds_uint _orif 
+	       sw_field.type.name _is :ds_uint64
+	
+	_then
+		_return data.as_number(_true)
+		
+	_elif sw_field.type _isnt _unset _andif
+	      sw_field.type.name _is :ds_date
+	_then
+		_return date.from_write_string(data)
+		
+	_elif sw_field.type _isnt _unset _andif
+	      sw_field.type.name _is :eo_spec_name
+	_then
+		
+		.custom_args[:spec_name] << data
+		_return data
+		
+		#Boolean validation -
+	_elif sw_field.type _isnt _unset _andif
+	      sw_field.type.name _is :ds_bool
+
+	_then
+		_if  data  = "False"
+		_then
+			_return  _false
+			
+		_elif data = "True"
+		_then 
+			_return   _true 
+		_endif
+		
+		#	 _elif sw_field.type _isnt _unset _andif
+		#	       sw_field.type.name _is :eo_line_voltage
+		#	 _then
+		#		
+		#		 _if data _isnt _unset 
+		#		 _then
+		#			 num << data.numbers_and_strings[1]
+		#			 charc << data.numbers_and_strings[2]
+		#			 _if charc.is_class_of?("")
+		#			 _then
+		#				 _if charc.as_symbol() = :|kV|
+		#				 _then
+		#					 charc_kV << :kV
+		#					 _return unit_value(num,charc_kV)
+		#				 _elif charc.as_symbol() = :|V|
+		#				 _then
+		#					 charc_V << :V
+		#					 _return unit_value(num,charc_V)
+		#				 _endif
+		#			 _endif
+		#		 _endif
+		#		 
+	_else
+		
+		_return data
+	_endif
+	
+_endmethod
+$
+
+#======================================================================
+#Method: write_log_file()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.write_log_file(p_output_directory,p_report_name)
+	##
+	## This method is used to write the log file of record transactions
+	##	
+	## Parameters  :   p_output_directory  - Directory path to
+	##                                       store log file.
+	##                 p_report_name       - Name of the report.
+	##                
+	##                 
+	## Returns     : <Nothing>.
+	
+	_protect
+		_local report_name << p_report_name
+		
+		_local l_name << write_string(p_output_directory ,"\",report_name,"_log_report.txt")
+		
+		_local a_stream << external_text_output_stream.new(l_name)
+
+		#-------------- WRITE MAIN HEADING -------------------------------
+		a_stream.write("----------------------------------------------------------------------------")
+		a_stream.newline()
+		a_stream.write(%tab,%tab,_self.message(:migration_log_message))
+		a_stream.newline()
+		a_stream.write("----------------------------------------------------------------------------")
+		a_stream.newline()
+
+		#------------ WRITE DATE AND TIME ---------------------------
+		a_stream.write(_self.message(:start_time),.custom_args[:start_time])
+		a_stream.newline()
+		a_stream.write(_self.message(:end_time),date_time.now())
+		a_stream.newline()
+		a_stream.newline()
+
+		#------------ WRITE EXCEL TO SW Mapping Information ---------------------------
+		a_stream.write(_self.message(:sw_table_name_log_msg),%space,report_name)
+		a_stream.newline()
+		a_stream.newline()
+
+		summary_values << _unset
+		
+		#------------- WRITE REPORT SUB HEADING ---------------------------
+		a_stream.write(_self.message(:hash),%space,
+			       _self.message(:log_heading_key,report_name),
+			       %space,_self.message(:hash))
+		
+		a_stream.newline()
+		a_stream.newline()
+
+		#---------WRITE MESSAGE INFORMATION------------------------
+		
+
+		#---------- WRITE REPORT HEADING ----------------------------------
+		a_stream.write(_self.message(:error_record),%tab,_self.message(:log_error_description))
+		a_stream.newline()
+		a_stream.write("----------------------------------------------------------------------------")
+		a_stream.newline()
+		
+		#----------- WRITE ERROR INFORMATION ----------------------------
+		_for  values _over .custom_args[:error_info].fast_elements()
+		_loop
+			(name,error_description) << (_scatter values)
+                        
+			a_stream.write(name)
+			a_stream.write(%tab,error_description)
+			
+			a_stream.newline()
+			
+		_endloop
+
+		a_stream.newline()
+		a_stream.newline()
+		
+		#---------- WRITE SUMMARY INFORMATION ----------------------------
+		_if (summary_values << .custom_args[:summary]) _isnt _unset
+		_then
+			a_stream.write(_self.message(:summary))
+			a_stream.newline()
+
+			_for s_key,value _over summary_values.fast_keys_and_elements()
+			_loop
+				a_stream.write(%tab,_self.message(s_key),"  =  ",value)
+				a_stream.newline()
+			_endloop
+		_endif
+
+		
+		_return l_name
+		
+
+	_protection
+
+		_if a_stream _isnt _unset
+		_then
+			a_stream.close()
+		_endif 
+		
+	_endprotect
+
+_endmethod
+$
+
+#======================================================================
+#Method: message()
+#======================================================================
+
+_pragma(classify_level=basic, topic={tp_record_insert_engine}, usage={TPSODL})
+_method tp_record_insert_engine.message(p_message_id,_gather p_args)
+	## Returns the string related to that symbol.
+	##	
+	## Parameters  :   p_message_id  - 
+	##                 p_args       - 
+	##                
+	##                 
+	## Returns     : String related to the symbol.
+	
+	>> _self.message_accessor.human_string(
+		   p_message_id,_unset, _scatter p_args )
+_endmethod
+$

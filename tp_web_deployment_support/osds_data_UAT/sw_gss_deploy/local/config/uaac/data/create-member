@@ -1,0 +1,14 @@
+GROUP_NAME|USER_NAME|
+gss.user|gss_user|
+gss.user|gss_both|
+gss.user|gss_north|
+gss.user|gss_west|
+gss.admin|gss_admin|
+gss.admin|gss_both|
+shared.assets|gss_north|
+shared.assets|gss_west|
+shared.assets|gss_user|
+opco.north|gss_north|
+opco.west|gss_west|
+all.assets|gss_admin|
+all.assets|gss_both|

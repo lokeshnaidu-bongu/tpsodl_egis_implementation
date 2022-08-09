@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+
+<!-- Define the xml files for specific collections -->
+	<collection collection_name = "lnd_building" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_builtup" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_circle" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_cluster_of_trees" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_lnd_division" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_environment" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_estate_land_type" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_flood_map" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_footpath" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_gate" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_green" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "lnd_landmark" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_locality_boundary" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_municipal_ward_boundary" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_non_builtup" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_obstacle" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "lnd_zip" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "lnd_railroad" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />
+	</collection>
+	<collection collection_name = "lnd_restricted_area" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+    	</collection>
+	<collection collection_name = "tp_right_of_way" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "lnd_street" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "lnd_street_segment" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "lnd_section" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "tp_shop" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "tp_slum" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />
+	</collection>	 
+	<collection collection_name = "lnd_subdivision" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />    		
+	</collection>	 
+	<collection collection_name = "tp_sub_locality" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>	 
+	<collection collection_name = "tp_telecom" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />
+	</collection>	 
+	<collection collection_name = "tp_tpsodl_boundary" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />
+	</collection>	  
+	<collection collection_name = "tp_tpsodl_building" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>	 
+	<collection collection_name = "tp_transit_area" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />
+	</collection>	 
+	<collection collection_name = "tp_tree" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>	 
+	<collection collection_name = "tp_utility_points" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "tp_vehicle_demarcated_boundary" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "tp_village_boundary" >
+		<fields field_name = "tp_remarks" field_base_name="tp_remarks_id" />
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+	<collection collection_name = "lnd_waterbody" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />
+	</collection>
+	<collection collection_name = "lnd_wetland" >
+		<fields field_name = "tp_survey_remark" field_base_name ="tp_survey_remark_id" />	
+	</collection>
+</tp_collections>

@@ -1,0 +1,19 @@
+tp_cstm_db_implementer	1
+
+description
+	TPSODL Custom DB Implementer
+end
+
+requires 
+	co_datamodel_implementer
+	schematic_datamodel
+end
+	
+install_requires
+	co_datamodel_implementer	
+	eo_implementer
+	eo_datamodel_implementer
+end
+
+requires_datamodel
+end

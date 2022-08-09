@@ -1,0 +1,24 @@
+#% text_encoding = iso8859_1
+
+
+_package user
+$
+_global tpsodl_get_directory_for_file << _proc@tpsodl_get_directory_for_file(p_input_dir)
+					      _local l_dir << ""
+					      _local l_split_coll << p_input_dir.split_by("\")
+					      _for a_key,a_val _over  l_split_coll.fast_keys_and_elements()
+					      _loop
+						      _if a_key <> l_split_coll.size
+						      _then
+							      _if a_key = 1
+							      _then
+								      l_dir << a_val  	      
+							      _else
+								      l_dir << write_string(l_dir,"\",a_val) 
+							      _endif
+						      _endif	    
+					      _endloop
+					      
+					      >>l_dir
+				      _endproc
+$

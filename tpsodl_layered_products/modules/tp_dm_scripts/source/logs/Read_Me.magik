@@ -1,0 +1,16 @@
+## Follow below steps to execute Data model
+#Electric Dataset- Create Checkpoint / Alternative and switch
+# Writable mode
+#Electric Case Dataset- Create Checkpoint / Alternative and switch
+# Writable mode
+_block
+	mmm << sw_module_manager.module(:tp_cstm_db_implementer)
+	imps << mmm.datamodel_implementers()
+	##compile in this code
+	de << datamodel_engine.new(:implementers,imps)
+	de.print_installation_status()
+	##should see version number in list as installable
+	#de.install_case_database_changes()
+	#de.install_database_changes()
+_endblock
+

@@ -1,0 +1,167 @@
+<div class="map noselect" data-map-name="{{options.mapName}}" data-toggle="streetview">
+  <div class="map-toolbar">
+    <div class="pull-left overlay-chooser" style="width:25%;max-width:350px;">
+      <div class="input-group form-search" id="mapSearch">
+        <span class="input-group-addon" style="padding:0px;">
+          <div style="padding: 5px 10px 3px;">
+            <i class="icon-search" style="line-height: 0.9em;vertical-align: -5%;font-size: 14px;"></i>
+          </div>
+        </span>
+        <input id="query" type="search" class="form-control" autocomplete="off" placeholder="{{messages.assetSearchBoxHint}}" data-search-tag="{{options.searchTag}}" />
+        <div class="input-group-btn">
+          <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-placement="bottom">
+            <i id="searchTypeIndicator" class="icon-ico_map_lg"></i><i class="icon-chevron-down"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-small">
+            <li class="search-item" data-search-type="asset">
+              <div>
+                <i class="icon-ico_map_lg"></i>
+                <label>{{messages.assetSearchLabel}}</label>
+              </div>
+            </li>
+            {{#addressSearch}}
+            <li class="divider"></li>
+            <li class="search-item" data-search-type="address">
+              <div>
+                <i class="icon-map-marker"></i>
+                <label>{{messages.addressSearchLabel}}</label>
+              </div>
+            </li>
+            {{/addressSearch}}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="pull-right">
+		
+		
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:midnightblue;" -->
+		   <!-- id="previous_view" class="icon-ico_arrowleft_lg" rel="tooltip" data-container="body" -->
+		   <!-- data-placement="top" title="Previous View"></i></span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:midnightblue;" -->
+		   <!-- id="next_view" class="icon-ico_arrowright_lg" rel="tooltip" data-container="body" data-placement="bottom" -->
+		   <!-- title="Next View"></i></span> -->
+		
+		<button class="btn btn-map" ><i
+		   style="color: midnightblue;font-size: 15px;" id="previous_view" rel="tooltip" data-container="body"
+		   data-placement="bottom" title="Previous View"><b>🡸</b></i>
+		</button>
+		<button class="btn btn-map" ><i
+		   style="color: midnightblue;font-size: 15px;" id="next_view" rel="tooltip" data-container="body"
+		   data-placement="bottom" title="Next View"><b>🡺</b></i>
+		</button>
+		<button class="btn btn-map" ><i
+		   style="color: midnightblue;font-size: 12px;" id="home_view" rel="tooltip" data-container="body"
+		   data-placement="bottom" title="Home"><b>Home</b></i>
+		</button>
+		<button class="btn btn-map" ><i
+		   style="color: midnightblue;font-size: 12px;" id="osm_view" rel="tooltip" data-container="body"
+		   data-placement="bottom" title="On/Off OSM"><b>OSM</b></i>
+		</button>
+		<button class="btn btn-map" ><i
+		   style="color: midnightblue;font-size: 12px;" id="shared_path" rel="tooltip" data-container="body"
+		   data-placement="bottom" title="Documents"><b>FTP</b></i>
+		</button>
+		<button class="btn btn-map" ><i
+		   style="color: midnightblue;font-size: 12px;" id="clear_map" rel="tooltip" data-container="body"
+		   data-placement="bottom" title="Clear Selection"><b>Clear</b></i>
+		</button>
+		<button class="btn btn-map" id="tpsodl_add_external_data_to_map_button"><i
+		   style="color: midnightblue;font-size: 12px;" id="tpsodl_add_external_data_to_map" rel="tooltip" data-container="body"
+		   data-placement="bottom" title="Import KML/Json Data"><b>Drag&Drop Data</b></i>
+		</button>
+		<!-- <div id="tpsodl_add_external_data_to_map_button" class="btn-group overlay-chooser"> -->
+			<!-- <button id="tpsodl_add_external_data_to_map" class="btn btn-map" > -->
+			  <!-- <i class="icon-drag-drop-data"></i> -->
+			<!-- </button> -->
+		<!-- </div> -->
+		<!-- <button class="btn btn-map" id="tpsodl_add_external_data_to_map_button"><i -->
+		   <!-- style="color: midnightblue;font-size: 15px;" id="tpsodl_add_external_data_to_map" rel="tooltip" data-container="body" -->
+		   <!-- data-placement="bottom" title="Import KML/Json Data" class="icon-drag-drop-data"></i> -->
+		<!-- </button> -->
+		<!-- <button id="tpsodl_add_external_data_to_map_button" class="btn btn-map" title="Import KML/Json Data> -->
+          <!-- <i class="icon-drag-drop-data"></i> -->
+        <!-- </button> -->
+		
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:midnightblue;" -->
+		   <!-- id="previous_view" class="icon-ico_arrowleft_lg" rel="tooltip" data-container="body" -->
+		   <!-- data-placement="top" title="Previous View"></i></span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:midnightblue;" -->
+		   <!-- id="next_view" class="icon-ico_arrowright_lg" rel="tooltip" data-container="body" data-placement="bottom" -->
+		   <!-- title="Next View"></i></span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:darkblue;"  -->
+			<!-- id="home_view" class="icon-ico_home_lg" rel="tooltip" data-container="body" data-placement="top" title=""  -->
+			<!-- data-original-title="Home View"></i></span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i -->
+		   <!-- style="padding: 4px;color: red;font-size: 35px;" id="clear_map" rel="tooltip" data-container="body" -->
+		   <!-- data-placement="bottom" title="Clear Map">x</i> -->
+		<!-- </span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:green;"  -->
+			<!-- id="osm_view" class="icon-ico_map_lg" rel="tooltip" data-container="body" data-placement="top" title=""  -->
+			<!-- data-original-title="On/Off OSM"></i></span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:darkmagenta;"  -->
+			<!-- id="shared_path" class="icon-link" rel="tooltip" data-container="body" data-placement="top" title=""  -->
+			<!-- data-original-title="Documents"></i></span> -->
+		<!-- </span> -->
+		
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:midnightblue;"  -->
+			<!-- id="home_view" class="icon-ico_home_lg" rel="tooltip" data-container="body" data-placement="top" title=""  -->
+			<!-- data-original-title="Home View"></i></span> -->
+			
+
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i -->
+		   <!-- style="padding: 4px;color: red;font-size: 35px;" id="clear_map" rel="tooltip" data-container="body" -->
+		   <!-- data-placement="bottom" title="Clear Selection">x</i> -->
+		<!-- </span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:midnightblue;"  -->
+			<!-- id="osm_view" class="icon-ico_map_lg" rel="tooltip" data-container="body" data-placement="top" title=""  -->
+			<!-- data-original-title="On/Off OSM"></i></span> -->
+		<!-- <span class="pull-left overlay-chooser" id="custom-tools"><i style="height: 28px;padding: 3px;color:midnightblue;"  -->
+			<!-- id="shared_path" class="icon-link" rel="tooltip" data-container="body" data-placement="top" title=""  -->
+			<!-- data-original-title="Documents"></i></span> -->
+		<!-- </span> -->
+      <div class="trace-actions" >
+      </div>
+      {{#mapLocation}}
+      <div class="btn-group">
+        <button class="btn btn-map" id="enableMapClick">
+          <i class="icon-info-sign"></i>
+        </button>
+      </div>
+      {{/mapLocation}}
+
+      {{#schematicsButton}}
+      <div class="btn-group">
+        <button class="btn btn-map" id="showSchematicView">
+          <!--TODO replace with localisation message later-->
+          Show Schematics
+        </button>
+      </div>
+      {{/schematicsButton}}
+
+      {{#mapVisualization}}
+      <div id="mapVisualization" class="btn-group overlay-chooser">
+        <button class="btn btn-map dropdown-toggle" data-toggle="dropdown" data-title="map-visualization">
+          <i class="icon-ico_colorbground_lg"></i>{{messages.map_visualization.electricalEquipmentStyle}}<i class="icon-chevron-down"></i>
+        </button>
+      </div>
+      {{/mapVisualization}}
+
+      <div id="mapLayers" class="btn-group overlay-chooser">
+        <button id="mapLayersButton" class="btn btn-map dropdown-toggle" data-toggle="dropdown" data-layer-map="{{options.mapName}}" data-title="Layers">
+          <i class="icon-overlays"></i>{{messages.layersLabel}}<i class="icon-chevron-down"></i>
+        </button>
+      </div>
+	  
+
+
+      {{#mapCurrentLocation}}
+      <div class="btn-group">
+        <button class="btn btn-map" id="currentLocationButton">
+          <i class="icon-screenshot"></i>
+        </button>
+      </div>
+      {{/mapCurrentLocation}}
+    </div>
+  </div>
+</div>

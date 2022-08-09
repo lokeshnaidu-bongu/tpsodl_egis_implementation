@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+<collection collection_name = "lnd_county" >
+<fields field_name = "name" external_name = "" mandatory = "false" field_type="" field_size ="" unset_value="" default_value ="" field_index="" mode ="update"/>
+
+</collection>
+
+</tp_collections>

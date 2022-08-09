@@ -1,0 +1,24 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+#Amish	10
+#Downtown Underground Area	20
+#High Fault Area	30
+#Historical	40
+#Military	50
+#Mine	60
+#Nature Preserve	70
+#Not Listed	997
+#Sink Hole	80
+#Superfund site	90
+Airports	11
+Central Banks	12
+Chemical Industries	13
+Govt Quarters	14
+Political Offices	15
+Police Quarters	16
+
+

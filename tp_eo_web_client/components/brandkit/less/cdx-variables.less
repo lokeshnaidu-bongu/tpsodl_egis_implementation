@@ -1,0 +1,440 @@
+//--------------------
+// CDx VARIABLES
+//--------------------
+//
+// This file only contains variables for CDx
+//
+// Paths
+// -------------------------
+
+@import (reference) "variables.less";
+
+
+// Monochrome Palette
+// -------------------------
+@trueBlack:       #000000;
+@black:           #141414;
+@grayDarkest:     #2b2b2b;
+@grayDarker:      #414141;
+@grayDark:        #575757;
+@gray:            #868686;
+@grayLight:       #bcbcbc;
+@grayLighter:     #d4d4d4;
+@grayLightest:    #e9e9e9;
+@offWhite:        #f5f5f5;
+@white:           #ffffff;
+
+
+// Accent Palette
+// -------------------------
+@cyan:            #005CB9;
+@cyanLight:       #6bc9ed;
+@cyanDark:        #056083;
+@green:           #46ad00;
+@greenLight:      #75d835;
+@greenDark:       #1d5f11;
+@red:             #de2533;
+@redLight:        #ff5c5c;
+@redDark:         #b61225;
+@orange:          #ff9821;
+@orangeLight:     #ffbb66;
+@orangeDark:      #e55c00;
+@purple:          #8669ff;
+@purpleLight:     #9c97ff;
+@purpleDark:      #595194;
+@blue:            #005CB9;
+@blueLight:       #3693f8;
+@blueDark:        #00366e;
+@yellow:          #ffed45;
+@yellowLight:     #fff98d;
+@yellowDark:      #ffcf45;
+
+@blueDarker:      darken(@blue, 10%);
+@grayBorder:      #cccccc;
+
+// Scaffolding
+// -------------------------
+@bodyBackground:        @white;
+@textColor:             @grayDark;
+
+// Links
+// -------------------------
+@linkColor:             @blue;
+@linkColorHover:        @blueDark;
+
+
+// Typography
+// -------------------------
+@sansFontFamily:        "GE Sans", "ge-sans", "GE Inspira", "ge-inspira", Helvetica, Arial, sans-serif;
+@serifFontFamily:       "GE Serif", "ge-serif", Georgia, serif;
+@monoFontFamily:        Inconsolata, Consolas, monospace;
+@brandFontFamily:       "GE Inspira", "ge-inspira", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+// remapping bootstrap font vars
+@font-family-sans-serif:  @sansFontFamily;
+@font-family-serif:       @serifFontFamily;
+@font-family-monospace:   @monoFontFamily;
+
+
+@baseFontSize:          14px;
+@baseFontFamily:        @sansFontFamily;
+@baseLineHeight:        20px;
+@altFontFamily:         @serifFontFamily;
+
+@headingsColor:         @grayDarkest; // empty to use BS default, @textColor
+
+// Component sizing
+// -------------------------
+// Based on 14px font-size and 20px line-height
+
+@fontSizeLarge:         @baseFontSize * 1.2857; // ~18px
+@fontSizeSmall:         @baseFontSize * 0.75; // ~11px
+@fontSizeMini:          @baseFontSize * 0.70; // ~10px
+
+@baseBorderRadius:      3px;
+@borderRadiusLarge:     6px;
+@borderRadiusSmall:     3px;
+
+
+// Tables
+// -------------------------
+@tableBackground:                   transparent; // overall background-color
+@tableBackgroundAccent:             @grayLightest; // for striping
+@tableBackgroundHover:              none; // for hover
+@tableBorder:                       @grayLight; // table and cell border
+
+
+// Buttons
+// -------------------------
+
+// mis-used in a number of components, can't use for buttons anymore
+@btnBorder:                         @offWhite;
+
+// default button
+
+@btnBorderRadius:                   3px;
+
+@btnText:                           @grayDarker;
+@btnIconColor:                      @black;
+@btnBorderForRealzy:                @grayLightest;
+@btnBackground:                     @grayLightest;
+@btnBackgroundHighlight:            @grayLighter;
+
+// primary button
+
+@btnPrimaryText:                    @white;
+@btnPrimaryBackground:              @blue;
+@btnPrimaryBackgroundHighlight:     @blueDark;
+@btnPrimaryToggle:                  darken(@blue,50%);
+@btnIconColorPrimary:               @white;
+
+@btnInverseText:                    @btnPrimaryText;
+@btnInverseBackground:              @btnPrimaryBackground;
+@btnInverseBackgroundHighlight:     @btnPrimaryBackgroundHighlight;
+@btnInverseIconColor:               @btnIconColorPrimary;
+
+
+// disabled button
+
+@btnDisabledText:                   @gray;
+@btnDisabledBackground:             @grayLightest;
+
+// other buttons
+
+@btnInfoBackground:                 @cyan;
+@btnInfoBackgroundHighlight:        darken(@cyan,10%);
+
+@btnSuccessBackground:              @green;
+@btnSuccessBackgroundHighlight:     darken(@green,10%);
+
+@btnWarningBackground:              @orange;
+@btnWarningBackgroundHighlight:     darken(@orange,10%);
+
+@btnDangerBackground:               @red;
+@btnDangerBackgroundHighlight:      darken(@red,10%);
+
+@btnInverseBackground:              @grayDarker;
+@btnInverseBackgroundHighlight:     @grayDarkest;
+
+// toggle
+
+@btnToggleText:                     @white;
+@btnToggleBackground:               @blue;
+
+// selected
+
+@btnSelectedText:                   @white;
+@btnSelectedBackground:             @blue;
+
+// Tags
+// -------------------------
+
+@tagBackground:                 @grayLightest;
+@tagBackgroundHighlight:        @grayLighter;
+@tagText:                       @textColor;
+@tagPadding:                    8px 15px 7px 15px;
+@tagBorderRadius:               3em;
+
+// Forms
+// -------------------------
+@inputBackground:               @grayLightest;
+@inputBorder:                   @grayLighter;
+@inputBorderRadius:             0;
+@inputDisabledBackground:       @grayLighter;
+@inputDisabledText:             @grayDark;
+@formActionsBackground:         @grayLightest;
+@inputHeight:                   @baseLineHeight + 10px; // base line-height + 8px vertical padding + 2px top/bottom border
+@webkitBaseBorder:              #4C4C4C;
+
+@inputHoverBorder:              @grayDark;
+@inpurFocusBorder:              @blue;
+
+
+// Dropdowns
+// -------------------------
+@dropdownBackground:            @white;
+@dropdownBorder:                @grayLighter;
+@dropdownDividerTop:            @grayLighter;
+@dropdownDividerBottom:         @white;
+
+@dropdownLinkColor:             @grayDark;
+@dropdownLinkColorHover:        @textColor;
+@dropdownLinkColorActive:       @white;
+
+@dropdownLinkBackgroundHover:   @grayLighter;
+@dropdownLinkBackgroundActive:  @blue;
+
+// faceted / type ahead
+
+@dropdownFacetedFacetBackground: @grayLightest;
+
+
+// COMPONENT VARIABLES
+// --------------------------------------------------
+
+// Z-index master list
+// -------------------------
+// Used for a bird's eye view of components dependent on the z-axis
+// Try to avoid customizing these :)
+@zindexDropdown:          1000;
+@zindexPopover:           1010;
+@zindexTooltip:           1030;
+@zindexFixedNavbar:       1020;
+@zindexModalBackdrop:     1040;
+@zindexModal:             1050;
+
+
+// Sprite icons path
+// -------------------------
+@iconSpritePath:          "../assets/img/glyphicons-halflings.png";
+@iconWhiteSpritePath:     "../assets/img/glyphicons-halflings-white.png";
+
+
+// Input placeholder text color
+// -------------------------
+@placeholderText:         @gray;
+
+
+// Hr border color
+// -------------------------
+@hrBorder:                @grayLighter;
+
+
+// Horizontal forms & lists
+// -------------------------
+@horizontalComponentOffset:       180px;
+
+
+// Wells
+// -------------------------
+@wellBackground:                  @grayLightest;
+
+
+// Navbar
+// -------------------------
+@navbarCollapseWidth:             979px;
+@navbarCollapseDesktopWidth:      980px;
+
+@navbarHeight:                    60px;
+@navbarBackgroundHighlight:       @grayLightest;
+@navbarBackground:                @grayLightest;
+@navbarBorder:                    @grayLightest;
+
+@navbarText:                      @grayDarkest;
+@navbarLinkColor:                 @grayDarkest;
+@navbarLinkColorHover:            @white;
+@navbarLinkColorActive:           @white;
+@navbarLinkBackgroundHover:       transparent;
+@navbarLinkBackgroundActive:      @blue;
+
+@navbarSearchBackground:          @grayDarker;
+@navbarSearchBackgroundFocus:     @white;
+@navbarSearchBorder:              @navbarSearchBackground;
+@navbarSearchPlaceholderColor:    @gray;
+
+@navbarBrandColor:                @white;
+
+// Inverted navbar
+@navbarInverseBackground:                @grayLightest;
+@navbarInverseBackgroundHighlight:       @navbarInverseBackground;
+@navbarInverseBorder:                    @navbarInverseBackground;
+
+@navbarInverseText:                      @grayDarkest;
+@navbarInverseLinkColor:                 @grayDarkest;
+@navbarInverseLinkColorHover:            @blue;
+@navbarInverseLinkColorActive:           @blueDark;
+@navbarInverseLinkBackgroundHover:       transparent;
+@navbarInverseLinkBackgroundActive:      transparent;
+
+@navbarInverseSearchBackground:          lighten(@navbarInverseBackground, 25%);
+@navbarInverseSearchBackgroundFocus:     @white;
+@navbarInverseSearchBorder:              @navbarInverseBackground;
+@navbarInverseSearchPlaceholderColor:    #ccc;
+
+@navbarInverseBrandColor:                @grayDarkest;
+
+
+// Pagination
+// -------------------------
+//@paginationBackground:                @white; // No longer in use BS3
+//@paginationBorder:                    @grayLighter; // No longer in use BS3
+//@paginationActiveBackground:          @blue; // No longer in use BS3
+
+
+// Hero unit
+// -------------------------
+@heroUnitBackground:              @grayLighter;
+@heroUnitHeadingColor:            inherit;
+@heroUnitLeadColor:               inherit;
+
+
+// Form states and alerts
+// -------------------------
+@warningText:             @orange;
+@warningBackground:       @orange;
+@warningBorder:           @orange;
+
+@errorText:               @red;
+@errorBackground:         @red;
+@errorBorder:             @red;
+
+@successText:             @green;
+@successBackground:       @green;
+@successBorder:           @green;
+
+@infoText:                @cyan;
+@infoBackground:          @cyan;
+@infoBorder:              @cyan;
+
+
+// Tooltips and popovers
+// -------------------------
+@tooltipColor:            #fff;
+@tooltipBackground:       #000;
+@tooltipArrowWidth:       5px;
+@tooltipArrowColor:       @tooltipBackground;
+
+@popoverBackground:       @white;
+@popoverArrowWidth:       10px;
+@popoverArrowColor:       @white;
+@popoverTitleBackground:  @grayLightest;
+
+// Special enhancement for popovers
+@popoverArrowOuterWidth:  @popoverArrowWidth + 1;
+@popoverArrowOuterColor:  rgba(0,0,0,.25);
+
+
+// STUFF MOVED FROM CDX/less/variables.less for BS3 Upgrade
+// Color Palette
+// -------------------------
+// BS3 removal @black:                 #262626;
+// @grayLighter:           #f2f1f0;
+
+// @blue:                  @cyan;
+
+// NOTE: These colors were used by various MDS components, but
+// the variable names should not appear in any of those components.
+// Instead, these hex values should be set in this variables file
+// using common variable names (like @btnBackground) and then used
+// by the components in that fashion. This allows DXs to communicate
+// with each other by using common variables, and overriding those
+// colors and settings only at the local Dx level.
+
+// The comments are being left here for the time being so that the
+// values may be referenced when comparing old components, but
+// should be removed before release.
+
+// @mds-grayDarkest:           #444;              // footer.less
+// @mds-grayDarker:            #555453;           // unused?
+// @mds-grayDark:              #777;              // footer.less
+// @mds-gray:                  #dad9d7;           // extensions.less, block.less, feature.less, hero.less, teasers.less
+// @mds-grayLight:             #e9e8e7;           // hero.less
+// @mds-offWhite:              #faf9f8;           // variables.less
+
+// @thinblue:              rgba(82,168,236,.8);
+// @cyanLightest:          #daf1fa;
+// @greenLightest:         #eaf4d9;
+// @redLightest:           #fce0de;
+// @orangeLightest:        #fcecd9;
+
+
+// Scaffolding
+// -------------------------
+// BS3 removal @bodyBackground:              @grayLightest;
+@contentContainerBackground:  @white;
+
+// Full bleed Mobile Grid
+// BS3 removal @paddingContainerMobile:         40px 20px;
+
+
+// Header/Footer
+// -------------------------
+// BS3 removal @navbarBackground:            @grayLightest;
+@footerBackground:            @grayLighter;
+
+// Typography
+// -------------------------
+// BS3 removal @baseLineHeight:        24px;
+
+
+// Tables
+// -------------------------
+// BS3 removal@tableBackgroundAccent:             #faf9f8;    // for striping
+// BS3 removal @tableBorder:                       #dad9d7;    // table and cell border
+
+
+// Buttons
+// -------------------------
+
+// @btnPrimaryBackground:              @black;
+// @btnPrimaryBackgroundHighlight:     @grayDarker;
+
+
+// Forms
+// -------------------------
+// BS3 removal @inputBorder:           #dad9d7;
+
+
+// Form states and alerts
+// -------------------------
+// BS3 removal @warningText:             @orange;
+// BS3 removal @warningBackground:       #fcecd9;
+// BS3 removal @warningBorder:           @orangeLight;
+
+// BS3 removal @errorText:               @red;
+// BS3 removal @errorBackground:         #fce0de;
+// BS3 removal @errorBorder:             @redLight;
+
+// BS3 removal @successText:             @green;
+// BS3 removal @successBackground:       #eaf4d9;
+// BS3 removal @successBorder:           @greenLight;
+
+// BS3 removal @infoText:                @cyan;
+// BS3 removal @infoBackground:          #daf1fa;
+// BS3 removal @infoBorder:              @cyanLight;
+
+
+// Pagination
+// -------------------------
+// BS3 removal @paginationBorder:      #dad9d7;
+

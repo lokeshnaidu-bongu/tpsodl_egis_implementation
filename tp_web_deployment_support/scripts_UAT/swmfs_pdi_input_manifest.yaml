@@ -1,0 +1,28 @@
+id: 'sw_swmfs_deploy'
+api_version: '5.3.0'
+targets:
+  - id: 'sw-swmfs'
+    products:
+      - id: 'swmfs'
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local/'
+        pdi:
+          image: ''
+          tag: ''
+        param_groups:
+          - id: 'environment'
+            params:
+              ######################## MANDATORY
+              # SWMFS_VERSION: ''
+              # DOCKER_REGISTRY: ''
+              # SW_LICENCE_DB: ''
+              ######################## OPTIONAL
+              # SWMFS_NAMESPACE: ''
+              # KUBECONFIG: ''
+              # SWMFS_K8_SERVICE_PORT: ''
+              # SWMFS_PORT: ''
+              ######################## STORAGE_CLASSES
+              # STORAGE_CLASS_NAME: ''
+              # SWMFS_ACCESS_MODES: ''
+              # SWMFS_STORAGE_SIZE: ''
+              ######################## DEV ONLY
+              # DOCKER_REPOSITORY: ''

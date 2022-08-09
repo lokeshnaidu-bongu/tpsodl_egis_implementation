@@ -1,0 +1,10 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Cable Joint	1
+End Point	2
+Wire Joint	3
+Branch Point	4

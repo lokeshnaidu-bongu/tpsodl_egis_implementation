@@ -1,0 +1,349 @@
+// Button groups
+
+// Dropdowns
+.dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus,
+.dropdown-submenu:hover > a {
+    color: @white;
+	#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+}
+
+
+// Mega button groups
+.btn-mega-group {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+	text-indent: 0;
+	font-size: @baseFontSize + 3; //16px
+	width: 160px;
+
+	> li:before {
+		content: none;
+		margin-right: 0;
+	}
+}
+
+.btn-mega-group li {
+	width: 100%;
+	position: relative;
+
+	&:first-child .btn {
+		.border-radius(@borderRadiusLarge + 4 @borderRadiusLarge + 4 0 0);
+	}
+
+	&:last-child .btn {
+		.border-radius(0 0 @borderRadiusLarge + 4 @borderRadiusLarge + 4);
+	}
+
+	.btn {
+		font-family: @brandFontFamily;
+		width: 100%;
+		height: 64px;
+		font-size: @baseFontSize + 3; //16px
+		vertical-align: middle;
+		text-align: left;
+		position: relative;
+		padding-left: 52px;
+		margin-bottom: 1px;
+		color: @grayDark;
+		border: 1px solid @grayLighter;
+		background-color: @btnInverseBackground;
+		.border-radius(0);
+
+		i {
+			display: block;
+			position: absolute;
+			top: 50%;
+			margin-top: -14px;
+			left: 10px;
+			font-size: @baseFontSize + 12; //32px
+			color: @gray;
+		}
+
+		&:active {
+			#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+			.reset-filter();
+		}
+
+		&:hover {
+			color: @grayDarkest;
+			border-color: @cyan;
+
+			i {
+				color: @grayDarkest;
+			}
+		}
+
+		&:active {
+			color: @white;
+			border-color: transparent;
+
+			i {
+				color: @white;
+			}
+		}
+
+		&.disabled,
+		&.disabled:hover,
+		&.disabled:active {
+			color: @grayLighter;
+			border-color: @grayLighter;
+			background: @white none;
+
+			i {
+				color: @grayLighter;
+			}
+		}
+	} // .btn
+} // .btn-mega-group li
+
+.lt-ie10 .btn-mega-group li .btn {
+	float: left;
+}
+
+
+// Dropdowns/ups & Combo boxes
+.btn-group {
+
+	.btn {
+		font-size: @baseFontSize;
+
+		&:first-child {
+			.border-radius(@baseBorderRadius 0 0 @baseBorderRadius);
+		}
+
+		&:last-child {
+			.border-radius(0 @baseBorderRadius @baseBorderRadius 0);
+		}
+
+		&.dropdown-toggle {
+			.border-radius(@baseBorderRadius);
+		}
+	}
+
+	.btn,
+	.btn + .dropdown-backdrop {
+		+ .btn.dropdown-toggle {
+			//background-image: none;
+			z-index: 3;
+			margin-left: -2px;
+			//box-shadow: 0 0 0;
+			.border-radius(0 @baseBorderRadius @baseBorderRadius 0);
+		}
+		
+		
+   @media screen and (-webkit-min-device-pixel-ratio:0) { 
+    // safari only override 
+	   //noinspection ALL
+	   ::i-block-chrome, + .btn.dropdown-toggle {
+  	     margin-left: -5px;
+    	}
+	}
+
+		+ .btn.btn-inverse.dropdown-toggle {
+			color: @grayDark;
+			
+			&:active {
+				color: @white;
+			}
+		}
+	} // .btn
+
+	&.open {
+		.btn {
+			&.btn-inverse.dropdown-toggle,
+			&.dropdown-toggle {
+				color: @white;
+				border-color: @cyan;
+				#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+				.reset-filter();
+			}
+
+			&.btn-success.dropdown-toggle {
+				background: darken(@green, 10%) none;
+				border-color: darken(@green, 10%);
+			}
+
+			&.btn-warning.dropdown-toggle {
+				background: darken(@orange, 10%) none;
+				border-color: darken(@orange, 10%);
+			}
+
+			&.btn-danger.dropdown-toggle {
+				background: darken(@red, 10%) none;
+				border-color: darken(@red, 10%);
+			}
+
+			&.btn-info.dropdown-toggle {
+				// Required to override active background image
+				background: darken(@cyan, 10%) none;
+				border-color: darken(@cyan, 10%);
+			}
+
+			&.btn-success.dropdown-toggle,
+			&.btn-warning.dropdown-toggle,
+			&.btn-danger.dropdown-toggle {
+				background-repeat: no-repeat;
+			}
+			
+		} // .btn
+
+		//button group dropdown next to alert icon buttons
+		.btn.btn-success + .btn.dropdown-toggle{
+			background: darken(@green, 10%) none;
+			border-color: darken(@green, 10%);
+		}
+		.btn.btn-warning + .btn.dropdown-toggle{
+			background: darken(@orange, 10%) none;
+			border-color: darken(@orange, 10%);
+		}
+
+		.btn.btn-danger + .btn.dropdown-toggle{
+			background: darken(@red, 10%) none;
+			border-color: darken(@red, 10%);
+		}
+		
+		 
+		.btn,
+		.btn + .dropdown-backdrop {
+			+ .btn.btn-info.dropdown-toggle,
+			+ .btn.btn-primary.dropdown-toggle,
+			+ .btn.btn-success.dropdown-toggle,
+			+ .btn.btn-warning.dropdown-toggle,
+			+ .btn.btn-danger.dropdown-toggle,
+			+ .btn.btn-danger + .btn.dropdown-toggle {
+				border-left: 1px solid @white;
+			}
+		}
+		
+
+		.btn + .btn.dropdown-toggle,
+		.btn + .dropdown-backdrop  + .btn.dropdown-toggle,
+		.btn-primary.dropdown-toggle {
+			color: @white;
+		}
+	} // &.open
+} // .btn-group
+
+
+
+.dropdown-menu {
+	// Can't use em's here because 0 font size is
+	// used in some container elements
+	font-size: @baseFontSize;
+	color: @grayDark;
+	.border-radius(@baseBorderRadius);
+
+	li {
+		list-style: none outside;
+	}
+}
+
+
+// Page controls
+.btn-group.page-controls .btn {
+	border: 1px solid @grayLighter;
+	margin-left: 1px;
+}
+
+// Toggle, radio, check
+.btn[data-toggle]:active,
+.btn.active[data-toggle],
+.btn.btn-primary.active[data-toggle],
+.btn.btn-primary[data-toggle]:active,
+.btn-group[data-toggle=buttons] .btn:active {
+  background-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+	#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+	.reset-filter();
+	color: @white;
+	border-color: transparent;
+}
+
+.btn.btn-success[data-toggle]:active,
+.btn.btn-success.active[data-toggle],
+.btn-group[data-toggle=buttons] .btn.btn-success:active {
+  background: darken(@green, 15%);
+}
+
+.btn.btn-warning[data-toggle]:active,
+.btn.btn-warning.active[data-toggle],
+.btn-group[data-toggle=buttons] .btn.btn-warning:active {
+  background: darken(@orange, 15%);
+}
+
+.btn.btn-danger[data-toggle]:active,
+.btn.btn-danger.active[data-toggle],
+.btn-group[data-toggle=buttons] .btn.btn-danger:active {
+  background: darken(@red, 15%);
+}
+
+.btn-group > .btn,
+.btn-group > .dropdown-menu,
+.btn-group > .popover {
+  font-size: @baseFontSize;
+}
+
+.btn-group + .btn-group {
+  margin-left: 5px;
+}
+.btn-toolbar > .pull-right > .btn-group {
+  margin-bottom:10px;
+}
+
+.btn-group > .btn  {
+	//noinspection ALL
+	@media screen and (-webkit-min-device-pixel-ratio:0) {
+    // windows safari only override 
+    ::i-block-chrome, + .btn {
+  	   margin-left: -5px;
+    	}
+	}
+ }
+	
+.btn-group > .btn-primary  {
+	 + .btn-primary{
+	 margin-left: 1px;
+	 }
+
+	//noinspection ALL
+	@media screen and (-webkit-min-device-pixel-ratio:0) {
+    //windows safari only override 
+    ::i-block-chrome, + .btn-primary {
+  	     margin-left: -5px;
+  	     &:not(:last-child),
+	 	 &:not(:first-child){
+			border-left-color:@white;
+	 		border-right-color:@white;
+			}		
+    }
+	}
+}
+
+// Filters
+.btn-group .btn {
+	//  &:active,
+	&.disabled:active {
+		color: @grayDark;
+		background: @offWhite none;
+	}
+}
+
+.btn-group, .btn-group.open {
+
+	.btn.btn-primary + .btn.dropdown-toggle,
+	.btn.btn-success + .btn.dropdown-toggle,
+	.btn.btn-warning + .btn.dropdown-toggle,
+	.btn.btn-danger + .btn.dropdown-toggle,
+	.btn.disabled + .btn.dropdown-toggle.disabled {
+		border-left: 1px solid @white;
+	}
+}
+
+// REMOVE THIS TO ALIGN WITH BS3 DEPRESSED STATE.  This is only here in order accurately match ge-bootstrap 1.2.
+.btn-group.open .dropdown-toggle {
+	box-shadow: none;
+}

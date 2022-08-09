@@ -1,0 +1,20 @@
+_block
+	#Make sure Alterbative is in writable mode before running this script
+	ev<<gis_program_manager.databases[:electric]
+	sp << ev.collections[:eo_service_point]
+	_for i _over sp.fast_elements()
+	_loop
+		_if i _isnt _unset
+		_then
+			_if i.location _isnt _unset
+			_then 
+			_if i.location.number_of_nodes() ~=1
+			_then
+				nd << i.location.number_of_nodes()
+				write(i.id,%tab, nd)
+			_endif
+			_endif 
+		_endif
+		_endloop 
+		
+_endblock

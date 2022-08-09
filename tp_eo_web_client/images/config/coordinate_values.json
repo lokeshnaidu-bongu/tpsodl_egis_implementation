@@ -1,0 +1,9 @@
+[{
+    "name": "Google Mercator",
+    "value": "EPSG:900913"
+  },
+  {
+    "name": "Long-Lat WGS84",
+    "abbreviation": "EPSG:4326"
+  }
+]

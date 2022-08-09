@@ -1,0 +1,23 @@
+{
+  "name": "audit_bookmarks_config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pg.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-ip": "^1.0.4",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
+    "path": "^0.12.7",
+    "pg": "^6.1.2",
+    "valid-filename": "^3.1.0"
+  }
+}

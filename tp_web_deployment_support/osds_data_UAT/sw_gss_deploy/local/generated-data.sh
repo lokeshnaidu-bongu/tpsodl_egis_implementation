@@ -1,0 +1,25 @@
+#!/bin/bash
+export EIS_IMAGE_NAME=tpsodl-eo-web
+export SOLR_VERSION=8.8.2-slim_0.3.1
+export SW_RABBITMQ_VERSION=3.8.16-management-alpine_0.1.0
+export SWS_UAA_VERSION=2.1.0-dev.73
+export SW_UAAC_VERSION=2.7.3-4.2.0
+export UAA_YAML_ADD_KEYS_VERSION=1.0.0
+export SW_POSTGRES_VERSION=10.17.0-debian-10_0.1.0
+export SW_GDALSERVER_VERSION=1.3.0
+export ALPINE_VERSION=3.12.0
+export ALPINE_CURL_VERSION=0.1.8
+export ELASTICSEARCH_VERSION=7.9.1
+export KIBANA_VERSION=7.9.1
+export FLUENTBIT_VERSION=1.7.7
+export CURATOR_VERSION=V5.8.4
+export UAA_ISSUER_URI=https://dc-gisuat-webm1:30443/uaa
+export UAA_TOKEN_URL=https://dc-gisuat-webm1:30443/uaa/oauth/token
+export BIFROST_URL=https://dc-gisuat-webm1:30443
+export UAA_LOGOUT_URL=https://dc-gisuat-webm1:30443/uaa/logout.do
+export UAA_AUTHORIZATION_URL=https://dc-gisuat-webm1:30443/uaa/oauth/authorize
+export GSS_CALLBACK_URL=https://dc-gisuat-webm1:30443/auth/uaa/callback
+export GSS_LOGOUT_URL=https://dc-gisuat-webm1:30443/auth/logout
+export GSS_UNAUTHENTICATED_URL=https://dc-gisuat-webm1:30443/auth/unauthenticated
+export EIS_RESOURCES_PATH=eis/resources
+export STSHOST=dc-gisuat-webm1

@@ -1,0 +1,41 @@
+// Todo: BS3 - Is this separate override file necessary? Maybe leverage variables more to get rid of it?
+
+// Override typography settings.
+.table {
+	th,
+	td {
+		font-size: @baseFontSize;
+    vertical-align: middle;
+		border-left: 1px solid @tableBorder;
+
+		// cell alignment convenience classes
+    h6 {
+      font-weight: bold;
+      color: @black;
+    }
+
+    // Todo: BS3 - What's the point of this code? We don't document this behavior anywhere...
+    // jackNote™: Then let's document it. It's useful and necesary in the reference designs.
+    &.align-left {
+      text-align: left;
+    }
+    &.align-center {
+      text-align: center;
+    }
+    &.align-right {
+      text-align: rigth;
+    }
+	}
+	th {
+		background-color: @black;
+		color: @white;
+		font-weight: bold;
+	}
+    th:first-child, td:first-child {
+        border-left-style: none;
+    }
+	// Remove top border from first row so it doesn't look like a shadow.
+	thead + tbody tr:first-child td {
+		border-top-width: 0;
+	}
+}

@@ -1,0 +1,71 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/progress-bars.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+.progress {
+  height:     20px;
+	background: @grayLightest;
+	.progress-bar {
+		#gradient > .vertical(@blue, @blue);
+		.box-shadow(~"none");
+	}
+	+ .progress-status {
+		color: @blue;
+		font-size: @baseFontSize - 2;
+		margin-top: -15px;
+	}
+}
+.progress-striped {
+	.progress-bar {
+		#gradient > .striped(@blue, -45deg);
+	}
+}
+.progress-danger {
+	.progress-bar {
+		#gradient > .vertical(@errorBackground, @errorBackground);
+	}
+	&.progress-striped .progress-bar {
+		#gradient > .striped(@errorBackground, -45deg);
+	}
+	+ .progress-status {
+		color: @errorText;
+	}
+}
+.progress-success {
+	.progress-bar {
+		#gradient > .vertical(@successBackground, @successBackground);
+	}
+	&.progress-striped .progress-bar {
+		#gradient > .striped(@successBackground, -45deg);
+	}
+	+ .progress-status {
+		color: @successText;
+	}
+}
+.progress-info {
+	.progress-bar {
+		#gradient > .vertical(@infoBackground, @infoBackground);
+	}
+	&.progress-striped .progress-bar {
+		#gradient > .striped(@infoBackground, -45deg);
+	}
+	+ .progress-status {
+		color: @infoText;
+	}
+}
+.progress-warning {
+	.progress-bar {
+		#gradient > .vertical(@warningBackground, @warningBackground);
+	}
+	&.progress-striped .progress-bar {
+		#gradient > .striped(@warningBackground, -45deg);
+	}
+	+ .progress-status {
+		color: @warningText;
+	}
+}

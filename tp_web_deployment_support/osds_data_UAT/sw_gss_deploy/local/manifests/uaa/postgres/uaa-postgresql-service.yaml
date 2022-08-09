@@ -1,0 +1,120 @@
+#
+# Description: K8S manifest to create the Postgresql service for use by UAA
+#
+# Pre-requisites:
+#   * Secret 'uaa-postgresql-secret' - contains the username/password used
+#     for the UAA database
+#   * PersistentVolumeClaim 'uaa-postgresql-pvc' - a PVC for Postgresql data folder
+#
+
+# ---------------------------------------------------------------------------
+#  ConfigMap to initialize the UAA DATABASE
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+#  Deployment
+# ---------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uaa-postgresql
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: uaa-service
+    service: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predix
+      service-cluster: uaa-service
+      service: postgres
+  template:
+    metadata:
+      labels:
+        app: predix
+        service-cluster: uaa-service
+        service: postgres
+    spec:
+      securityContext:
+        fsGroup: 1001
+      imagePullSecrets:
+      - name: regsecret    
+      containers:
+      - name: uaa-postgresql
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/postgres:10.17.0-debian-10_0.1.0
+        securityContext:
+          runAsUser: 1001
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+        env:
+        - name: NEW_DB_OWNER
+          valueFrom:
+            secretKeyRef:
+              name: uaa-postgresql-secret
+              key: username
+        - name: NEW_DB_OWNER_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: uaa-postgresql-secret
+              key: password
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: uaa-postgresql-secret
+              key: adminpassword
+        - name: NEW_DB
+          valueFrom:
+            secretKeyRef:
+              name: uaa-postgresql-secret
+              key: dbname
+        volumeMounts:
+        - name: uaa-postgres-lb-volume
+          mountPath: /bitnami/postgresql
+      initContainers:
+      - name: init-postgres-permissions
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        command:
+        - /bin/sh
+        - -c
+        - |
+          mkdir -p /bitnami/postgresql/data
+          chmod 700 /bitnami/postgresql/data/bitnami/postgresql/data
+          find /bitnami/postgresql/data  -mindepth 0 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+          xargs chown -R 1001:1001
+          chown 1001:1001 /bitnami/postgresql/
+          chmod -R 777 /dev/shm
+        volumeMounts:
+        - name: uaa-postgres-lb-volume
+          mountPath: /bitnami/postgresql
+      volumes:
+      - name: uaa-postgres-lb-volume
+        persistentVolumeClaim:
+          claimName: nfs-storage-class-uaa-postgres-gss-prod-pvc
+      imagePullSecrets:
+      - name: regsecret
+---
+# ---------------------------------------------------------------------------
+#  Service
+# ---------------------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: uaa-postgresql-svc
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: uaa-service
+    service: postgres
+spec:
+  selector:
+    app: predix
+    service-cluster: uaa-service
+    service: postgres
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+      nodePort: 30447

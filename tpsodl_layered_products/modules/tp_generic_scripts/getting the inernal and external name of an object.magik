@@ -1,0 +1,4 @@
+_for i _over gis_program_manager.databases[:Electric].collection(:eo_power_xfrmr_inst).all_fields.fast_elements()
+_loop
+write(i,%tab,i.external_name)
+_endloop

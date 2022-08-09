@@ -1,0 +1,62 @@
+ _block
+    r_count << 0
+    c_count << 0
+    excel_app << ole_client.create_object("Excel.application")
+    workbooks << excel_app.workbooks()
+    write(workbooks,"test")
+    file_path << "E:\EO_522\electric_office\config\Training\my_excel_file_1.xlsx"
+    workbook << workbooks.add(file_path)
+    write(workbook,"test2")
+    sheet<<workbook.sheets
+    sheets_count<<sheet.count
+    a_sheet << sheet.Item(1)
+    excel<<property_list.new()
+    _for row _over 1.upto(a_sheet.rows().count())
+    _loop 
+        _if a_sheet.cells(row,1).value _is _unset    
+        _then
+            _leave
+        _else
+            r_count << r_count+1
+        _endif
+        
+    _endloop
+    show(r_count)
+    _for col  _over 1.upto(a_sheet.columns().count())
+    _loop
+        _if a_sheet.cells(1,col).value _is _unset
+        _then
+            _leave
+        _else
+            c_count << c_count+1
+        _endif
+    _endloop
+    show(c_count)
+    _for row _over 1.upto(r_count)
+    _loop
+        excel[row]<<rope.new()
+        
+        _for col _over 1.upto(c_count) 
+        _loop
+            cell_value  << a_sheet.cells(row,col).text().write_string.trim_spaces()
+            show(cell_value)
+	     excel[row]
+
+#show(cell_value)
+            excel[row].add(cell_value)
+        _endloop
+        
+    _endloop
+_endblock
+
+
+
+
+
+
+
+------------------------------------------------------------------------
+_for i,j  _over table.keys_and_elements()
+       _loop
+           f_obj.write(i.write_string+"                 "+j,%newline)
+       _endloop

@@ -1,0 +1,44 @@
+{
+  "auto_authenticate":{
+    "uaaUrl": "${UAA_TOKEN_URL}",
+    "uaaClients": {
+      "client_guest": {
+        "secret": "${ANONYMOUS_ACCESS_PASSWORD}"
+      }
+    }
+  },
+
+  "oauth2": {
+    "authorizationURL": "${UAA_AUTHORIZATION_URL}",
+    "tokenURL": "${UAA_TOKEN_URL}",
+    "uaaLogoutURL": "${UAA_LOGOUT_URL}",
+    "clientID": "${BIFROST_UAA_USER}",
+    "clientSecret": "${BIFROST_UAA_PASSWORD}",
+    "callbackURL": "${GSS_CALLBACK_URL}",
+    "logoutURL": "${GSS_LOGOUT_URL}",
+    "unauthenticatedURL": "${GSS_UNAUTHENTICATED_URL}",
+    "pkceCookie": {
+      "name": "x-gss-code-verifier",
+      "key": "${BIFROST_PKCE_KEY}",
+      "lifetimeMs": 60000
+    },
+    "xssCookie": {
+      "name": "x-gss-xss",
+      "key": "${BIFROST_XSS_KEY}"
+    }
+  },
+
+  "externalEndpointsAuth": {
+    "basic_example": {
+        "strategy": "basic",
+        "username": "foo",
+        "password": "bar"
+    },
+    "echo_strategy": {
+        "strategy": "bearer",
+        "uaa_url": "${SW_GSS_UAA_CLIENT_URL}",
+        "client_id": "${SW_GSS_UAA_CLIENT_ID}",
+        "client_secret": "${SW_GSS_UAA_CLIENT_SECRET}"
+    } 
+  }
+}

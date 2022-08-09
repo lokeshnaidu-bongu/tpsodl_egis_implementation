@@ -1,0 +1,19 @@
+// Dependencies
+// --------------------------------------------------
+@import "ge-bootstrap/less/hdx-bootstrap.less";
+@import "hdx-variables.less";
+@import "mixins.less";
+@import "jumpnav.less";
+
+// IIDX Specific - Need to color change for contrast, also added a bounce
+.jumpnav.fixed, .jumpnav.fixed li a:focus {
+  .animated-scroll;
+}
+
+.jumpnav.fixed li a:hover {
+  background-color: @jumpNavBackgroundColorScrolling;
+}
+
+.jumpnav li a:focus {
+  background-color: @jumpNavBackgroundColor;
+}

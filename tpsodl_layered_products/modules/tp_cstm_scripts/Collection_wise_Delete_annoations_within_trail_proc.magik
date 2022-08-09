@@ -1,0 +1,56 @@
+_package user
+$
+delete_annotation_proc << _proc@delete_annotation_proc(el_obj)
+
+
+			       _dynamic !current_coordinate_system! 
+			       !current_coordinate_system!  << smallworld_product.application(:tp_eo_application).coordinate_system
+
+	       		       ele_dt << gis_program_manager.cached_dataset(:electric)
+			       lnd_dt << gis_program_manager.cached_dataset(:land)
+			       l_col << lnd_dt.collections[:lnd_subdivision]
+			       
+			       _local app << smallworld_product.application(:tp_eo_application)	
+			       _local tr  << app.plugin(:maps).current_map.trail
+			       
+
+			       bd << tr.bounds
+			       scannerb << ele_dt.geometry_scanner(:general)
+			       scannerb.start_scan(bd)
+			       _loop
+				       _local l_geom << scannerb.get()
+				       
+
+				       _if l_geom _is _unset _then _leave _endif
+				    #write("+++ l_col.as_symbol() +++",el_obj.as_symbol())
+				    
+				       _if  l_geom.rwo.source_collection.name _is el_obj.as_symbol()
+				       _then
+					       #write("+++ l_geom.rwo +++",l_geom.rwo)
+					       
+					       #write(l_geom.geom_type)
+
+					       _if l_geom.rwo.responds_to?(:annotations)
+					       _then
+						       write("+++ Deleted Annotations for +++",%tab,l_geom.rwo)
+						     _if l_geom.rwo.annotations _isnt _unset 
+						_then
+						       l_geom.rwo.annotations.delete()
+						       _endif
+					       _elif l_geom.rwo.responds_to?(:annotation)
+					       _then
+						        write("+++ Deleted Annotation for +++",%tab,l_geom.rwo)
+						_if l_geom.rwo.annotation _isnt _unset 
+						_then
+						 l_geom.rwo.annotation.delete()	
+						_endif
+						      
+					      
+					       _endif
+
+				       _endif					
+			       _endloop					  
+			  
+_endproc
+$
+

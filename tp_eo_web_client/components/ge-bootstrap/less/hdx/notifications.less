@@ -1,0 +1,50 @@
+.module-notifications {
+	a,
+	a:link,
+	a:visited {
+		color: @textColor;
+		
+		b {
+			color: @linkColor;
+		}
+	}
+
+	a:hover {
+		text-decoration: none;
+		
+		h4,
+		small,
+		b {
+			color: @linkColorHover;
+			text-decoration: underline;
+		}
+	}
+
+	.label {
+		margin-right: 5px;
+		vertical-align: baseline;
+	}
+
+	small {
+		color: @textColor;
+		display: block;
+		font-size: @baseFontSize;
+		font-weight: normal;
+	}
+
+	p {
+		clear: both;
+		margin: 0;
+	}
+
+	time,
+	.time {
+		color: @gray;
+		display: block;
+		
+		em {
+			font-style: normal;
+		}
+	}
+}
+

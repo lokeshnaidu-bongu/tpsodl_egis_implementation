@@ -1,0 +1,295 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Indices for objects
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_stagging_db_implementer.register(:datamodel_name, "tp_cstm_dbstag_imp_v1", 
+				:version, 1,
+				:implementer_comment,        "Add Indices to Objects",
+				:upgrade?, _false,
+				:case_change_method,         :|v1_adding_new_indices()|,
+				:case_change_results_method, :|v1_case_change_results()|,
+				:dataset_names, {{:stagging_case, :stagging}})
+$
+_pragma(classify_level=restricted)
+tp_cstm_stagging_db_implementer.define_shared_constant(:add_fields_to_indices,
+	##
+	## Object Internal Names along with the fields to be indexed
+	##
+	property_list.new_with(
+		:tp_mis_circle,
+		{
+			:tp_name,
+			:tp_circle_code,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis,
+			:tp_losses
+		},
+
+		:tp_mis_division,
+		{
+			:tp_name,
+			:tp_division_code,
+			:tp_circle_name,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis,
+			:tp_losses
+		},
+
+		:tp_mis_subdivision,
+		{
+			:tp_name,
+			:tp_subdivision_code,
+			:tp_circle_name,
+			:tp_division_name,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis,
+			:tp_losses
+		},
+
+		:tp_mis_section,
+		{
+			:tp_name,
+			:tp_section_code,
+			:tp_circle_name,
+			:tp_division_name,
+			:tp_subdivision_name,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis,
+			:tp_losses
+		},
+
+		:tp_mis_gss,
+		{
+			:tp_name,
+			:tp_gss_fl_code,
+			:tp_circle_name,
+			:tp_division_name,
+			:tp_subdivision_name,
+			:tp_section_name,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis,
+			:tp_losses
+		},
+
+		:tp_mis_pss,
+		{
+			:tp_name,
+			:tp_pss_fl_code,
+			:tp_circle_name,
+			:tp_division_name,
+			:tp_subdivision_name,
+			:tp_section_name,
+			:tp_gss_name,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis,
+			:tp_losses,
+			:tp_max_load,
+			:tp_min_load
+		},
+
+		:tp_mis_dss,
+		{
+			:tp_name,
+			:tp_dss_fl_code,
+			:tp_pss_name,
+			:tp_gss_name,
+			:tp_feeder_name,
+			:tp_circle_name,
+			:tp_division_name,
+			:tp_subdivision_name,
+			:tp_section_name,
+			:tp_pole,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis,
+			:tp_max_load,
+			:tp_min_load,
+			:tp_losses
+		},
+
+		:tp_mis_dt,
+		{
+			:tp_name,
+			:tp_dt_fl_code,
+			:tp_dss_name,
+			:tp_pss_name,
+			:tp_gss_name,
+			:tp_feeder_name,
+			:tp_circle_name,
+			:tp_division_name,
+			:tp_subdivision_name,
+			:tp_section_name,
+			:tp_power_xfrmr,
+			:tp_dt_meter,
+			:tp_pole,
+			:tp_losses,
+			:tp_max_load,
+			:tp_min_load,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis
+		},
+
+		:tp_mis_feeder,
+		{
+			:tp_name,
+			:tp_pss_name,
+			:tp_feeder_fl_code,
+			:tp_gss_name,
+			:tp_circle_name,
+			:tp_division_name,
+			:tp_subdivision_name,
+			:tp_section_name,
+			:tp_max_load,
+			:tp_min_load,
+			:tp_losses,
+			:tp_date_of_last_updation_in_gis,
+			:tp_data_updated_by_gis
+		},
+
+		:tp_primary_mtr_reading_data_arc,
+		{
+			:tp_sc_no,
+			:tp_new_account_number,
+			:tp_current_pole,
+			:tp_meter_sr_number,
+			:tp_current_dt,
+			:tp_current_feeder,
+			:tp_current_pss,
+			:tp_last_updated_date,
+			:tp_current_section,
+			:tp_consumer_name,
+			:tp_arrear_amount,
+			:tp_last_payment,
+			:tp_payment_date,
+			:tp_net_payment
+		},
+		:tp_primary_mtr_reading_data,
+		{
+			:tp_sc_no,
+			:tp_new_account_number,
+			:tp_current_pole,
+			:tp_meter_sr_number,
+			:tp_current_dt,
+			:tp_current_feeder,
+			:tp_current_pss,
+			:tp_last_updated_date,
+			:tp_current_section,
+			:tp_consumer_name,
+			:tp_arrear_amount,
+			:tp_last_payment,
+			:tp_payment_date,
+			:tp_net_payment
+		},		
+		:tp_consumer_consumption_data_arc,
+		{
+			:tp_sc_no,
+			:tp_new_account_number,
+			:tp_current_building,
+			:tp_current_pole,
+			:tp_current_dt_meter,
+			:tp_current_dt_fl,
+			:tp_current_feeder_fl,
+			:tp_current_pss_fl,
+			:tp_current_section,
+			:tp_consumer_name,
+			:tp_arrear_amount,
+			:tp_last_payment,
+			:tp_payment_date,
+			:tp_net_payment
+		},
+		:tp_consumer_consumption_data,
+		{
+			:tp_sc_no,
+			:tp_new_account_number,
+			:tp_current_building,
+			:tp_current_pole,
+			:tp_current_dt_meter,
+			:tp_current_dt_fl,
+			:tp_current_feeder_fl,
+			:tp_current_pss_fl,
+			:tp_current_section,
+			:tp_consumer_name,
+			:tp_arrear_amount,
+			:tp_last_payment,
+			:tp_payment_date,
+			:tp_net_payment
+		}						
+		      ),
+	:public)
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.v1_adding_new_indices(p_target_case_view)
+	## 
+	##
+
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_for a_tbl, a_fld_vec _over _self.add_fields_to_indices.fast_keys_and_elements()
+	_loop
+	
+		l_coll << l_case_manager.get_case_object(a_tbl)
+		_if l_coll _is _unset 
+		_then
+			write("+++  +++",a_tbl)
+			print(a_fld_vec)
+			_continue 
+		_endif
+		_for a_fld _over 1.upto(a_fld_vec.size)#.fast_elements()
+		_loop
+
+			 l_fld_id << l_coll.get_field(a_fld_vec[a_fld])
+			_if a_fld_vec[a_fld] _isnt _unset _andif
+			    l_fld_id _isnt _unset 
+			_then
+				l_c << rope.new_with(l_coll.get_field(l_fld_id.id))
+				l_coll.make_index_on_fields(rope.new_with(l_coll.get_field(a_fld_vec[a_fld]).id))
+			_endif
+		
+		_endloop 
+	_endloop 
+	
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.v1_case_change_results()
+	## 
+	##
+	_local l_ccr << case_change_result.new()
+	
+	_for a_tbl, a_fld_vec _over _self.add_fields_to_indices.fast_keys_and_elements() 
+	_loop
+		l_ccr.add(a_tbl)
+	_endloop
+	
+	>> {l_ccr}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

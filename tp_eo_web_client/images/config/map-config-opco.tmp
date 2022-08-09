@@ -1,0 +1,38 @@
+  "layerAuth": {
+    "shared.assets": {
+      "name": "Common",
+      "layers": [
+        "Transmission network",
+        "Transmission structures",
+        "MV network",
+        "LV network"
+      ]
+    },
+    "all.assets": {
+      "name": "All",
+      "layers": [
+        "Transmission network",
+        "Transmission structures",
+        "MV network",
+        "LV network"
+      ]
+    },
+    "opco.north": {
+      "name": "North",
+      "layers": [
+        "Transmission network",
+        "Transmission structures",
+        "MV network",
+        "LV network"
+      ]
+    },
+    "opco.west": {
+      "name": "West",
+      "layers": [
+        "Transmission network",
+        "Transmission structures",
+        "MV network",
+        "LV network"
+      ]
+    }
+  },

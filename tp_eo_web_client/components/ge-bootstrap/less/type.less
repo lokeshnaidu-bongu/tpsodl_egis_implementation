@@ -1,0 +1,188 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/type.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+p {
+  line-height: @baseFontSize + 6; // 20px
+}
+
+.timestamp {
+  color: @gray;
+  font-size: @baseFontSize;
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+// Blockquote
+blockquote p {
+	#voice > .human(@baseFontSize + 2, normal, @baseLineHeight);
+	margin-bottom: 5px;
+  padding: 0 3em 0 1em;
+}
+.voice-brand blockquote p,
+blockquote.voice-brand p {
+	#voice > #family > .brand;
+}
+blockquote small {
+	color: @gray;
+  font-style: italic;
+  padding: 0 3em 0 3em;
+}
+
+cite {
+  font-style: italic;
+}
+
+// Description/definition lists
+dl {
+  dd {
+    margin-bottom: @baseFontSize;
+  }
+}
+
+.dl-horizontal dt {
+  line-height: @baseLineHeight + 1;
+  margin-top: -1px;
+  width: 33.3%;
+}
+.dl-horizontal dd {
+  margin-left: 33.3%;
+  padding-left: 10px;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: normal;
+}
+h1 {
+  font-family: @brandFontFamily;
+	font-size: @baseFontSize + 34; // 48px regular, line height 52px
+  color: @headingsColor;
+  font-weight: normal;
+  line-height: 52px;
+}
+h2 {
+  font-family: @brandFontFamily;
+	font-size: @baseFontSize + 22; // 36px regular, line height 42
+  color: @headingsColor;
+  font-weight: normal;
+  line-height: 42px;
+}
+h3 {
+  font-family: @brandFontFamily;
+	font-size: @baseFontSize + 10; // 24px regular, line height 28px
+	//line-height: @baseLineHeight * 1.5;
+  color: @headingsColor;
+  font-weight: normal;
+  line-height: 28px;
+}
+h4 {
+  font-family: @brandFontFamily;
+	font-size: @baseFontSize + 4; // 18px regular. line height 22px
+  color: @headingsColor;
+  font-weight: normal;
+  line-height: 22px;
+}
+h5 {
+  font-family: @brandFontFamily;
+	font-size: @baseFontSize + 2; // 14px regular, line height 20px
+  color: @headingsColor;
+  font-weight: normal;
+  line-height: 20px;
+}
+h6 {
+  font-family: @sansFontFamily;
+	font-size: @baseFontSize; // 14px bold, line height 20px
+	color: @headingsColor;
+  font-weight: bold;
+  line-height: 20px;
+  margin-bottom: 20px;
+}
+h4 small { font-size: round(@baseFontSize*.85714286); }
+
+table h6 {
+  margin-bottom: 0;
+} 
+
+// Page Header
+.page-header {
+  border-bottom: 0;
+  font-size: @baseFontSize + 12;
+  margin: 0;
+  padding-bottom: 0;
+  text-align: right;
+  .clearfix();
+  > h1 {
+    font-size: inherit;
+    line-height: 35px;
+    text-align: left;
+    small {
+      color: @gray;
+      margin-left: 5px;
+    }
+  }
+  > * {
+    margin-bottom: @gridGutterWidth;
+  }
+  // A few rules to ensure that nav pills and
+  // button groups sit nicely together in the
+  // "secondary" nav area.
+  .nav {
+    margin-bottom: 0;
+    + .btn-group {
+      margin-left: @baseLineHeight;
+    }
+  }
+  .btn-group {
+    margin: 0;
+    .btn-icon {
+      // Button icons in the header need white backgrounds,
+      // not the standard button group porcelain background.
+      background-color: @white;
+      border-color: transparent;
+      &:hover {
+        background-color: @grayLightest;
+      }
+      &.active,
+      &:active {
+        background-color: darken(@white,15%);
+      }
+      &:not(:first-child) {
+        border-left-color: @btnBorder;
+      }
+    }
+  }
+}
+
+ul,
+ol {
+  margin: 0 0 9px 25px;
+  padding-left: 0;
+}
+
+// Lists
+ul.structured,
+ol.structured {
+  margin-left: 0;
+  list-style: none;
+  & li {
+    border-top: 1px solid @grayLight;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  & li:first-child:not(.nav-header) {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
+
+.list-unstyled {
+  margin-left: 0;
+}

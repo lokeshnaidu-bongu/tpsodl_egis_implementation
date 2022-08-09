@@ -1,0 +1,28 @@
+// Modal
+.modal-dialog {
+  background-color: @black;
+  border: 1px solid @grayDarker;
+
+  .modal-header {
+    background-color: @btnHoverBackground;
+
+    .close {
+      color: @grayLight;
+      .opacity(100);
+
+      &:hover,
+      &.hover {
+        color: @grayLighter;
+      }
+
+      &:hover,
+      &.hover {
+        color: @grayLightest;
+      }
+    }
+  }
+
+  .modal-body, .modal-footer {
+    background-color: @black;
+  }
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<tp_collections>
+  <!-- Define the xml files for specific collections -->
+  <collection collection_name="cis_customer">
+    
+    <enum_fields fld_name="tp_status"><!-- eo_status-->
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_yes_no"><!-- yes_no-->
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>	
+    <enum_fields fld_name="tp_owner_name_value"><!-- eo_owner_name_value-->
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    
+    <enum_fields fld_name="tp_owner"><!--eo_owner-->
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_phase"><!--eo_phase-->
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_circle_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_circle_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+<enum_fields fld_name="tp_land_division_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_division_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+<enum_fields fld_name="tp_land_section_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_section_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_sub_division_code">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_sub_division_name">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_billing_status">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_tariff_categeory">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_consumer_fuction">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+</tp_collections>

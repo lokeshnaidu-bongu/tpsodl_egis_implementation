@@ -1,0 +1,1177 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 15-02-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+_package user
+
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+
+remex(:tp_db_compression_engine)
+$
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+def_slotted_exemplar(:tp_db_compression_engine,
+	## 
+	## 
+	## 
+	{
+		#To Store details required
+		{:custom_args,_unset}
+		
+		
+	},
+	:engine_model)
+$
+
+
+#-------------------------------------------------------------------------------
+# Slot Access
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+tp_db_compression_engine.define_slot_access(:custom_args,:writable,:public)
+$
+
+#-------------------------------------------------------------------------------
+# Method new()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.new()
+	## 
+	## It calls init method to create object.
+	##
+	## Parameters : <None>
+	##
+	## Reture     : <Nothing>
+	
+	_return _clone.init()
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method init()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.init()
+	##
+	## Description : Create and return the instance of engine.
+	##
+	## Parameters  : <None>
+	##
+	## Returns     : Instance of engine.
+
+	_super.init()
+	
+	.custom_args << property_list.new()
+
+	_return _self
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method compress_hot()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.compress_hot(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in Hot mode.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+	
+
+	
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_hot|()|,
+			 p_src_path,p_dest_path,p_dialog)
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method int!compress_hot()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.int!compress_hot(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in Hot mode.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+
+	_self.changed(:status, _self.message(:running))
+	_local l_search << p_src_path
+	_local l_directory << p_dest_path
+	_local l_ds_admin,l_ds_cs_config,l_ds_gis,l_ds_land,l_design_manager_design_admin,l_design_manager_design_config,l_design_manager_design_work,l_design_manager_user_work,l_ds_electric,l_os_mapbase,l_ds_audit_history_archive
+	_local l_msg,l_tot_data_files
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	gis_program_manager.open_datasets(:electric_dm)	       
+	l_ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	l_ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	l_ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	l_ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	l_design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	l_design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	l_design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	l_design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	l_ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	l_os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	l_ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+	#	l_tot_data_files << ds_admin.size + ds_cs_config.size + ds_gis.size + ds_land.size + design_manager_design_admin.size + design_manager_design_config.size + design_manager_design_work.size + design_manager_user_work.size + ds_electric.size + os_mapbase.size + ds_audit_history_archive.size
+
+	l_tot_data_files << 11
+	
+	l_msg << _self.message(:status,_self.message(:running),"0",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for i _over  l_ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :searchpath, {l_search+"\ds_admin"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+		
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"1",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+
+	_for j _over  l_ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :searchpath, {l_search+"\ds_cs_config"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"2",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for k _over  l_ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :searchpath, {l_search+"\ds_gis"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"3",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+
+	_for l _over  l_ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :searchpath, {l_search+"\ds_land"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"4",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+
+	_for n _over  l_design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :searchpath, {l_search+"\design_manager\design_admin"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"5",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for o _over  l_design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :searchpath, {l_search+"\design_manager\design_config"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"6",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for p _over  l_design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :searchpath, {l_search+"\design_manager\design_work"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"7",l_tot_data_files)					
+        _self.changed(:status,l_msg)
+	
+	_for q _over  l_design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :searchpath, {l_search+"\design_manager\user_work"},# DataBase Source Location Path
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"8",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+
+	_for t _over  l_ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :searchpath, {l_search+"\ds_electric"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"9",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for x _over  l_os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :searchpath, {l_search+"\os_mapbase"},# DataBase Source Location Path
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"10",l_tot_data_files)					
+        _self.changed(:status,l_msg)
+	
+	_for y _over  l_ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :searchpath, {l_search+"\ds_audit_history_archive"},# DataBase Source Location Path
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"11",l_tot_data_files)					
+        _self.changed(:status,l_msg)
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod 
+
+
+#-------------------------------------------------------------------------------
+# Method compress_online_start()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.compress_online_start(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in online mode.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+	
+
+	
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_online_start|()|,
+			 p_src_path,p_dest_path,p_dialog)
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method int!compress_online_start()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.int!compress_online_start(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in Online mode.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+	
+	_self.changed(:status, _self.message(:running))
+	_local l_search << p_src_path
+	_local  l_directory << p_dest_path
+	_local l_ds_admin,l_ds_cs_config,l_ds_gis,l_ds_land,l_design_manager_design_admin,l_design_manager_design_config,l_design_manager_design_work,l_design_manager_user_work,l_ds_electric,l_os_mapbase,l_ds_audit_history_archive
+	_local l_msg,l_tot_data_files
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	gis_program_manager.open_datasets(:electric_dm)
+	l_ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	l_ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	l_ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	l_ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	l_design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	l_design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	l_design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	l_design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	l_ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	l_os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	l_ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+	l_tot_data_files << 11
+	
+	l_msg << _self.message(:status,_self.message(:running),"0",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for i _over  l_ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :searchpath, {l_search+"\ds_admin"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_admin",
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+		
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"1",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for j _over  l_ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :searchpath, {l_search+"\ds_cs_config"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_cs_config",
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"2",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+
+	_for k _over  l_ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :searchpath, {l_search+"\ds_gis"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_gis",
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"3",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for l _over  l_ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :searchpath, {l_search+"\ds_land"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_land",
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"4",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for n _over  l_design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :searchpath, {l_search+"\design_manager\design_admin"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\design_admin",
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"5",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for o _over  l_design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :searchpath, {l_search+"\design_manager\design_config"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\design_config",
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"6",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for p _over  l_design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :searchpath, {l_search+"\design_manager\design_work"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\design_work",
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"7",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for q _over  l_design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :searchpath, {l_search+"\design_manager\user_work"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\design_manager\user_work",
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"8",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for t _over  l_ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :searchpath, {l_search+"\ds_electric"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_electric",
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"9",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for x _over  l_os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :searchpath, {l_search+"\os_mapbase"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\os_mapbase",
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"10",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for y _over  l_ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :searchpath, {l_search+"\ds_audit_history_archive"},# DataBase Source Location Path
+				      :online_history_dir, l_search+"\ds_audit_history_archive",
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"11",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod 
+
+#-------------------------------------------------------------------------------
+# Method compress_online_iterative()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.compress_online_iterative(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in online mode.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+
+	
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_online_iterative|()|,
+			 p_src_path,p_dest_path,p_dialog)
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method int!compress_online_iterative()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.int!compress_online_iterative(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in online mode.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+	
+
+	_self.changed(:status, _self.message(:running))
+	_local l_search << p_src_path
+	_local l_directory << p_dest_path
+	_local l_ds_admin,l_ds_cs_config,l_ds_gis,l_ds_land,l_design_manager_design_admin,l_design_manager_design_config,l_design_manager_design_work,l_design_manager_user_work,l_ds_electric,l_os_mapbase,l_ds_audit_history_archive
+	_local l_msg,l_tot_data_files
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	gis_program_manager.open_datasets(:electric_dm)
+	l_ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	l_ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	l_ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	l_ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	l_design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	l_design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	l_design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	l_design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	l_ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	l_os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	l_ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+	l_tot_data_files << 11
+	
+	l_msg << _self.message(:status,_self.message(:running),"0",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for i _over  l_ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :online_history_dir, l_search+"\ds_admin",
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+		
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"1",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for j _over  l_ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :online_history_dir, l_search+"\ds_cs_config",
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"2",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for k _over  l_ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :online_history_dir, l_search+"\ds_gis",
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"3",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+
+	_for l _over  l_ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :online_history_dir, l_search+"\ds_land",
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"4",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for n _over  l_design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :online_history_dir, l_search+"\design_manager\design_admin",
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"5",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for o _over  l_design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :online_history_dir, l_search+"\design_manager\design_config",
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"6",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for p _over  l_design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :online_history_dir, l_search+"\design_manager\design_work",
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"7",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for q _over  l_design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :online_history_dir, l_search+"\design_manager\user_work",
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"8",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for t _over  l_ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :online_history_dir, l_search+"\ds_electric",
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"9",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for x _over  l_os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :online_history_dir, l_search+"\os_mapbase",
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"10",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for y _over  l_ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :online_history_dir, l_search+"\ds_audit_history_archive",
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _false
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"11",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod
+
+
+#-------------------------------------------------------------------------------
+# Method compress_online_final()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.compress_online_final(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in online mode Final.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!compress_online_final|()|,
+			 p_src_path,p_dest_path,p_dialog)
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method int!compress_online_final()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.int!compress_online_final(p_src_path,p_dest_path,p_dialog)
+	##
+	## Description : Compresses all datasets in online mode Final.
+	##
+	## Parameters  :  p_src_path - Source path of the database.
+	##                p_dest_path - Destination path to store the
+	##                              compressed db
+	##                p_dialog  -  reference of the gui_plugin      
+	##
+	## Returns     : <Nothing>.
+
+	_self.changed(:status, _self.message(:running))
+	
+	_local l_search << p_src_path
+	_local l_directory<< p_dest_path
+	_local l_ds_admin,l_ds_cs_config,l_ds_gis,l_ds_land,l_design_manager_design_admin,l_design_manager_design_config,l_design_manager_design_work,l_design_manager_user_work,l_ds_electric,l_os_mapbase,l_ds_audit_history_archive
+	_local l_msg,l_tot_data_files
+	date_time_environ.dst_rules_name << "Asia/Calcutta"
+	ds_environment.nslots<< 100000 
+	ds_environment.npcls<< 131072 
+	ds_environment.nbuffs <<102400 
+	ds_environment.init()
+	smallworld_product.load_module(:ds_transfer)
+	smallworld_product.load_module(:ds_transfer_dialog)
+	#smallworld_product.load_module(:large_simple_vector)
+	ds_envi << ds_environment
+	ds_envi.init()
+	manage_soc(l_search+"\ds_admin")
+	gis_program_manager.open_datasets(:electric_dm)
+	l_ds_admin << {"ace.ds","auth.ds","cs_config.ds","job_queue.ds","scrapbook.ds","scratch.ds","style.ds","temp.ds","thematics.ds"}#loop I
+	l_ds_cs_config << {"case.ds","case_dd.ds"}#loop J
+	l_ds_gis << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds"}#loop K
+	l_ds_land << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","raster.ds","rwo.ds","gdb.ds","audit_history.ds"}#loop L
+	l_design_manager_design_admin << {"case.ds","case_dd.ds","rwo.ds"}#loop N
+	l_design_manager_design_config << {"case.ds","case_dd.ds","dd_extension.ds","rwo.ds"}#loop O
+	l_design_manager_design_work << {"case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop P
+	l_design_manager_user_work << {"case.ds","case_dd.ds"}#loop Q
+	l_ds_electric << {"audit_history.ds","case.ds","case_dd.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop T
+	l_os_mapbase << {"audit_history.ds","dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop x
+	l_ds_audit_history_archive << {"dd.ds","dd_extension.ds","gdb.ds","raster.ds","rwo.ds"}#loop y
+
+	l_tot_data_files << 11
+	l_msg << _self.message(:status,_self.message(:running),"0",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for i _over  l_ds_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,i,
+				      :to_ds_file,i,
+				      :online_history_dir, l_search+"\ds_admin",
+				      :directory, l_directory+"\ds_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+		
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"1",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for j _over  l_ds_cs_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,j,
+				      :to_ds_file,j,
+				      :online_history_dir, l_search+"\ds_cs_config",
+				      :directory, l_directory+"\ds_cs_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"2",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for k _over  l_ds_gis.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,k,
+				      :to_ds_file,k,
+				      :online_history_dir, l_search+"\ds_gis",
+				      :directory, l_directory+"\ds_gis",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+
+	l_msg << _self.message(:status,_self.message(:running),"3",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for l _over  l_ds_land.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,l,
+				      :to_ds_file,l,
+				      :online_history_dir, l_search+"\ds_land",
+				      :directory, l_directory+"\ds_land",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"4",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for n _over  l_design_manager_design_admin.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,n,
+				      :to_ds_file,n,
+				      :online_history_dir, l_search+"\design_manager\design_admin",
+				      :directory, l_directory+"\design_manager\design_admin",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"5",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for o _over  l_design_manager_design_config.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,o,
+				      :to_ds_file,o,
+				      :online_history_dir, l_search+"\design_manager\design_config",
+				      :directory, l_directory+"\design_manager\design_config",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"6",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for p _over  l_design_manager_design_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,p,
+				      :to_ds_file,p,
+				      :online_history_dir, l_search+"\design_manager\design_work",
+				      :directory, l_directory+"\design_manager\design_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"7",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for q _over  l_design_manager_user_work.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,q,
+				      :to_ds_file,q,
+				      :online_history_dir, l_search+"\design_manager\user_work",
+				      :directory, l_directory+"\design_manager\user_work",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"8",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for t _over  l_ds_electric.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,t,
+				      :to_ds_file,t,
+				      :online_history_dir, l_search+"\ds_electric",
+				      :directory, l_directory+"\ds_electric",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"9",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for x _over  l_os_mapbase.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,x,
+				      :to_ds_file,x,
+				      :online_history_dir, l_search+"\os_mapbase",
+				      :directory, l_directory+"\os_mapbase",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"10",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_for y _over  l_ds_audit_history_archive.fast_elements()
+	_loop
+		ds << ds_transfer.new(:hot?,_true ,
+				      :from_ds_file,y,
+				      :to_ds_file,y,
+				      :online_history_dir, l_search+"\ds_audit_history_archive",
+				      :directory, l_directory+"\ds_audit_history_archive",# DataBase Target Location Path
+				      :target_concurrency_mode,:singleuser_nf,
+				      :info_level,2,
+				      :finalize?, _true
+				  )        
+		ds.do()
+	_endloop
+	
+	l_msg << _self.message(:status,_self.message(:running),"11",l_tot_data_files)					
+	_self.changed(:status,l_msg)
+	
+	_self.changed(:status, _self.message(:completed))
+	write("Compression Completed Successfully For all Datasets at time ------>>>>>>> : ",date_time_now())
+	
+_endmethod 
+
+
+#-------------------------------------------------------------------------------
+# Method message()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_engine}, usage={TPSODL})
+_method tp_db_compression_engine.message(message_id,_gather args)
+	##
+	## 
+	
+	
+	>> _self.message_accessor.human_string(
+		   message_id,_unset, _scatter args )
+_endmethod
+$

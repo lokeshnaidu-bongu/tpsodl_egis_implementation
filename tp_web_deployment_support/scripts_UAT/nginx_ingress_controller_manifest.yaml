@@ -1,0 +1,45 @@
+id: 'bsf-ingress-controller'
+api_version: '5.3.0'
+targets:
+  - id: 'ingress-controller'
+    products:
+      - id: 'pdi-ingress-controller'
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local/kubeconfig/.'
+        pdi:
+          image: 'dtr.predix.io/pwr-smallworld/pdi-ingress-controller'
+          tag: '1.0.1'
+        param_groups:
+          - id: 'environment'
+            params:
+              NAMESPACE: 'ingress-controller'
+          - id: 'values-ingress'
+            params:
+              imagePullSecrets:
+              - name: regsecret
+              controller:
+                admissionWebhooks:
+                  enabled: false
+                image:
+                  repository: 'dtr.predix.io/pwr-smallworld/nginx-ingress-controller'
+                  tag: '0.41.2'
+                ## Uncomment for deploy with nexus
+                nodeSelector: 
+                  node-role.kubernetes.io/nexus: "true"
+                service:
+                  enableHttp: false
+                  type: NodePort
+                  nodePorts:
+                    https: '30443' 
+                config:
+                  proxy-body-size: '2m'
+                # # Uncomment for GISA for ADMS Series 3 deployments
+                #   ssl-ciphers: 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384'
+                #   ssl-protocols: 'TLSv1.2'
+              defaultBackend:
+                enabled: true
+                image:
+                  repository: 'dtr.predix.io/pwr-smallworld/defaultbackend'
+                  tag: '1.5'
+                ## Uncomment for deploy with nexus
+                nodeSelector:
+                  node-role.kubernetes.io/nexus: "true"

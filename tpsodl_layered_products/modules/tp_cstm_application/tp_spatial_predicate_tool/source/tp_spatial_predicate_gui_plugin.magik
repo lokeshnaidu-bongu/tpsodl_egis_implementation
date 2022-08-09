@@ -1,0 +1,1641 @@
+################################################################################
+#
+#           Product: tp EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 18-02-2022
+# Creator Name       : S. Haritha Rani, Arya Mukharjee, Sayan Roy,TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+##################################################################################
+
+_package user
+$
+
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+
+$
+remex(:tp_spatial_predicate_gui_plugin)
+$
+
+def_slotted_exemplar( :tp_spatial_predicate_gui_plugin,
+	{
+		{ :top_container, _unset },
+		{ :swo_items, _unset },
+		{ :engine, _unset }
+		
+	},
+	:plugin )
+$
+
+#-------------------------------------------------------------------------------
+# Slot Access
+#-------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+tp_spatial_predicate_gui_plugin.define_slot_access( :swo_items, :write, :private )
+
+#-------------------------------------------------------------------------------
+# Slot Access
+#-------------------------------------------------------------------------------
+$
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+tp_spatial_predicate_gui_plugin.define_slot_access(:top_container, :write, :private )
+$
+
+#-------------------------------------------------------------------------------
+# Slot Access
+#-------------------------------------------------------------------------------
+$
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+tp_spatial_predicate_gui_plugin.define_slot_access(:engine, :write, :private )
+$
+
+#-------------------------------------------------------------------------------
+# Method init_actions()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.init_actions()
+	## 
+	## 
+	_self.add_action(
+		sw_action.new(
+			:browse,
+			:engine ,_self ,
+			:dialog_control , {:image_button_item},
+			:action_message, :browse|()|,
+			:menubar_control,:button_item,
+			:image, {:folder,:ui_resources},
+			:caption,"browse",
+			:tooltip,"browse file",
+			:toolbar_control, :image_button_item))
+	
+	_self.add_action(
+		sw_action.new(	:interrupt,
+				:action_message,:|interrupt()|,
+				:engine, _self ,
+				:enabled?,_true ,
+				:dialog_control , {:image_button_item},
+				:menubar_control,:button_item,
+				:image, {:folder,:ui_resources},
+				:caption,"interrupt",
+				:tooltip,"Interrupt",
+				:dialog_control,:button_item))
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method init()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.init(name, framework)
+	## 
+	##
+	_super.init(name,framework)
+	
+	.swo_items << property_list.new()
+	
+	.swo_items[:gpm] << gis_program_manager
+	
+	.swo_items[:total_selected_objects] << rope.new()
+	
+	.swo_items[:electric_view] << .swo_items[:gpm].cached_dataset(:electric)
+	
+	.swo_items[:land_view] << .swo_items[:gpm].cached_dataset(:land)
+	
+	.swo_items[:meter_coll] << .swo_items[:electric_view].collection(:tp!meter)
+	
+	.swo_items[:pole_coll] << .swo_items[:electric_view].collection(:ed_pole)
+	
+	.swo_items[:coll_mappings] << _self.get_collection_mappings()
+	
+	.swo_items[:total_input_collections] << property_list.new()
+	
+	_if  smallworld_product.application(:tp_eo_application) _isnt _unset 
+	_then
+		
+		.swo_items[:app] << smallworld_product.application(:tp_eo_application)
+		
+#	_elif smallworld_product.application(:sweo_wm_user) _isnt _unset
+#	_then
+#		
+#		.swo_items[:app] << smallworld_product.application(:sweo_wm_user)
+		
+	_endif
+	
+	_if .swo_items[:app] _is _unset 
+	_then
+		write("TP EO Application not Opened")
+		_return 
+	_endif
+	
+	.swo_items[:special_handled_collections] << property_list.new()
+	
+	.swo_items[:special_handled_collections][:tp!notification] << :location
+	
+	.swo_items[:special_handled_collections][:tp!rco_customer] << :location
+	
+	.swo_items[:special_handled_collections][:tp!slum] << :area
+	
+	.swo_items[:special_handled_collections][:tp!vehicle_demarcated_boundary] << :extent	
+		
+	l_xml_file_name<<"Input_collection_names.xml"
+	
+	.swo_items[:user_coll_names_xml] << sw_module_manager.module(:tp_spatial_predicate_tool).get_resource_file(l_xml_file_name,"data")
+	
+	# Change for Testing
+	.swo_items[:output_fl_path] << "D:"
+	
+	.engine << tp_spatial_predicate_engine.new()
+	
+	.engine.add_dependent( _self )
+	
+	>> _self 
+	
+_endmethod
+$
+
+#------------------------------------------------------------------------------
+# Shared Constant :input_file_path
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+tp_spatial_predicate_gui_plugin.define_shared_constant(
+	:input_file_path,"C:\Users\Haritha\spatial_predicate_tool\resources\base\data\Input_collection_names.xml",
+	:public)
+$
+#------------------------------------------------------------------------------
+# Method pre_activation()
+#------------------------------------------------------------------------------
+
+_method tp_spatial_predicate_gui_plugin.pre_activation()
+	## 
+	##
+	.swo_items[:radio_gp].value << :trail
+	.swo_items[:radio_gp_ds].value << :both
+	_self.framework.set_status_info("Ready")
+	_self.changed( :source_field_values, :refresh )
+	_self.changed( :destination_field_values, :refresh )
+
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method post_activation()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.post_activation()
+	## 
+	##
+
+	(ok?,.swo_items[:total_sr_input_collections],.swo_items[:total_ds_input_collections]) << _self.get_drop_down_values()
+
+	.swo_items[:source_selection_type].text_items <<.swo_items[:total_sr_input_collections]
+	.swo_items[:destination_selection_type].text_items << .swo_items[:total_ds_input_collections]	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method build_gui()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.build_gui( p_frame )
+	## 
+	## 
+	p_frame.top_frame.title << _self.message(:spat_pre_tool)
+	
+	p_frame.top_frame.resizable? << _false
+	
+	p_frame.top_frame.maximizable? << _true
+	
+	p_frame.resize? << _false
+	
+	_local l_top_cc
+	
+	.top_container << l_top_cc << sw_canvas_container.new( p_frame, 1,1,
+							       :width, 500,
+							       :height, 350,
+							       :row_resize_values,{1,0},
+							       :outer_spacing,5,
+							       :row_spacing, 5)
+	_local l_main_container << sw_container.new( l_top_cc, 10,1,
+						     :row,1, :col,1,
+						     :row_spacing, 5,
+						     :row_alignment, :top,
+						     :col_alignment, :fill,
+						     :row_resize_values, {0,1} )
+	
+	
+	_local l_grp1 << sw_border_container.new(l_main_container, 1,12,:label,_self.message(:dataset),
+						 :row,1, :col,1,
+						 :row_spacing, 5,
+						 :outer_spacing, 5,
+						 :row_alignment, :top,
+						 :col_alignment, :fill,
+						 :row_resize_values, {0,1} )
+	
+	_local l_rg_ds
+	
+	.swo_items[:radio_gp_ds] <<
+		l_rg_ds << radio_group.new( l_rg_con_ds,
+					    :always_one?, _true ,
+					    :model,_self ,
+					    :change_selector, :|set_ds_input_fl_coll_type()|)
+	_local l_gb_radio_ds << sw_container.new( l_grp1, 1,7,
+						  :row,1, :col,1,
+						  :row_spacing, 5,
+						  :row_alignment, :top,
+						  :col_alignment, :fill,
+						  :row_resize_values, {0,1} )
+	
+	
+	_local rg_1 << sw_toggle_item.new(l_gb_radio_ds,
+					  :label, _self.message(:electric),
+					  :row, 1, :col,1)
+	
+	.swo_items[:radio_gp_ds].manage_child(rg_1, :electric)
+	
+	_local rg_4 << sw_toggle_item.new(l_gb_radio_ds,
+					  :label, _self.message(:land),
+					  :row, 1, :col,2)
+	
+	.swo_items[:radio_gp_ds].manage_child(rg_4, :land)
+	
+	_local rg_3 << sw_toggle_item.new(l_gb_radio_ds,
+					  :label, _self.message(:both),
+					  :row, 1, :col,3)
+	
+	.swo_items[:radio_gp_ds].manage_child(rg_3, :both)
+	
+	#----------------------------------------------------------------------------------------------------
+	
+	
+	_local l_gb1 <<	sw_container.new( l_main_container, 1,4,
+					  :row,2, :col,1,
+					  :row_spacing,8,
+					  :col_spacing,5,
+					  #:outer_spacing,10,
+					  :row_alignment,:left,
+					  :col_alignment,:fill,
+					  :min_width,200,
+					  :min_height,10)
+	
+	.swo_items[:source_selection_type] << sw_text_item.new(l_gb1,:label,_self.message(:src_obj_type),
+							       :model,_self,                                       
+							       :text_items,{},
+							       :col_alignment, :fill,
+							       :row, 1, :col,2,
+							       :min_width,100,
+							       :row_spacing, 10,
+							       :change_selector,:|get_field_list()| )
+	
+	
+	.swo_items[:destination_selection_type] << sw_text_item.new(l_gb1,:label,_self.message(:dest_obj_type),
+								    :text_items,{},                                 
+								    :model, _self,
+								    :col_alignment, :fill,
+								    :row, 1, :col,4,
+								    :min_width,100,
+								    :row_spacing, 10,
+								    :change_selector,:|get_field_list_end()|   )
+	
+	#___________________________________________________________________________________________
+	#	
+	
+	
+	_local l_rg_con << sw_border_container.new( l_main_container, 3,8,:label,_self.message(:src_sel_typ),
+					  	       :row,3, :col,1,
+						       :row_spacing,8,
+						       :col_spacing,5,
+						       :outer_spacing,1,
+						       :row_alignment,:centre,
+						       :col_alignment,:fill,
+						       :min_width,350,
+						       :min_height,10)
+	
+	_local l_rg
+	
+	.swo_items[:radio_gp] <<l_rg<< radio_group.new( l_rg_con,
+							:always_one?, _true ,
+							:model,_self ,
+							:change_selector, :|set_input_fl_coll_type()|  )
+	_local l_gb2_radio1 << sw_container.new( l_rg_con,
+						 1,7,
+						 :row,1,:col,1,
+						 :row_spacing,8,
+						 :col_spacing,5,
+						 :outer_spacing,1,
+						 :row_alignment,:centre,
+						 :col_alignment,:fill,
+						 :min_width,350,
+						 :min_height,10)
+	
+	
+	_local l_r1 << sw_toggle_item.new(l_gb2_radio1,
+					  :label, _self.message(:trail),
+					  :row, 1, :col,1)
+	
+	.swo_items[:radio_gp].manage_child(l_r1, :trail)
+	
+	_local l_r2 << sw_toggle_item.new(l_gb2_radio1,
+					  :label, _self.message(:map_view),
+					  :row, 1, :col,2)
+	
+	.swo_items[:radio_gp].manage_child(l_r2, :map_view)
+	
+	_local l_r3 << sw_toggle_item.new(l_gb2_radio1,
+					  :label, _self.message(:map_selection),
+					  :row, 1, :col,3)
+	
+	.swo_items[:radio_gp].manage_child(l_r3, :map_selection)
+	
+	_local l_r4 << sw_toggle_item.new(l_gb2_radio1,
+					  :label, _self.message(:all),
+					  :row, 1, :col,4)
+	
+	.swo_items[:radio_gp].manage_child(l_r4, :all)
+	
+	_local l_r5 << sw_toggle_item.new(l_gb2_radio1,
+					  :label, _self.message(:source_object_files),
+					  :row, 1, :col,5)
+	
+	.swo_items[:radio_gp].manage_child(l_r5, :file)
+	
+	.swo_items[:radio_gp].model << _self
+	
+	####Browse Button
+	.swo_items[:extnl_brwse] <<  _self.action(:browse).place_control_on(l_gb2_radio1,:dialog)
+	
+	.swo_items[:extnl_brwse].row << 1
+	
+	.swo_items[:extnl_brwse].col << 7
+	
+	
+	_local l_gb3 <<	sw_container.new( l_main_container, 1,4,
+					  :row,4, :col,1,
+					  :row_spacing,8,
+					  :col_spacing,5,
+					  :outer_spacing,5,
+					  :row_alignment,:left,
+					  :col_alignment,:left,
+					  :min_width,150,
+					  :min_height,10)
+	.swo_items[:source_operation_type] <<
+		sw_text_item.new(l_gb3, :label, _self.message(:operation_type),
+				 :text_items, {"",_self.message(:within),
+					       _self.message(:interacts),
+					       _self.message(:overlays),
+					       _self.message(:overlaps),
+					       _self.message(:src_obj_fld_value),
+					       _self.message(:obj_outside_src_obj),
+					       _self.message(:buffer),
+					       _self.message(:shortest_path),
+					       _self.message(:shortest_path_ext_file)}, 
+				 :model,_self,
+				 :col_alignment, :fill,
+				 :row, 1, :col,1,
+				 :min_width,300,
+				 :change_selector,:|get_text_box()|,
+				 :row_spacing, 10)
+	
+	.swo_items[:buffer_value_text] <<
+		sw_text_item.new(l_gb3,:text_items ,{},
+				 :model,_self,
+				 :col_alignment, :left,
+				 :editable?, _false,
+				 :row, 1, :col,2,
+				 :display_length,10 )
+		
+	_local label3_2 << sw_label_item.new( l_gb3,
+					      _self.message(:in_mtrs),
+					      :row,1,:col,3,
+					       :col_alignment, :fill,
+					      :min_width,250  )
+	
+	#___________________________________________________________________________________________
+	
+	
+	_local l_gb4 << sw_border_container.new( l_main_container, 1,2,:label,_self.message(:rpt_fld_jn_rpt),
+						 :row,5, :col,1,
+						 :row_spacing,8,
+						 :col_spacing,5,
+						 :outer_spacing,5 ,
+						 :row_alignment,:centre,
+						 :col_alignment,:fill,
+						 :min_width,350,
+						 :min_height,10)
+	
+
+	_local l_rc_table_item_3a << sw_border_container.new( l_gb4, 1,1,:label,_self.message(:src_obj_flds),
+							      :row,1, :col,1,
+							      :row_spacing,8,
+							      :col_spacing,5,
+							      :outer_spacing,12,
+							      :row_alignment,:centre,
+							      :col_alignment,:fill,
+							      :min_width,350,
+							      :min_height,11)
+	
+	_local l_src_table
+	
+	.swo_items[:field_values_table] << l_src_table << sw_table.new( l_rc_table_item_3a,
+									:row,1,:col,1,
+									:model, _self,
+									:aspect,:source_field_values,
+									:data_selector, :populate_src_table_data|()|,
+									:selection_type, :cell,
+									:selection_mode, :many,
+									:min_width,50,
+									:min_height, 150)
+	
+	l_src_table.n_cols << 1
+	
+	l_src_table.set_column_labels( {_self.message(:source_object_fields) } )
+	
+	l_src_table.col_resize_values << {1}
+	
+	# The table can be filtered, sorted and columns can be
+	# reordered and hidden
+	l_src_table.enable_filter? << _true
+	
+	l_src_table.enable_sort? << _true
+	
+	l_src_table.enable_manage_columns? << _true
+	
+	l_src_table.set_column_sort_procedure( 1,l_src_table.get_sort_proc(:strings_with_numbers) )
+	
+	_self.changed( :source_field_values, :refresh )
+	_local  l_rc_table_item_3b << sw_border_container.new(  l_gb4, 1,1,:label,_self.message(:dst_obj_flds),
+								:row,1, :col,2,
+								:row_spacing,8,
+								:col_spacing,5,
+								:outer_spacing,12,
+								:row_alignment,:centre,
+								:col_alignment,:fill,
+								:min_width,350,
+								:min_height,10)
+	
+	_local l_dst_table
+	
+	.swo_items[:field_values_table_end] <<
+		l_dst_table << sw_table.new( l_rc_table_item_3b,
+					     :row,1,:col,1,
+					     :model, _self,
+					     :aspect,:destination_field_values,
+					     :data_selector, :populate_dst_table_data|()|,
+					     :selection_type, :cell,
+					     :selection_mode, :many,
+					     :min_width,50,
+					     :min_height, 150 )
+	
+	l_dst_table.n_cols << 1
+	
+	l_dst_table.set_column_labels( {_self.message(:destination_object_fields) } )
+	
+	l_dst_table.col_resize_values << {1}
+	
+	# The table can be filtered, sorted and columns can be
+	# reordered and hidden
+	l_dst_table.enable_filter? << _true
+	
+	l_dst_table.enable_sort? << _true
+	
+	l_dst_table.enable_manage_columns? << _true
+	
+	l_dst_table.set_column_sort_procedure( 1, l_dst_table.get_sort_proc(:strings_with_numbers) )
+	
+	_self.changed( :destination_field_values, :refresh )
+
+	##__________________________________________________________________________________________________________________________________________
+
+	_local l_gb5a << sw_container.new(l_main_container, 1,1,
+ 						       :row,6, :col,1,
+ 						       :row_spacing,8,
+ 						       :col_spacing,5,
+ 						       :outer_spacing,1 ,
+ 						       :row_alignment,:left,
+ 						       :col_alignment,:left,
+ 						       :min_width,350,
+ 						       :min_height,10)
+	
+	_local label5_1 << sw_label_item.new( l_gb5a,
+					   _self.message(:press_cntrl_for_selection),
+					   :row,1,:col,1,
+					   :min_width,250   )	
+
+	_local l_gb5b << sw_container.new(l_main_container, 1,3,
+ 						       :row,7, :col,1,
+ 						       :row_spacing,8,
+ 						       :col_spacing,5,
+ 						       :outer_spacing,1 ,
+ 						       :row_alignment,:left,
+ 						       :col_alignment,:left,
+ 						       :min_width,350,
+ 						       :min_height,10)	
+
+
+	.swo_items[:additional_remarks_text] << sw_text_item.new(l_gb5b,:label,_self.message(:add_remarks),
+					          	:row,1, :col,1,
+						       :row_spacing,8,
+						       :col_spacing,5,
+						       :outer_spacing,5,
+						       :row_alignment,:left,
+						       :col_alignment,:left,
+						       :min_width,350,
+						       :min_height,30)
+	_local label5_3 << sw_label_item.new( l_gb5b,
+					   _self.message(:max_chars),
+					   :row,1,:col,3,
+					   :min_width,250    )
+
+	_local l_gb5c << sw_container.new(l_main_container, 1,6,
+						       :row,8, :col,1,
+						       :row_spacing,8,
+						       :col_spacing,5,
+						       :outer_spacing,5 ,
+						       :row_alignment,:centre,
+						       :col_alignment,:centre,
+						       :min_width,350,
+						       :min_height,10)	
+
+	
+	.swo_items[:get_report_btn] <<sw_button_item.new( l_gb5c,
+							  :model, _self,
+							  :row,1, :col,1,
+							  :min_width,150,
+							  :label, _self.message(:get_report),
+							  :selector, :|get_report()|)
+	.swo_items[:interrupt_btn] << _self.action(:interrupt).place_control_on( l_gb5c, :dialog )
+	
+	# Added line to disable the interrupt button initially.
+	_self.action(:interrupt).enabled?<<_false
+	
+	.swo_items[:interrupt_btn].min_width << 100
+	
+
+	.swo_items[:reset_btn] <<sw_button_item.new( l_gb5c,
+						     :model, _self,
+						     :row,1, :col,3,
+						     :min_width,150,
+						     :label, _self.message(:reset),
+						     :selector, :|reset()|)
+	
+	.swo_items[:explorer_btn] <<sw_button_item.new( l_gb5c,
+							:model, _self,
+							:row,1, :col,4,
+							:min_width,150,
+							:label, _self.message(:export_to_explorer),
+							:selector, :|open_explorer()|)
+	.swo_items[:cancel_btn] <<sw_button_item.new(l_gb5c,
+						     :model, _self,
+						     :row,1, :col,5,
+						     :min_width,150,
+						     :label, _self.message(:quit),
+						     :selector, :quit|()|)
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_drop_down_values()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.get_drop_down_values()
+	## 
+	## 
+	_local l_rg_val << .swo_items[:radio_gp_ds].value
+	
+	_local l_ds << .swo_items[:gpm].cached_dataset(l_rg_val)
+	
+	_local l_drop_down_set << rope.new()
+	
+	_local l_drop_down_set_ds << rope.new()
+	
+	l_drop_down_set.add("")
+	
+	l_drop_down_set_ds.add("")
+	
+	l_drop_down_set.add("Lat-Long")
+	
+	_if l_rg_val _is :both
+	_then
+		_for a_ds _over {:electric,:land}.fast_elements()
+		_loop
+			l_ds << .swo_items[:gpm].cached_dataset(a_ds)
+			
+			_for req_coll _over l_ds.collections.fast_elements()
+			_loop
+				l_value << write_string(req_coll.external_name.write_string,"(",l_ds.name,")")
+				l_drop_down_set.add_last(l_value)
+				
+				l_drop_down_set_ds.add_last(l_value)
+				
+			_endloop
+		_endloop
+		
+	_else
+		_for req_coll _over l_ds.collections.fast_elements()
+		_loop
+			l_value << write_string(req_coll.external_name.write_string,"(",l_ds.name,")")
+			l_drop_down_set.add_last(l_value)
+			
+			l_drop_down_set_ds.add_last(l_value)
+			
+		_endloop
+	_endif
+	_return _true,l_drop_down_set.as_sorted_collection().as_simple_vector(),l_drop_down_set_ds.as_sorted_collection().as_simple_vector()
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method item_list_generator()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.item_list_generator()
+	##
+	## 
+	## 
+	_local l_list << _self.toggle_ed_list
+	>> l_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method toggle_ed_list_end()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.toggle_ed_list_end
+	## 
+	##
+	##
+	_local l_list << rope.new()
+	_local l_styled_string << {:value, 1,:tab}
+	_local l_total_fields,l_all_external_names,l_fld_map,l_display_tree,l_fld_hndle
+	_if .swo_items[:destination_selection_type].enabled?
+	_then 
+		l_total_fields << property_list.new()
+		
+		_if .swo_items[:destination_object] _isnt _unset  _andif
+		    .swo_items[:destination_object] <> ""
+		_then
+			l_all_external_names << rope.new()
+			l_fld_map << property_list.new()
+			
+			_for a_field _over .swo_items[:destination_object].all_fields.fast_elements()
+			_loop
+				_if a_field.name = :id
+				_then
+					_continue
+				_endif
+
+				_if a_field.is_physical? _andif _not a_field.is_join? _andif _not a_field.is_geometry?
+				_then
+					l_all_external_names.add(a_field.external_name)
+					l_fld_map[a_field.external_name.lowercase.substitute_string(" ","").as_symbol()] << a_field
+					
+				_endif
+				
+			_endloop
+			_for a_fld _over l_all_external_names.as_sorted_collection().as_simple_vector().fast_elements()
+			_loop
+				l_fld_hndle << l_fld_map[a_fld.lowercase.substitute_string(" ","").as_symbol()]
+				
+				l_display_tree << display_tree.new(l_fld_hndle,{a_fld})
+				l_display_tree.styled_string << l_styled_string
+				
+				l_list.add(l_display_tree)
+				
+			_endloop 
+		_endif 
+	_endif
+
+	_return l_list
+_endmethod
+$
+#___________________________________________________________________________________________________
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.get_field_list()
+	##
+	## 
+	##
+	.swo_items[:field_values_table].clear_selection()
+	_local l_list << rope.new()
+	_local l_styled_string << {:value, 1,:tab}
+	_local l_source_collection<<""
+	_local l_total_fields << property_list.new()
+	
+	_if .swo_items[:source_selection_type].value ~= "Lat-Long"
+	_then
+		_if .swo_items[:source_selection_type].value.split_by("(").size>0
+		_then
+			l_source_collection << .swo_items[:electric_view].table_for_external_name(.swo_items[:source_selection_type].value.split_by("(")[1])
+			
+			_if l_source_collection _is _unset 
+			_then
+				
+				l_source_collection << .swo_items[:land_view].table_for_external_name(.swo_items[:source_selection_type].value.split_by("(")[1])
+				
+			_endif
+		_endif
+	_else
+		l_source_collection << .swo_items[:source_selection_type].value
+	_endif
+
+	_if l_source_collection <> ""
+	_then
+		_for a_dtset_key,a_dtset _over .swo_items[:coll_mappings].fast_keys_and_elements()
+		_loop
+			_if .swo_items[:source_selection_type].value = "Lat-Long"
+			_then
+				req_coll << _unset
+				_leave
+			_endif
+			
+			_if (req_coll << a_dtset[l_source_collection.name]) _isnt _unset
+			_then
+				_leave
+			_endif
+		_endloop
+		_if req_coll _isnt _unset _andif req_coll <> unset
+		_then
+			.swo_items[:source_object] << req_coll
+		_else
+			.swo_items[:source_object] << l_source_collection
+		_endif			
+		
+	_else
+		.swo_items[:source_object] << ""
+	_endif
+	
+	_self.populate_src_table_data(.swo_items[:field_values_table])
+	_self.changed(:source_field_values,:refresh)
+	
+	>> l_total_fields
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_field_list_end()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.get_field_list_end()
+	## 
+	## 
+	##
+	.swo_items[:field_values_table_end].clear_selection()
+	_local l_list << rope.new()
+	_local l_styled_string << {:value, 1,:tab}
+	_local l_dst_collection <<""
+	_local l_total_fields << property_list.new()	
+	#l_source_collection << .swo_items[:destination_selection_type].value
+	_if .swo_items[:destination_selection_type].value.split_by("(").size>0 
+	_then
+		l_dst_collection << .swo_items[:electric_view].table_for_external_name(.swo_items[:destination_selection_type].value.split_by("(")[1])
+		_if l_dst_collection _is _unset 
+		_then
+			l_dst_collection << .swo_items[:land_view].table_for_external_name(.swo_items[:destination_selection_type].value.split_by("(")[1])
+		_endif
+	_endif
+	
+
+	#.swo_items[:coll_mappings]
+	_if l_dst_collection <> ""
+	_then
+		_for a_dtset_key,a_dtset _over .swo_items[:coll_mappings].fast_keys_and_elements()
+		_loop
+			#_if (req_coll << a_dtset[l_source_collection.lowercase.substitute_string(" ","").as_symbol()]) _isnt _unset
+			_if (req_coll << a_dtset[l_dst_collection.name]) _isnt _unset
+			_then
+				_leave
+			_endif
+		_endloop
+
+		_if req_coll _isnt _unset _andif req_coll <> unset
+		_then						
+			.swo_items[:destination_object] << req_coll
+		_else
+			.swo_items[:destination_object] << l_dst_collection
+		_endif
+		
+	_else
+		.swo_items[:destination_object] << ""
+	_endif 
+
+	_self.populate_dst_table_data(.swo_items[:field_values_table_end])
+	_self.changed(:destination_field_values,:refresh)
+	>> l_total_fields
+_endmethod
+$
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.set_ds_input_fl_coll_type(a_type)
+	## 
+	## 
+	(ok?,.swo_items[:total_sr_input_collections],.swo_items[:total_ds_input_collections]) << _self.get_drop_down_values()
+	.swo_items[:source_selection_type].text_items <<.swo_items[:total_sr_input_collections]
+	.swo_items[:destination_selection_type].text_items << .swo_items[:total_ds_input_collections]
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.set_input_fl_coll_type(a_type)
+	## 
+	##
+	_if a_type = :file
+	_then 
+	#	_self.action(:browse).enabled? << _true
+	_else
+	#	_self.action(:browse).enabled? << _false
+	_endif
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.item_list_generator_end()
+	##
+	## 
+	## 
+
+	l_list << _self.toggle_ed_list_end
+	
+	>> l_list
+_endmethod
+$
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.check_validate_object(l_key)
+	## 
+	##	
+
+	_if .swo_items[l_key]  _is _unset _orif
+	    .swo_items[l_key] = ""
+	_then
+		_self.show_message("Please Select ",l_key," !")
+		_return _false 
+	_endif
+
+	l_selected_fields_list << _self.get_selected_report_fields(l_key)	
+		
+	_if l_selected_fields_list.size = 0
+	_then
+		# Start Change : Add Lat-Long In drop Down
+		# Date         : 24-11-2017
+		_if .swo_items[l_key] <> "Lat-Long"
+		_then
+			
+			only_id_recs << _true
+			
+			_if .swo_items[:cluster_toggle_item] _is _unset _orif 
+			    _not .swo_items[:cluster_toggle_item].value
+			_then
+				only_id_recs << _self.show_question("write only ID of "+l_key.write_string,
+							    "QUIT and Select Fields","You have not selected any fields to write in REPORTS, please select any option")
+			_endif
+
+		
+
+			_if only_id_recs
+			
+			_then
+			
+				##If Condition added for Lat-Long##
+				_if .swo_items[l_key] <> "Lat-Long"
+				_then 				
+					l_selected_fields_list.add_first(.swo_items[l_key].field(:id))								
+					.swo_items[:output_lst][l_key] << l_selected_fields_list
+
+				_else
+					_if .swo_items[:output_lst][l_key] _is _unset
+					_then
+						.swo_items[:output_lst][l_key] << rope.new()
+					_endif
+					
+					.swo_items[:output_lst][l_key].add("Unique value")
+					.swo_items[:output_lst][l_key].add("Latitude")
+					.swo_items[:output_lst][l_key].add("Longitude")
+				_endif
+				##-------------------END-----------------##
+			_else	
+				_return _false
+			_endif
+		_endif 
+	_else
+		.swo_items[:cluster_field_name] << l_selected_fields_list.an_element().external_name
+		# mandatory Id field field
+		_if .swo_items[l_key].is_kind_of?(rwo_set)
+		_then 
+			l_selected_fields_list.add_first(.swo_items[l_key].an_element().field(:id))
+		_else
+			l_selected_fields_list.add_first(.swo_items[l_key].field(:id))
+		_endif
+		
+		.swo_items[:output_lst][l_key] << l_selected_fields_list
+		
+	_endif
+
+	_return _true 
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_collection_mappings()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.get_collection_mappings()
+	## 
+	##
+	_local l_collections_mapping << property_list.new()
+	_local l_coll_name,l_coll_nm
+	_for a_dst _over {:electric}.fast_elements()
+	_loop 
+		_if l_collections_mapping[a_dst] _is _unset 
+		_then 	  
+			l_collections_mapping[a_dst] << property_list.new()
+		_endif
+	
+		_for a_coll _over .swo_items[:gpm].cached_dataset(a_dst).collections.fast_elements()
+		_loop 
+			l_coll_name  << a_coll.external_name.write_string
+			l_coll_nm << l_coll_name.lowercase.substitute_string(" ","")
+			l_collections_mapping[a_dst][l_coll_nm.as_symbol()] << a_coll
+		_endloop
+	_endloop
+
+	_return l_collections_mapping
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_report()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.get_report()
+	## 
+	## 
+	##
+
+	_dynamic !current_coordinate_system!
+	!current_coordinate_system! << smallworld_product.application(:tp_eo_application).coordinate_system
+	
+	.swo_items[:output_lst] << property_list.new()
+	_local l_show_message
+	_if .swo_items[:source_object] = "Lat-Long"
+	_then	
+		_if ~_self.check_input_file_format_for_lat_long()
+		_then
+			_return
+		_endif
+		
+		_if .swo_items[:source_operation_type].value <> "Buffer" _andif
+		    .swo_items[:source_operation_type].value <> "Interacts"
+		_then 
+			_self.show_message("Please Select Valid Operation Type!!! (Interacts (or) Buffer)")
+			_return 
+		_endif 
+	_endif 	
+	_if _not _self.check_validate_object(:source_object)
+	_then
+		_return
+	_endif	
+
+	l_show_message << "Fields selected for getting in reports source object selected fields : "
+
+	.swo_items[:explorer_btn].enabled? << _false
+
+	_if .swo_items[:output_lst][:source_object] _isnt _unset
+	_then 
+		_for a_fld _over .swo_items[:output_lst][:source_object].fast_elements()
+		_loop
+			_if .swo_items[:source_object] = "Lat-Long"
+			_then
+				l_show_message << l_show_message+a_fld.write_string+", "
+			_else
+				l_show_message << l_show_message+a_fld.external_name.write_string+", "
+				
+			_endif 
+		_endloop
+	_endif
+
+	_if .swo_items[:source_operation_type].value <> "Source object field value only"
+	_then
+		_if _not _self.check_validate_object(:destination_object)
+		_then
+			_return
+		_endif
+		
+		l_show_message << l_show_message+"destination object seleted fields : "
+		_for a_fld _over .swo_items[:output_lst][:destination_object].fast_elements()
+		_loop
+			l_show_message << l_show_message+a_fld.external_name.write_string+", "
+		_endloop
+	_endif
+	
+	_if .swo_items[:additional_remarks_text].value.size > 20
+	_then
+		_self.show_message("Please Enter Max 20 characters only")
+		_return
+	_endif
+
+	_if .swo_items[:source_operation_type].value.write_string = "Shortest Path" _andif
+	    (.swo_items[:buffer_value_text].value.default("").size = 0 _orif
+	     .swo_items[:buffer_value_text].value.as_number() _is _unset)
+	_then
+		_self.show_message("Enter Buffer Value In Mts")
+		_return
+	_endif
+
+	l_run? << _self.show_alert(l_show_message,"Run","Quit")
+
+	_if _not l_run?
+	_then
+		_return
+	_endif
+	
+	.swo_items[:get_report_btn].enabled? << _false
+	.swo_items[:interrupt_btn].enabled? << _true
+	.swo_items[:reset_btn].enabled? << _false 
+	.engine.get_collection_wise_report(.swo_items)
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method toggle_ed_list()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.toggle_ed_list
+	## 
+	##
+	##
+	_local l_list << rope.new()
+	_local l_styled_string << {:value, 1,:tab}
+	_local l_total_fields << property_list.new()
+	_local l_all_external_names,l_fld_map,l_src_obj,l_fld_hndle,l_display_tree
+	
+	_if .swo_items[:source_object] _isnt _unset  _andif
+	    .swo_items[:source_object] <> ""
+	_then
+		l_all_external_names << rope.new()
+		l_fld_map << property_list.new()
+		
+		_if .swo_items[:source_object] <> "Lat-Long"
+		_then
+			l_src_obj << .swo_items[:source_object]
+			_for a_field _over .swo_items[:source_object].all_fields.fast_elements()
+			_loop
+				_if a_field.name = :id
+				_then
+					_continue
+				_endif
+				_if a_field.is_physical? _andif _not a_field.is_join? _andif _not a_field.is_geometry?
+				_then
+					l_all_external_names.add(a_field.external_name)
+					l_fld_map[a_field.external_name.lowercase.substitute_string(" ","").as_symbol()] << a_field
+				_endif 
+			_endloop
+			
+			_for a_fld _over l_all_external_names.as_sorted_collection().as_simple_vector().fast_elements()
+			_loop
+				l_fld_hndle << l_fld_map[a_fld.lowercase.substitute_string(" ","").as_symbol()]
+				l_display_tree << display_tree.new(l_fld_hndle,{a_fld})
+				l_display_tree.styled_string << l_styled_string
+				l_list.add(l_display_tree)
+				
+			_endloop
+		_endif 
+	_endif
+	
+	_return l_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method item_list_generator()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.item_list_generator()
+	##
+	## 
+	## 
+	_local l_list << _self.toggle_ed_list
+	
+	>> l_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method toggle_ed_list_end()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.toggle_ed_list_end
+	## 
+	##
+	##
+	_local l_list << rope.new()
+	_local l_styled_string << {:value, 1,:tab}
+	_local l_total_fields,l_display_tree,l_all_external_names,l_fld_map,l_fld_hndle
+	
+	_if .swo_items[:destination_selection_type].enabled?
+	_then
+		l_total_fields << property_list.new()
+		
+		_if .swo_items[:destination_object] _isnt _unset  _andif
+		    .swo_items[:destination_object] <> ""
+		_then
+		
+			l_all_external_names << rope.new()
+			l_fld_map << property_list.new()
+		
+			_for a_field _over .swo_items[:destination_object].all_fields.fast_elements()
+			_loop
+				_if a_field.name = :id
+				_then
+					_continue
+				_endif
+
+				_if a_field.is_physical? _andif _not a_field.is_join? _andif _not a_field.is_geometry?
+				_then
+					l_all_external_names.add(a_field.external_name)
+					l_fld_map[a_field.external_name.lowercase.substitute_string(" ","").as_symbol()] << a_field
+				_endif 
+			_endloop
+			_for a_fld _over l_all_external_names.as_sorted_collection().as_simple_vector().fast_elements()
+			_loop
+				l_fld_hndle << l_fld_map[a_fld.lowercase.substitute_string(" ","").as_symbol()]
+				l_display_tree << display_tree.new(l_fld_hndle,{a_fld})
+				l_display_tree.styled_string << l_styled_string
+				
+				l_list.add(l_display_tree)
+			_endloop 
+		_endif 
+	_endif
+	
+	_return l_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method item_list_generator_end()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.item_list_generator_end()
+	##
+	## 
+	## 
+
+	_local l_list << _self.toggle_ed_list_end
+	
+	>> l_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method check_validate_object()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.check_validate_object(l_key)
+	## 
+	##	
+	_local l_only_id_recs?,l_selected_fields_list
+	
+	_if .swo_items[l_key]  _is _unset _orif
+	    .swo_items[l_key] = ""
+	_then
+		_self.show_message("Please Select ",l_key," !")
+		_return _false 
+	_endif
+
+	l_selected_fields_list << _self.get_selected_report_fields(l_key)
+		
+	_if l_selected_fields_list.size = 0
+	_then
+		_if .swo_items[l_key] <> "Lat-Long"
+		_then
+			l_only_id_recs? << _true
+			
+			_if l_only_id_recs?
+			_then
+				
+				_if .swo_items[l_key] <> "Lat-Long"
+				_then
+					
+					l_selected_fields_list.add_first(.swo_items[l_key].field(:id))								
+					.swo_items[:output_lst][l_key] << l_selected_fields_list
+
+				_else
+					_if .swo_items[:output_lst][l_key] _is _unset
+					_then
+						.swo_items[:output_lst][l_key] << rope.new()
+					_endif
+					
+					.swo_items[:output_lst][l_key].add("Unique value")
+					.swo_items[:output_lst][l_key].add("Latitude")
+					.swo_items[:output_lst][l_key].add("Longitude")
+				_endif
+				
+			_else	
+				_return _false
+			_endif
+		_endif 
+	_else
+		
+		_if .swo_items[l_key].is_kind_of?(rwo_set)
+		_then 
+			l_selected_fields_list.add_first(.swo_items[l_key].an_element().field(:id))
+		_else
+			l_selected_fields_list.add_first(.swo_items[l_key].field(:id))
+		_endif
+		
+		.swo_items[:output_lst][l_key] << l_selected_fields_list
+		
+	_endif
+
+	_return _true
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_selected_report_fields()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.get_selected_report_fields(p_sr_type)
+	## 
+	## 
+	##
+	_local l_field_prop_list << property_list.new()
+
+	_local l_sr_type<< p_sr_type
+	
+	_local l_selected_felds_for_reports,l_table_data,l_selected_fld,l_row,l_tree_key
+	
+	_if .swo_items[l_sr_type] ~= "Lat-Long"
+	_then
+		_for a_fld _over .swo_items[l_sr_type].all_fields.fast_elements()
+		_loop
+			l_field_prop_list[a_fld]<<a_fld.external_name
+		_endloop
+	_endif
+	
+	l_selected_felds_for_reports << rope.new()
+	
+	_if l_sr_type = :source_object
+	_then
+		l_tree_key << :field_values_table
+	_else
+		l_tree_key << :field_values_table_end
+	_endif
+
+	_for a_fld_row _over .swo_items[l_tree_key].selected_cells.fast_elements()
+	_loop
+		l_row<<a_fld_row[1]+1
+		l_table_data << .swo_items[l_tree_key].get_focus_item_list()
+	
+		l_selected_fld << l_table_data[l_row].label.split_by(tab_char)[1]
+		_for a_fld,a_fld_ext_name _over l_field_prop_list.fast_keys_and_elements()
+		_loop
+			_if a_fld_ext_name = l_selected_fld
+			_then
+				l_selected_felds_for_reports.add_last(a_fld)
+			_endif
+		_endloop
+	
+	_endloop
+	
+	>> l_selected_felds_for_reports
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method browse()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.browse(_gather args)
+	##
+	##
+	##
+	_try _with cond 
+		_self.activate_directory_selection(:xml_directory_folder)
+		
+	_when error   	
+		condition.raise(:error,:string,cond.report_contents_string)
+	_endtry 
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method activate_directory_selection()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.activate_directory_selection(p_input)
+	##
+	## 
+	##
+	_local l_input << p_input
+	_local l_dir,l_dialog
+	_if l_input _is _unset _then _return _endif
+	
+	_local f_path << system.pathname_up(system.user_application_data_path(),1) 
+	_if _not (system.file_exists? (f_path))
+	_then 	
+		system.mkdir(f_path)
+	
+	_endif
+	l_dir << system.getenv("")
+	l_dialog << file_dialog.new(_self, :path_selected|()|, _unset,:directory, l_dir)
+	l_dialog.filter << {"xls","XLS","xlsx","XLSX","txt","TXT"}
+	l_dialog.activate()
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method note_change()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.note_change(who,what,data)
+	## 
+	##
+	_if what = :show_message
+	_then
+		_if data.is_kind_of?(simple_vector)
+		_then
+			.swo_items[:source_objects] << data[2]
+			.swo_items[:destination_objects] << data[3]
+			.swo_items[:explorer_btn].enabled? << _true
+			_self.framework.show_message(data[1])
+		_else
+			_self.framework.show_message(data)
+		_endif
+		
+	_elif what = :status
+	_then
+		_self.framework.set_status_info(data)
+		
+	_elif what = :run_status
+	_then
+		#.swo_items[:get_report_btn].enabled? << _true 
+		#.swo_items[:interrupt_btn].enabled? << _false
+	_elif what = :complete
+	_then
+		.swo_items[:get_report_btn].enabled? << _true 
+		.swo_items[:interrupt_btn].enabled? << _false
+		.swo_items[:reset_btn].enabled? << _true
+		.swo_items[:explorer_btn].enabled? << _true
+		_self.framework.set_status_info(data)
+	
+	_elif what = :lat_long_opeartion_type
+	_then
+		_self.show_message(data)
+	_elif what _is :error_message
+	_then
+		_self.framework.show_message(data)
+		_self.framework.set_status_info(data)
+		.swo_items[:get_report_btn].enabled? << _true 
+		.swo_items[:interrupt_btn].enabled? << _false
+		.swo_items[:reset_btn].enabled? << _true
+	_endif 
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_text_box()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.get_text_box()
+	##
+	## 
+	##
+	_if .swo_items[:source_operation_type].value.write_string = "Buffer" _orif
+	    .swo_items[:source_operation_type].value.write_string = "Shortest Path" 
+	_then
+		.swo_items[:buffer_value_text].editable? << _true
+	_else
+		.swo_items[:buffer_value_text].editable? << _false
+	_endif 
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method check_input_file_format_for_lat_long()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.check_input_file_format_for_lat_long()
+	##
+	## 
+
+	_if .swo_items[:input_file_path] _is _unset 
+	_then
+		_self.show_message("Please Select The Input File !!!")
+		_return _false 	
+	_else
+		 
+		_try _with cond1
+			a_fl_hdl << external_text_input_stream.new(.swo_items[:input_file_path])
+			
+		_when error
+			_if cond1.report_contents_string.includes_all?("Access denied")
+			_then
+				_self.show_message("Kindly Close the Input File and Try Again.")
+			_endif
+			
+			_return _false 
+			
+		_endtry	
+		_loop
+			_if (a_ln << a_fl_hdl.get_line()) _is _unset
+			_then
+				_leave
+			_endif
+			
+			l_val << a_ln.split_by(",")
+			
+			_if l_val.size < 3
+			_then
+				_protect
+
+				_self.show_message("Invalid Input File Format.File Format supported is .CSV.Please Provide input as Unique Number(150704614),Latitude(19.061112),Longitude(72.835334)")
+				_protection
+					_if a_fl_hdl _isnt _unset
+					_then
+						a_fl_hdl.close(_true )					
+					_endif 
+				_endprotect
+				_return _false		
+				
+			_endif
+
+			
+			_leave 
+		_endloop
+		_protect
+		_protection
+			_if a_fl_hdl _isnt _unset
+			_then
+				a_fl_hdl.close(_true )
+				
+			_endif 
+		_endprotect
+		
+		_return _true
+	_endif
+
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method open_explorer()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={spatial_predicate}, usage={Tata_Power})
+_method tp_spatial_predicate_gui_plugin.open_explorer()
+	## 
+	##
+	_local l_app
+	_if (l_app << smallworld_product.application(:sweo_wm_user)) _is _unset _andif 
+	    (l_app << smallworld_product.application(:sweo_dm_user)) _is _unset
+	_then
+		write("Start The Application....")
+		_return
+	_endif
+
+	_if .swo_items[:source_objects] _isnt _unset
+	_then
+		l_app.databus.make_data_available(:rwo_set,{_self,.swo_items[:source_objects],
+							    :name,"Source Objects",
+							    :group_name,"tp-Spatial-Predicate",:keep,100,
+							    :set_current?,_true})
+	_endif
+	
+	_if .swo_items[:destination_objects] _isnt _unset
+	_then
+		l_app.databus.make_data_available(:rwo_set,{_self,.swo_items[:destination_objects],
+							    :name,"Destination Objects",
+							    :group_name,"tp-Spatial-Predicate",:keep,100,
+							    :set_current?,_true})
+	_endif
+
+
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method reset()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.reset()
+	## 
+	##
+	.swo_items[:get_report_btn].enabled? << _true 
+	.swo_items[:interrupt_btn].enabled? << _false
+	.swo_items[:source_operation_type].value << ""
+	.swo_items[:buffer_value_text].value << ""
+	.swo_items[:buffer_value_text].editable? << _false
+	.swo_items[:radio_gp].value << :trail
+	.swo_items[:radio_gp_ds].value << :both
+	.swo_items[:destination_selection_type].value << ""
+	_self.get_field_list_end()
+	.swo_items[:source_selection_type].value << ""
+	_self.get_field_list()
+	.swo_items[:additional_remarks_text].value << ""
+	.swo_items[:explorer_btn].enabled? << _false
+	.swo_items[:source_object]<<""
+	.swo_items[:destination_object]<<""
+	_self.changed(:source_field_values,:refresh)
+	_self.changed(:destination_field_values,:refresh)
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method interrupt()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.interrupt()
+	## 
+	##
+	_if .engine.thread _isnt _unset
+	_then
+		.engine.thread.kill()
+	_endif
+	_self.framework.set_status_info("Interrupted...")
+	.swo_items[:get_report_btn].enabled? << _true 
+	.swo_items[:interrupt_btn].enabled? << _false
+	.swo_items[:reset_btn].enabled? << _false 
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method populate_src_table_data()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.populate_src_table_data( a_table )
+	## 
+	## 
+	# Adds a row for each module showing the module name, product
+	# name and whether it is loaded.
+	
+	l_list <<_self.item_list_generator()
+
+	row << 1
+	_for a_each_line _over l_list.fast_elements()
+	_loop
+	#	a_table.add_label( row, 1, row)
+		a_table.add_label( row, 1, a_each_line)
+		
+		row +<< 1
+	_endloop
+	_return l_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method populate_dst_table_data()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.populate_dst_table_data( a_table )
+	## 
+	## 
+	# Adds a row for each module showing the module name, product
+	# name and whether it is loaded.
+	l_list <<_self.item_list_generator_end()
+
+	row << 1
+	_for a_each_line _over l_list.fast_elements()
+	_loop
+		#a_table.add_label( row, 1, row)
+		a_table.add_label( row, 1, a_each_line)
+		
+		row +<< 1
+	_endloop
+	_return l_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method quit()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.quit()
+	## 
+	## 
+	_self.framework.close()
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method path_selected()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_gui_plugin})
+_method tp_spatial_predicate_gui_plugin.path_selected(p_file_path)
+        ##
+	## Stores the file path when clicked on "Ok" button.
+	
+	.swo_items[:input_file_path] << p_file_path
+	
+_endmethod 	
+$

@@ -1,0 +1,165 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/navbar.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+.navbar {
+  // margin-bottom: @baseLineHeight;
+  min-height: @navbarHeight;
+  //padding-left:  20px;
+  //padding-right: 20px;
+  #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+  .box-shadow(0 1px 4px rgba(0,0,0,.065));
+}
+
+.navbar-fixed-top, .navbar-fixed-bottom {
+    // z-index: 2000000001;  // 1 higher than spin.js z-order
+    z-index: 1039;
+}
+
+.navbar-default .navbar-brand {
+  color: @navbarBrandColor;
+   &:hover,
+    &:focus {
+      color: @white;
+    }
+}
+
+.navbar-default .navbar-nav {
+  > .open > a {
+    &,
+    &:hover,
+    &:focus {
+      background-color: inherit;
+      color: @white;
+    }
+  }
+}
+
+.navbar-brand {
+  #voice > .brand(@baseFontSize + 4, normal, 1);
+  //height: 70px; // will need rules to shrink on mobile   //Commenting this line to fix the navbar in 1.2.0
+  line-height: @baseLineHeight;
+  padding-top: 15px;
+  padding-bottom: 0;
+  text-shadow: none;
+  // margin-left: -45px;   //removing left margin to fix navbar alignment in 1.2.0
+  small {
+    color: @navbarText;
+    font-size: @baseFontSize - 1;
+    margin-left: 5px;
+  }
+}
+
+.navbar-nav > li {
+  font-size: @baseFontSize;
+  > a {
+    color: @navbarLinkColor;
+    text-shadow: none;
+  }
+  // Add spacing to compensate for chevron vs caret.
+  > .dropdown-menu.pull-right {
+    right: 3px;
+  }
+  .dropdown-menu {
+    margin-top: 2px;
+  }
+}
+
+.navbar .btn-toolbar {
+  margin: 15px 0 0;
+  .btn-group {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+}
+
+// TODO - REFACTOR ALL OF THIS NAVBAR!!!!! IT'S CRAZY!!!!!
+
+.navbar .btn-group > .btn {
+  font-weight: bold;
+}
+
+.navbar .container {
+  position: relative;
+}
+
+.navbar .btn-navbar {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.navbar-search {
+  float: none;
+  margin-top: 0;
+}
+
+.navbar-search .input-append {
+  margin-bottom: 0px;
+}
+
+.navbar-form {
+  .search-query {
+    border-radius: 3px;
+    height: 27px;
+  }
+  .input-group-btn .btn {
+    padding-bottom: 0;
+  }
+}
+
+
+// .toolbar-container {
+//   float: right;
+// }
+
+// .navbar-search {
+//   margin: ((@navbarHeight - 26) / 2) 0;
+//   .search-query {
+//     .border-radius(0);
+//     padding: 2px 4px;
+//     &:focus,
+//     &:focus + .btn {
+//       background-color: @white;
+//       border-color: @white;
+//       color: @grayDarker;
+//     }
+//   }
+//   .input-append {
+//     margin-bottom: 0;
+//     .search-query {
+//       .border-radius(@baseBorderRadius 0 0 @baseBorderRadius);
+//     }
+//     .btn {
+//       .border-radius(0 @baseBorderRadius @baseBorderRadius 0);
+//     }
+//   }
+//   .search-query,
+//   .btn {
+//     background-color: @navbarSearchBackground;
+//     border-color: @navbarSearchBorder;
+//     color: @grayLight;
+//     .transition(~"background linear .2s, border linear .2s");
+//   }
+// }
+.navbar-toggle {
+  display: block;
+  @media (min-width: @navbarCollapseWidth) {
+    display: none;
+  }
+}
+
+
+.navbar-collapse {
+
+  @media (min-width: @grid-float-breakpoint) {
+    &.collapse {
+      margin-bottom : -4px;
+    }
+
+  }
+}

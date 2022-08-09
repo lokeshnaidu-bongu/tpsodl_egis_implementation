@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+<collection collection_name = "tp_mis_section" >
+<fields field_name = "tp_name" external_name = "Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_section_code" external_name = "Section Code" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_covered_area" external_name = "Covered Area" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_gss" external_name = "Total GSS" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_power_xfrmr" external_name = "Total Power Transformer" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_pss" external_name = "Total PSS" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_feeders" external_name = "Total 11KV Feeders" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_33kv_feeders" external_name = "Total 33KV Feeders" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_dss" external_name = "Total DSS" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_dt" external_name = "Total DT" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_inactive_dts" external_name = "Total Inactive DTS" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_fdr_meters" external_name = "Total Feeder Meters" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_dt_meters" external_name = "Total DT Meters" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_inactive_meters" external_name = "Total Inactive Meters" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_towers" external_name = "Total Towers" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_inactive_towers" external_name = "Total Inactive Towers" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_poles" external_name = "Total Poles" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_inactive_poles" external_name = "Total Inactive Poles" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_33kv_fdr_len" external_name = "Total 33kv Feeder Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_33kv_fdr_wire_len" external_name = "Total 33kv Feeder Wire Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_33kv_fdr_cable_len" external_name = "Total 33kv Feeder Cable Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_33kv_inactive_fdr_len" external_name = "Total 33kv Inactive Feeder Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_fdr_len" external_name = "Total 11kv Feeder Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_3_phase_cable" external_name = "Total 11kv 3-Phase Cable" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_2_phase_cable" external_name = "Total 11kv 2-Phase Cable" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_3_phase_wire" external_name = "Total 11kv 3-Phase Wire" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_2_phase_wire" external_name = "Total 11kv 2-Phase Wire" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_fdr_wire_len" external_name = "Total 11kv Feeder Wire Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_fdr_cable_len" external_name = "Total 11kv Feeder Cable Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_11kv_inactive_fdr_len" external_name = "Total 11kv Inactive Feeder Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_fdr_len" external_name = "Total LT Feeder Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_3_phase_wire" external_name = "Total LT 3-Phase Wire" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_2_phase_wire" external_name = "Total LT 2-Phase Wire" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_1_phase_wire" external_name = "Total LT 1-Phase Wire" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_3_phase_cable" external_name = "Total LT 3-Phase Cable" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_2_phase_cable" external_name = "Total LT 2-Phase Cable" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_1_phase_cable" external_name = "Total LT 1-Phase Cable" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_fdr_wire_len" external_name = "Total LT Feeder Wire Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_lt_inactive_fdr_len" external_name = "Total LT Inactive Feeder Length" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/><fields field_name = "tp_total_consumers" external_name = "Total Consumers" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_active_consumers" external_name = "Total Active Consumers" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_disconnected_consumers" external_name = "Total Disconnected Consumers" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_total_defaulter_consumers" external_name = "Total Defaulter Consumers" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_circle_name" external_name = "Circle Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_division_name" external_name = "Division Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_subdivision_name" external_name = "Sub Division Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_date_of_last_updation_in_gis" external_name = "Date Last Updated in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+<fields field_name = "tp_data_updated_by_gis" external_name = "Data Updated By GIS" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+<fields field_name = "tp_losses" external_name = "Reported Loss" mandatory = "false" field_type="ds_float" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="percent" mode = "insert" /></collection>
+
+</tp_collections>

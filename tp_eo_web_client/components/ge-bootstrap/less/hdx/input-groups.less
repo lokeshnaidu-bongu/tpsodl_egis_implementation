@@ -1,0 +1,45 @@
+// Dependencies
+// --------------------------------------------------
+
+
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+ /*.input-group-addon:first-child {
+  border-right: solid 1px @red;
+  //margin-right:5px;
+}
+
+.input-group-addon:last-child {
+  border-left: solid 1px @red;
+  //margin-left:5px;
+}*/
+
+
+.input-group{
+	.input-group-addon {
+	    background-color: @offWhite;
+	  	border-color:  @grayLighter;
+	}
+	/*
+	.btn{
+		color: @grayDark;
+	}
+	*/
+}
+.input-group-btn {
+  .btn {
+  	height: 30px;
+  }
+}
+
+.input-group-btn:last-child > .btn, 
+.input-group-btn:last-child > .btn-group {
+	margin-left: 0px;
+}
+
+.input-group-btn .add-on .btn {
+	padding-top:6px;
+}

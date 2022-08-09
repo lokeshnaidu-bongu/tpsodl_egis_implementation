@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="SystemMonitoringService" targetNamespace="http://services.sbi.gesmallworld.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://services.sbi.gesmallworld.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema targetNamespace="http://services.sbi.gesmallworld.com/" version="1.0" xmlns:tns="http://services.sbi.gesmallworld.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="unlinkedAssetsDTO" type="tns:unlinkedAssetsDTO"/>
+<xs:element name="urns" type="tns:urns"/>
+<xs:complexType name="urns">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="urn" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="unlinkedAssetsDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="urns" type="tns:urns"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getUnlinkedAssetsResponse">
+    <wsdl:part name="return" type="tns:unlinkedAssetsDTO">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUnlinkedAssets">
+    <wsdl:part name="urns" type="tns:urns">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="SystemMonitoring">
+    <wsdl:operation name="getUnlinkedAssets">
+      <wsdl:input message="tns:getUnlinkedAssets" name="getUnlinkedAssets">
+    </wsdl:input>
+      <wsdl:output message="tns:getUnlinkedAssetsResponse" name="getUnlinkedAssetsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SystemMonitoringServiceSoapBinding" type="tns:SystemMonitoring">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getUnlinkedAssets">
+      <soap:operation soapAction="" style="rpc"/>
+      <wsdl:input name="getUnlinkedAssets">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUnlinkedAssetsResponse">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SystemMonitoringService">
+    <wsdl:port binding="tns:SystemMonitoringServiceSoapBinding" name="SystemMonitoringDAOImplPort">
+      <soap:address location="http://localhost:8181/cxf/SystemMonitoring"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

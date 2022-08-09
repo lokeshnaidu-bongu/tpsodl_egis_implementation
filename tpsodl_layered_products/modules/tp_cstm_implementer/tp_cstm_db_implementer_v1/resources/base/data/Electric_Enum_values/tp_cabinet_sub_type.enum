@@ -1,0 +1,14 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Bus Raiser Panel	7
+Feeder Pillar with Breaker	4
+Feeder Pillar without Breaker	5
+LV Cubicle	1
+LV Junction Box	6
+Meter Panel	3
+Others	8
+SFU Panel	2

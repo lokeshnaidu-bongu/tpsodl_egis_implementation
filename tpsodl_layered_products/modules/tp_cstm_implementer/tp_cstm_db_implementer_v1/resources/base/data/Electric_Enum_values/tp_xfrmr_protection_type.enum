@@ -1,0 +1,13 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Isolator+Fuse	1
+Isolator+Breaker	2
+Isolator	3
+Fuse	4
+Isolator+Fuse+Breaker	5
+Fuse+Breaker	6
+Breaker	7

@@ -1,0 +1,5 @@
+
+  name: ge-lunr
+  version: 0.0.1
+  description: Fork of Lunr to support GE IIDx Mapping Collection free text search.
+  source: https://github.build.ge.com/DXC/ge-lunr.git

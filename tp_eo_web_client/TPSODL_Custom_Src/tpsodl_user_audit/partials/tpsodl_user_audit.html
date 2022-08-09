@@ -1,0 +1,82 @@
+<section class="module sidebar-module">
+   <div id="auditMain" class="module-body">
+      <div class="rwo">
+         <div class="col-sm-12">
+            <div class="col-sm-6" style="margin-left: -15px;margin-bottom:0px;"><label><b>Select user</b></label></div>
+            <div class="controls" style="margin-left:0px;margin-bottom:20px;width:100%">
+               <select class="form-control" id="user" style="width:100%;margin-bottom:0px;">
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-12">
+            <div class="controls" style="margin-left:0px;margin-bottom:20px;width:100%">
+               <div class="col-sm-6" style="margin-left: -15px";><label><b>From Date</b></label></div>
+               <div class="col-sm-6" style="padding-left: 40px;";><label><b>To Date</b></label></div>
+            </div>
+         </div>
+         <div class="col-sm-12">
+            <div class="controls" style="margin-left:0px;margin-bottom:20px;margin-top: -48px;width:100%" >
+               <div class="col-sm-6"><input type="text" class="datepicker datepicker-from" id="startdatepicker"
+                  placeholder="Login date *" style="margin-left: -14px;"></div>
+               <div class="col-sm-6"><input type="text" class="datepicker datepicker-to" id="enddatepicker"
+                  placeholder="Logout date *" style="margin-left: 6%;"></div>
+            </div>
+         </div>
+          <div class="pull-right">
+            <span id="audit_spinner" rel="audit_spinner" class="csp_common_spinner"></span>
+            <button id="clear" class="btn btn-primary">Clear</button>
+            <button id="generateReport" class="btn tpsodl_main">View Report</button>
+         </div>
+        
+      </div>
+   </div>
+</section>
+<br/>
+<section class="module sidebar-module">
+<div id="auditTable_div">
+         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+         <!-- <h3 class="modal-title" style="color:black !important;text-align:center;"><b>User Audit Report</b></h3> -->
+      <!-- </div> -->
+      <!-- <div class="col-sm-12" style="background-color:lightgray;padding-left: 0px;padding-right: 1px;padding-bottom: 5px;"> -->
+		<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+         <!-- <h3 class="modal-title" style="color:black !important;text-align:center;"><b>User Audit Report</b></h3> -->
+            <table id="auditTable" style="background-color:whitesmoke;" class="cell-border">
+               <thead id="auditHeader">
+                  <tr>
+                     <th>Username</th>
+                     <th>Login</th>
+                     <th>Logout</th>
+                     <th>IP Address</th>
+                  </tr>
+               </thead>
+               <tbody id="auditTableBody">
+               </tbody>
+            </table>
+         </div>
+</section>
+<!-- <div class="modal fade" id="auditModal" role="dialog" data-backdrop="false" style="background-color: rgba(0,0,0,0.4);padding-top: 5%;"> -->
+<!-- <div class="modal-dialog modal-lg" style="margin-left: 17%;margin-top: 3.2%;width: 60%;"> -->
+
+   <!-- <div class="modal-content"> -->
+      <!-- <div class="modal-header"> -->
+         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+         <!-- <h3 class="modal-title" style="color:black !important;text-align:center;"><b>User Audit Report</b></h3> -->
+      <!-- </div> -->
+      <!-- <div class="col-sm-12" style="background-color:lightgray;padding-left: 0px;padding-right: 1px;padding-bottom: 5px;"> -->
+      
+            <!-- <table id="auditTable" style="background-color:whitesmoke;" class="cell-border"> -->
+               <!-- <thead id="auditHeader"> -->
+                  <!-- <tr> -->
+                     <!-- <th>Username</th> -->
+                     <!-- <th>Login</th> -->
+                     <!-- <th>Logout</th> -->
+                     <!-- <th>IP Address</th> -->
+                  <!-- </tr> -->
+               <!-- </thead> -->
+               <!-- <tbody id="auditTableBody"> -->
+               <!-- </tbody> -->
+            <!-- </table> -->
+         <!-- </div> -->
+   <!-- </div> -->
+   <!-- </div> -->
+<!-- </div> -->

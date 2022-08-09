@@ -1,0 +1,20 @@
+{
+  "name": "jumpnav",
+  "description": "Fixed-position links with scrolling to content.",
+  "version": "0.9.0",
+  "author": "General Electric",
+  "main": [
+    "js/jumpnav.js",
+    "less/jumpnav.less"
+  ],
+  "ignore": [
+    ".*",
+    "Gruntfile",
+    "require.config.js"
+  ],
+  "dependencies": {
+    "ge-bootstrap": "git@github.sw.ge.com:DXC/ge-bootstrap#master",
+    "requirejs": "git://github.com/jrburke/requirejs-bower#~2.1.14",
+    "jquery": "git://github.com/components/jquery#~1.10.2"
+  }
+}

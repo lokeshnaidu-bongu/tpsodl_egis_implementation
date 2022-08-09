@@ -1,0 +1,505 @@
+########################################################################
+#% text_encoding = iso8859_1 
+######################################################################## 
+## 
+## TPSODL Implementation Project 
+## 
+## Created By:  Triveni Damarla, TCS
+## Date:  16-02-2022
+##
+## Description:
+## Service to provide objects within buffer
+########################################################################
+_package user
+$
+
+#---------------------------------------------------------------------------------
+# Class definition
+#---------------------------------------------------------------------------------
+remex(:tpsodl_features_within_buffer_service_provider)
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+def_slotted_exemplar(:tpsodl_features_within_buffer_service_provider,
+	##
+	## Service to provide objects within buffer
+	##
+	{
+		{:items,_unset }
+	},
+	{:service_provider,:gss_service_provider_mixin})
+
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+tpsodl_features_within_buffer_service_provider.define_interface( :service,
+								 :methods, { :get_buffer_collections|()|,
+									     :get_selection_features|()|,
+									     :get_trail_point_features|()|
+								 })
+$
+
+
+tpsodl_features_within_buffer_service_provider.define_shared_constant(:electric_collections,
+	##
+	## All the Required electric objects for object search 
+	##
+	equality_set.new_with("ed_cabinet",
+			      "eo_cable_segment_inst",
+			      "eo_circuit",
+			      "eo_comms_device",
+			      "eo_conduit",
+			      "eo_connector_point_inst",
+			      "eo_connector_segment_inst",
+			      "ed_decorative_pole",
+			      "eo_energy_source",
+			      "eo_energy_storage_inst",
+			      "eo_fiber_optic",
+			      "eo_isolating_eqpt_inst",
+			      "eo_measuring_eqpt_inst",
+			      "eo_meter",
+			      "ed_pole",
+			      "eo_power_xfrmr_inst",
+			      "eo_protective_eqpt_inst",
+			      "eo_service_connection",
+			      "eo_service_point",
+			      "sub_substation",
+			      "ed_switchgear",
+			      "et_tower",
+			      "eo_wire_segment_inst"),:public)
+
+$
+
+tpsodl_features_within_buffer_service_provider.define_shared_constant(:land_collections,
+	##
+	## All the Required land objects for object search 
+	##
+	equality_set.new_with(
+		"tp_tpsodl_building",
+		"tp_circle",
+		"tp_division",
+		"lnd_subdivision",
+		"lnd_section",
+		"lnd_zip",
+		"tp_locality_boundary",
+		"tp_sub_locality",
+		"tp_municipal_ward_boundary",
+		"tp_village_boundary",
+		"tp_slum_area",
+		"tp_environment",
+		"tp_flood_map",
+		"lnd_waterbody",
+		"lnd_wetland",
+		"tp_estate_land_type",
+		"tp_cluster_of_trees",
+		"tp_tree",
+		"tp_transit_area",
+		"tp_vehicle_demarcated_boundary",
+		"lnd_railroad",
+		"lnd_street",
+		"lnd_street_segment",
+		"tp_footpath",
+		"tp_right_of_way",
+		"tp_obstacle",
+		"tp_utility_points",
+		"tp_telecom",
+		"lnd_restricted_area",
+		"lnd_landmark",
+		"tp_non_builtup",
+		"tp_builtup",
+		"tp_gate",
+		"tp_green",
+		"tp_shop",
+		"tp_tpsodl_boundary",
+		"lnd_building" ),:public)
+
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+_method tpsodl_features_within_buffer_service_provider.init( a_session, properties )
+	## 
+	## Initialise the service
+	##
+	_super.init( a_session, properties )
+
+	.items << property_list.new()
+
+	.items[:electric] << gis_program_manager.cached_dataset(:electric)
+
+	.items[:land] << gis_program_manager.cached_dataset(:land)
+
+	>> _self
+
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+_method tpsodl_features_within_buffer_service_provider.get_buffer_collections( a_service_call ) 
+	## 
+	## Returns the list of collections for the given DS_NAME parameter
+	##
+	
+	_local response << a_service_call.response
+
+	l_ds_name << _self.get_service_call_parameter( a_service_call, :ds_name)
+
+	_if l_ds_name = "electric|"
+	_then
+		l_elec_coll << property_list.new()
+
+		_for a_int_name _over _self.electric_collections.fast_elements()
+		_loop
+			l_dst_coll << l_ds_name.concatenation(l_ds_name,a_int_name)
+			l_ext_name << .items[:electric].collections[a_int_name.as_symbol()].external_name
+			l_elec_coll[l_ext_name] << l_dst_coll
+		_endloop
+
+		response.set_parameter("collection_list",l_elec_coll)
+
+		_return  response
+		
+	_elif l_ds_name = "land|"
+	_then
+		l_land_coll << property_list.new()
+
+		_for a_int_name _over _self.land_collections.fast_elements()
+		_loop
+			l_dst_coll << l_ds_name.concatenation(l_ds_name,a_int_name)
+			l_ext_name << .items[:land].collections[a_int_name.as_symbol()].external_name
+			l_land_coll[l_ext_name] << l_dst_coll
+		_endloop
+
+		response.set_parameter( "collection_list",l_land_coll )
+
+		_return  response
+	_endif
+
+_endmethod
+$
+
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+_method tpsodl_features_within_buffer_service_provider.get_selection_features( a_service_call )
+	## 
+	## Returns the result list of all the selected object in the
+	## Buffer based on the criteria
+	##
+	
+	_local response << a_service_call.response
+
+	l_urn << _self.get_service_call_parameter( a_service_call, :urns_list)
+
+	l_buffer_radius << _self.get_service_call_parameter ( a_service_call , :buffer_radius )		
+
+	l_coll << _self.get_service_call_parameter(a_service_call,:collection)
+
+	l_missing_bp? << _self.get_service_call_parameter(a_service_call,:missing_bp)
+
+	l_selection << geometry_set.new()
+	
+	_if l_missing_bp?
+	_then
+		l_coll << "land|lnd_building"
+	_endif
+
+	_if l_coll = "all"
+	_then		
+		l_dataset << _unset
+		l_collection << _unset
+	_else
+		l_list << l_coll.split_by("|")
+
+		l_dataset << l_list[1].as_symbol()
+
+		l_collection << l_list[2].as_symbol()
+	_endif 
+
+	l_rwo << urn_manager.get_object_from_urn(l_urn.an_element())
+	
+	_for i_geom _over l_rwo.geometry_fields.fast_elements()
+	_loop
+		_if (l_geom << l_rwo.perform(i_geom.name)) _isnt _unset
+		_then
+			_leave
+		_endif
+	_endloop
+	
+	_if l_buffer_radius = "-1"
+	_then
+		_if l_geom.geom_type _is :point _orif
+		    l_geom.geom_type _is :simple_point _orif
+		    l_geom.geom_type _is :chain _orif
+		    l_geom.geom_type _is :simple_chain
+		_then
+			response.set_parameter("error","Please Select a Polygon Object")
+			_return response
+		_else
+			l_coord << l_rwo.bounds.centre
+			(l_features,l_area) << _self.get_features_from_polygon(l_coord,l_rwo,l_dataset,l_collection,l_missing_bp?)
+		_endif
+	_else
+		_if l_geom.geom_type _is :point _orif
+		    l_geom.geom_type _is :simple_point    
+		_then
+			l_coord << l_geom.coordinate
+			(l_features,l_area) << _self.get_features_from_buffer(l_coord,l_buffer_radius.as_number()*1000,l_dataset,l_collection,l_missing_bp?)		
+			
+		_elif l_geom.geom_type _is :chain _orif
+		      l_geom.geom_type _is :simple_chain
+		_then			
+			l_coord << l_rwo.bounds.centre
+			(l_features,l_area) << _self.get_features_from_buffer(l_coord,l_buffer_radius.as_number()*1000,l_dataset,l_collection,l_missing_bp?)
+			
+		_else
+			response.set_parameter("error","Please select point or line Object")
+			_return response
+		_endif
+	_endif
+
+	_local ace_name << _self.session.ace_name.default( :default )
+	crs << _self.session.get_coordinate_system("EPSG:900913")
+	
+	a_service_call.set_parameter(:ace_name, ace_name)
+	a_service_call.set_parameter(:feature_count,l_features.size)
+	a_service_call.set_parameter(:ace_visibility_tag,:default)
+	a_service_call.set_parameter(:crs,"EPSG:900913")
+	a_service_call.set_parameter(:result_type,"all")
+
+	_self.process_rwo_result(l_features,a_service_call,response,crs)
+
+	>> response
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+_method tpsodl_features_within_buffer_service_provider.get_trail_point_features( a_service_call )
+	## 
+	## Returns all the features within the buffer radius around the
+	## given trail point
+	
+	_local response << a_service_call.response
+
+	l_coords_list << _self.get_service_call_parameter ( a_service_call , :trail_coordinates )	
+
+	l_buffer_radius << _self.get_service_call_parameter ( a_service_call , :buffer_radius )
+	
+	l_coll << _self.get_service_call_parameter(a_service_call,:collection)
+	
+	l_missing_bp? << _self.get_service_call_parameter(a_service_call,:missing_bp)
+
+	_if l_missing_bp?
+	_then
+		l_coll << "land|lnd_building"
+	_endif
+	
+	_if l_coll = "all"
+	_then
+		l_dataset << _unset
+		l_collection << _unset
+	_else
+		l_list << l_coll.split_by("|")
+
+		l_dataset << l_list[1].as_symbol()
+
+		l_collection << l_list[2].as_symbol()
+	_endif 
+
+	_local l_parsed_coord << json_decoder.new().parse_string(l_coords_list)
+	
+	l_coord << coordinate.new(l_parsed_coord[1], l_parsed_coord[2])
+
+	(l_features,l_area) << _self.get_features_from_buffer(l_coord, l_buffer_radius.as_number()* 1000,l_dataset,l_collection,l_missing_bp?)
+
+	ace_name << _self.session.ace_name.default( :default )
+	crs << _self.session.get_coordinate_system("EPSG:900913")
+	
+	a_service_call.set_parameter(:ace_name, ace_name)	
+	a_service_call.set_parameter(:feature_count,l_features.size)
+	a_service_call.set_parameter(:ace_visibility_tag,:default)
+	a_service_call.set_parameter(:crs,"EPSG:900913")
+	a_service_call.set_parameter(:result_type,"all")
+	
+	_self.process_rwo_result(l_features,a_service_call,response,crs)
+
+	>> response
+
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+_method tpsodl_features_within_buffer_service_provider.get_features_from_buffer(p_coord,p_radius,p_dataset,p_collection,_optional missing_bp?)
+	## 
+	## Once the Buffer is created the object scanner gets the
+	## required object from that buffer radius
+	
+	l_missing_buildings << rwo_set.new()
+	
+	_if p_dataset _is _unset
+	_then
+		p_dataset << :electric
+	_endif 
+	l_view << .items[p_dataset]
+
+	l_area << p_coord.buffer(p_radius)
+
+	l_features << rwo_set.new()
+
+	ar << l_area
+	l_bounds << ar.bounds
+	
+	l_scanner << .items[p_dataset].geometry_scanner(:general)
+
+	l_scanner.start_scan(l_bounds)
+
+	_if P_collection _is _unset
+	_then 
+		_loop
+			l_geom << l_scanner.get()
+
+			_if l_geom _is _unset 
+			_then
+				_leave
+			_else
+				_try
+					_if l_geom.interacts_with?(l_area) 
+					_then					
+						l_features.add(l_geom.rwo)
+					_endif
+				_when error
+					_continue 
+				_endtry
+			_endif
+		_endloop
+	_else
+		_loop
+			l_geom << l_scanner.get()
+
+			_if l_geom _is _unset 
+			_then
+				_leave
+			_else
+				_try
+					_if l_geom.interacts_with?(l_area) _andif
+					    l_geom.rwo_type _is p_collection
+					_then					
+						l_features.add(l_geom.rwo)
+					_endif
+				_when error					
+					_continue 
+				_endtry
+				
+			_endif
+		_endloop
+	_endif
+
+	.items[p_dataset].return_scanner_to_pool(l_scanner)
+	
+	_if missing_bp?
+	_then	
+		l_features << _self.get_missing_bp_buildings(l_features)
+	_endif
+
+	>> (l_features,l_area)
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+_method tpsodl_features_within_buffer_service_provider.get_features_from_polygon(p_coord,p_rwo,p_dataset,p_collection,_optional missing_bp?)
+	## 
+	## Returns all the required objects from the selected polygon object.
+	##
+	
+	_if p_dataset _is _unset
+	_then
+		p_dataset << :electric
+	_endif
+	
+	l_missing_buildings << rwo_set.new()
+	l_view << .items[p_dataset]
+
+	l_bounds  << p_rwo.bounds
+
+	l_area << pseudo_area.new_with_sectors(p_rwo.extent.sectors)
+
+	l_features << rwo_set.new()
+
+	l_scanner << .items[p_dataset].geometry_scanner(:general)
+
+	l_scanner.start_scan(l_bounds)
+
+	_if P_collection _is _unset
+	_then
+		_loop
+			l_geom << l_scanner.get()
+
+			_if l_geom _is _unset 
+			_then
+				_leave
+			_else
+				_try
+					_if l_geom.interacts_with?(l_area) 
+					_then					
+						l_features.add(l_geom.rwo)
+					_endif
+				_when error
+					_continue 
+				_endtry
+			_endif
+		_endloop
+	_else
+		
+		_loop
+			l_geom << l_scanner.get()
+			_if l_geom _is _unset 
+			_then
+				_leave
+			_else
+				_try
+					_if l_geom.interacts_with?(l_area) _andif
+					    l_geom.rwo_type _is p_collection
+					_then
+						
+						l_features.add(l_geom.rwo)
+					_endif
+				_when error
+					_continue 
+				_endtry
+			_endif
+		_endloop
+	_endif 
+
+	_if missing_bp?
+	_then
+		l_features << _self.get_missing_bp_buildings(l_features)
+	_endif
+	
+	.items[p_dataset].return_scanner_to_pool(l_scanner)
+		
+	>> (l_features,l_area)
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_services})
+_method tpsodl_features_within_buffer_service_provider.get_missing_bp_buildings(l_features)
+	## 
+	## Returns the Missing BP Buildings
+	##
+
+	l_missing_buildings << rwo_set.new()
+	l_ev <<  _self.application.database.dataset(:electric)
+	l_meter_coll << l_ev.collections[:eo_meter]
+	
+	_for i_rwo _over l_features.elements()
+	_loop
+		l_pred << predicate.within(:location,i_rwo.extent)
+		
+		_if l_meter_coll.select(l_pred).empty?
+		_then
+			l_missing_buildings.add(i_rwo)
+		_endif
+		
+	_endloop
+
+	>> l_missing_buildings
+_endmethod
+$

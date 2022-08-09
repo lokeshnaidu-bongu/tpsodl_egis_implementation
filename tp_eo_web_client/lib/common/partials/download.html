@@ -1,0 +1,23 @@
+<section class="module sidebar-module">
+  <div class="module-body">
+    <div id="downloadList" class="download-list">
+      {{#downloads}}
+      <div class="download-item">
+        <a target="_blank" {{#href}}href="{{href}}"{{/href}} {{#clientId}}id="{{clientId}}" class="client-data"{{/clientId}}{{^clientId}} download="{{filename}}"{{/clientId}}>
+          <i class="fa fa-file-{{type}}-o fa-3x"></i>
+          <div class="file-details">
+            <div class="line1">{{title}}</div>
+            <div class="line2">{{date_time}}</div>
+          </div>
+        </a>
+      </div>
+      {{/downloads}}
+      {{^downloads}}
+      <h3 class="voice voice-brand">{{messages.download.empty_list}}</h3>
+      {{/downloads}}
+    </div>
+  </div>
+
+  <footer class="module-footer ">
+  </footer>
+</section>

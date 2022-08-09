@@ -1,0 +1,213 @@
+ul.nav-tabs {
+  border-color: darken(@blue, 11.5%);
+
+  > li {
+    &:hover > a {
+      background: @btnHoverBackground;
+      border: 1px solid @grayDarker;
+      border-bottom-color: darken(@blue, 11.5%);
+      color: @grayLight;
+    }
+
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus,
+    &.dropdown.active > a,
+    &.dropdown.active.open > a,
+    &.dropdown.active:hover > a:hover,
+    &.dropdown.open.active > a,
+    &.dropdown.open.active > a:hover,
+    &.dropdown.open.active > a:focus {
+      color: @white;
+	    border: 1px solid darken(@blue, 11.5%);
+	    #gradient > .vertical(@blue, darken(@blue, 11.5%));
+    }
+  }
+}
+
+ul.nav-tabs.nav-stacked > li {
+  > a,
+  &:hover > a {
+    border: 1px solid @grayDarker;
+    margin: 0;
+  }
+
+  &:hover > a {
+    background-color: @btnHoverBackground;
+  }
+
+  &.active > a,
+  &.active:active > a {
+    #gradient > .vertical(@blue, darken(@blue, 11.5%));
+    border-color: darken(@blue, 11.5%);
+  }
+
+  &.dropdown > a,
+  &.dropdown:hover > a {
+    border-color: transparent;
+  }
+}
+
+.tabbable,
+.tabbable.tabs-right,
+.tabbable.tabs-left,
+.tabbable.tabs-below {
+  ul.nav-tabs {
+    border-color: darken(@blue, 11.5%);
+
+    > li {
+      > a {
+        border: 1px solid transparent;
+      }
+
+      &.active > a,
+      &.active > a:hover {
+        border-color: darken(@blue, 11.5%);
+      }
+
+      &:hover > a {
+        border: 1px solid @grayDarker;
+        border-bottom-color: darken(@blue, 11.5%);
+      }
+    }
+  }
+}
+
+// Clears the blue border-bottom for all tabbable items except the default
+.tabbable.tabs-right,
+.tabbable.tabs-left,
+.tabbable.tabs-below {
+  ul.nav-tabs {
+    > li {
+      &:hover > a, {
+        border: 1px solid @grayDarker;
+      }
+    }
+  }
+}
+
+// Pills
+ul.nav-pills {
+  > li {
+    > a {
+      background: none;
+    }
+    /*> a > i[class^="icon-"],*/
+    &:hover > a:hover > i[class^="icon-"] {
+      color: @white;
+    }
+
+    &.open > a > i[class^="icon-"],
+    &.open:hover > a:hover > i[class^="icon-"] {
+      color: @white;
+    }
+
+    &:hover > a {
+      background-color: @btnHoverBackground;
+      border-color: @grayDarker;
+      color: @grayLight;
+    }
+
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus,
+    &.dropdown.open > a,
+    &.dropdown.open > a:hover {
+      color: @white;
+	    border: 1px solid darken(@blue, 11.5%);
+	    #gradient > .vertical(@blue, darken(@blue, 11.5%)) ;
+	    background-color: mix(@blue, darken(@blue, 11.5%), 60%);
+    }
+  }
+}
+
+
+// Nav list
+ul.nav-list {
+  background-color: lighten(@black, 11.5%);
+
+  li {
+    a {
+      text-shadow: none;
+    }
+
+    &:hover a {
+      background-color: @grayDarkest;
+      color: @grayLight;
+    }
+
+    &.active  a,
+    &.active  a:hover {
+      #gradient > .vertical(@blue, darken(@blue, 11.5%));
+    }
+
+    &.divider {
+      background-color: @black;
+      border-color: @black;
+    }
+  }
+}
+
+// Paging
+.pagination > li, .no-touch .pagination > li {
+  > a {
+    background: none;
+    border-color: @grayDarker;
+  }
+
+  > a:hover,
+  &:hover > a {
+    background-color: @btnHoverBackground;
+    border-color: @grayDarker;
+    color: @grayLight;
+  }
+
+  &.active > a,
+  &.active:hover > a {
+    #gradient > .vertical(@blue, darken(@blue, 11.5%));
+    background-color: mix(@blue, darken(@blue, 11.5%));
+    border-color: transparent;
+    color: @white;
+  }
+
+  &.disabled > a,
+  &.disabled:hover > a {
+    background-color: transparent;
+    color: @grayDark;
+    .opacity(.6);
+  }
+}
+
+.pager li {
+  a,
+  &.disabled a,
+  &.disabled:hover a {
+    background: none;
+    color: @grayDark;
+    border: 1px solid @grayDarker;
+  }
+
+  &.disabled a {
+    .opacity(.6);
+  }
+
+  &:hover a,
+  a:focus {
+    background-color: @btnHoverBackground;
+    color: @grayLight;
+    border-color: @grayDarkest;
+  }
+}
+
+.pager {
+  > li.active a,
+  > li.active a:hover
+  > li.active a:focus {
+    
+	     #gradient > .vertical(@blue, darken(@blue, 11.5%));
+    	background-color: mix(@blue, darken(@blue, 11.5%));
+    	border-color: transparent;
+    	color: @white;
+ 
+  	}
+ }

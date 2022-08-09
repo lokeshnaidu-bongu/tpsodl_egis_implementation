@@ -1,0 +1,17 @@
+<ul class="pagination pull-right">
+  <li class="{{#prevDisabled}}disabled {{/prevDisabled}}prev">
+    <a id="paginationLeft" data-page-target="{{prevTarget}}">
+      <i class="icon-arrow-left"></i>{{Messages.results_list.prevButton}}
+    </a>
+  </li>
+  <li class="disabled">
+    <a data-toggle="tab">
+      {{pageCount}}
+    </a>
+  </li>
+  <li class="{{#nextDisabled}}disabled {{/nextDisabled}}next">
+    <a id="paginationRight" data-page-target="{{nextTarget}}">
+      <i class="icon-arrow-right"></i>{{Messages.results_list.nextButton}}
+    </a>
+  </li>
+</ul>

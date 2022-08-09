@@ -1,0 +1,36 @@
+{
+  "base": "server_config_soap.json",
+  "externalEndpoints": {
+    "gisa_adms": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 15043,
+        "path": "/enmac/SOAP"
+      },
+      "wsdl": "./wsdl/NetworkDataSetUpdate_InBound.wsdl",
+      "soap_version": "soap11",
+      "validate_soap": false
+    }
+  },
+  "extensions": {
+    "soap": {
+      "enabled": true,
+      "soap_version": "soap12",
+      "validate_soap": true,
+      "inbound_paths": {
+        "/gss/web/services/NetworkDataSetUpdate": {
+          "wsdl": "./wsdl/NetworkDataSetUpdate_OutBound.wsdl",
+          "soap_version": "soap11",
+          "validate_soap": false
+        }
+      }
+    }
+  },
+  "paths": {
+    "/gss/web/services/NetworkDataSetUpdate": {
+      "security_roles": ["gss.guest"],
+      "auto_authenticate_client": "client_guest"
+    }
+  }
+}

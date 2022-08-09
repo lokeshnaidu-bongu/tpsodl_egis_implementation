@@ -1,0 +1,50 @@
+<div class="noselect">
+  <div class="top-results-list">
+    <div class="results-count pull-left">{{listCount}}</div>
+    <div class="pull-right results-list-controls">
+      {{#options.filter}}
+      <div class="btn filter">
+        {{#options.filterActive}}
+          {{messages.results_list.changefilterButton}}
+        {{/options.filterActive}}
+        {{^options.filterActive}}
+          {{messages.results_list.filterButton}}
+        {{/options.filterActive}}
+      </div>
+      {{/options.filter}}
+      {{#options.export.active}}
+      <div class="btn-group export">
+        <button class="btn dropdown-toggle" data-toggle="dropdown">{{messages.results_list.exportButton}}&nbsp;<i class="icon-chevron-down"></i>
+        </button>
+        <ul class="dropdown-menu pull-right">
+          {{#options.export.optionsList}}
+          <li><a href="#" data-event="{{pubEvent}}">{{name}}</a></li>
+          {{/options.export.optionsList}}
+		  <li><a href="#" data-event="exportRecordsCustomKML">Export to KML</a></li>
+		  <li><a href="#" data-event="exportRecordsCustomJSON">Export to JSON</a></li>
+        </ul>
+		
+      </div>
+      {{/options.export.active}}
+    </div>
+  </div>
+  <div class="results-list">
+    {{#results}}
+    <div class="result" data-index="{{index}}">
+      {{#showNumberBadges}}
+      <span class="badge badge-info">{{index}}</span>
+      <h3 style="display:inline-block;margin-left:10px" class="voice voice-brand">{{name}}</h3>
+      {{/showNumberBadges}}
+      {{^showNumberBadges}}
+      <h3 style="display:inline-block;margin-left:5px" class="voice voice-brand">{{name}}</h3>
+      {{/showNumberBadges}}
+      <div class="attributes">
+        {{#attributes}}
+        <div class="attribute" title="{{key}}">{{value}}</div>
+        {{/attributes}}
+      </div>
+    </div>
+    {{/results}} {{^results}} {{messages.results_list.noResults}} {{/results}}
+  </div>
+  <div id="results-page-controls"></div>
+</div>

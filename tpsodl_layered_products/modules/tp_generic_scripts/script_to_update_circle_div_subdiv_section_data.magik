@@ -1,0 +1,181 @@
+
+_block
+
+	_local tp_installation_colls << rope.new_with(
+#						:eo_isolating_eqpt_inst,
+#						:eo_connector_segment_inst,
+#						:eo_cable_segment_inst,
+#						:eo_connector_point_inst,
+#						:eo_power_xfrmr_inst,
+#						:eo_measuring_eqpt_inst,
+#						:eo_protective_eqpt_inst,
+#						:eo_energy_storage_inst,
+#						:eo_regulating_eqpt_inst,
+#						:eo_wire_segment_inst,
+						:eo_meter
+#						:et_tower,
+#						:ed_decorative_pole,
+#						:eo_service_point,
+#						:ed_cabinet,
+#						:sub_substation,
+#						:ed_pole
+					     )
+
+	_local l_elec_view << gis_program_manager.cached_dataset(:electric)
+	_local l_land_view << gis_program_manager.cached_dataset(:land)
+	_local l_muncipal_ward_bound_coll << l_land_view.collections[:tp_municipal_ward_boundary]
+	_local l_subdiv_coll << l_land_view.collections[:lnd_subdivision]
+	_local l_div_coll << l_land_view.collections[:tp_division]
+	_local l_sec_coll << l_land_view.collections[:lnd_section]
+	_local l_circle_coll << l_land_view.collections[:tp_circle]
+	_local l_road_cent_coll << l_land_view.collections[:lnd_street_segment]
+	_local l_city_coll << l_land_view.collections[:lnd_city]
+	_local l_locality_bound_coll << l_land_view.collections[:tp_locality_boundary]
+	_local l_sub_locality_coll << l_land_view.collections[:tp_sub_locality]
+	_local l_coll_name,l_ev_colls,l_record,l_geom
+	_local l_pred_ext,l_pred_rt,l_sub_div,l_div,l_sec,l_circle,l_road_cent,l_city,l_locality_bound,l_sub_locality
+	
+	_try _with cond
+		
+		_for a_coll_name _over tp_installation_colls.fast_elements()
+		_loop
+
+			l_ev_colls << l_elec_view.collections[a_coll_name]
+
+			_for a_rec _over l_ev_colls.fast_elements()
+			_loop
+				l_coll_name << a_rec.source_collection.name 
+				l_record << a_rec
+				
+				_if l_record.cs_default_geometry_name _isnt _unset _andif
+				    l_record.default_geometry _isnt _unset
+				_then
+					
+					_if l_record.default_geometry.geom_type _is :point
+					_then
+						_if l_record.source_collection.name _is :eo_measuring_eqpt_inst
+						_then
+							l_geom << l_record.source_location
+						_else
+							l_geom << l_record.location
+						_endif
+						
+					_elif  l_record.default_geometry.geom_type _is :chain
+					_then
+						_if l_record.source_collection.name _is :eo_isolating_eqpt_inst
+						_then
+							l_geom << l_record.connector
+						_else
+							l_geom << l_record.route
+						_endif
+						
+					_elif l_record.default_geometry.geom_type _is :area _or l_record.default_geometry.geom_type _is :simple_area
+					_then
+						l_geom << l_record.extent
+						
+					_endif 
+
+				_else
+					_if l_coll_name _is :sub_substation _or l_coll_name _is :ed_cabinet
+					_then
+						l_geom << l_record.extent
+					_endif
+				_endif
+				
+				_if l_geom _isnt _unset
+				_then
+					
+					l_pred_ext << predicate.interacts(:extent,l_geom)
+					l_pred_rt << predicate.interacts(:route,l_geom)
+					l_muncipal_ward_bound << l_muncipal_ward_bound_coll.select(l_pred_ext).an_element()	
+					l_sub_div << l_subdiv_coll.select(l_pred_ext).an_element()
+					l_div << l_div_coll.select(l_pred_ext).an_element()
+					l_sec << l_sec_coll.select(l_pred_ext).an_element()
+					l_circle << l_circle_coll.select(l_pred_ext).an_element()
+					l_road_cent << l_road_cent_coll.select(l_pred_rt).an_element()
+					l_city << l_city_coll.select(l_pred_ext).an_element()
+					l_locality_bound << l_locality_bound_coll.select(l_pred_ext).an_element()
+					l_sub_locality << l_sub_locality_coll.select(l_pred_ext).an_element()
+
+#					_if l_muncipal_ward_bound _isnt _unset _andif
+#					    l_record.field(:tp_ward_code) _isnt _unset 
+#					_then
+#						l_record.tp_ward_code << l_muncipal_ward_bound.tp_ward_code
+#					_endif
+
+#					_if l_road_cent _isnt _unset _andif
+#					    l_record.field(:tp_road_name) _isnt _unset 
+#					_then 
+#						l_record.tp_road_name << l_road_cent.tp_name.default("")
+#					_endif
+#					_if l_city _isnt _unset _andif
+#					    l_record.field(:tp_city) _isnt _unset 
+#					_then 
+#						l_record.tp_city << l_city.tp_name.default("")
+#					_endif
+#					_if l_locality_bound _isnt _unset _andif
+#					    l_record.field(:tp_locality) _isnt _unset 
+#					_then 
+#						l_record.tp_locality << l_locality_bound.tp_name.default("")
+#					_endif
+#					_if l_sub_locality _isnt _unset _andif
+#					    l_record.field(:tp_sub_locality) _isnt _unset 
+#					_then 
+#						l_record.tp_sub_locality << l_sub_locality.tp_name.default("")
+#					_endif
+					_if l_circle _isnt _unset _andif
+					    l_record.field(:tp_circle_name) _isnt _unset 
+					_then 
+						l_record.tp_circle_name << l_circle.tp_name.default("")
+					_endif
+#					_if l_circle _isnt _unset _andif
+#					    l_record.field(:tp_circle_code) _isnt _unset 
+#					_then
+#						
+#						l_record.tp_circle_code << l_circle.tp_circle_code.default("")
+#					_endif
+					_if l_sub_div _isnt _unset _andif
+					    l_record.field(:tp_sub_division_name) _isnt _unset 
+					_then 
+						l_record.tp_sub_division_name << l_sub_div.name.default("")
+					_endif
+					##need to uncomment it once this field available.
+					#			_if l_sub_div _isnt _unset _andif
+					#			    l_record.field(:tp_sub_division_code) _isnt _unset 
+					#			_then
+					#				l_record.tp_sub_division_code << l_sub_div.tp_sub_division_code.default("")
+					#			_endif
+
+					_if l_div _isnt _unset _andif
+					    l_record.field(:tp_division_name) _isnt _unset 
+					_then
+						l_record.tp_division_name << l_div.tp_name.default("")
+					_endif
+#					_if l_div _isnt _unset _andif
+#					    l_record.field(:tp_division_code) _isnt _unset 
+#					_then
+#						
+#						l_record.tp_division_code << l_div.tp_division_code.default("")
+#					_endif
+					
+					_if l_sec _isnt _unset _andif
+					    l_record.field(:tp_section_name) _isnt _unset 
+					_then	
+						l_record.tp_section_name << l_sec.tp_name.default("")
+					_endif 	
+#					_if l_sec _isnt _unset _andif
+#					    l_record.field(:tp_section_code) _isnt _unset 
+#					_then
+#						l_record.tp_section_code << l_sec.tp_section_code.default("")
+#					_endif
+				_endif
+			_endloop
+
+		_endloop
+		
+	_when error 
+		write("+++ Error Occured...  +++")
+		
+	_endtry
+
+_endblock

@@ -1,0 +1,249 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf8">
+      <link href="../css/ge-bootstrap-iidx.min.css" rel="stylesheet">
+      <link href="../ge-bootstrap-iidx.min.css" rel="stylesheet">
+      <script src="../ge-bootstrap.min.js"></script>
+  </head>
+  <body style="margin: 50px;">
+
+  <input type="text" placeholder="Text input">
+  
+  <br><br>
+  Disabled:<br />
+  <input type="text" placeholder="disabled" disabled>
+  <input type="text" placeholder="readonly" readonly>
+  <select type="text" placeholder="disabled" disabled><option value="#">Text</option><option value="#">Text</option></select>
+  <select type="text" placeholder="readonly" readonly><option value="#">Text</option><option value="#">Text</option></select>
+  <textarea rows="3" placeholder="disabled" disabled></textarea>
+  <textarea rows="3" placeholder="readonly" readonly></textarea>
+  
+  <br><br>
+  
+  <textarea rows="3"></textarea>
+  
+  <br><br>
+  
+  <label class="checkbox">
+    <input type="checkbox" value="">
+    Option one is this and that—be sure to include why it's great
+  </label>
+  
+  <br>
+  
+  <label class="radio">
+    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+    Option one is this and that—be sure to include why it's great
+  </label>
+  <label class="radio">
+    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+    Option two can be something else and selecting it will deselect option one
+  </label>
+  
+  <br>
+  
+  <label class="checkbox inline">
+    <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+  </label>
+  <label class="checkbox inline">
+    <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
+  </label>
+  <label class="checkbox inline">
+    <input type="checkbox" id="inlineCheckbox3" value="option3"> 3
+  </label>
+  
+  <br><br>
+  
+  <select>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+  </select>
+  
+  <br>
+  
+  <select multiple="multiple">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+  </select>
+
+  <hr>
+
+  <form>
+    <fieldset>
+      <legend>Legend</legend>
+      <label>Label name</label>
+      <input type="text" placeholder="Type something…">
+      <span class="help-block">Example block-level help text here.</span>
+      <label class="checkbox">
+        <input type="checkbox"> Check me out
+      </label>
+      <button type="submit" class="btn">Submit</button>
+    </fieldset>
+  </form>
+
+  <hr>
+
+  <form class="form-inline">
+    <input type="text" class="input-small" placeholder="Email">
+    <input type="password" class="input-small" placeholder="Password">
+    <label class="checkbox">
+      <input type="checkbox"> Remember me
+    </label>
+    <button type="submit" class="btn">Sign in</button>
+  </form>
+
+  <hr>
+
+  <form class="form-horizontal">
+    <div class="control-group">
+      <label class="control-label" for="inputEmail">Email</label>
+      <div class="controls">
+        <input type="text" id="inputEmail" placeholder="Email">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputPassword">Password</label>
+      <div class="controls">
+        <input type="password" id="inputPassword" placeholder="Password">
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox"> Remember me
+        </label>
+        <button type="submit" class="btn">Sign in</button>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+
+  <form class="form-inline">
+    <div class="input-append">
+      <input type="text" class="input-medium search-query"><button type="submit" class="btn btn-icon"><i class="icon-search"></i></button>
+    </div>
+  </form>
+
+  <hr>
+
+  <div class="input-prepend">
+    <span class="add-on">@</span>
+    <input class="span2" id="prependedInput" type="text" placeholder="Username">
+  </div>
+
+  <div class="input-append">
+    <input class="span2" id="appendedInput" type="text">
+    <span class="add-on">.00</span>
+  </div>  
+
+  <div class="input-prepend input-append">
+    <span class="add-on">$</span>
+    <input class="span2" id="appendedPrependedInput" type="text">
+    <span class="add-on">.00</span>
+  </div>
+
+  <div class="input-append">
+    <input class="span2" id="appendedInputButton" type="text">
+    <button class="btn" type="button">Go!</button>
+  </div>
+
+  <div class="input-append">
+    <input class="span2" id="appendedInputButtons" type="text">
+    <button class="btn" type="button">Search</button>
+    <button class="btn" type="button">Options</button>
+  </div>
+
+  <div class="input-append">
+    <input class="span2" id="appendedDropdownButton" type="text">
+    <div class="btn-group">
+      <button class="btn dropdown-toggle" data-toggle="dropdown">
+        Action
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        ...
+      </ul>
+    </div>
+  </div>
+
+  <div class="input-prepend">
+    <div class="btn-group">
+      <button class="btn dropdown-toggle" data-toggle="dropdown">
+        Action
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        ...
+      </ul>
+    </div>
+    <input class="span2" id="prependedDropdownButton" type="text">
+  </div>
+
+  <hr>
+
+  <span class="input-xlarge uneditable-input">Some value here</span>
+
+  <hr>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Save changes</button>
+    <button type="button" class="btn">Cancel</button>
+  </div>
+
+  <hr>
+
+  <input type="text"><span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+
+  <hr>
+
+  <form class="form-horizontal">
+    <div class="control-group warning">
+      <label class="control-label" for="inputWarning">Input with warning</label>
+      <div class="controls">
+        <input type="text" id="inputWarning">
+        <span class="help-inline">Something may have gone wrong</span>
+      </div>
+    </div>
+     
+    <div class="control-group error">
+      <label class="control-label" for="inputError">Input with error</label>
+      <div class="controls">
+        <input type="text" id="inputError">
+        <span class="help-inline">Please correct the error</span>
+      </div>
+    </div>
+     
+    <div class="control-group info">
+      <label class="control-label" for="inputInfo">Input with info</label>
+      <div class="controls">
+        <input type="text" id="inputInfo">
+        <span class="help-inline">Username is already taken</span>
+      </div>
+    </div>
+     
+    <div class="control-group success">
+      <label class="control-label" for="inputSuccess">Input with success</label>
+      <div class="controls">
+        <input type="text" id="inputSuccess">
+        <span class="help-inline">Woohoo!</span>
+      </div>
+    </div>
+  </form>
+  <script src="../components/requirejs/require.js"></script>
+  <script src="../js/require.config.js"></script>
+  <script type="text/javascript">
+    requirejs.config({
+      baseUrl: "../"
+    });
+    require(['ge-bootstrap']);
+  </script>
+  </body>
+</html>

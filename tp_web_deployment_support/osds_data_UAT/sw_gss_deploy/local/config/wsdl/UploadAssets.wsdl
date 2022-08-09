@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="UploadAssetsService" targetNamespace="http://services.sbi.gesmallworld.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://services.sbi.gesmallworld.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema targetNamespace="http://services.sbi.gesmallworld.com/" version="1.0" xmlns:tns="http://services.sbi.gesmallworld.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="assets" type="tns:assets"/>
+<xs:element name="readAssetsDTO" type="tns:readAssetsDTO"/>
+<xs:element name="uploadAssetsDTO" type="tns:uploadAssetsDTO"/>
+<xs:complexType name="assets">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="inserts" type="xs:anyType"/>
+      <xs:element minOccurs="0" name="updates" type="xs:anyType"/>
+      <xs:element minOccurs="0" name="deletes" type="xs:anyType"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="uploadAssetsDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="filename" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="readAssetsDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="filename" type="xs:string"/>
+      <xs:element minOccurs="0" name="content" type="xs:string"/>
+      <xs:element minOccurs="0" name="error" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="uploadDesignAssets">
+    <wsdl:part name="assets" type="tns:assets">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="uploadDesignAssetsResponse">
+    <wsdl:part name="return" type="tns:uploadAssetsDTO">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="read">
+    <wsdl:part name="filename" type="xsd:string">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="readResponse">
+    <wsdl:part name="return" type="tns:readAssetsDTO">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UploadAssets">
+    <wsdl:operation name="uploadDesignAssets">
+      <wsdl:input message="tns:uploadDesignAssets" name="uploadDesignAssets">
+    </wsdl:input>
+      <wsdl:output message="tns:uploadDesignAssetsResponse" name="uploadDesignAssetsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="read">
+      <wsdl:input message="tns:read" name="read">
+    </wsdl:input>
+      <wsdl:output message="tns:readResponse" name="readResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UploadAssetsServiceSoapBinding" type="tns:UploadAssets">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="uploadDesignAssets">
+      <soap:operation soapAction="" style="rpc"/>
+      <wsdl:input name="uploadDesignAssets">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="uploadDesignAssetsResponse">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="read">
+      <soap:operation soapAction="" style="rpc"/>
+      <wsdl:input name="read">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="readResponse">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UploadAssetsService">
+    <wsdl:port binding="tns:UploadAssetsServiceSoapBinding" name="UploadAssetsDAOImplPort">
+      <soap:address location="http://localhost:8181/cxf/UploadAssets"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,97 @@
+#% text_encoding = iso8859_1
+_package sw
+
+##
+## This script can be started from a closed session, or an open one, i.e. with
+## an open database.  open_eo_db_for_upgrade() is called at the top of the file. 
+## This opens the db if not already open and moves all sub-alternatives to top as
+## we do NOT want any datasets upgraded in sub-alternatives of Top.
+##
+## It requires 2 environment variables to be set
+## - SW_ACE_DB_DIR
+##   location of the ACE of the database to be upgraded
+##   This will be opened if no database has yet been opened.
+## - EO_SOURCE_DB_VERSION
+##   The version that the database is at prior to it being upgraded.
+##
+## The database will be checked for a correct set of installable
+## implementers and upgraded.
+##
+## Key feedback to look for:
+##   "Status of expected implementers:"
+##   "The following implementers are installable but are not..."
+##
+## A global variable, eng, will be created that will reference an instance of
+## a datamodel_engine that is used to apply the upgrade.  It can then be used
+## within the same session, e.g. to perform an undo.
+##
+
+_global eo_upgrades << _unset
+$
+
+_block
+	write("Running ", !source_file!)
+
+	# These environment variable must be set in the session:
+	_local env_vals << scripted_upgrade_helper.parse_environment_variables(
+		{"EO_SOURCE_DB_VERSION", :number, _true},
+		{"SW_ACE_DB_DIR", :string, _true}
+	)
+	_global eo_upgrades
+	eo_upgrades << rope.new_with( {:eo_implementer, env_vals["EO_SOURCE_DB_VERSION"]})
+_endblock
+$
+
+_block
+	_local mod_dir << sw_module_manager.module(:eo_implementer).full_directory
+	_local config_file << system.pathname_down(mod_dir, "scripts", "configure_upgrades.magik")
+	load_file(config_file)
+	
+	_if scripted_upgrade_helper.configured_for_expected_implementers?(_scatter eo_upgrades) _isnt _true
+	_then
+		write("Aborting")
+		!abort!()
+	_endif
+	
+_endblock
+$
+
+_block
+	# Stop millions of unnecessary information messages
+	_handling sw_module_information _with procedure
+	open_eo_db_for_upgrade()
+	
+	#Create a datamodel engine with added DM implementers to check our DB and then upgrade it 
+	#Assign it to a global variable so as to be available in the session afterwards for any further processing
+	_global eng
+	_local imps << implementers_for_eo_upgrade()
+	eng << datamodel_engine.new(:implementers, imps)
+
+	write(newline_char, "Checking current status of DB before upgrade...")
+	_if _not scripted_upgrade_helper.confirm_installable_implementers( eng, _scatter eo_upgrades)
+	_then
+		write("Aborting")
+		write("Run eng.print_installation_status() for further details")
+		!abort!()
+	_endif
+	write("Do not be alarmed with an unexpected installable implementer with one of the following sub_datamodel_names:",
+		newline_char, "eo_table_code, eo_foreign_key_indices, adds style subcode enums",
+		newline_char, "They are dynamically registered, see proc, dynamic_upgrade_implementers()")
+	
+	#Now run the upgrade
+	write(newline_char, "Upgrade starting...")
+	eng.install_database_changes()
+	eng.print_installation_status()
+	
+	write(newline_char, "Checking current status of DB after upgrade...")
+	_if scripted_upgrade_helper.confirm_installed_implementers( eng, _scatter eo_upgrades)
+	_then 
+		write("The upgrade of EO database finished successfully")
+	_else 
+		write("Warning: The upgrade of EO database failed!")
+	_endif
+	write("Run eng.print_installation_status() for further details")
+	
+_endblock
+$
+

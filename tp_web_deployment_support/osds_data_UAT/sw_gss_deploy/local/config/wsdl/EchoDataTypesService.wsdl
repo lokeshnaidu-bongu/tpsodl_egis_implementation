@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+  xmlns:ns1="http://org.apache.axis2/xsd" 
+  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" 
+  xmlns:ax21="http://util.java/xsd" 
+  xmlns:ns="http://echoDataTypes.webservice.gss" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://echoDataTypes.webservice.gss">
+  <wsdl:types>
+    <xs:schema xmlns:ax22="http://util.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://echoDataTypes.webservice.gss">
+      <xs:import namespace="http://util.java/xsd"/>
+
+      <xs:complexType name="WSCoordinate">
+        <xs:sequence maxOccurs="1" minOccurs="1">
+          <xs:element maxOccurs="1" minOccurs="1" name="x" type="xs:double"/>
+          <xs:element maxOccurs="1" minOccurs="1" name="y" type="xs:double"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="echoCoordinate" type="ns:WSCoordinate">
+      </xs:element>
+      <xs:element name="echoCoordinateResponse" type="ns:WSCoordinate">
+      </xs:element>
+
+      <xs:element name="echoBoolean">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoBooleanResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoDouble">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0" type="xs:double"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoDoubleResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:double"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoInt">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoIntResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:int"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoString">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoStringResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoStringArray">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="param0" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoStringArrayResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoCalendar">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0" nillable="true" type="xs:dateTime"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoCalendarResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:dateTime"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoAnyType">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0" type="xs:anyType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoAnyTypeResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:anyType"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoComplexSequence">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="intVal" type="xs:int"/>
+                  <xs:element name="stringVal" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoComplexSequenceResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="intVal" type="xs:int"/>
+                  <xs:element name="stringVal" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoComplexSimpleElementAndAttribute">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="stringVal" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="attribute0" type="xs:string"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoComplexSimpleElementAndAttributeResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="stringVal" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="attribute0" type="xs:string"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoComplexSimpleElementExtension">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute name="attribute0" type="xs:string" use="required"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoComplexSimpleElementExtensionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute name="attribute0" type="xs:string" use="required"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="complexSequence">
+        <xs:sequence>
+          <xs:element name="intVal" type="xs:int"/>
+          <xs:element name="stringVal" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="echoComplexList">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="param0" type="ns:complexSequence" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="echoComplexListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="return" type="ns:complexSequence" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="echoCoordinateResponse">
+    <wsdl:part name="response" element="ns:echoCoordinateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoCoordinateRequest">
+    <wsdl:part name="parameters" element="ns:echoCoordinate"/>
+  </wsdl:message>
+  <wsdl:message name="echoDoubleRequest">
+    <wsdl:part name="parameters" element="ns:echoDouble"/>
+  </wsdl:message>
+  <wsdl:message name="echoDoubleResponse">
+    <wsdl:part name="parameters" element="ns:echoDoubleResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoIntRequest">
+    <wsdl:part name="parameters" element="ns:echoInt"/>
+  </wsdl:message>
+  <wsdl:message name="echoIntResponse">
+    <wsdl:part name="parameters" element="ns:echoIntResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoCalendarRequest">
+    <wsdl:part name="parameters" element="ns:echoCalendar"/>
+  </wsdl:message>
+  <wsdl:message name="echoCalendarResponse">
+    <wsdl:part name="parameters" element="ns:echoCalendarResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoStringArrayRequest">
+    <wsdl:part name="parameters" element="ns:echoStringArray"/>
+  </wsdl:message>
+  <wsdl:message name="echoStringArrayResponse">
+    <wsdl:part name="parameters" element="ns:echoStringArrayResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoBooleanRequest">
+    <wsdl:part name="parameters" element="ns:echoBoolean"/>
+  </wsdl:message>
+  <wsdl:message name="echoBooleanResponse">
+    <wsdl:part name="parameters" element="ns:echoBooleanResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoStringRequest">
+    <wsdl:part name="parameters" element="ns:echoString"/>
+  </wsdl:message>
+  <wsdl:message name="echoStringResponse">
+    <wsdl:part name="parameters" element="ns:echoStringResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoAnyTypeRequest">
+    <wsdl:part name="parameters" element="ns:echoAnyType"/>
+  </wsdl:message>
+  <wsdl:message name="echoAnyTypeResponse">
+    <wsdl:part name="parameters" element="ns:echoAnyTypeResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexSequenceRequest">
+    <wsdl:part name="parameters" element="ns:echoComplexSequence"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexSequenceResponse">
+    <wsdl:part name="parameters" element="ns:echoComplexSequenceResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexSimpleElementAndAttributeRequest">
+    <wsdl:part name="parameters" element="ns:echoComplexSimpleElementAndAttribute"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexSimpleElementAndAttributeResponse">
+    <wsdl:part name="parameters" element="ns:echoComplexSimpleElementAndAttributeResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexSimpleElementExtensionRequest">
+    <wsdl:part name="parameters" element="ns:echoComplexSimpleElementExtension"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexSimpleElementExtensionResponse">
+    <wsdl:part name="parameters" element="ns:echoComplexSimpleElementExtensionResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexListRequest">
+    <wsdl:part name="parameters" element="ns:echoComplexList"/>
+  </wsdl:message>
+  <wsdl:message name="echoComplexListResponse">
+    <wsdl:part name="parameters" element="ns:echoComplexListResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="EchoDataTypesPortType">
+    <wsdl:operation name="echoCoordinate">
+      <wsdl:input message="ns:echoCoordinateRequest" wsaw:Action="urn:echoCoordinateRequest"/>
+      <wsdl:output message="ns:echoCoordinateResponse" wsaw:Action="urn:echoCoordinateResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoDouble">
+      <wsdl:input message="ns:echoDoubleRequest" wsaw:Action="urn:echoDouble"/>
+      <wsdl:output message="ns:echoDoubleResponse" wsaw:Action="urn:echoDoubleResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoInt">
+      <wsdl:input message="ns:echoIntRequest" wsaw:Action="urn:echoInt"/>
+      <wsdl:output message="ns:echoIntResponse" wsaw:Action="urn:echoIntResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoCalendar">
+      <wsdl:input message="ns:echoCalendarRequest" wsaw:Action="urn:echoCalendar"/>
+      <wsdl:output message="ns:echoCalendarResponse" wsaw:Action="urn:echoCalendarResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoStringArray">
+      <wsdl:input message="ns:echoStringArrayRequest" wsaw:Action="urn:echoStringArray"/>
+      <wsdl:output message="ns:echoStringArrayResponse" wsaw:Action="urn:echoStringArrayResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoBoolean">
+      <wsdl:input message="ns:echoBooleanRequest" wsaw:Action="urn:echoBoolean"/>
+      <wsdl:output message="ns:echoBooleanResponse" wsaw:Action="urn:echoBooleanResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoString">
+      <wsdl:input message="ns:echoStringRequest" wsaw:Action="urn:echoString"/>
+      <wsdl:output message="ns:echoStringResponse" wsaw:Action="urn:echoStringResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoAnyType">
+      <wsdl:input message="ns:echoAnyTypeRequest" wsaw:Action="urn:echoAnyType"/>
+      <wsdl:output message="ns:echoAnyTypeResponse" wsaw:Action="urn:echoAnyTypeResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSequence">
+      <wsdl:input message="ns:echoComplexSequenceRequest" wsaw:Action="urn:echoComplexSequence"/>
+      <wsdl:output message="ns:echoComplexSequenceResponse" wsaw:Action="urn:echoComplexSequenceResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementAndAttribute">
+      <wsdl:input message="ns:echoComplexSimpleElementAndAttributeRequest" wsaw:Action="urn:echoComplexSimpleElementAndAttribute"/>
+      <wsdl:output message="ns:echoComplexSimpleElementAndAttributeResponse" wsaw:Action="urn:echoComplexSimpleElementAndAttributeResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementExtension">
+      <wsdl:input message="ns:echoComplexSimpleElementExtensionRequest" wsaw:Action="urn:echoComplexSimpleElementExtension"/>
+      <wsdl:output message="ns:echoComplexSimpleElementExtensionResponse" wsaw:Action="urn:echoComplexSimpleElementExtensionResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexList">
+      <wsdl:input message="ns:echoComplexListRequest" wsaw:Action="urn:echoComplexList"/>
+      <wsdl:output message="ns:echoComplexListResponse" wsaw:Action="urn:echoComplexListResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EchoDataTypesSoap11Binding" type="ns:EchoDataTypesPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="echoCoordinate">
+      <soap:operation soapAction="urn:echoCoordinate" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoDouble">
+      <soap:operation soapAction="urn:echoDouble" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoInt">
+      <soap:operation soapAction="urn:echoInt" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoCalendar">
+      <soap:operation soapAction="urn:echoCalendar" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoBoolean">
+      <soap:operation soapAction="urn:echoBoolean" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoStringArray">
+      <soap:operation soapAction="urn:echoStringArray" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoString">
+      <soap:operation soapAction="urn:echoString" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoAnyType">
+      <soap:operation soapAction="urn:echoAnyType" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSequence">
+      <soap:operation soapAction="urn:echoComplexSequence" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementAndAttribute">
+      <soap:operation soapAction="urn:echoComplexSimpleElementAndAttribute" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementExtension">
+      <soap:operation soapAction="urn:echoComplexSimpleElementExtension" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexList">
+      <soap:operation soapAction="urn:echoComplexList" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="EchoDataTypesSoap12Binding" type="ns:EchoDataTypesPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="echoCoordinate">
+      <soap12:operation soapAction="urn:echoCoordinate" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoDouble">
+      <soap12:operation soapAction="urn:echoDouble" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoInt">
+      <soap12:operation soapAction="urn:echoInt" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoCalendar">
+      <soap12:operation soapAction="urn:echoCalendar" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoBoolean">
+      <soap12:operation soapAction="urn:echoBoolean" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoStringArray">
+      <soap12:operation soapAction="urn:echoStringArray" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoString">
+      <soap12:operation soapAction="urn:echoString" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoAnyType">
+      <soap12:operation soapAction="urn:echoAnyType" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSequence">
+      <soap12:operation soapAction="urn:echoComplexSequence" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementAndAttribute">
+      <soap12:operation soapAction="urn:echoComplexSimpleElementAndAttribute" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementExtension">
+      <soap12:operation soapAction="urn:echoComplexSimpleElementExtension" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexList">
+      <soap12:operation soapAction="urn:echoComplexList" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="EchoDataTypesHttpBinding" type="ns:EchoDataTypesPortType">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="echoCoordinate">
+      <http:operation location="EchoDataTypes/echoCoordinate"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoCoordinate"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoCoordinate"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoDouble">
+      <http:operation location="EchoDataTypes/echoDouble"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoDouble"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoDouble"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoInt">
+      <http:operation location="EchoDataTypes/echoInt"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoInt"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoInt"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoCalendar">
+      <http:operation location="EchoDataTypes/echoCalendar"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoCalendar"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoCalendar"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoBoolean">
+      <http:operation location="EchoDataTypes/echoBoolean"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoBoolean"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoBoolean"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoStringArray">
+      <http:operation location="EchoDataTypes/echoStringArray"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoStringArray"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoStringArray"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoString">
+      <http:operation location="EchoDataTypes/echoString"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoString"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoString"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoAnyType">
+      <http:operation location="EchoDataTypes/echoAnyType"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoAnyType"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoAnyType"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSequence">
+      <http:operation location="EchoDataTypes/echoComplexSequence"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoComplexSequence"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoComplexSequence"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementAndAttribute">
+      <http:operation location="EchoDataTypes/echoComplexSimpleElementAndAttribute"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoComplexSimpleElementAndAttribute"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoComplexSimpleElementAndAttribute"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexSimpleElementExtension">
+      <http:operation location="EchoDataTypes/echoComplexSimpleElementExtension"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoComplexSimpleElementExtension"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoComplexSimpleElementExtension"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="echoComplexList">
+      <http:operation location="EchoDataTypes/echoComplexList"/>
+      <wsdl:input>
+        <mime:content type="text/xml" part="echoComplexList"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="echoComplexList"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EchoDataTypesService">
+    <wsdl:port name="EchoDataTypesHttpSoap11Endpoint" binding="ns:EchoDataTypesSoap11Binding">
+      <soap:address location="http://localhost:3001/gss/web/services/EchoDataTypesService/EchoDataTypesHttpSoap11Endpoint"/>
+    </wsdl:port>
+    <wsdl:port name="EchoDataTypesHttpSoap12Endpoint" binding="ns:EchoDataTypesSoap12Binding">
+      <soap12:address location="http://localhost:3001/gss/web/services/EchoDataTypesService/EchoDataTypesHttpSoap12Endpoint"/>
+    </wsdl:port>
+    <wsdl:port name="EchoDataTypesHttpEndpoint" binding="ns:EchoDataTypesHttpBinding">
+      <http:address location="http://localhost:3001/gss/web/services/EchoDataTypesService/EchoDataTypesHttpEndpoint"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

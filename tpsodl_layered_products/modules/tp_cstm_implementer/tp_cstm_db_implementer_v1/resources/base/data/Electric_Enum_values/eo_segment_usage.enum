@@ -1,0 +1,15 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+EHV Feeder	3
+MV Feeder	9
+HV Feeder	11
+Jumper	4
+LV Feeder	5
+Others	6
+Service Line	7
+Street Light	8
+Control Cable	2

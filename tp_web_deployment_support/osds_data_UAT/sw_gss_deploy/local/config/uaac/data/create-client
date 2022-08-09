@@ -1,0 +1,7 @@
+CLIENT_NAME|SECRET|SCOPES|AUTHORITIES|AUTHORIZED_GRANT_TYPES
+client_admin|client_admin|gss.admin, all.assets|gss.admin, all.assets|client_credentials
+client_user|client_user|gss.user, shared.assets|gss.user, shared.assets|client_credentials
+client_both|client_both|gss.user, gss.admin, all.assets|gss.user, gss.admin, all.assets|client_credentials
+client_none|client_none|||client_credentials
+client_north|client_north|gss.user, opco.north, shared.assets|gss.user, opco.north, shared.assets|client_credentials
+client_west|client_west|gss.user, opco.west, shared.assets|gss.user, opco.west, shared.assets|client_credentials

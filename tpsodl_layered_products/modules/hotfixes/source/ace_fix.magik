@@ -1,0 +1,23 @@
+_pragma(classify_level=restricted)
+_method application.ace
+##
+## Returns the application's ace.
+##
+
+
+
+>> _if _self.properties _isnt _unset _andif
+_self.ace_name _isnt _unset _andif
+get_global_value(:gis_program_manager) _isnt _unset
+_then
+the_ace << gis_program_manager.ace( :|EO| )
+_if the_ace _is _unset
+_then
+#condition.raise(:application_ace_not_found,
+#:ace_name, _self.ace_name )
+_endif
+>> the_ace
+_endif
+
+_endmethod
+$

@@ -1,0 +1,71 @@
+#% text_encoding = iso8859_1
+
+_block
+	##
+	## This script will query the product histories of the datasets of an EO
+	## database, for the CYMDIST product, checking that a number of datamodels have
+	## been installed and are between the minimum and maximum versions required at
+	## the current release.
+	##
+	## This script is relevant for both newly created databases and older ones that
+	## have been upgraded.
+	##
+	smallworld_product.add_product("D:\EO_528\CYMDIST_Office")
+	smallworld_product.load_module(:cymdist_implementer)
+	smallworld_product.load_module(:cymdist_ace_implementer)
+	smallworld_product.load_module(:cymdist_style_implementer)
+	smallworld_product.load_module(:cymdist_datamodel_implementer)
+	_local ace_view     << gis_program_manager.ace_top_view
+	_local style_view   << gis_program_manager.style_view
+	_local cymdist_view << gis_program_manager.databases[:cymdist]
+
+	_local views_property_list << property_list.new_with(
+		"ace view",     ace_view,
+		"cymdist_view", cymdist_view,
+		"style view",   style_view )
+
+	_for view_name,view _over views_property_list.fast_keys_and_elements()
+	_loop
+		_if view _is _unset
+		_then 
+			write(view_name," ERROR - view does not exist. Aborting...")
+			!abort!()
+		_endif
+	_endloop
+	
+	_local expected_datamodel_versions <<
+		property_list.new_with(
+			cymdist_view,
+			{
+				# Min & max versions are included.  This fixes the versions, but should force
+				# anyone who introduces a new implementer to configure it in correctly.
+				{:office_cymdist, :cymdist_datamodel_implementer, :cymdist_datamodel, 2, 2}
+		},
+			ace_view,
+			{
+				{:office_cymdist, :cymdist_ace_implementer, :cymdist_eo_ace, 2, 2}
+		},
+			style_view,
+			{
+				{:office_cymdist, :cymdist_style_implementer, :cymdist_style, 2, 2}
+		}
+	)
+	
+	_local all_good? << _true
+	_for a_view, edv _over expected_datamodel_versions.fast_keys_and_elements()
+	_loop
+		_if a_view _is _unset
+		_then
+			write("ERROR - view does not exist: ")
+		_else
+			all_good? _and<< a_view.check_datamodel_versions(_scatter edv)
+		_endif
+	_endloop
+	_if all_good?
+	_then
+		write("All datamodel installations are good.")
+	_else
+		write("Something is wrong with datamodel installation checks.")
+	_endif
+_endblock
+$

@@ -1,0 +1,25 @@
+<div id="mapLocationPopoverData">
+{{#features}}
+<div class='item' data-id="{{id}}{{^id}}item{{/id}}">
+  <table class='table'>
+    <tbody>
+      <tr>
+        <td colspan="2">
+          <strong>{{name}}</strong>
+        </td>
+      </tr>
+      {{#feature}}
+        <tr>
+          {{#attrib}}
+          <td style="padding-left: 20px;">
+            <strong>{{attrib}}</strong>
+          </td>
+          {{/attrib}}
+          <td style="padding-left: 10px;">{{value}}</td>
+        </tr>
+      {{/feature}}
+    </tbody>
+  </table>
+</div>
+{{/features}}
+</div>

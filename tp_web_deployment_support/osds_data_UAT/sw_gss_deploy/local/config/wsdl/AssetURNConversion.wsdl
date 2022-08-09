@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://services.sbi.gesmallworld.com" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns0="http://services.sbi.gesmallworld.com" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:documentation>AssetURNConversion</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://services.sbi.gesmallworld.com" xmlns:ns="http://services.sbi.gesmallworld.com">
+	
+			<xs:complexType name="urnsType">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="urn" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			
+			<xs:element name="getRWOurns">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="urns" type="ns0:urnsType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="getRWOurnsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="urns" type="ns0:urnsType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+           
+        </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getRWOurnsRequest">
+    <wsdl:part name="parameters" element="ns0:getRWOurns">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRWOurnsResponse">
+    <wsdl:part name="parameters" element="ns0:getRWOurnsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AssetURNConversionPortType">
+    <wsdl:operation name="getRWOurns">
+      <wsdl:input message="ns0:getRWOurnsRequest" wsaw:Action="urn:getRWOurns">
+    </wsdl:input>
+      <wsdl:output message="ns0:getRWOurnsResponse" wsaw:Action="urn:getRWOurnsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AssetURNConversionHttpBinding" type="ns0:AssetURNConversionPortType">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="getRWOurns">
+      <http:operation location="AssetURNConversion/getRWOurns"/>
+      <wsdl:input>
+        <mime:content part="getRWOurns" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getRWOurns" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AssetURNConversionSOAP11Binding" type="ns0:AssetURNConversionPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getRWOurns">
+      <soap:operation soapAction="urn:getRWOurns" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AssetURNConversion">
+    <wsdl:port name="AssetURNConversionSOAP11port_http" binding="ns0:AssetURNConversionSOAP11Binding">
+      <soap:address location="http://localhost:3001/gss/web/services/AssetURNConversion"/>
+    </wsdl:port>
+    <wsdl:port name="AssetURNConversionHttpport" binding="ns0:AssetURNConversionHttpBinding">
+      <http:address location="http://localhost:3001/gss/web/services/AssetURNConversion"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

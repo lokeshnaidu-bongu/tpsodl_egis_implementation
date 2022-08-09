@@ -1,0 +1,36 @@
+
+
+_block
+	ele_dataset << gis_program_manager.database(:electric)
+	ele_dataset.checkpoint("example_"+date_time.now().write_String)
+	ele_ds_rep<< ele_dataset.replicate()
+	ele_ds_rep.go_to_alternative("Your Alternative name")
+	p_checkpoint << "your check point name"
+	ele_ds_rep.go_to_checkpoint(p_checkpoint, :readonly)
+
+	_for a_col_name _over here fast elements of all collections names
+	_loop
+		
+		l_stream << ds_difference_stream.new_on( ele_dataset.collections[a_col_name],ele_ds_rep.collections[a_col_name])
+		
+		_loop @dif			`		      
+			(child_change,child_rec,base_Rec) << l_stream.get()
+
+			_if child_change _is _unset
+			_then
+				_leave @dif
+			_else
+				
+				//write here based on the child_change
+				_if child_change _is :remove _or child_change _is :delete _or child_change _is :insert _or child_change _is :update
+				_then
+					
+				_endif
+				
+			_endif
+			
+		_endloop 
+		
+	_endloop
+	
+_endblock

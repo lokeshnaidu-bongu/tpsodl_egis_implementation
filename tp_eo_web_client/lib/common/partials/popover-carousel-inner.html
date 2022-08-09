@@ -1,0 +1,16 @@
+{{#features}}
+<div class='item' data-id="{{id}}{{^id}}item{{/id}}" data-name='{{name}}'>
+  <table class='table'>
+    <tbody>
+      {{#feature}}
+      <tr>
+        <td>
+          <strong>{{attrib}}</strong>
+        </td>
+        <td>{{{value}}}</td>
+      </tr>
+      {{/feature}}
+    </tbody>
+  </table>
+</div>
+{{/features}}

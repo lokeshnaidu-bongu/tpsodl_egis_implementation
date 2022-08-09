@@ -1,0 +1,130 @@
+#% text_encoding = iso8859_1
+_package sw
+
+_global !disable_text_translation?! << _true
+$
+_block
+	system.putenv("SW_ACE_DB_DIR", "D:\gis_db")
+	system.putenv("EO_DB_UNIT_TYPE", "mm")
+	ds_coordinate_system.add_catalogue_def(:utm45_n,coordinate_system.new_proj(:wgs84,:accurate_utm,{:zone,45,:south,_false},
+										   coordinate.new(0,0),:mm,:group,:world))
+_endblock
+$
+_block
+	_local mod_dir << sw_module_manager.module(:eo_implementer).full_directory
+	_local config_file << system.pathname_down(mod_dir, "scripts", "configure_upgrades.magik")
+	load_file(config_file)	
+_endblock
+$
+
+_block 
+	## Creating EO database with Upgrade Framework
+	
+	## This is a script that creates a new EO database using Upgrade Framework. 
+	## It first creates an empty database and an accompanying thematics file. 
+	## It then uses eo implementers to modify it. 
+	## Once the empty database is created, initial upgrades are performed using the first.
+	## eo implementer module called eo_implementer. is used to create design manager.
+	## Subsequently optional, stored_unit and dynamic upgrades are performed using
+	## their respective implementers.
+	##
+	## After all implementers are run, the script checks whether all implementers that were 
+	## supposed to be installed are installed.
+	##
+	## This script assumes that the destination directory has been set in the
+	## environment variable SW_ACE_DB_DIR, e.g.
+	## system.putenv("SW_ACE_DB_DIR", "D:\databases\new_eo_db\ds_admin")
+	## Note, for windows, use backslashes (\)
+	##
+	## IF IMPERIAL IS REQUIRED INSTEAD OF METRIC:
+	## set environment variable EO_DB_UNIT_TYPE to "imperial"
+	#------ Creating parameters for database ------
+	_local env_vals << scripted_upgrade_helper.parse_environment_variables(
+		{"SW_ACE_DB_DIR", :string, _true},
+		{"EO_DB_UNIT_TYPE", :string, _true}
+		)
+	
+	_local db_location << env_vals["SW_ACE_DB_DIR"]
+	_local metric? <<  (env_vals["EO_DB_UNIT_TYPE"] <> "imperial")
+	
+	# This file contains the parameters needed to create the database. If changes are necessary save them to another
+	# file and edit the script to use that file
+	_local file << smallworld_product.get_resource_file("create_eo_database.xml","data",:eo_implementer,_false) 
+	
+	#------ create database ------
+	write("Creating initial DB...")
+	_global creation_engine
+	creation_engine << create_database_engine.new()
+	creation_engine.import_properties_from_xml( file )
+	creation_engine.set_property(:ace_location, db_location)
+	creation_engine.create_database()
+	
+	#------ Create a thematics.ds file next to ace.ds ------
+	write("Creating thematics.ds...")
+	_local dir << system.getenv("SW_ACE_DB_DIR")
+	_local ds_env_running?
+	_if _not (ds_env_running? << ds_environment.c_is_initialised?)
+	_then
+		ds_environment.init()
+	_endif
+	
+	_local tm_view << tm_dataset_manager.set_tm_view(dir)
+	tm_view.discard()
+	
+	_if ds_env_running?
+	_then
+		#Leave the session as we found it.
+		ds_environment.reinitialise()
+	_endif
+	
+	#------ Run implementers ------
+	write("Applying initial database upgrades")
+	
+	_local modules << modules_for_eo_creation(metric?)
+	
+	_global initial_upgrade_engine
+	initial_upgrade_engine << datamodel_engine.new(:modules,modules)
+	initial_upgrade_engine.install_database_changes()
+	
+	#Second time ensures all implementers are installed
+	initial_upgrade_engine.install_database_changes()
+
+	_global dynamic_engine 
+	dynamic_engine << datamodel_engine.new(:implementers,dynamic_upgrade_implementers()) 
+	dynamic_engine.install_database_changes()
+	
+	# #------ End Stuff ------
+	
+	write("Merge stored unit upgrade changes from top to DM top")
+	_local ev << gis_program_manager.cached_dataset(:electric)
+	ev.switch(:write)
+	ev.goto_top_alternative()
+	ev.down("DM Top")
+	ev.merge()
+	write("Merged stored unit upgrade changes from top to DM top")
+
+	## The current user, performing the install will have an ACE
+	## alternative, but we don't merge ACE alts.
+	## Nothing is done here for any pre-existing ACE alts - that is
+	## the job of the caller.
+	_local ace_view << gis_program_manager.ace_view
+	ace_view.switch(:write)
+	ace_view.align()
+	ace_view.commit()
+	
+	#Check installation status 
+	_if _not scripted_upgrade_helper.confirm_installed_implementers(initial_upgrade_engine, {:eo_implementer, 0})
+	_then 
+		write("Warning: The installation of new EO database failed!", newline_char, 
+			"Run initial_upgrade_engine.print_installation_status() for more details")
+		
+	_elif metric? _andif _not scripted_upgrade_helper.confirm_installed_implementers(initial_upgrade_engine, {:eo_stored_units_implementer, 0})
+	_then 
+		write("Warning: The installation of metric units into the new EO database failed!", newline_char, 
+			"Run initial_upgrade_engine.print_installation_status() for more details")
+		
+	_else 
+		write("The installation of new EO database finished successfully")
+	_endif
+	
+_endblock 

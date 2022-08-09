@@ -1,0 +1,22 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Hbeam	1
+Hbeam & PCC	2
+Hbeam & RSJoist & PCC	3
+Lattice	4
+PCC	5
+RCC	6
+RSJoist	7
+RSJoist & PCC	8
+RSJoist & RailPole	9
+RailPole	10
+RailPole & Bullet	11
+RailPole & Hbeam	12
+RailPole & Hbeam & RSJoist	13
+RailPole & PCC	14
+Tubular	15
+WallBracket	16

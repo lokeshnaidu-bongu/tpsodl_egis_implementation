@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+    <!-- Define the xml files for specific collections -->
+    <collection collection_name = "cs_work_order" >
+	
+	<fields field_name = "tp_wo_type" external_name = "Wo Type" mandatory = "false" field_type="tp_wo_type" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_lat" external_name = "Lat" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="" mode = "insert" />
+	<fields field_name = "tp_long" external_name = "Long" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="" mode = "insert" />
+	<fields field_name = "tp_installation_status" external_name = "Installation Status" mandatory = "false" field_type="tp_wo_installation_status" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_new_meter_no" external_name = "New Meter No" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_new_account_number" external_name = "New Account Number" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_existing_meter_no" external_name = "Existing Meter No" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_existing_account_number" external_name = "Existing Account Number" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_type_of_meter" external_name = "Type Of Meter" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_make" external_name = "Make" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_class" external_name = "Class" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_seal_no" external_name = "Seal No" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_load_range" external_name = "Load Range" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_cap_in" external_name = "Cap In" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_neighbor_cons_no" external_name = "Neighbor Cons No" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_neighbor_pole_no" external_name = "Neighbor Pole No" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_neighbor_meter_no" external_name = "Neighbor Meter No" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_neighbor_building_no" external_name = "Neighbor Building No" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_section_code" external_name = "Geo-Section Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_land_pincode" external_name = "Pincode" mandatory = "false" field_type="tp_land_pincode" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	
+    </collection>
+   
+</tp_collections>

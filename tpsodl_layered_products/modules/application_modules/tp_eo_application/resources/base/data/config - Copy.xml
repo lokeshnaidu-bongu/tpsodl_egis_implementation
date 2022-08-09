@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<!--  config.xml for Electric Office Application  -->
+<config base="sweo_dm_user_application.config">
+  <plugins>  
+    <plugin name="document_manager" class_name="document_manager">
+      <!-- default document to be displayed at startup -->
+      <document source_plugin_name="maps">
+	<gui_properties>
+	  <property name="class_name"                        value="eo_map_gui_framework"/>
+	  <property name="resource_module_name"              value="sweo_base_user_application"/>
+	  <property name="floating_gui_definition_file_name" value="floating_map_gui.xml"/>
+	  <property name="embedded_gui_definition_file_name" value="embedded_map_gui.xml"/>
+	  <property name="config_definition_file_name"       value="map_config.xml"/>
+	  <property name="title_message_id"                  value="main_map_title"/>
+	</gui_properties>
+	
+	<document_properties>
+	  <property name="ace_name"    value="EO"/>
+	  <property name="world_id"    value="0"/>
+	  <property name="universe_id" value="0"/>
+	  <property name="centre_x"    value="267092000"/>
+	  <property name="centre_y"    value="2137361000"/>
+	  <property name="scale"       value="200000"/>
+	</document_properties>
+      </document>
+    </plugin>
+
+
+    <plugin name="editor_manager" class_name="emst_editor_manager" >
+      <property name="configuration_file_name" value="tp_eo_application.collection_config" /> 
+      <property name="editor_config_definition_module_name" value="sweo_dm_user_application"/>
+      <property name="editor_config_definition_file_name" value="cu_object_editor_config.xml"/>
+      <property name="editor_gui_definition_module_name" value="sweo_dm_user_application"/>
+      <property name="editor_gui_definition_file_name" value="cu_object_editor_gui.xml"/>
+      <property name="map_manager_name" value="maps"/>
+      <property name="default_editor_class" value="emst_object_editor"/>
+      <property name="show_collection_chooser?" value="true"/>
+    </plugin>
+    <plugin name="explorer" class_name="explorer_plugin">
+      <property name="model_config_definition_module_name"    value="tp_eo_application"/>
+      <property name="model_config_definition_file_name"      value="explorer_model_config.xml"/>
+      <property name="floating_config_definition_module_name" value="sweo_base_user_application"/>
+      <property name="floating_config_definition_file_name"   value="floating_explorer_view_config.xml"/>
+      <property name="floating_gui_definition_module_name"    value="sweo_base_user_application"/>
+      <property name="floating_gui_definition_file_name"      value="floating_explorer_view_gui.xml"/>
+      <property name="embedded_config_definition_module_name" value="office_base_application"/>
+      <property name="embedded_config_definition_file_name"   value="embedded_explorer_view_config.xml"/>
+      <property name="embedded_gui_definition_module_name"    value="office_base_application"/>
+      <property name="embedded_gui_definition_file_name"      value="embedded_explorer_view_gui.xml"/>
+      <property name="expose_embedded_selection"              value="true"/>
+      <property name="expose_floating_selection"              value="true"/>
+      <property name="editor_manager_name"                    value="editor_manager"/>
+      <export>
+	<toolbar source_name="find"/>
+	<toolbar source_name="advanced_find"/>
+      </export>
+      <find_engine>
+	<categories>
+	  <category name="asset_id" default="yes"/>
+	</categories>
+	<engine plugin_name="search_engine"/>
+	<default_text id="find_text"/>
+      </find_engine>
+    </plugin>
+    <!-- tpDCL's Custom Plugins -->
+
+    <plugin name="quality_management" class_name="qm_plugin">
+      <property name="dialog_as_sub_window?" value="false"/>
+      <property name="routines_config_file"  value="tp_eo_application.qm_routine_config"/>
+    </plugin>
+    <!-- Add schematics plugins here 
+    <plugin name="schematic" class_name="gs!schematic_plugin">
+      <properties>
+	<property name="hide_connecting_nodes?" value="false"/>
+	<property name="extend_links?" value="false"/>
+	<property name="extension_technique" value="extend_first"/>
+	<property name="map_manager_name" value="maps"/>
+	<property name="transform_plugin_name" value="gs!schematic_transform"/>
+	<property name="document_manager_name" value="document_manager"/>
+	<property name="navigate" value="datastore"/>
+	<property name="drafting_manager_name" value="drafting_manager"/>
+      </properties>          
+    </plugin>
+    
+    <plugin name="gs!schematic_transform" class_name="transform_plugin">
+      <properties>
+	<property name="map_manager_name" value = "maps" />
+	<property name="transform_manager_class_name" value = "gs!schematic_transform_manager"/>
+      </properties>
+    </plugin>
+	-->
+    <!-- End of schematics plugins -->
+	
+	<!-- TPSODL Custom Application Tools -->
+	<plugin name="database_comp" class_name="tp_db_compression_activation_plugin"/>
+	<plugin name="update_tool" class_name="tp_attribute_update_activation_plugin"/>
+	<plugin name="spatial_pred_tool" class_name="tp_spatial_predicate_activation_plugin"/>
+	<plugin name="versions" class_name="version_management_plugin">
+	    <property name="conflict_viewer_name" value="conflict_viewer_dialog"/>
+	</plugin>
+
+  </plugins>
+  
+</config>

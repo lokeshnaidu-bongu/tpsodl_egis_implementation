@@ -1,0 +1,201 @@
+
+
+_global set_vis_flds << _proc@set_vis_flds(p_ace_names, p_view_names, p_table_name,p_tags,p_vis_flds_to_add)
+				##
+				## Makes the given p_flds_to_add visible in the p_ace_names for
+				## p_table_name in p_view_names
+				##
+				## mutliple datasets and ace names are not supported for now...
+				_local l_av << gis_program_manager.ace_view
+				_local l_ace_col << l_av.collections[:sw_gis!ace]
+				_local l_ace,aces_ok?,parms_ok? << _unset
+				_local l_dataset,l_table << _unset 
+				_local l_valid_ace_vis_tags << equality_set.new_with("default",
+										     "browser",
+										     "description",
+										     "report",
+										     "join_field_description",
+										     "sql_server" ) 
+				_local l_colls_to_change << rope.new()
+				
+				(aces_ok?,l_ace) << _for an_ace_name _over p_ace_names.fast_elements()
+				_loop @verify_aces
+					l_ace << l_ace_col.at(an_ace_name)
+					
+					_if l_ace _is _unset
+					_then
+						write(write_string("Specified ace ",
+								   an_ace_name.write_string,
+								   " not found" ) )
+						_leave _with _false
+					_endif 
+				_finally _leave _with _true, l_ace
+				_endloop
+				
+				_if aces_ok?
+				_then
+					(parms_ok?, l_table,l_dataset) <<
+						_for a_dataset_name _over p_view_names.fast_elements()
+					_loop @verify_params
+						
+						l_dataset << gis_program_manager.cached_dataset(a_dataset_name)
+						
+						_if l_dataset _is _unset
+						_then
+							write(write_string( "Dataset ", a_dataset_name.write_string, " not open" ) )
+							_leave @verify_params _with _false 
+						_endif
+						
+						_for i_table _over l_dataset.collections.fast_elements()  # whether should be changed to user tables ... ?
+						_loop
+							_if a_dataset_name _is :electric 
+							_then
+								l_coll_wise_fld_to_add << get_electric_coll_wise_flds()
+								
+							_elif a_dataset_name _is :land
+							_then
+								
+								l_coll_wise_fld_to_add << get_land_coll_wise_flds()
+								
+							_endif
+							
+							_if l_coll_wise_fld_to_add[i_table.name] _is _unset 
+							_then
+								_continue
+							_endif
+							l_vis_flds_to_add << l_coll_wise_fld_to_add[i_table.name].as_simple_vector()
+							_if _not i_table.all_field_names.includes_all?( l_vis_flds_to_add )
+							_then
+								_continue
+								#_leave @verify_params _with _false 
+							_endif
+							
+							_if _not l_valid_ace_vis_tags.includes_all?( p_tags )
+							_then
+								#_leave @verify_params _with _false
+								_continue
+							_endif
+							
+							l_colls_to_change.add(i_table)
+							
+						_endloop
+						
+					_finally _leave @verify_params _with _true, l_colls_to_change 
+					_endloop
+					write("Total collections that will be updated: " + l_colls_to_change.size.write_string,l_dataset )
+					_if parms_ok? 
+					_then
+						
+						_for i_table _over l_table.fast_elements()
+						_loop
+							
+							Write("Setting visible field changes to " + i_table.name.write_string + " Collection")
+							l_extng_vis_flds << rope.new_from(i_table.visible_field_names)
+							_if p_view_names.an_element() _is :electric 
+							_then
+							l_coll_wise_fld_to_add << get_electric_coll_wise_flds()
+								
+							_elif p_view_names.an_element() _is :land
+							_then
+								l_coll_wise_fld_to_add << get_land_coll_wise_flds()
+								
+							_endif
+							_if l_coll_wise_fld_to_add[i_table.name] _is _unset 
+							_then
+								_continue
+								
+							_endif
+							l_vis_flds_to_add << l_coll_wise_fld_to_add[i_table.name].as_simple_vector()
+							_if  _not l_extng_vis_flds.includes_all?(l_vis_flds_to_add)
+							_then
+								_continue
+							_endif
+							
+							l_extng_vis_flds.add_all_first(l_vis_flds_to_add)
+							
+							_for a_tag _over p_tags.fast_elements()
+							_loop
+								_for a_dataset _over p_view_names.fast_elements()
+								_loop
+									l_ace.set_table_visible_field_names(a_dataset,i_table.name,a_tag,l_extng_vis_flds)
+								_endloop 
+							_endloop
+						_endloop
+					_endif
+				_endif
+				
+		     _endproc
+$
+get_electric_coll_wise_flds <<_proc @get_electric_coll_wise_flds()
+				      ## Electric XML PATH
+				      _local l_tp_colls << sw_module_manager.module(:tp_dm_scripts).get_resource_file("tp_electric_ace_visibility.xml","data")
+				      _local l_path  <<  system.canonicalise(l_tp_colls)
+				      
+				      _local str << external_text_input_stream.new(l_path)
+				      
+				      _local xml_def << simple_xml.read_element_from( str, sw:editable_xml_thing.new(:tp_collections))
+				      _local l_tp_enum_flds << property_list.new()
+				      
+				      
+				      _for a_tp_Coll _over xml_def.xml_elements()
+				      _loop
+					      
+					      l_coll_name << a_tp_Coll.attributes["collection_name"].as_symbol()
+					      
+					      _if l_tp_enum_flds[l_coll_name] _is _unset 
+					      _then
+						      l_tp_enum_flds[l_coll_name] << rope.new()
+					      _endif
+					      
+					      _for a_each_tp_coll _over a_tp_Coll.xml_elements()
+					      _loop
+						      
+						      l_fld_list << a_each_tp_Coll.attributes
+						      
+						      l_tp_enum_flds[l_coll_name].add_last(l_fld_list["field_name"].as_symbol())
+					      _endloop
+					      
+				      _endloop
+				      
+				      
+			     _return l_tp_enum_flds
+			      _endproc
+
+get_land_coll_wise_flds <<_proc @get_land_coll_wise_flds()
+				 
+				  _local l_tp_colls << sw_module_manager.module(:tp_dm_scripts).get_resource_file("tp_land_ace_visibility.xml","data")
+				  _local l_path  <<  system.canonicalise(l_tp_colls)
+				  
+				  _local str << external_text_input_stream.new(l_path)
+				  
+				  _local xml_def << simple_xml.read_element_from( str, sw:editable_xml_thing.new(:tp_collections))
+				  _local l_tp_enum_flds << property_list.new()
+				  
+				  _for a_tp_Coll _over xml_def.xml_elements()
+				  _loop
+					  
+					  l_coll_name << a_tp_Coll.attributes["collection_name"].as_symbol()
+					  
+					  _if l_tp_enum_flds[l_coll_name] _is _unset 
+					  _then
+						  l_tp_enum_flds[l_coll_name] << rope.new()
+					  _endif
+					  
+					  _for a_each_tp_coll _over a_tp_Coll.xml_elements()
+					  _loop
+						  
+						  l_fld_list << a_each_tp_Coll.attributes
+						  
+						  l_tp_enum_flds[l_coll_name].add_last(l_fld_list["field_name"].as_symbol())
+					  _endloop
+					  
+				  _endloop
+				  
+				  _return l_tp_enum_flds
+			  _endproc
+
+_block
+	set_vis_flds({"EO"},{:electric},_unset,{"default"},{})
+	set_vis_flds({"EO"},{:land},_unset,{"default"},{})
+_endblock
+$

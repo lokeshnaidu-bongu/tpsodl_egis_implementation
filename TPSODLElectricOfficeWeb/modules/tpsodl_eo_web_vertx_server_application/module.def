@@ -1,0 +1,14 @@
+tpsodl_eo_web_vertx_server_application	1
+
+requires
+	tp_cstm_land_adds
+	eo_web_vertx_server_application
+	tpsodl_features_within_buffer_service
+	tpsodl_convert_coordinates
+	tp_network_summary_report
+	tpsodl_custom_asset_search
+end
+
+description
+	TPSODL Electric Office Web service provider application.
+end

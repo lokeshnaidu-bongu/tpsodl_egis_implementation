@@ -1,0 +1,36 @@
+_block 
+## Adding Product
+sw_module_dialog.open()
+_global product_path,mmm,imps,de
+system.putenv("SW_ACE_DB_DIR", "F:\tp_gis_db_wgs\ds_admin")
+system.putenv("EO_DB_UNIT_TYPE", "cm")
+#system.putenv("ace_dir","F:\tp_gis_db_wgs\ds_admin")
+product_path << "E:\EO_528\land_office"
+smallworld_product.add_product(product_path)
+## Loading Dependent Modules
+smallworld_product.load_module(:cs_land)
+smallworld_product.load_module(:land_ds_install)
+smallworld_product.load_module(:cs_land_trace_engine)
+smallworld_product.load_module(:cs_map_grid_generator)
+smallworld_product.load_module(:cs_raster)
+smallworld_product.load_module(:street_management)
+smallworld_product.load_module(:swo_geocoding_gui)
+smallworld_product.load_module(:swo_street_name_management_tool)
+smallworld_product.load_module(:us_landbase_plugin)
+## Fetching Upgradable Implementers
+mmm << sw_module_manager.module(:land_ds_install)
+imps << mmm.datamodel_implementers()
+## compile in this code
+de << datamodel_engine.new(:implementers,imps)
+land_db.switch(:write)
+de.print_installation_status()
+## should see version number in list as installable
+de.install_case_database_changes()
+de.install_database_changes()
+gis_program_manager.databases[:land].commit()
+land_db.switch(:write)
+elec_db_cood_syst << gis_program_manager.databases[:electric].world.coordinate_system
+gis_program_manager.databases[:land].world.coordinate_system << elec_db_cood_syst
+gis_program_manager.databases[:land].commit()
+land_db.switch(:readonly)
+_endblock 

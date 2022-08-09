@@ -1,0 +1,29 @@
+
+
+// adjust the position of a large icon base so the stack is centered
+span.icon-stack i.icon-stack-base.icon-large {
+	margin-left: -0.05em;
+	margin-top: 0.05em;
+}
+
+// these are icons that will be added to the custom icon font eventually
+// for now define placeholder classes using similar icons
+
+.icon-danger-sign {
+	//design review Aligned warning icon with data value
+	background: url("@{imagesPath}/status-icons.png") 0px -63px, 0 0;
+	width: 28px;
+  height: 25px;
+  vertical-align: top;
+  display: inline-block;
+}
+
+
+i[class^="icon-"].danger {
+	color:@red;
+	font-size: @baseFontSize + 7;
+	display: inline-block; 
+	 vertical-align: top;
+	
+}
+.icon-handicap:before         { content: "\f10c"; }

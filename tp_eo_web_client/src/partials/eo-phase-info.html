@@ -1,0 +1,41 @@
+<header class="module-header">
+  <h3 class="voice voice-brand">{{messages.object_details.eoPhaseInfo.objectInfoTitle}}</h3>
+</header>
+<div class="module-body">
+
+  {{#features}}
+
+    {{#boxes}}
+      <div class="panel panel-default">
+
+        <div class="panel-heading phase-panel-heading">
+             {{#asset}}
+                <a href="#" class="join" id="{{urn}}">{{description}}</a>
+             {{/asset}}
+        </div>
+        <div class="panel-body" style="padding:0px;">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="panel-body">
+                <div class="phase-symbol-container" id="phasing">
+                  {{#phases}}
+                    <div class="phase-symbol {{class}}" title="{{name}}"><div class="join phase-description" id="{{urn}}">{{description}}</div></div>
+                  {{/phases}}
+                </div>
+                <div>
+                  {{#specification}}
+                  <a href="#" class="join" id="{{urn}}" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;display: block;">{{name}}, {{description}}</a>
+                  {{/specification}}
+                </div>
+              </div>
+            </div>
+          </div>
+       </div>
+  </div>
+
+  {{/boxes}} {{^boxes}} {{infoMessage}} {{/boxes}}
+
+{{/features}}
+
+</div>
+<footer class="module-footer"></footer>

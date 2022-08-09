@@ -1,0 +1,48 @@
+<!-- this file configures the plugins that are available to the authorisation framework -->
+
+<config>
+  <plugins>
+    <plugin name="authorisation_users"  class_name="authorisation_users_plugin">
+       <property_pages>
+          <page page_name="authorisation_user_general_properties_page"/>
+          <page page_name="authorisation_user_member_of_properties_page"/>
+       </property_pages>
+    </plugin>
+    <plugin name="authorisation_groups"  class_name="dm!authorisation_groups_plugin">
+       <property_pages>
+          <page page_name="authorisation_group_general_properties_page"/>
+          <page page_name="authorisation_group_rights_properties_page"/>
+          <page page_name="authorisation_group_alternatives_properties_page"/>
+          <page page_name="authorisation_group_tables_properties_page"/>
+          <page page_name="authorisation_group_design_rights_properties_page"/>
+       </property_pages>
+    </plugin>
+    <plugin name="authorisation_rights"  class_name="authorisation_rights_plugin">
+       <property_pages>
+          <page page_name="authorisation_right_general_properties_page"/>
+       </property_pages>
+    </plugin>
+    <plugin name="authorisation_design_rights"  class_name="authorisation_design_rights_plugin">
+       <property_pages>
+          <page page_name="authorisation_design_right_general_properties_page"/>
+       </property_pages>
+    </plugin>
+	<plugin name="authorisation_ldap"  class_name="authorisation_ldap_plugin">
+       <property_pages>
+          <page page_name="authorisation_ldap_page1"/>
+          <page page_name="authorisation_ldap_page2"/>
+          <page page_name="authorisation_ldap_page3"/>
+          <page page_name="authorisation_ldap_page4"/>
+       </property_pages>
+    </plugin>
+     <plugin name="authorisation_tab"  class_name="authorisation_tab_plugin">
+       <plugins>
+          <handle plugin_name="authorisation_users"/>
+          <handle plugin_name="authorisation_groups"/>
+          <handle plugin_name="authorisation_rights"/>
+          <handle plugin_name="authorisation_design_rights"/>
+       </plugins>
+     </plugin>
+
+  </plugins>
+</config>

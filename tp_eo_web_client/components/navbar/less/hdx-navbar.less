@@ -1,0 +1,414 @@
+//noinspection CssUnknownTarget
+@import "ge-bootstrap/less/hdx-bootstrap.less";
+@import "navbar.less";
+@import "hdx-mixins.less";
+@import "hdx-variables.less";
+
+.navbar-static-top {
+	margin-bottom: @baseLineHeight;
+	border: 0;
+}
+
+.navbar-collapse {
+	clear: both;
+}
+
+.navbar {
+	// Active nav items
+	.nav > .active > a,
+	.nav > .active > a:hover {
+		#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+		color: @white;
+	}
+
+	.btn-navbar,
+	.btn-navbar:active {
+		background-color: @grayDarkest;
+		border: none;
+		background-image: none;
+	}
+
+	.btn-toolbar > .btn {
+		margin-left: 10px;
+	}
+	.btn-group > .btn {
+		font-weight: normal;
+	}
+
+	.btn, .btn-group.open .btn.dropdown-toggle {
+		&.notification, &.notification:hover {
+			color: @white;
+			background: transparent url("@{imagesPath}/masthead-notifications.png") no-repeat 2px -4px;
+			padding-right: 10px;
+			padding-left: 29px;
+			height: 26px;
+			border-color: transparent;
+			font-size: @baseFontSize;
+			line-height: @baseFontSize;
+		}
+
+		&.notification-alert, &.notification-alert:hover {
+			.notification-alert-colors;
+		}
+
+		&.notification-message, &.notification-message:hover {
+			.notification-message-colors;
+			background-position: 2px -37px;
+		}
+
+		&.notification-suggestion, &.notification-suggestion:hover {
+			.notification-suggestion-colors;
+			background-position: 2px -69px;
+		}
+
+		&.notification-task, &.notification-task:hover {
+			.notification-task-colors;
+			background-position: 2px -99px;
+		}
+	}
+	// .btn
+
+	.user-utilities {
+
+		.dropdown-menu {
+			padding-left: 0;
+		}
+
+		.btn.dropdown-toggle {
+			font-size: @baseFontSize;
+			padding-left: 2px;
+			background-color: @grayDarkest;
+			border-color: @grayDarkest;
+			padding-top: 1px;
+			padding-right: 10px;
+			padding-bottom: 1px;
+
+			&:hover,
+			&.hover,
+			&:active,
+			&.active {
+				color: @grayDark;
+				background-color: @grayDarker;
+				background-image: none;
+				border-color: @grayDarker;
+			}
+
+			[class^="icon-"] {
+				margin: 0 0 0 5px;
+			}
+
+			.user-thumbnail {
+				width: 22px;
+				height: 22px;
+				.border-radius(@borderRadiusSmall - 1);
+				vertical-align: bottom;
+			}
+
+			.user-thumbnail {
+				width: 22px;
+				height: 22px;
+				.border-radius(@borderRadiusSmall - 1);
+				vertical-align: bottom;
+			}
+		}
+
+		&.open {
+			.btn.dropdown-toggle, .btn.dropdown-toggle:hover {
+				color: @white;
+				background-image: none;
+				background-color: darken(@grayDarkest, 7%);
+				border-color: darken(@grayDarkest, 7%);
+			}
+		}
+	}
+}
+
+.primary-navbar {
+	line-height: 0;
+
+	.btn-inverse {
+		background-color: @grayDarkest;
+	}
+
+	.nav-header {
+		text-transform: none;
+	}
+
+	/* Unnecessary?
+	.dropdown.open {
+		border-bottom-width: 5px;
+	}
+
+	.btn-group > .dropdown-toggle {
+		.border-radius(0);
+	}*/
+
+	.nav {
+
+		> li {
+			text-indent: 0;
+
+			> a {
+				font-size: @baseFontSize;
+				line-height: @baseLineHeight + 2;
+				padding: 10px;
+
+				&:hover {
+					color: @offBlack;
+				}
+			}
+
+		}
+
+		&.alt {
+
+			> li {
+
+				> a {
+					height: 26px;
+					line-height: 26px;
+					padding: 0 13px;
+					margin: 7px 4px;
+					background-color: @white;
+					.border-radius(@baseBorderRadius);
+
+					&:hover {
+						background-color: @offWhite;
+					}
+				}
+
+			}
+		}
+
+		> li {
+
+			&.active > a,
+			&.open > a,
+			> a:active {
+
+				&, &:hover {
+					color: @white;
+					#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+				}
+
+			}
+		}
+
+
+		&.alt {
+
+			> li {
+
+				&.active > a,
+				&.open > a,
+				> a:active {
+
+					&, &:hover {
+						background-color: @cyan;
+						.reset-filter(); // Because .alt has rounded corners.
+					}
+				}
+
+			}
+		}
+	}
+
+	// .nav.alt > li
+	.workspace-history.btn-group {
+		margin: 3px 0;
+	}
+}
+
+// .primary-navbar
+
+// Workspace example
+.workspace-navbar {
+	background-color: @workspaceNavbarBackground;
+	border-bottom: 1px solid @workspaceNavbarBackgroundHighlight;
+
+	.nav {
+		padding-bottom: 7px;
+	}
+
+	.nav > li {
+		line-height: 1;
+
+		.btn + .btn {
+			margin-left: -1px;
+		}
+	}
+
+	.btn-group {
+		margin: 7px 4px 0 1px;
+		padding: 0;
+		vertical-align: top;
+
+		.btn {
+			background-color: @offWhite;
+			padding-top: 2px;
+			padding-bottom: 2px;
+			font-size: @baseFontSize;
+			color: @grayDark;
+			border: 1px solid @grayLighter;
+
+			&:first-child {
+				.border-radius(@btnBorderRadius 0 0 @btnBorderRadius);
+			}
+
+			&:last-child {
+				.border-radius(0 @btnBorderRadius @btnBorderRadius 0);
+			}
+
+			&:hover {
+				background-image: none;
+				color: @grayDark;
+				background-color: @grayLighter;
+				background: @grayLighter;
+			}
+
+			&.btn-remove {
+				z-index: 2;
+				margin: 0 0 0 -1px;
+
+				[class^="icon-"], [class*=" icon-"] {
+					font-size: @baseFontSize - 3;
+					color: @grayDark;
+				}
+			}
+
+			i[class^="icon-"] {
+				.opacity(100);
+			}
+		}
+		// .btn
+	}
+
+	.btn:active,
+	.btn:hover,
+	.btn-remove:active,
+	.active .btn,
+	.active .btn-remove {
+		color: @white;
+		border-color: transparent;
+		#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+	}
+
+	.btn-remove:active, .active .btn-remove {
+		border-left: 1px solid @white;
+	}
+	.nav > li .btn {
+		border-color: @grayLighter;
+
+	}
+
+	.nav > .active .btn {
+		color: @white;
+		border-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+		#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+		&.btn-remove {
+
+			[class^="icon-"], [class*=" icon-"] {
+				color: @white;
+			}
+		}
+	}
+	.nav > .active .btn:hover {
+		background: @grayLighter;
+		border-color: @grayLighter;
+		color: @grayDark;
+		&.btn-remove {
+
+			[class^="icon-"], [class*=" icon-"] {
+				color: @grayDark;
+			}
+		}
+	}
+}
+
+// .workspace-navbar
+
+// Breadcrumb example
+.breadcrumb {
+	background: none;
+	filter: none;
+
+	li, li a {
+		font-size: @baseFontSize;
+		color: @grayDark;
+	}
+
+	li a:hover {
+		color: @linkColor;
+		text-decoration: none;
+	}
+
+	li .divider {
+		color: @grayLight;
+	}
+
+	li.active {
+		color: @cyan;
+	}
+}
+
+// .breadcrumb
+
+.navbar .nav > li > .dropdown-menu {
+	&:before {
+		content: '';
+		display: inline-block;
+		border-left: 7px solid transparent;
+		border-right: 7px solid transparent;
+		border-bottom: 7px solid #ccc;
+		border-bottom-color: @dropdownBorder;
+		position: absolute;
+		top: -7px;
+		left: 9px;
+	}
+	&:after {
+		content: '';
+		display: inline-block;
+		border-left: 6px solid transparent;
+		border-right: 6px solid transparent;
+		border-bottom: 6px solid @dropdownBackground;
+		position: absolute;
+		top: -6px;
+		left: 10px;
+	}
+	.border-radius(@baseBorderRadius);
+}
+
+// Menu position and menu caret support for dropups via extra dropup class
+.navbar-fixed-bottom .nav > li > .dropdown-menu {
+	&:before {
+		border-top: 7px solid #ccc;
+		border-top-color: @dropdownBorder;
+		border-bottom: 0;
+		bottom: -7px;
+		top: auto;
+	}
+	&:after {
+		border-top: 6px solid @dropdownBackground;
+		border-bottom: 0;
+		bottom: -6px;
+		top: auto;
+	}
+}
+
+// Caret should match text color on hover/focus
+.navbar .nav li.dropdown > a:hover .caret {
+	border-top-color: @navbarLinkColorHover;
+	border-bottom-color: @navbarLinkColorHover;
+}
+
+//Text color on hover an d click should be white for mega dropdown secondary nav items
+.mega-dropdown {
+	.nav > li {
+		&.active > a,
+		a:hover {
+			color: @white;
+		}
+	}
+}
+
+

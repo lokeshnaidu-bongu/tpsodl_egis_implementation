@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<solr_config>
+	<!-- SOLR Lucene index extract configuration file for EO_US 4.3 Database -->
+	<solr_options>
+
+		<!-- mode, either "upload" or "file" -->
+		<!-- Upload generates data and immediately sends it to the solr webserver 
+			to update the index -->
+		<!-- File generates data on disk, to be uploaded by node.js -->
+		<solr_mode>upload</solr_mode>
+
+		<!-- maximum number of records in one file for file based extracting only -->
+		<solr_chunk_size>500</solr_chunk_size>
+
+		<!-- number of parallel threads used for extracting the data -->
+		<solr_nthreads>7</solr_nthreads>
+
+		<!-- The name and port that will be used to upload the index data by the 
+			Solr extractor -->
+		<solr_secure>false</solr_secure>
+		<solr_host_name>${SOLR_HOST_NAME}</solr_host_name>
+		<solr_port>8983</solr_port>
+
+		<!-- The username and password for SOLR -->
+		<solr_username>${SW_SOLR_USER}</solr_username>
+		<solr_password>${SW_SOLR_PASSWORD}</solr_password>		
+
+		<!-- The coordinate system used to store location information in Solr. 
+			Currently only WGS84 i supported for spatial scanning in solr -->
+		<solr_coordinate_system>world_longlat_wgs84_degree
+		</solr_coordinate_system>
+
+	</solr_options>
+
+	<!-- Add a solr_dataset entry for each dataset of which you want to extract 
+		data to the lucence index -->
+	<!-- for each dataset either add a list of tables to be included or use 
+		all tables specified by the rwo_table_names protocol on the database view 
+		and exclude a set of tables -->
+	<solr_datasets>
+		<solr_dataset name="electric">
+
+			<rwo_tables_included>
+				<!-- TPSODL Custom rwo_table_names -->
+				<rwo_table>ed_cabinet</rwo_table>
+				<rwo_table>eo_cable_segment_inst</rwo_table>
+				<rwo_table>eo_circuit</rwo_table>
+				<rwo_table>eo_comms_device</rwo_table>
+				<rwo_table>eo_conduit</rwo_table>
+				<rwo_table>eo_connector_point_inst</rwo_table>
+				<rwo_table>eo_connector_segment_inst</rwo_table>
+				<rwo_table>ed_decorative_pole</rwo_table>
+				<rwo_table>eo_energy_source</rwo_table>
+				<rwo_table>eo_energy_storage_inst</rwo_table>
+				<rwo_table>eo_fiber_optic</rwo_table>
+				<rwo_table>eo_isolating_eqpt_inst</rwo_table>
+				<rwo_table>eo_measuring_eqpt_inst</rwo_table>
+				<rwo_table>eo_meter</rwo_table>
+				<rwo_table>ed_pole</rwo_table>
+				<rwo_table>eo_power_xfrmr_inst</rwo_table>
+				<rwo_table>eo_protective_eqpt_inst</rwo_table>
+				<rwo_table>eo_service_connection</rwo_table>
+				<rwo_table>eo_service_point</rwo_table>
+				<rwo_table>sub_substation</rwo_table>
+				<rwo_table>ed_switchgear</rwo_table>
+				<rwo_table>et_tower</rwo_table>
+				<rwo_table>eo_wire_segment_inst</rwo_table>			
+			</rwo_tables_included>
+
+			<rwo_tables_excluded>
+				<!-- Add Database specific ignorable objects -->
+			</rwo_tables_excluded>
+		</solr_dataset>
+		<solr_dataset name="land">
+				<!-- TPSODL Custom rwo_table_names -->
+				<rwo_table>tp_tpsodl_building</rwo_table>
+				<rwo_table>tp_circle</rwo_table>
+				<rwo_table>tp_division</rwo_table>
+				<rwo_table>lnd_subdivision</rwo_table>
+				<rwo_table>lnd_section</rwo_table>
+				<rwo_table>lnd_zip</rwo_table>
+				<rwo_table>tp_locality_boundary</rwo_table>
+				<rwo_table>tp_sub_locality</rwo_table>
+				<rwo_table>tp_municipal_ward_boundary</rwo_table>
+				<rwo_table>tp_village_boundary</rwo_table>
+				<rwo_table>tp_slum_area</rwo_table>
+				<rwo_table>tp_environment</rwo_table>
+				<rwo_table>tp_flood_map</rwo_table>
+				<rwo_table>lnd_waterbody</rwo_table>
+				<rwo_table>lnd_wetland</rwo_table>
+				<rwo_table>tp_estate_land_type</rwo_table>
+				<rwo_table>tp_cluster_of_trees</rwo_table>
+				<rwo_table>tp_tree</rwo_table>
+				<rwo_table>tp_transit_area</rwo_table>
+				<rwo_table>tp_vehicle_demarcated_boundary</rwo_table>
+				<rwo_table>lnd_railroad</rwo_table>
+				<rwo_table>lnd_street</rwo_table>
+				<rwo_table>lnd_street_segment</rwo_table>
+				<rwo_table>tp_footpath</rwo_table>
+				<rwo_table>tp_right_of_way</rwo_table>
+				<rwo_table>tp_obstacle</rwo_table>
+				<rwo_table>tp_utility_points</rwo_table>
+				<rwo_table>tp_telecom</rwo_table>
+				<rwo_table>lnd_restricted_area</rwo_table>
+				<rwo_table>lnd_landmark</rwo_table>
+				<rwo_table>tp_non_builtup</rwo_table>
+				<rwo_table>tp_builtup</rwo_table>
+				<rwo_table>tp_gate</rwo_table>
+				<rwo_table>tp_green</rwo_table>
+				<rwo_table>tp_shop</rwo_table>
+				<rwo_table>tp_tpsodl_boundary</rwo_table>
+				<rwo_table>lnd_building</rwo_table>
+		</solr_dataset>
+	</solr_datasets>
+</solr_config>

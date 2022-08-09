@@ -1,0 +1,31 @@
+{
+  "name": "toggle-switch",
+  "author": "General Electric",
+  "version": "1.2.0",
+  "main": [
+    "src/js/toggle-switch.js",
+    "src/less/toggle-switch.less"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "Gruntfile.js",
+    "package.json",
+    "lib",
+    "css",
+    "node_modules",
+    "src/js/require.config.js"
+  ],
+  "dependencies": {
+    "bootstrap": "git://github.com/jozefizso/bower-bootstrap-less.git#~3.2.0",
+    "brandkit": "git://github.sw.ge.com/DXC/brandkit.git#~2.5.8",
+    "oo-utils": "git://github.sw.ge.com/DT/oo-utils.git#~v0.9.0",
+    "requirejs": "git://github.com/jrburke/requirejs-bower#~2.1.14",
+    "jquery": "git://github.com/components/jquery#~1.10.2",
+    "bootstrap-switch": "v1.8"
+  },
+  "devDependencies": {},
+  "resolutions": {
+    "jquery": "~1.10.2"
+  }
+}

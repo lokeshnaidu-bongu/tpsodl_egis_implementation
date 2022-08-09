@@ -1,0 +1,21 @@
+########################################################################
+#% text_encoding = iso8859_1 
+######################################################################## 
+## 
+## TPSODL Implementation Project 
+## 
+## Created By:  Triveni Damarla, TCS
+## Date:  16-02-2022
+##
+## Description:
+## Handling Message files
+########################################################################
+
+_package sw
+$
+
+!global_auto_declare?! << _false
+$
+
+message_handler.new(:tpsodl_features_within_buffer_service_provider).add_use(:service_provider)
+$

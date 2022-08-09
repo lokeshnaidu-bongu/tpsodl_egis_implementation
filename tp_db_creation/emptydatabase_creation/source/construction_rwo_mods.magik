@@ -1,0 +1,31 @@
+$
+_pragma(classify_level=restricted, topic={drafting}, usage={external})
+_method create_database_helper.create_construction_rwos(view,_optional file, rwo_name, rwo_code)
+
+	## Creates the dataless RWO named 'rwo_name' with RWO code
+	## 'rwo_code', for construction geometry, in view
+	## 'view' and in the database file 'file'.
+	##
+	## The defaults for unspecified optional arguments
+	## is as follows:
+	##
+	##       file        "rwo.ds"
+	##       rwo_name    :construction
+	##       rwo_code    1
+	##
+	## Sets the editor for the table to be the object 'construction_editor'
+	
+	_if rwo_name _is _unset _then rwo_name << :construction _endif
+	_if rwo_code _is _unset _then rwo_code << 1 _endif
+	
+	table_descriptor << define_rwo_table(view,rwo_name, {}, 0, rwo_code,file)
+	define_application_code(view,rwo_name,:point,1,:simple_point)
+	define_application_code(view,rwo_name,:line,2,:simple_chain)
+	define_application_code(view,rwo_name,:circle,3,:simple_chain)
+	define_application_code(view,rwo_name,:trail,4,:simple_chain)
+	define_application_code(view,rwo_name,:arc,5,:simple_chain)
+	define_application_code(view,rwo_name,:text,6,:text)
+	
+	table_descriptor.define_attributes(:table_editor, construction_editor)
+_endmethod
+$

@@ -1,0 +1,135 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By:  S. Haritha Rani, TCS
+## Date: 18/11/2021
+##
+## Description:
+
+########################################################################
+_package sw
+$
+_pragma(classify_level=restricted)
+##
+## EO load CASE  implementer class
+##
+def_slotted_exemplar(:tp_cstm_db_implementer,
+	{
+	},
+	{:co_datamodel_implementer})
+$
+tp_cstm_db_implementer.define_shared_constant(:tp_fld_mandatory_mapping_val,
+	##
+	##Cabinet along with Physical fields & Integer fields
+	##
+	property_list.new_with(:false, _false,
+			       :true, _true ,
+			       :ds_date,date.now(),
+			       :ds_int,0,
+			       :ds_float,0.0,
+			       :ds_double,0.0,
+			       :eo_mounting,"Unknown",
+			       :eo_status,"Proposed Install",
+			       #:tp_xfrmr_capacity, unit_value((0.0), :kv),
+			       :eo_line_voltage,unit_value((0.0), :v)),
+	:public)
+
+$
+
+$
+tp_cstm_db_implementer.define_shared_constant(:tp_fld_stored_unit_mapping_val,
+	##
+	##Cabinet along with Physical fields & Integer fields
+	##
+	equality_property_list.new_with("Ampere","amp",
+					"Degree","",
+					"Kilo Volt Ampere","kva",
+					"Kilo Volt Ampere","kva",
+					"Kilo Watt","kw",
+					"KiloVolt","kv",
+					"Kilogram","kgram",
+					"Liter","l",
+					"Mega Volt Ampere","megava",
+					"Meter","m",
+					"Millimeter","mm",
+					"No,s","Not Available",
+					"second","sec",
+					"percent","percent",
+					"celsius","celsius",
+					"Volt","v"),:public)#
+$
+#_pragma(classify_level=restricted, topic={csp_datamodel})
+#tp_cstm_db_implementer.define_shared_constant(:tp_enum_def_vals,
+#	## 
+#	## This constant needs to contain the name of the table that
+#	## will be created. Add collection name as :symbol.
+#	##
+#	property_list.new_with(:eo_line_voltage,unit_value((0.0), :v),
+#			       :tp_rated_current,unit_value((0.0), :amp),
+#			       :tp_rated_voltage,unit_value((0.0), :v),
+#			       :tp_nominal_voltage,unit_value((0.0), :v),
+#			       #:tp_total_cable_actual_length,,
+#			       :tp_output_voltage,unit_value((0.0), :v),
+#			       :tp_rated_current_duration,unit_value((0.0), :v),
+#			       :tp_rated_sht_ckt_bk_cur,unit_value((0.0), :v),
+#			       :tp_foundation_lvl_frm_sea_lvl,unit_value((0.0), :v),
+#			       :tp_maximum_demand,unit_value((0.0), :kw),
+#			       :tp_burden,unit_value((0.0), :amp),
+#			       :tp_rated_continuous_current,unit_value((0.0), :amp),
+#			       :tp_rated_short_time_current,unit_value((0.0), :amp),
+#			       :tp_source_voltage,unit_value((0.0), :v),
+#			       :tp_joint_to_joint_length,unit_value((0.0), :m),
+#			       :tp_weight,unit_value((0.0),:kgram))
+#			       
+#	,:public)
+#$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.tp_read_flds_from_xml(p_coll_name)
+	## 
+	##
+	_local l_coll_name << p_coll_name
+	_local l_c_name << l_coll_name.write_string
+	_local l_xml_file_name << write_string("tp_"+l_c_name+".xml")
+	show(l_xml_file_name)
+	tp_colls << sw_module_manager.module(:tp_cstm_db_implementer).get_resource_file(l_xml_file_name,"data")
+	
+	l_path  <<  system.canonicalise(tp_colls)
+	str << external_text_input_stream.new(l_path)
+	
+	xml_def << simple_xml.read_element_from( str, sw:editable_xml_thing.new(:tp_collections))			
+	
+	l_tp_enum_flds << property_list.new()
+	
+	
+	_for a_tp_Coll _over xml_def.xml_elements()
+	_loop
+		#show(i.attributes["collection_name"])
+		
+		l_coll_name << a_tp_Coll.attributes["collection_name"].as_symbol()
+	
+		_if l_tp_enum_flds[l_coll_name] _is _unset 
+		_then
+			l_tp_enum_flds[l_coll_name] << property_list.new()
+		_endif
+		count << 0
+		_for a_each_tp_coll _over a_tp_Coll.xml_elements()
+		_loop
+			count << count+1
+			l_fld_list << a_each_tp_Coll.attributes
+			_if l_tp_enum_flds[l_coll_name][count] _is _unset 
+			_then
+				l_tp_enum_flds[l_coll_name][count] << property_list.new()
+			_endif
+			_for a_tp_fld_key, a_tp_fld_def _over l_fld_list.fast_keys_and_elements()
+			_loop
+				l_tp_enum_flds[l_coll_name][count][a_tp_fld_key.as_symbol()]<< a_tp_fld_def
+			_endloop
+		_endloop
+	_endloop
+
+	_return l_tp_enum_flds[l_coll_name]
+_endmethod
+$

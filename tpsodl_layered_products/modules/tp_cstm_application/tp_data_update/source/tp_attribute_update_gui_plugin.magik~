@@ -1,0 +1,629 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 12-01-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+_package user
+$
+
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+
+remex(:tp_attribute_update_gui_plugin)
+$
+
+def_slotted_exemplar( :tp_attribute_update_gui_plugin,
+	{
+		{ :top_container, _unset },
+		#To hold the GUI containers and controls
+		{ :menu_items, _unset },
+		#To hold the engine instance
+		{:engine_update,_unset},
+		{:engine_insert,_unset}
+		
+	},
+	:plugin )
+$
+
+#-------------------------------------------------------------------------------
+# Slot Access
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+tp_attribute_update_gui_plugin.define_slot_access( :menu_items, :readable, :public )
+$
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+tp_attribute_update_gui_plugin.define_slot_access( :top_container, :readable, :public )
+$
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+tp_attribute_update_gui_plugin.define_slot_access( :engine_update, :readable, :public )
+$
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+tp_attribute_update_gui_plugin.define_slot_access( :engine_insert, :readable, :public )
+$
+
+#-------------------------------------------------------------------------------
+# Method init()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.init(name, framework)
+	## 
+	##
+	write("+++ object creating +++")
+	
+	_super.init(name,framework)
+	.menu_items << property_list.new()
+
+	#---------- HANDLE OF THE ENGINE ----------------
+	.engine_update << tp_attribute_update_engine.new()
+	.engine_update.add_dependent(_self)
+
+	.engine_insert << tp_record_insert_engine.new()
+	.engine_insert.add_dependent(_self)
+	
+	>> _self 
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method init_actions()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.init_actions()
+	## 
+	## Defines actions in this plugin.
+	##
+	#
+
+	_self.add_action(sw_action.new(:import_data,
+				       :action_message,:|import_data()|,
+				       :engine,_self, 
+				       :dialog_control,:button_item,
+				       :image, {:run, :ui_resources }))
+
+	_self.add_action(sw_action.new(:insert_data,
+				       :action_message,:|import_data()|,
+				       :engine,_self, 
+				       :dialog_control,:button_item,
+				       :image, {:run, :ui_resources }))
+	
+	_self.add_action(sw_action.new(	:interrupt,
+					:action_message,:|interrupt()|,
+					:engine, _self ,
+					:enabled?,_true ,
+					:dialog_control,:button_item,
+					:image, {:interrupt_engine, tp_attribute_update_gui_plugin.module_name }))
+	
+	_self.add_action(sw_action.new(	:quit,
+					:action_message,:|quit()|,
+					:engine, _self ,
+					:enabled?,_true ,
+					:dialog_control,:button_item,
+					:image, {:interrupt_engine, tp_attribute_update_gui_plugin.module_name }))
+	
+	_self.add_action(sw_action.new(:excel_folder_browse,
+				       :action_message, :excel_folder_browse|()|,
+				       :engine, _self ,
+				       :image,{:open,:ui_resources}))
+
+	_self.add_action(sw_action.new(	:log_directory_browse,
+					:action_message, :log_directory_browse|()|,
+					:engine, _self ,
+					:image,{:open,:ui_resources}))
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method build_gui()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.build_gui( a_frame )
+	## 
+	##
+	a_frame.top_frame.title << _self.message(:tool_name)
+	a_frame.top_frame.resizable? << _true
+	a_frame.top_frame.maximizable? << _true
+	a_frame.resize? << _false
+	.top_container << top_rcl << sw_container.new( a_frame,
+						 1, 1,
+						 :min_width,100,
+						 :min_height,100,
+						 #:col_alignment, :left,
+						 #:row_alignment, :middle,
+						 :top_spacing,10,
+						 :left_spacing,10,
+						 :right_spacing,10,
+						 :bottom_spacing,10
+						 #:row_spacing,10
+						 )
+
+
+	
+
+	excel_rc << sw_container.new(top_rcl, 3, 1,
+			       :resize?,_false,
+			       :col_alignment, :fill,
+			       :row_alignment, :top,
+			       :row_spacing,5)
+	
+	radio_rc << sw_container.new(excel_rc, 1, 2,
+			    :resize?,_false,
+			    #:col_alignment, :left,
+			    #:row_alignment, :middle,
+			    :col_alignment, :fill,
+			    :row_alignment, :fill,
+			    :col_spacing,4,
+			    #:row_spacing,5,
+			    :row,1,:col,1,
+			    :outer_spacing,5)
+	#--------------RADIO BUTTON SELECTION SECTION ----------------
+	
+
+	.menu_items[:radio_gp] << rg << radio_group.new( radio_rc,
+					    :always_one?, _true ,
+					    :model,_self ,
+					    :change_selector, :radio_btn_selection|()|)
+
+	
+	
+	r1 << sw_toggle_item.new( radio_rc,
+			      :label, _self.message(:update),
+			      :row, 1,
+			      :col, 1
+			      
+			     )
+	
+	rg.manage_child( r1, :update )
+	
+	r2 << sw_toggle_item.new( radio_rc,
+			      :label, _self.message(:insert),
+			      :row, 1,
+			      :col, 2
+			      )
+	rg.manage_child( r2, :insert)
+	
+
+	
+	#-------------------------------------------------------------
+	
+	ch_rc << sw_container.new(excel_rc, 2, 3,
+			    :resize?,_false,
+			    #:col_alignment, :left,
+			    #:row_alignment, :middle,
+			    :col_alignment, :fill,
+			    :row_alignment, :centre,
+			    :col_spacing,30,
+			    :row_spacing,10,
+			    :row,2,:col,1,
+			    :outer_spacing,5)
+	
+	#-------------- EXCEL DIRECTORY SECTION ----------------
+	_local label1 << sw_label_item.new( ch_rc,
+					 _self.message(:excel_file_folder),
+					 :row,1,
+					 :col,1,
+					 :col_alignment, :left,
+					 :row_alignment, :top,
+					 :min_width,100
+				    )
+	.menu_items[:excel_text] << sw_text_item.new(ch_rc,
+						     :row,1,
+						     :col,2,
+						     :min_width,200)
+	
+	_local browse_btn_input << _self.action(:excel_folder_browse).place_control_on(ch_rc,:dialog)
+	browse_btn_input.min_width << 50
+	#-----------------------------------------------
+	#-------------- LOG DIRECTORY SECTION ----------------
+	_local label2 << sw_label_item.new( ch_rc,
+					 _self.message(:log_directory_folder),
+					 :row,2,
+					 :col,1,
+					 :min_width,100
+					 
+				    )
+
+	.menu_items[:log_text] << sw_text_item.new(ch_rc,
+						   :row,2,
+						   :col,2,
+						   :min_width,200)
+	
+	_local browse_btn_log << _self.action(:log_directory_browse).place_control_on(ch_rc, :dialog )
+	browse_btn_log.min_width << 50
+	
+	#--------------------------------------------
+	
+
+	#------------- BUTTON SECTION ----------------------
+		_local btn_ch_rc << sw_container.new(excel_rc,1,_unset,
+				       :col_spacing,15,
+				       :resize?,_true,
+				       #:col_alignment, :left,
+				       #:row_alignment, :middle,
+				       :row_alignment,:fill,
+				       :col_alignment,:centre,
+				       :outer_spacing,5,
+				       :row,3, :col, 1)
+
+	_local generate_btn << _self.action(:import_data).place_control_on( btn_ch_rc, :dialog )
+
+	generate_btn.min_width << 100
+
+	_local insert_btn << _self.action(:insert_data).place_control_on( btn_ch_rc, :dialog )
+
+	insert_btn.min_width << 100
+	_self.action(:insert_data).enabled?<<_false
+	
+	_local interrupt_btn << _self.action(:interrupt).place_control_on( btn_ch_rc, :dialog )
+
+	# Added line to disable the interrupt button initially.
+	_self.action(:interrupt).enabled?<<_false 
+	# End
+	
+	interrupt_btn.min_width << 100
+
+        _local quit_btn << _self.action(:quit).place_control_on( btn_ch_rc, :dialog )
+	quit_btn.min_width << 100
+		
+
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method post_activation()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.post_activation()
+	## 
+	##
+	.menu_items[:excel_text].value << ""
+	.menu_items[:log_text].value << ""
+	_self.framework.set_status_info(_self.message(:Ready))
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method quit()
+##-------------------------------------------------------------------------------
+
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.quit()
+	## 
+	## 
+	_self.framework.close()
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method excel_folder_browse()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.excel_folder_browse()
+	## 
+	##
+	
+	_self.activate_excel_directory_selection(:excel_file_folder)
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method activate_excel_directory_selection()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.activate_excel_directory_selection(input)
+	## 
+	##
+	
+	_if input _is _unset _then _return _endif
+	
+	f_path << system.pathname_up(system.user_application_data_path(),1) 
+	_if _not (system.file_exists? (f_path))
+	_then 	
+		system.mkdir(f_path)
+	
+	_endif
+
+	_local dir << system.getenv("")
+	_local dialog << file_dialog.new(_self, :path_selected|()|, _unset,:directory, dir)
+	dialog.filter << {"xls","XLS","xlsx","XLSX"}
+	dialog.activate()
+_endmethod
+$
+
+
+#-------------------------------------------------------------------------------
+# Method path_selected()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.path_selected(p_file_path)
+        ##
+	## Stores the file path when clicked on "Ok" button.
+	
+	
+	.menu_items[:excel_text].value << p_file_path
+	
+	.menu_items[:log_text].value << tp_get_directory_for_file(p_file_path)
+	
+_endmethod 	
+$
+
+#-------------------------------------------------------------------------------
+# Method log_directory_browse()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.log_directory_browse()
+	## 
+	## This method is used to activate the directory selection
+	## dialog on click on the 'Browse' button.
+	## 
+	_self.activate_directory_selection(:log_directory_folder)	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method activate_directory_selection()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.activate_directory_selection(input)
+	## 
+	## Description: Method is build the directory selection dialog
+	##
+	
+
+	_if input _is _unset _then _return _endif
+	
+	f_path << system.pathname_up(system.user_application_data_path(),1) + "\temp"
+
+	_if _not (system.file_exists? (f_path))
+	_then
+		
+		system.mkdir(f_path)	
+	_endif
+
+	
+	_local dialog << file_dialog.new(_self, :directory_selected|()|, _unset )
+	dialog.operation << :select_directory
+	dialog.activate()
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method directory_selected()
+##-------------------------------------------------------------------------------
+
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.directory_selected(p_file_path)
+        ##
+	## Stores the file path when clicked on "Ok" button.
+	##
+	
+	.menu_items[:log_text].value  << p_file_path
+_endmethod 	
+$
+
+#-------------------------------------------------------------------------------
+# Method import_data()
+##-------------------------------------------------------------------------------
+
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.import_data()
+	## 
+	##
+	_self.framework.set_status_info(_self.message(:running))
+	
+	_if .menu_items[:excel_text].value  _is _unset _orif
+	    .menu_items[:excel_text].value = ""
+	_then
+		
+		_self.framework.set_status_info(_self.message(:ready))
+		_self.show_message(_self.message(:excel_file_not_entered))
+		_self.framework.set_status_info("")
+		_return 
+	_endif
+
+	_if .menu_items[:log_text].value  _is _unset _orif
+	    .menu_items[:log_text].value = ""
+	_then
+		
+		_self.framework.set_status_info(_self.message(:ready))
+		_self.show_message(_self.message(:log_directory_not_entered))
+		_self.framework.set_status_info("")
+		_return
+	_endif
+
+	_if gis_program_manager.databases[:electric].mode  _is :readonly
+	_then
+		_self.show_message(_self.message(:set_view_to_write_mode))
+		_self.framework.set_status_info("")
+		_return
+	_endif
+	
+	_if .menu_items[:radio_gp].value = "update"
+	_then
+		.engine_update.import_data(.menu_items[:excel_text].value, .menu_items[:log_text].value, _self)
+		_self.action(:interrupt).enabled? << _true
+		_self.action(:import_data).enabled? << _false
+		
+	_else
+		
+		.engine_insert.import_data(.menu_items[:excel_text].value, .menu_items[:log_text].value, _self)
+		_self.action(:interrupt).enabled? << _true
+		_self.action(:insert_data).enabled? << _false
+	_endif
+	
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method interrupt()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.interrupt()
+	##
+	## Description: This method is used to interrupt the process running.
+	## 
+	## Parameters : <None>
+	## 
+	## Returns    : <Nothing>
+	##
+
+	_if .menu_items[:radio_gp].value = "update"
+	_then
+		_if .engine_update.run_status _is :running _orif
+		    .engine_update.run_status _is :ready 
+		_then
+			.engine_update.interrupt_engine()
+			
+			_self.framework.set_status_info(_self.message(:interrupted))
+			
+			_self.action(:interrupt).enabled? << _false
+			
+			_self.action(:import_data).enabled? << _true
+		_endif
+	_else
+		_if .engine_insert.run_status _is :running _orif
+		    .engine_insert.run_status _is :ready 
+		_then
+			.engine_insert.interrupt_engine()
+			
+			_self.framework.set_status_info(_self.message(:interrupted))
+			
+			_self.action(:interrupt).enabled? << _false
+			
+			_self.action(:insert_data).enabled? << _true
+		_endif
+		
+	_endif
+	
+	
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method radio_btn_selection()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.radio_btn_selection()
+	## 
+	## 
+	
+	
+	_if .menu_items[:radio_gp].value = "insert"
+	_then
+		_self.action(:import_data).enabled?<<_false
+		_self.action(:insert_data).enabled?<<_true
+	_else
+		
+		_self.action(:import_data).enabled?<<_true
+		_self.action(:insert_data).enabled?<<_false
+	_endif
+	
+	
+	
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method note_change()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_attribute_update_gui_plugin}, usage={TPSODL})
+_method tp_attribute_update_gui_plugin.note_change(who,what,data)
+	## 
+	##
+
+	
+	_if .menu_items[:radio_gp].value = "insert"
+	_then
+			
+		_if _not (who = .engine_insert)
+		_then
+			_return
+		_endif
+		
+		_if what _is :status
+		_then
+			_self.framework.set_status_info(data)
+			
+		_elif what _is :completed
+		_then
+			_self.framework.set_status_info(_self.message(:completed))
+			
+			_self.action(:interrupt).enabled? << _false
+			_self.action(:insert_data).enabled? << _true
+			
+		_elif what _is :error
+		_then
+			_self.action(:interrupt).enabled? << _false
+		
+			_self.action(:insert_data).enabled? << _true
+			
+			_self.show_message(data)
+
+			_self.framework.set_status_info(_self.message(:error_occurred))
+		
+		_endif
+	_else
+		_if _not (who = .engine_update)
+		_then
+			_return
+		_endif
+		
+		_if what _is :status
+		_then
+			_self.framework.set_status_info(data)
+			
+		_elif what _is :completed
+		_then
+			_self.framework.set_status_info(_self.message(:completed))
+			
+			_self.action(:interrupt).enabled? << _false
+			_self.action(:import_data).enabled? << _true
+			
+		_elif what _is :error
+		_then
+			_self.action(:interrupt).enabled? << _false
+		
+			_self.action(:import_data).enabled? << _true
+			
+			_self.show_message(data)
+
+			_self.framework.set_status_info(_self.message(:error_occurred))
+		
+		_endif
+	_endif
+	
+_endmethod
+$

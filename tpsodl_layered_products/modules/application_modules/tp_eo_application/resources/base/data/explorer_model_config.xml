@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<config base="office_base_application.explorer_model_config">
+    <plugins> 
+
+	<plugin name="datasets_plugin"  class_name="explorer_model_datasets_plugin">
+	    <plugin_data>
+		<elements>
+		    <element name="Gis">
+			<datasets display_all="yes">
+			    <dataset name="gis"/>
+			</datasets>
+			<aces>
+			    <ace name="EO"/>
+			</aces>
+		    </element>
+		    <element name="Land">
+			<datasets display_all="yes">
+			    <dataset name="land"/>
+			</datasets>
+			<aces>
+			    <ace name="EO"/>
+			</aces>
+		    </element>
+		    <element name="Electric">
+			<datasets display_all="yes">
+			    <dataset name="electric"/>
+			</datasets>
+			<aces>
+			    <ace name="EO"/>
+			</aces>
+		    </element>
+		    <element name="Raster">
+			<datasets display_all="yes">
+			    <dataset name="raster_ds"/>
+			</datasets>
+			<aces>
+			    <ace name="EO"/>
+			</aces>
+		    </element>			
+		</elements>
+	    </plugin_data>
+	</plugin>
+
+	<plugin name="themes_plugin"  class_name="explorer_model_themes_plugin">
+	    <plugin_data>
+		<aces>
+		    <ace name="EO"/>
+		</aces>
+	    </plugin_data>
+	</plugin>
+
+	<plugin name="search_engine"  class_name="explorer_model_search_plugin">
+	    <plugin_data>
+		<elements>
+		    <element name="asset_id">
+			<dataset name="electric" ace_name="EO">
+			    <collection name="eo_cable">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_composite_switch">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_connector_point">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_connector_segment">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_energy_consumer">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_energy_source">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_isolating_eqpt">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_light">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_meter">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_power_xfrmr">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_protective_eqpt">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_regulating_eqpt">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_wire">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_counterpoise">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_guy">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_pullbox">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_guy">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_secondary_bus_enclosure">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="st_conduit">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_light">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_pit">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_cabinet">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_antenna">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_insulator">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_insulator">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_foundation">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_pole">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_tower">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_decorative_pole">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_pedestal">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_cross_arm">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_duct">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_conduit">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="eo_fiber_optic">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_pole_structure">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_manhole">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_handhole">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="st_duct">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_crossing">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_pole">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_pad">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="ed_vault">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_crossarm">
+				<field name = "asset_id"/>
+			    </collection>
+			    <collection name="et_structure">
+				<field name = "asset_id"/>
+			    </collection>
+			</dataset>
+		    </element>
+		</elements>
+	    </plugin_data>
+	</plugin>
+
+	<!-- Locator Search Plugin is used to define the tables and fields --> 
+	<!-- that are queried based upon the category.                     -->
+	<!--<plugin name="report_categories" class_name="eo_locator_search_plugin">
+	    <plugin_data>
+		<elements>
+		    <element name="swo_locator_config">
+			<plugin plugin_name="datasets_plugin">
+			    <collection>
+				<parameters>
+				    <parameter name="dataset" value="scratch"/>		   
+				    <parameter name="collection" value="swo_locator_config"/>
+				</parameters>
+				<fields>
+				    <field name="swo_dataset_name"/>
+				    <field name="swo_collection_name"/>
+				    <field name="swo_field_name"/>
+				</fields>
+				<visible_field_names>
+				    <field name="swo_dataset_name"/>
+				    <field name="swo_collection_name"/>
+				    <field name="swo_field_name"/>
+				</visible_field_names>
+				<result_method name="populate_scratch_collection"/>
+			    </collection>
+			</plugin>
+		    </element>
+		</elements>
+	    </plugin_data>
+	</plugin>-->
+
+	<!-- Locator Search Plugin is used to define the tables and fields --> 
+	<!-- that are queried based upon the category.                     -->
+	<plugin name="locator_categories" class_name="swo_locator_search_plugin">
+	    <plugin_data>
+		<elements>
+		    <element name="swo_locator_config">
+			<plugin plugin_name="datasets_plugin">
+			    <collection>
+				<parameters>
+				    <parameter name="dataset" value="scratch"/>		   
+				    <parameter name="collection" value="swo_locator_config"/>
+				</parameters>
+				<fields>
+				    <field name="swo_dataset_name"/>
+				    <field name="swo_collection_name"/>
+				    <field name="swo_field_name"/>
+				</fields>
+				<visible_field_names>
+				    <field name="swo_dataset_name"/>
+				    <field name="swo_collection_name"/>
+				    <field name="swo_field_name"/>
+				</visible_field_names>
+				<result_method name="populate_scratch_collection"/>
+			    </collection>
+			</plugin>
+		    </element>
+		</elements>
+	    </plugin_data>
+	</plugin>
+
+    </plugins>
+</config>

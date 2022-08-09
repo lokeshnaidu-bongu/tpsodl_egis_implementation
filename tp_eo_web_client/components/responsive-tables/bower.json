@@ -1,0 +1,25 @@
+{
+  "name": "responsive-tables",
+  "version": "0.6.0",
+  "author": "General Electric",
+  "main": [
+    "js/responsive-tables.js",
+    "less/responsive.less"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "Gruntfile.js",
+    "package.json",
+    "components",
+    "css",
+    "node_modules",
+    "js/require.config.js"
+  ],
+  "dependencies": {
+    "ge-bootstrap": "git@github.sw.ge.com:DXC/ge-bootstrap#v1.9.4",
+    "requirejs": "git://github.com/jrburke/requirejs-bower#~2.1.11",
+    "jquery": "git://github.com/components/jquery#~1.10.2",
+    "respond": "git://github.com/GeneralElectric/Respond.git#~1.2.1"
+  }
+}

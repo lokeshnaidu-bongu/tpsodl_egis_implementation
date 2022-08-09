@@ -1,0 +1,255 @@
+.label,
+.badge {
+	.border-radius(@baseBorderRadius);
+}
+
+.label {
+	padding: @labelTagPadding;
+	line-height: 1.5em;
+	vertical-align: middle;
+	text-transform: @labelTagTextTransform;
+	font-size: @labelTagFontSize;
+
+	&.label {
+		&-success,
+		&-warning,
+		&-important {
+			background-repeat: no-repeat;
+		}
+
+		&-inverse,
+		&-default {
+			text-transform: capitalize;
+		}
+	}
+}
+
+
+.badge {
+	font-size: @badgeFontSize;
+	font-weight: normal;
+	text-transform: none;
+	padding: @badgePadding;
+}
+
+.label,
+.badge {
+	background-color: @grayDark; // This style setting blows away all previous .badge-? .label-? definitions so we have to define the color in each one below.
+}
+
+
+.label.label,
+.badge.badge,
+.alert.alert{
+	&-info {
+		//  background-color: @cyan; // Not needed now that included in .vertical override.
+		#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+	}
+	&-success {
+		//	background-color: @green; // Not needed now that included in .vertical override.
+		#gradient > .vertical(@green, darken(@green, 10%));
+	}
+	&-warning {
+		//	background-color: @orange; // Not needed now that included in .vertical override.
+		#gradient > .vertical(@orange, darken(@orange, 10%));
+	}
+}
+
+
+.label.label-important,
+.badge.badge-important,
+.alert.alert-danger,
+.alert.alert-error,
+.alert.alert-important {
+	//	background-color: @red; // Not needed now that included in .vertical override.
+	#gradient > .vertical(@red, darken(@red, 10%));
+}
+
+.alert.alert,
+.label.label {
+
+	&-success,
+	&-warning,
+	&-important,
+	&-error,
+	&-block .alert-heading,
+	&-alt.label-important {
+		&:before {
+
+			display: inline-block;
+
+			font-family: @geicons;
+			font-size: @baseFontSize;
+			font-weight: normal;
+			vertical-align: top;
+
+			padding-right: 5px;
+			margin-bottom: -3px;
+
+		}
+	}
+
+	&-success {
+		&:before {
+			content: @icon-ico_ok_sm; //"\f402";
+			font-size: @baseFontSize + 6;
+			line-height: 1;
+		}
+	}
+
+	&-block .alert-heading,
+	&-warning {
+		&:before {
+			content: @icon-ico_alert_sm; //"\f109";
+			font-size: @baseFontSize;
+			line-height: 0.88;
+			padding-top: 3px; // use padding to normailze the icon.  but line-height is how we adjust cross-browser.
+
+		}
+	}
+
+	&-block.alert-error .alert-heading,
+	&-alt.label-important,
+	&-important,
+	&-error {
+		&:before {
+			content: @icon-ico_warning_sm; //"\f42c";
+			font-size: @baseFontSize + 7;
+			padding-top: 1px;
+			line-height: 0.9;
+		}
+	}
+}
+
+.label.label,
+.badge.badge,
+.alert.alert {
+	&-inverse {
+		background-color: @btnBackground;
+		border: 1px solid @grayLightest;
+		color: @grayDark;
+	}
+}
+
+// Alert styles
+.alert {
+	.border-radius(@borderRadiusLarge);
+	border: none;
+	//	background-color: @orange; // Not needed now that included in .vertical override.
+	#gradient > .vertical(@orange, darken(@orange, 10%));
+
+	.btn.pull-right {
+		padding-top: 3px;
+		padding-bottom: 3px;
+		line-height: @baseLineHeight - 5;
+		margin-left: 5px;
+		top: 0;
+	}
+
+	h4 {
+		font-weight: bold;
+		line-height: @baseLineHeight;
+		padding-bottom: 3px;
+	}
+
+	&.alert-block {
+
+		padding-left: 36px;
+
+		.alert-heading {
+			font-weight: bold;
+			line-height: @baseLineHeight;
+			padding-bottom: 3px;
+
+			&:before {
+				margin: 1px 5px 0 -25px;
+			}
+		}
+
+		&.alert-error {
+			&:before {
+				content: none;
+			}
+
+			.alert-heading {
+				&:before {
+					// The icon is a bit wider than the others...
+					margin-right:2px;
+					margin-left:-28px;
+				}
+			}
+		}
+	}
+
+}
+
+// This is the proposed new label style, used on dashboard
+// marked with class label-alt
+// TODO add other levels if this design is deemed included
+
+.label.label-alt.label-important {
+	font-size: 1em;
+	border: 1px solid @red;
+	background: none;
+	padding: 4px 8px;
+	color: @red;
+}
+
+
+// a badge inside of an icon becomes an iPhone-style mini indicator
+i[class^="icon-"] .badge {
+	position: absolute;
+	top: 1.33em;
+	left: 1.33em;
+	border-radius: 42px;
+	padding: 4px 3px 3px;
+	font-size: 9px;
+	font-family: sans-serif;
+}
+
+h4 .label {
+	line-height:1.4em;
+	padding-bottom:2px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+	/* Safari and Chrome */
+	.alert.alert,
+	.label.label {
+
+		&-success {
+			&:before {
+				line-height: 0.8;
+			}
+		}
+
+		&-warning {
+			&:before {
+				line-height: 0.7;
+			}
+		}
+
+		&-important,
+		&-error {
+			&:before {
+				line-height: 0.75;
+			}
+		}
+
+		&-block {
+			.alert-heading {
+				&:before {
+					margin-top: -1px;
+				}
+			}
+
+			&.alert-error {
+				.alert-heading {
+					&:before {
+						margin-top: -2px;
+					}
+				}
+			}
+		}
+	}
+}

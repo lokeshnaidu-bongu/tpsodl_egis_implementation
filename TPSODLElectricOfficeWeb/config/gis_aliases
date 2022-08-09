@@ -1,0 +1,43 @@
+###
+# TPSODL Electric Office Web aliases.
+###
+
+######################
+# Task Management CLI
+#eo_web_tm_closed:
+#  title   = Run Task Management closed image on the Electric Office Database
+#  session = electric_office_web:eo_web_tm_closed
+#  CONFIG_FOR_STARTUP = magikCLIConfig
+#  product = electric_office_web
+#
+#eo_web_tm_open:
+#  title   = Run Task Management open image on the Electric Office Database
+#  session = electric_office_web:eo_web_tm_open
+#  CONFIG_FOR_STARTUP = magikCLIConfig
+#  product = electric_office_web
+#  SW_ACE_DB_DIR      = %SMALLWORLD_GIS%/../electric_office/example_db/ds/ds_admin
+#  args               = -cli
+## STSHOST            = kubernetes_server_name      
+#
+#eo_web_tm_dsst_server:
+#  title   = Run Task Management Short Transaction Server image on the Electric Office Database
+#  session = electric_office_web:eo_web_tm_dsst_server
+#  CONFIG_FOR_STARTUP = magikCLIConfig
+#  product = electric_office_web
+#  args               = -dsst_server_port 4000
+
+  
+######################
+# TPSODL Electric Office Web Vert.X CLI
+tpsodl_eo_web_vertx_closed:
+  title   = Run TPSODL Electric Office Web Vert.x closed image
+  session = tpsodl_electric_office_web:tpsodl_eo_web_vertx_closed
+  CONFIG_FOR_STARTUP = magikCLIConfig
+  product = tpsodl_electric_office_web
+
+tpsodl_eo_web_vertx_open:
+  title   = Run Electric Office Web Vert.x open image
+  session = tpsodl_electric_office_web:tpsodl_eo_web_vertx_open
+  CONFIG_FOR_STARTUP = magikCLIConfig
+  product = tpsodl_electric_office_web
+

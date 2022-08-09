@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns="http://anyTypeXmlStreamExample.webservice.gss" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://anyTypeXmlStreamExample.webservice.gss">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://anyTypeXmlStreamExample.webservice.gss">
+      <xs:element name="requestRealWorldObj">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="URN" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="requestRealWorldObjResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="RWO" type="xs:anyType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="requestRealWorldObjRequest">
+    <wsdl:part name="parameters" element="ns:requestRealWorldObj" />
+  </wsdl:message>
+  <wsdl:message name="requestRealWorldObjResponse">
+    <wsdl:part name="parameters" element="ns:requestRealWorldObjResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AnyTypeXmlStreamPortType">
+    <wsdl:operation name="requestRealWorldObj">
+      <wsdl:input message="ns:requestRealWorldObjRequest" wsaw:Action="urn:requestRealWorldObj" />
+      <wsdl:output message="ns:requestRealWorldObjResponse" wsaw:Action="urn:requestRealWorldObjResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AnyTypeXmlStreamSoap11Binding" type="ns:AnyTypeXmlStreamPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="requestRealWorldObj">
+      <soap:operation soapAction="urn:requestRealWorldObj" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AnyTypeXmlStreamSoap12Binding" type="ns:AnyTypeXmlStreamPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="requestRealWorldObj">
+      <soap12:operation soapAction="urn:requestRealWorldObj" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AnyTypeXmlStream">
+    <wsdl:port name="AnyTypeXmlStreamSoap11Endpoint" binding="ns:AnyTypeXmlStreamSoap11Binding">
+      <soap:address location="http://localhost:3001/gss/web/services/AnyTypeXmlStreamExample/AnyTypeXmlStreamSoap11Endpoint" />
+    </wsdl:port>
+    <wsdl:port name="AnyTypeXmlStreamSoap12Endpoint" binding="ns:AnyTypeXmlStreamSoap12Binding">
+      <soap12:address location="http://localhost:3001/gss/web/services/AnyTypeXmlStreamExample/AnyTypeXmlStreamSoap12Endpoint" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

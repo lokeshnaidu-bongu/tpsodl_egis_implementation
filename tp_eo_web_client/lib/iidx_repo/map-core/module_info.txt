@@ -1,0 +1,4 @@
+  name: map-core
+  version: 0.3.0
+  source: https://github.build.ge.com/DXC/map-core.git
+  

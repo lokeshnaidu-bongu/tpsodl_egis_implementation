@@ -1,0 +1,22 @@
+<section class="module filter-popover noselect">
+  <header class="module-header">
+    <h2 class="voice voice-brand" style="margin: 0;">{{Messages.results_list.filter.title}}</h2>
+  </header>
+  <div class="module-body filter-pop-over">
+  <div class="filter-list">
+    <div class="checkbox">
+      <label><input type="checkbox" id="show_all" value="show_all" {{#noFilter}}checked{{/noFilter}}>{{Messages.results_list.filter.selectAllOption}}</label>
+    </div>
+    {{#filters}}
+    <div class="checkbox">
+      <label><input type="checkbox" value="{{filter}}" {{#enabled}}checked{{/enabled}}>{{filter}}</label>
+    </div>
+    {{/filters}}
+  </div>
+  <footer class="module-footer">
+    <div style="width: 100%; text-align: center">
+      <button id="okButton" class="btn btn-large">{{Messages.results_list.filter.okButton}}</button>
+      <button id="cancelButton" class="btn btn-large">{{Messages.results_list.filter.cancelButton}}</button>
+    </div>
+  </footer>
+</div>

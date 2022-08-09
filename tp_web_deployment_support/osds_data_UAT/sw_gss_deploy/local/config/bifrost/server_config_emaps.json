@@ -1,0 +1,50 @@
+{
+  "base": "server_config_solr.json",
+  "root": [{"name": "emaps", "path": "http://emaps-client-service:3000"}],
+  "extensions": {
+    "emaps": {
+      "enabled": true,
+      "secure": true,
+      "match": {
+        "service": "ejb/EmapsLocal",
+        "method": "requestEmapV2"
+      },
+      "replace": {
+        "service": "ejb/MagikLocal",
+        "method": "web_pdf_plot",
+        "async": "false"
+      },
+      "mail": {
+        "smtp": {
+          "host": "myhost.smtp",
+          "port": 25,
+          "use_auth": false,
+          "auth": {
+            "method": "(optional) PLAIN|LOGIN|OTHER SMTP AUTHENTICATION METHOD",
+            "user": "${SW_EMAPS_SMTP_USER}",
+            "password": "${SW_EMAPS_SMTP_PASSWORD}"
+          }
+        }
+      },
+      "defaults": {
+        "user": "User"
+      },
+      "dateFormat": "long",
+      "swLocale": "${SW_LOCALE}",
+      "swTimezone": "${SW_TZ}",
+      "from": "testuser@test-org.com",
+      "bcc": "sentmail@test-org.com",
+      "subject": "Your eMap, issued on {3}.",
+      "body_text": "Dear {0}, \n\nThank you for using the eMaps service. The eMap you requested is attached. \n\nTitle: {1} \nComment: {4} \nReference ID: {2} \n\nPlease be aware that all information included in this eMap is the property of the sender and subject to copyright. It is illegal to copy or send this information to any third party without the permission of the sender. \n\nPlease quote the Reference ID in any correspondence. \n\nKind regards, \nYour eMaps Service team",
+      "attachment_filename": "Your Emap",
+      "supplementary_information_attachment_filename": "/usr/apps/bifrost/config/supplementary-information"
+    }
+  },
+  "paths": {
+    "/emaps": {
+      "security_roles": [
+        "gss.user"
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+_block
+	system.putenv("SW_ACE_DB_DIR", "D:\gis_db")
+	system.putenv("EO_DB_UNIT_TYPE", "mm")
+	ds_coordinate_system.add_catalogue_def(:utm45_n,coordinate_system.new_proj(:wgs84,:accurate_utm,{:zone,45,:south,_false},
+										   coordinate.new(0,0),:mm,:group,:world))
+_endblock
+$

@@ -1,0 +1,200 @@
+<!-- This file is used to defines field grouping, ordering, and visibilty and
+      takes precedence over values stored in the ace or the data dictionary.
+      It can also be used to specify that a non default editor class,
+      configuration, or gui be used for a particular collection.
+
+      It is referred to in the applications config file in the
+      configuration_file_name property of the editor_manager.
+
+Modify all installation editors to use DM configuration rather than WM  
+-->
+<editors base="sweo_base_user_application.collection_config">>
+    <!-- Define the xml files for specific collections -->
+<!-- All installation objects require extra actions for managing current and future assets. 
+     These actions are defined in the following separate config and gui files. 
+-->
+    <collection	collection_name="eo_connector_point_inst"
+		config_file_name="eo_installation_asset_gui.dm_eo_installation_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_installation_editor_gui">
+    </collection>
+    
+    <collection	collection_name="eo_connector_segment_inst"
+		config_file_name="eo_installation_asset_gui.dm_eo_cs_inst_component_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_installation_editor_gui">
+    </collection>
+	
+    <collection	collection_name="eo_isolating_eqpt_inst"
+		config_file_name="eo_controlling_eqpt_gui.dm_eo_cs_inst_component_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_installation_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_cable_segment_inst"
+		config_file_name="eo_installation_asset_gui.dm_eo_cross_section_parent_inst_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_cross_section_parent_inst_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_wire_segment_inst"
+		config_file_name="eo_installation_asset_gui.dm_eo_cross_section_parent_inst_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_cross_section_parent_inst_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_regulating_eqpt_inst"
+		config_file_name="eo_controlling_eqpt_gui.dm_eo_installation_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_installation_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_protective_eqpt_inst"
+		config_file_name="eo_controlling_eqpt_gui.dm_eo_installation_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_installation_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_energy_storage_inst"
+		config_file_name="eo_controlling_eqpt_gui.dm_eo_installation_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_installation_editor_gui">
+    </collection>
+    
+    <collection	collection_name="eo_composite_switch"
+		config_file_name="eo_installation_asset_gui.dm_eo_composite_switch_editor_config"
+		gui_file_name="sweo_dm_user_application.cu_object_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_power_xfrmr_inst"
+		config_file_name="eo_controlling_eqpt_gui.dm_eo_2w_xfrmr_inst_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_2w_xfrmr_inst_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_3w_power_xfrmr_inst"
+		config_file_name="eo_controlling_eqpt_gui.dm_eo_3w_xfrmr_inst_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_3w_xfrmr_inst_editor_gui">
+    </collection>
+
+    <collection	collection_name="eo_measuring_eqpt_inst"
+		config_file_name="eo_installation_asset_gui.eo_installation_editor_config"
+		gui_file_name="eo_installation_asset_gui.dm_eo_installation_editor_gui">
+    </collection>
+
+    <collection collection_name="eo_equipment_assembly"
+		config_file_name="sweo_dm_user_application.eo_equipment_assembly_editor_config.xml">
+    </collection>
+
+    <collection collection_name="eo_dac"
+		config_file_name="sweo_dm_user_application.eo_dac_editor_config.xml">
+    </collection>
+
+    <collection collection_name="eo_light_relay"
+		config_file_name="sweo_dm_user_application.eo_light_relay_editor_config.xml">
+    </collection>
+	
+    <collection collection_name="eo_circuit" 
+	       gui_file_name="sweo_dm_user_application.eo_circuit_editor_gui">
+    </collection>
+
+    <collection collection_name="eo_circuit_source" 
+	       gui_file_name="sweo_dm_user_application.eo_circuit_editor_gui">
+    </collection>
+
+    <!-- These tables should use the eo_embedded_soft_joins plugin as well as the eo_cu_lister plugin -->
+    <collection collection_name="et_tower"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="ed_pole"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="ed_vault"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_pit"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_pullbox"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="et_pole"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="ed_switchgear"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_pole_structure"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="ed_junction"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_secondary_bus_enclosure"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_customer_station"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="ed_decorative_pole"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="ed_handhole"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_cabinet"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_pedestal"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="eo_accurate_point"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config"
+		gui_file_name="sweo_dm_user_application.eo_accurate_point_editor_gui">
+    </collection>
+    <collection collection_name="ed_pad"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="ed_riser"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="ed_manhole"
+		config_file_name="sweo_dm_user_application.eo_accurate_point_editor_config">
+    </collection>
+    <collection collection_name="et_structure"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="eo_service_point"
+		config_file_name="sweo_dm_user_application.eo_service_point_editor_config.xml">
+    </collection>
+    <collection collection_name="eo_marker"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="co_easement"
+        config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+        gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+    <collection collection_name="eo_comms_device"
+		config_file_name="sweo_dm_user_application.eo_object_editor_config.xml"
+		gui_file_name="sweo_dm_user_application.eo_object_editor_gui.xml">
+    </collection>
+	
+	<!-- Schematics
+	<collection collection_name="schematic"
+		gui_file_name="sweo_dm_user_application.eo_schematics_editor_gui.xml">
+    </collection>
+	<collection collection_name="schematic_node"
+		gui_file_name="sweo_dm_user_application.eo_schematics_editor_gui.xml">
+    </collection>
+	<collection collection_name="schematic_link"
+		gui_file_name="sweo_dm_user_application.eo_schematics_editor_gui.xml">
+    </collection>
+	<collection collection_name="schematic_area"
+		gui_file_name="sweo_dm_user_application.eo_schematics_editor_gui.xml">
+    </collection>
+	<collection collection_name="schematic_link_annotation"
+		gui_file_name="sweo_dm_user_application.eo_schematics_editor_gui.xml">
+    </collection>
+	-->
+</editors>

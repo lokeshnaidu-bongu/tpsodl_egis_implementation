@@ -1,0 +1,12 @@
+	_block
+	system.putenv("SW_ACE_DB_DIR", "F:\tp_gis_db_mm\wgs_miller")
+	system.putenv("EO_DB_UNIT_TYPE", "mm")
+	ds_coordinate_system.add_catalogue_def(:utm_45n_mm,coordinate_system.new_proj(:wgs84,:accurate_utm,{:zone,45,:south,_false},coordinate.new(0,0),:mm,:group,:world))
+	ds_coordinate_system.add_catalogue_def(:utm_45n_mm,coordinate_system.new_proj(:wgs84,:accurate_utm,{:zone,45,:south,_false},coordinate.new(0,0),:mm,:group,:world))
+	ds_coordinate_system.add_catalogue_def(:world_miller_wgs84_mm,coordinate_system.new_proj(:wgs84,:mill,{:lon_0,"0E",:south,_false},coordinate.new(0,0),:mm,:group,:world))
+	ds_coordinate_system.add_catalogue_def(:google_mercator_mm,coordinate_system.new_proj(:world_popular_visualisation_datum_mre,:merc,{:lon_0,"0E",:lat_ts,"0N",:k,1,:south,_false},coordinate.new(0,0),:mm,:group,:world))
+	ds_coordinate_system.add_catalogue_def(:transverse_mercator_mm,coordinate_system.new_proj(:wgs84,:accurate_tmerc,{:lon_0,"87E",:lat_0,"0N",:k,1,:south,_false},coordinate.new(0,0),:mm,:group,:world))
+ds_coordinate_system.add_catalogue_def(:orissa_lambert_mm,coordinate_system.new_proj(:wgs84,:lcc,{:lon_0=84.375,:lat_0=20.253,:lat_1=18.5833333333,:lat_2=21.9166666667}, coordinate.new(0,0),:mm,:group,:world))
+	datamodel_dialog.open()
+_endblock
+$

@@ -1,0 +1,23 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Basement	9
+Elevated	11
+Joist	4
+Kiosk	13
+Lattice Welded	6
+Not Applicable	15
+Panel Mounted	8
+PCC Pole	1
+Platform Mounted	10
+Plinth	7
+Rail	3
+Steel Tubular Pole	2
+Stilt Mounted	12
+Tower	5
+Pole	14
+Not Available	16
+Others	17

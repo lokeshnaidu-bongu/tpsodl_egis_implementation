@@ -1,0 +1,16 @@
+{
+  "name": "TwitterBootstrapWizard",
+  "author": "forked by General Electric from https://github.com/VinceG",
+  "description": "Twitter Bootstrap Wizard",
+  "version": "1.1.1",
+  "private": true,
+  "homepage": "http://gesdh.com/",
+  "devDependencies": {
+    "grunt": ">=0.4.1",
+    "grunt-contrib-clean": ">=0.4.0",
+    "grunt-contrib-less": "~0.9.0",
+    "grunt-shell": ">=0.3.0",
+    "grunt-contrib-jshint": "*",
+    "karma-support": "git+https://github.sw.ge.com/DT/karma-support.git#v1.0.5"
+  }
+}

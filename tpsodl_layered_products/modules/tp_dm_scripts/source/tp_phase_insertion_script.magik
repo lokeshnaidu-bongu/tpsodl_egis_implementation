@@ -1,0 +1,62 @@
+_block
+	#Make sure Alterbative is in writable mode before running this script
+	ev<<gis_program_manager.databases[:electric]
+	l_path <<"D:\EO_528\electric_office\eo_implementers\tp_cstm_land_db_implementer\Scripts\Phase_insertion.log"
+	a_file << external_text_output_stream.new(l_path)
+	a_file.write("Phase Insertion failed due to Following Reason")
+	a_file.newline()
+	l_coll_list << property_list.new_with(:eo_power_xfrmr_inst,{:eo_power_xfrmr,:eo_power_xfrmr_exi_phase},
+					      :eo_connector_point_inst,{:eo_connector_point,:eo_connector_point_exi_phase},
+					      :eo_connector_segment_inst,{:eo_connector_Segment,:eo_connector_segment_exi_phase},
+					      :eo_cable_segment_inst,{:eo_cable,:eo_cable_exi_phase},
+					      :eo_wire_segment_inst,{:eo_wire,:eo_wire_exi_phase},
+					      :eo_regulating_eqpt_inst,{:eo_regulating_eqpt,:eo_regulating_eqpt_exi_phase},
+					      :eo_protective_eqpt_inst,{:eo_protective_eqpt,:eo_protective_eqpt_exi_phase},
+					      :eo_isolating_eqpt_inst,{:eo_isolating_eqpt,:eo_isolating_eqpt_exi_phase})
+	_for a_inst_name,a_list _over l_coll_list.fast_keys_and_elements()
+	_loop
+		l_inst_coll << ev.collections[a_inst_name]
+		_for a_inst_rec _over l_inst_coll.fast_elements()
+		_loop
+			_if a_inst_rec.existing_assets.size ~= 0
+			_then
+				_continue 
+			_endif
+			
+			l_loc_des<< a_inst_rec.location_description
+			_if l_loc_des _is _unset 
+			_then
+				a_file.write("Location Description is not available for Installation ",a_inst_rec)
+				a_file.newline()
+				_continue 
+			_endif
+			l_mig_id<< a_inst_rec.tp_migration_unique_id
+			_if l_mig_id _is _unset 
+			_then
+				a_file.write("Migration Unique ID is not available for Installation ",a_inst_rec)
+				a_file.newline()
+				_continue 
+			_endif
+			l_coll_asset_name<< a_list[1]
+			l_coll_phase_name<< a_list[2]
+			l_asset<<ev.collection(l_coll_asset_name)
+			l_asset_rec << l_asset.select(predicate.eq(:tp_migration_unique_id,l_mig_id)).an_element()
+			_if l_asset_rec _is _unset 
+			_then
+				a_file.write("Asset Not available with Migration Unique ID of Installation ",a_inst_rec)
+				a_file.newline()
+				_continue 
+			_endif
+			l_phase_coll << ev.collection(l_coll_phase_name)
+			l_prop_list <<property_list.new_with(:phase,l_loc_des,
+							     :abandoned,_false,
+							     :installation,a_inst_rec,
+							     :asset,l_asset_rec,
+							     :normally_energised,_true ,
+							     :owned,_true )
+			rt<< record_transaction.new_insert(l_phase_coll,l_prop_list)
+			rt.run()
+		_endloop
+	_endloop
+
+_endblock

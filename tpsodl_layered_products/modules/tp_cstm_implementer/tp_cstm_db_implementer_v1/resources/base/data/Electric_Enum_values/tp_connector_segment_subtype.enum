@@ -1,0 +1,11 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Cylindrical Bus	1
+Flat Bus	2
+Other	3
+Stranded Bus	4
+SwitchGear Connection	5

@@ -1,0 +1,11 @@
+{
+  "base": "server_config_solr.json",
+  "root": [{"name": "network_viewer", "path": "http://network-viewer-client-service:3000"}],
+  "paths": {
+    "/network_viewer": {
+      "security_roles": [
+        "gss.user"
+      ]
+    }
+  }
+}

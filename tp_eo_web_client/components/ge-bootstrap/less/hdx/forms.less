@@ -1,0 +1,455 @@
+.form-horizontal .controls {
+	margin-left: 10px;
+}
+
+// Text inputs
+
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input,
+textarea,
+textarea.form-control /* new for BS3 */     {
+	font-size: @baseFontSize;
+	color: @grayDark;
+	border-color: @inputBorder;
+	background-color: @inputBackground;
+	.border-radius(@inputBorderRadius);
+	line-height: @baseLineHeight;
+	margin-bottom: 7px;
+	&:focus,
+	&.focused {
+		border-color: @cyan;
+		color: @black;
+		outline: none;
+	}
+
+	&.disabled,
+	&:disabled {
+		.opacity(.65);
+	}
+}
+
+// place holder text in italics
+
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"] {
+	&::-webkit-input-placeholder {
+		font-style: italic;
+	}
+
+	&:-moz-placeholder {
+		/* Firefox 18- */
+		font-style: italic;
+	}
+
+	&::-moz-placeholder {
+		/* Firefox 19+ */
+		font-style: italic;
+	}
+
+	&:-ms-input-placeholder {
+		font-style: italic;
+	}
+}
+
+.input-append {
+	input[type="text"],
+	input[type="password"],
+	input[type="datetime"],
+	input[type="datetime-local"],
+	input[type="date"],
+	input[type="month"],
+	input[type="time"],
+	input[type="week"],
+	input[type="number"],
+	input[type="email"],
+	input[type="url"],
+	input[type="search"],
+	input[type="tel"],
+	input[type="color"],
+	.uneditable-input,
+	textarea {
+		&:focus ~ .btn {
+			border-color: @cyan;
+		}
+	}
+}
+
+.uneditable-input {
+	//Override for hdx.
+	&:hover {
+		border-color: @inputBorder;
+	}
+}
+
+textarea {
+	height: auto;
+}
+
+.form-group.success,
+.form-group.warning,
+.form-group.error {
+	input[type="text"],
+	input[type="password"],
+	input[type="datetime"],
+	input[type="datetime-local"],
+	input[type="date"],
+	input[type="month"],
+	input[type="time"],
+	input[type="week"],
+	input[type="number"],
+	input[type="email"],
+	input[type="url"],
+	input[type="search"],
+	input[type="tel"],
+	input[type="color"] {
+		color: @grayDark;
+		padding-right: 28px;
+		display: inline-block;
+
+		&:focus {
+			color: @black;
+		}
+	}
+}
+
+.form {
+	&-group {
+
+		.formGroupHds(@borderColor, @color) {
+			border-color: @borderColor;
+
+			+ i {
+				font-family: @geicons;
+				font-style: normal;
+				font-weight: normal;
+
+				display: inline-block;
+				margin-left: -25px;
+
+				position: relative;
+				top: 5px;
+
+				color: @borderColor;
+			}
+
+			&:focus {
+				border-color: darken(@color, 10%);
+				+ i  {
+					color: darken(@color, 10%);
+				}
+			}
+		}
+
+		&.success {
+			input[type="text"],
+			input[type="password"],
+			input[type="datetime"],
+			input[type="datetime-local"],
+			input[type="date"],
+			input[type="month"],
+			input[type="time"],
+			input[type="week"],
+			input[type="number"],
+			input[type="email"],
+			input[type="url"],
+			input[type="search"],
+			input[type="tel"],
+			input[type="color"] {
+				.formGroupHds(@successBorder, @green);
+
+				+ i {
+					font-size: @baseFontSize + 7;
+
+					&:before {
+						content: @icon-ico_ok_sm;
+					}
+				}
+
+			}
+		}
+
+		&.warning {
+			input[type="text"],
+			input[type="password"],
+			input[type="datetime"],
+			input[type="datetime-local"],
+			input[type="date"],
+			input[type="month"],
+			input[type="time"],
+			input[type="week"],
+			input[type="number"],
+			input[type="email"],
+			input[type="url"],
+			input[type="search"],
+			input[type="tel"],
+			input[type="color"] {
+
+				.formGroupHds(@warningBorder, @orange);
+
+				+ i {
+					margin-left: -23px;
+					font-size: @baseFontSize;
+					top: 2px;
+
+					&:before {
+						content: @icon-ico_alert_sm;
+					}
+				}
+			}
+		}
+
+		&.error {
+			input[type="text"],
+			input[type="password"],
+			input[type="datetime"],
+			input[type="datetime-local"],
+			input[type="date"],
+			input[type="month"],
+			input[type="time"],
+			input[type="week"],
+			input[type="number"],
+			input[type="email"],
+			input[type="url"],
+			input[type="search"],
+			input[type="tel"],
+			input[type="color"] {
+
+				.formGroupHds(@errorBorder, @red);
+
+				+ i {
+					font-size: @baseFontSize + 5;
+
+					&:before {
+						content: @icon-ico_warning_sm;
+					}
+				}
+
+			}
+		}
+	}
+}
+
+// Position radios and checkboxes better
+input[type="radio"],
+input[type="checkbox"] {
+	margin: 2px 0 0;
+	//*margin-top: 0; // Not supporting IE7 anymore? BS3 doesn't. /* IE7 */
+	margin-top: 1px \9; /* IE8-9 */
+}
+
+.form-inline {
+
+	.input-append {
+
+		.search-query {
+
+			border-right: 0;
+			.border-radius(@inputBorderRadius 0 0 @inputBorderRadius);
+			padding: 3px 0px 3px 5px;
+		}
+
+		.btn {
+			border-left: 0;
+			//  padding:4px 0px 4px 2px;
+			.border-radius(0 @inputBorderRadius @inputBorderRadius 0);
+			margin-bottom: 5px;
+
+			i {
+				font-size: @baseFontSize;
+			}
+		}
+
+		.btn-inverse {
+			vertical-align: top;
+			border-radius: 0 @inputBorderRadius @inputBorderRadius 0;
+			background-color: @grayDarker;
+			padding-bottom: 1px;
+		}
+	}
+
+}
+
+.input {
+
+	&-prepend,
+	&-append {
+		.add-on {
+			line-height: @line-height-base * 1.5;
+			height: @input-height-base
+		}
+
+		.input-sm + .input-group-btn {
+			.add-on {
+				line-height: @line-height-base * 1.3;
+			}
+		}
+
+		.btn {
+			height: 30px;
+			line-height: @baseLineHeight +3; //21px
+			color: @grayDark;
+			font-size: @baseFontSize - 2;
+			margin-bottom: 1px;
+			&:active {
+				color: @white;
+			}
+		}
+	}
+
+	&-prepend {
+		.add-on:first-child,
+		.btn:first-child {
+			.border-radius(@inputBorderRadius 0 0 @inputBorderRadius);
+		}
+		input {
+			.border-radius(0 @inputBorderRadius @inputBorderRadius 0);
+		}
+	}
+
+	&-append {
+		.add-on, .btn {
+			//    margin-top: -1px;//commented for DE336 defect
+			margin-left: -1px;
+		}
+		.add-on:last-child, .btn:last-child {
+			.border-radius(0 @inputBorderRadius @inputBorderRadius 0);
+		}
+		input {
+			display: inline-block;
+			width: auto;
+			.border-radius(@inputBorderRadius 0 0 @inputBorderRadius);
+		}
+	}
+
+}
+
+.input-prepend.input-append {
+	.add-on:first-child,
+	.btn:first-child {
+		.border-radius(@inputBorderRadius 0 0 @inputBorderRadius);
+	}
+	.add-on:last-child,
+	.btn:last-child {
+		.border-radius(0 @inputBorderRadius @inputBorderRadius 0);
+	}
+	input {
+		.border-radius(0 0 0 0);
+	}
+}
+
+.form-actions {
+	background-color: @offWhite;
+	border-top-color: @grayLightest;
+}
+
+select,
+select.form-control {
+	&:focus {
+		border-color: @cyan;
+	}
+}
+
+.input-append.input-fluid {
+	width: 100%;
+
+	input[type=text] {
+		margin-left: -11px;
+		margin-right: -2px;
+	}
+}
+
+label {
+	color: @grayDark;
+	&[disabled],
+	&.disabled,
+	&:disabled {
+		cursor: not-allowed;
+		.opacity(.65);
+		input[type="checkbox"] {
+			cursor: not-allowed;
+		}
+	}
+}
+
+input[type="checkbox"] {
+	-webkit-border-radius: 0px; // ipad bug fix
+}
+
+//==========================================
+//Styles for controls wrapped in form control
+//In BS-3 inpuut and select control have to be wrapped in form controls
+
+//======================
+//No halo around input and select controls.
+.form-control {
+	&.focus,
+	&:focus {
+		.box-shadow(none);
+	}
+	//  height:31px; //this overrides the input field sizes hence commenting it out.
+}
+
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="file"] {
+	&:hover {
+		cursor: pointer; // MAY NOT ALLOW FOR DISABLED STATE
+	}
+}
+
+//Overide margins in form-controls
+//Removed after group discussion.
+/*
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+	 padding-left: 0px;
+	 padding-right: 0px;
+}*/
+
+// typeahead hacks...
+.input-group > span.twitter-typeahead {
+	width: 100%;
+}
+
+.input-group > span.twitter-typeahead + span.input-group-btn {
+	padding-bottom: 10px;
+	.add-on {
+		line-height: @line-height-base * 1.3;
+	}
+}
+
+// override border rule on select, which  troubles Mobile Safari
+.touch {
+	select,
+	select.form-control {
+		background-color: @inputBackground;
+		border-color: @inputBorder;
+	}
+}
+

@@ -1,0 +1,32 @@
+// pulling out these colors as mixins to allow different bgcolor and outline for lights out
+.notification-alert-colors {
+  border-color: @notificationAlertBackground;
+  border-style: solid;
+  border-width: 1px;
+  background-color: transparent;
+}
+
+.notification-message-colors {
+  border-color: @notificationMessageBackground;
+  border-style: solid;
+  border-width: 1px;
+  background-color: transparent;
+}
+
+.notification-suggestion-colors {
+  border-color: @notificationSuggestionBackground;
+  border-style: solid;
+  border-width: 1px;
+  background-color: transparent;
+}
+
+.notification-task-colors {
+  border-color: @notificationTaskBackground;
+  border-style: solid;
+  border-width: 1px;
+  background-color: transparent;
+}
+
+.nav-item-active-bg {
+  #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+}

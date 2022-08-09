@@ -1,0 +1,41 @@
+#% text_encoding = iso8859_1
+_package sw
+$
+
+
+_pragma(classify_level=advanced)
+_method co_datamodel_implementer_mixin.target_dataset_names_for_common_office_tables()
+	##
+	## Configure the target dataset for the common office objects
+	## to be the electric dataset.
+	## 
+	## This method returns the names of the case and user dataset
+	## names where the common office objects will be installed.
+	##
+	## This implementation returns
+	## {{:electric_case, :electric}}
+	##
+
+	>> {{:land_case, :land}}
+	
+_endmethod
+$
+
+
+_pragma(classify_level=advanced)
+_method co_datamodel_implementer_mixin.target_user_dataset_names_for_common_office_tables()
+	##
+	## Configure the target dataset for the common office objects
+	## to be the electric dataset.
+	## 
+	## This method returns the names of the case and user dataset
+	## names where the common office objects will be installed.
+	##
+	## This implementation returns
+	## {:electric}
+	##
+
+	>> {:electric}
+	
+_endmethod
+$

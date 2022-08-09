@@ -1,0 +1,78 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "ge-bootstrap/less/hdx-bootstrap.less";
+@import (reference) "hdx-variables.less";
+@import "slider.less";
+
+//-----hdx specific styles-----------------------
+  
+  .slider
+  {
+  
+ 
+  
+  //Cyan border on hover
+   .slider-button button:hover {
+    border-color: @buttonHoverColor;
+  }
+  
+  //Cyan text when hover
+   .slider-button button:hover i {
+  	color: @buttonHoverColor;
+	}
+	
+  //cyan button background  when active
+  .slider-button button:active,
+  .slider.active .thumb {
+    border-color: transparent;
+    #gradient > .vertical(lighten(@buttonHoverColor, 15%), @buttonHoverColor);
+     
+  }
+  
+    //White button text on active
+   .slider-button button:active i {
+  	color: @white;// @backgroundColor;
+	}
+	
+	
+	.slider-button button {
+	    background:@innerBackgroundColor;
+	    color: @borderColor;
+	    border-radius: @baseBorderRadius;
+	    border: 1px solid transparent;
+	    
+	}
+     
+   
+  //Ticks appear on outer margin
+  .slider .slider-ui .scale .tick {
+   //margin-top: 2px;
+  }
+  
+  //----hdx  specific images--------
+  
+ 
+  //tick mark text.
+  .slider-ui .scale div span {
+	   font-size: @sliderTickLabelFontSize;
+	   font-family:@dataLabelFontFamily;
+	   color: @textColor;
+	}
+//area behind + - buttons.
+    .slider-container{
+  		background:@innerBackgroundColor;
+  		border: 1px solid @borderColor;
+   		.border-radius(@baseBorderRadius);
+   		padding:0px @trackpaddingHeight;  
+  }
+  
+	 // background behind track.
+	  .slider-content{
+	  //border: @trackpaddingHeight solid  @innerBackgroundColor;
+	  border: 1px solid  @innerBackgroundColor;
+	  height: @trackContainerHeight;
+	   background-color: @backgroundColor;
+	  .border-radius(@borderRadiusLarge);
+	  }
+}

@@ -1,0 +1,543 @@
+#% text_encoding = iso8859_1
+_package sw
+
+_pragma(classify_level=restricted)
+##
+## This is the dialog for building/ sectioning the circuit
+## It is inherited from engine_model so it handles threading.
+##
+## It can be run from the Magik prompt using the following commands:
+##
+## dial << eo_circuit_builder_dialog.new( a_circuit, an_app )
+##
+## dial.circuit_build()       # See comments for the parameters
+## dial.post_circuit_build() 
+##
+## dial.terminate()
+##
+def_slotted_exemplar(:eo_circuit_builder_dialog,
+	{
+		{:application,_unset },
+		{:items , _unset },
+		{:circuit, _unset },
+		{:builder_engine,_unset },
+		{:last_routine, _unset}
+	},
+	:engine_model)
+$
+
+_pragma(classify_level=restricted)
+eo_circuit_builder_dialog.define_shared_constant(:qm_routine_config_name,
+	## 
+	## name of qm_routine_config xml file defining what qm routines
+	## are run by this dialog
+	##
+	"circuit_builder_qm_routine_config.xml",
+	_true )
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.html_help_data
+	##
+        ##  Returns:
+        ##  1. The default help ID, used if no ID is specified by the GUI or action.
+        ##  2. The name of a html help file for this GUI element.
+        ##  3. The module in which the html help file is located.
+	## 
+
+	>> ( 533010, .application.html_help_file_name, .application.html_help_resource_module_name )
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.html_help()
+	## 
+	## 
+	_super.html_help(533010)
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.new(a_rwo,app)
+	## 
+	## Init method to initialise
+	>> _clone.init(a_rwo,app)
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_dialog.init(a_rwo, app)
+	## Create a property list to hold the items.
+	## instansiating the slots
+	_super.init()
+	.items << property_list.new()
+	.application << app
+	_self.init_builder_engine()
+	_self.set_circuit(a_rwo)
+	>> _self
+_endmethod
+$
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_dialog.init_builder_engine()
+	## initialises .builder_engine (ipa_qm_engine with
+	## configuration based on XML _self.qm_routine_config_name)
+	##
+	config_file << smallworld_product.get_resource_file(_self.qm_routine_config_name, "data", _self.module_name)
+	build_config << qm_configuration.new(config_file)
+	a_database << .application.database
+	
+	.builder_engine << ipa_qm_engine.new(a_database, build_config, :monitor?, _true)
+	.builder_engine.add_dependent( _self, :progress_info )
+	>> _self 
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.set_circuit(a_rwo)
+	## This method sets the circuit object for the given rwo. 
+	## This will set the circuit object only when the thread is
+	## ready. 
+	_if _self.run_status _is :ready
+	_then
+		.circuit << 	_if a_rwo.descriptor.name = :eo_circuit
+			_then
+				>> a_rwo
+			_else
+				>> a_rwo.get_circuit()
+			_endif
+	_else
+		_self.show_alert(_self.message(:build_in_progress))
+	_endif
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.build_gui(container)
+	##  Builds the GUI in A_CONTAINER.
+	.top_frame << container.top_frame
+	>> _self.activate_in(container)
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.activate_in(a_frame)
+	## Create the GUI controls used by _self.
+	# Create a container rowcol to lay out the children
+	
+	a_frame.allow_resize? << _false
+        a_frame.maximizable? << _false
+        a_frame.minimizable? << _false
+	a_frame.resize_x? << _false
+	a_frame.resize_y? << _false
+
+	a_frame.width << 400
+	a_frame.height << 450
+		
+	rc << rowcol.new( a_frame, _unset, 1, :pixel,
+			 :style, :top_level,
+			 :resize_x?, _true,
+			 :resize_y?, _true )
+	rc.style << :top_level
+	rc.row_resize_values << { 0, 0, 0, 1, 0 }
+
+	# Create the actual Components
+
+	#main label item
+	.items[:name] << label_item.new(rc,_self.message(:circuit, _unset, .circuit.circuit_id()))	
+	g << group_box.new( rc, _self.message(:circuit_sectioning),
+		       :col_alignment,:fill,
+		       :row_alignment,:fill)
+	rc_build << rowcol.new(g,2,1)
+
+	#source sectioning checkbox
+	.items[:build_circuit_source_sections] << toggle_item.new(rc_build,
+						  _self.message(:build_circuit_source_sections),
+						  :row,1,:col,1,
+						  :model, _self,
+						  :value,_true,
+						  :change_selector, :|manage_actions()| )
+	#isolatable sectioning checkbox
+	.items[:build_isolatable_sections] << toggle_item.new(rc_build,
+						   _self.message(:build_isolatable_sections),
+						   :row,2,:col,1,
+						   :model, _self,
+						   :value,_true,
+						   :change_selector, :|manage_actions()|)
+	label_item.new(rc,_self.message(:build_log))
+	#build log text window
+	.items[:build_log] << text_window.new(rc, 20, 60, _unset,
+                                :horizontal_scrollbar?, _false,
+				:editable?, _false,
+				:col_alignment,:fill,
+				:row_alignment,:fill,
+                                :model, _self )
+	
+	# Create a "button box"
+	bottom_rc << rowcol.new( rc, 1, _unset, :pixel,
+				 :row_alignment, :fill,
+				 :col_alignment, :fill,
+				 :resize_x?, _true,
+				 :resize_y?, _false )
+
+	#help button
+	the_image << smallworld_product.get_raster_image( :help, :ui_resources )
+        .items[:help] << image_button_item.new( bottom_rc, the_image,
+						_self, :|html_help()|,
+						:col_alignment, :left,
+						:show_background?, _true,
+						:balloon_help_text, _self.message(:help),
+						:help_id, _self.help_id )
+	#start cancel buttons
+	bb << rowcol.new( bottom_rc, 1, _unset, :pixel,
+			  :col_alignment, :right,
+			  :resize_y?, _false )
+	bb.style << :button_box
+	.items[:apply] << button_item.new(bb,_self.message(:start),_self,:|apply()|, :min_width, 75)
+	.items[:close] << button_item.new(bb,_self.message(:close),_self,:|quit()|, :min_width , 75)
+
+	>> rc
+_endmethod
+$
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_dialog.refresh_maps()
+	## 
+	## 
+	_if (map_man<< .application.get_service_provider(:map_manager)) _isnt _unset
+	_then map_man.refresh_all()
+	_endif 
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.on_activation()
+	## 
+	## Method which will set the values for title, name, clearing
+	## the build log. And add as a dependent.
+	_super.on_activation()
+	_self.title <<   _self.message(:title,_unset,.circuit.circuit_id())
+	_if _self.run_status _is :ready
+	_then
+		.items[:name].label << _self.message(:circuit, _unset, .circuit.circuit_id())
+		.items[:build_log].value << ""
+	_endif
+	
+	_self.add_dependent(_self)
+_endmethod
+$
+
+_method eo_circuit_builder_dialog.on_deactivation()
+	## 
+	## remove dependent while deactivation.
+
+	_super.on_deactivation()
+	_self.remove_dependent(_self)
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.note_change( who, aspect, _gather data )
+	## 
+	## method that will enable , disable the actions.
+	_if who _is _self _andif
+	    aspect _is :run_status 
+	_then
+		_if _self.run_status _is :ready
+		_then
+			#if the engine is not running
+			.items[:apply].label << _self.message(:start)
+			.items[:apply].enabled? << _true 
+			.items[:build_circuit_source_sections].enabled? << _true 
+			.items[:build_isolatable_sections].enabled? << _true
+			.items[:close].enabled? << _true
+			
+		_elif _self.run_status _is :running
+		_then
+			#if the engine is in running mode
+			.items[:apply].label << _self.message(:stop)
+			.items[:apply].enabled? << _true
+			.items[:build_circuit_source_sections].enabled? << _false 
+			.items[:build_isolatable_sections].enabled? << _false
+			.items[:close].enabled? << _false
+		_endif
+	_elif who _is .builder_engine _andif
+	      aspect _is :progress_info _andif 
+	      _self.run_status _is :running
+	_then
+		(type, keys_and_args)<< (_scatter data)
+		_if type _is :run_check
+		_then
+			params << property_list.new_from_gathered(keys_and_args)
+			routine << params[:routine]
+			_if routine <> .last_routine
+			_then 
+				_self.add_to_log(_self.message(:routine,_unset,routine.external_name))
+				.last_routine<< routine
+			_endif 
+		_endif 
+	_endif
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.add_to_log(a_message)
+	## 
+	## Method to append the text.
+	.items[:build_log].append(write_string(a_message) +%newline)
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.manage_actions()
+	## 
+	##
+
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.apply()
+	## 
+	## Method called when Build Circuit is clicked. Starts the
+	## thread if not running and stops the thread if running.
+	_if _self.run_status _is :ready
+	_then
+		_if _self.run_build_process?
+		_then
+			#start the thread
+			.items[:build_log].value << ""
+			_self.perform_safely( :|run_engine()|,
+					      light_thread.background_priority,
+					      :|run()|,
+					      .circuit)
+		_endif 
+	_else
+		#interrupt the thread
+		.items[:apply].enabled? << _false
+		_self.interrupt_engine()
+		_self.add_to_log(_self.message(:build_process_interrupted,_unset,write_string(date_time_now())))
+	_endif
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.run_build_process?
+	## 
+	## Valdates whether the build process needs to be run or not
+	## depending on the sections that needs to be created.
+	## This method checks that if the circuit already has "circuit
+	## source section" it prompts the user that they should be
+	## recreated to maintain data integrity. same with the
+	## isolatable sections
+	_local l_value << _false
+	
+	_local css? << _not .circuit.get_circuit_sections("Circuit Source Section").empty?
+	_local iso? << _not .circuit.get_circuit_sections("Isolatable Section").empty?
+	_local css_sel? << .items[:build_circuit_source_sections].value
+	_local iso_sel? << .items[:build_isolatable_sections].value
+	
+	_if _not ( (css? _and _not css_sel?) _or (iso? _and _not iso_sel?))
+	_then
+		l_value << _true
+	_elif ( _self.show_query({_self.message(:yes), _self.message(:no)},
+				 {:yes, :no},
+				 :yes,
+				 _self.message(:circuit_section_integrity)) _is :yes)
+	_then
+		l_value << _true 
+	_endif
+	_return l_value 
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.run(p_circuit)
+	## 
+	## Method to run the circuit building, section building
+	## depending on the inputs selected by the user.
+	_self.add_to_log(_self.message(:build_process_started,_unset, write_string(date_time_now())))
+	_self.add_to_log(_self.message(:current_circuit,_unset,write_string(p_circuit.circuit_id().default(""))))
+	_self.add_to_log(_self.message(:circuit_source_nos,_unset,write_string(p_circuit.get_circuit_sources().size)))
+	_local l_sections << rope.new()
+	
+	_if .items[:build_circuit_source_sections].value _then	l_sections.add(:circuit_source_section)	_endif
+	_if .items[:build_isolatable_sections].value _then	l_sections.add(:isolatable_section) _endif
+	
+
+	_self.perform_safely( :build_circuit|()|, p_circuit, l_sections )
+	
+	_self.add_to_log(_self.message(:build_process_completed,_unset,write_string(date_time_now())))
+ 
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.exit()
+	## 
+	## Method which will prompt the user if he want to exit the
+	## dialog and the process is in running state.
+
+	_if _self.run_status _is :running
+	_then
+		_if ( _self.show_query({_self.message(:yes), _self.message(:no)},
+				       {:yes, :no},
+				       :no,
+				       _self.message(:terminate_build_prompt)) _is :yes)
+		_then
+			_self.quit()
+		_else
+			# Return true to indicate that the code has handled the close
+			# request correctly but the dialog should not be closed.
+			_return _true
+		_endif
+	_else
+		_self.quit()
+	_endif 
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.build_circuit(p_circuit, _optional section_types)
+	## 
+	## Builds the circuit
+
+	_local status<< set.new(), dialog<< _self 
+	_protect
+		_handling eo_circuit_information _with
+		_proc(cond)
+			_import dialog, status
+			_if cond.name _is :eo_circuit_success_information
+			_then status.add(:success)
+			_elif cond.name _is :eo_circuit_updated_information
+			_then status.add(:update)
+			_endif 
+			dialog.add_to_log(cond.report_contents_string)
+		_endproc
+
+		.last_routine<< _unset
+		flag_pred << _self.flag_check_predicate()
+		pre_flag_count<< .builder_engine.count_flags(flag_pred)
+
+		_self.circuit_build( section_types )
+		_if status.includes?(:success)
+		_then
+			_self.post_circuit_build()
+		_endif 
+
+		post_flag_count<< .builder_engine.count_flags(flag_pred)
+		new_flags?<< ( post_flag_count - pre_flag_count ) > 0
+
+		# Commit any flags that may have been created
+		#FIXME - Should this really do a commit if there is no design??
+		_if swg_dsn_admin_engine.active_design _isnt _unset
+		_then
+			swg_dsn_admin_engine.save_design_changes()
+		_else
+			.circuit.source_view.commit()
+		_endif
+
+		cid << .circuit.circuit_id()
+		_if _not status.includes?(:success)
+		_then 
+			_if new_flags?
+			_then
+				_self.add_to_log(_self.message(:circuit_build_fail_new_flags, _unset, cid))
+			_else
+				_self.add_to_log(_self.message(:circuit_build_failed, _unset, cid))
+			_endif
+		_elif _not status.includes?(:update)
+		_then
+			_self.add_to_log(_self.message(:circuit_not_updated, _unset, cid))			
+		_else
+			_self.refresh_maps()
+		_endif 
+		_if status.includes?(:success) _andif
+		    new_flags?
+		_then
+			_if _not status.includes?(:update)
+			_then
+				_self.add_to_log(_self.message(:circuit_not_updated_new_flags, _unset, cid))
+			_else
+				_self.add_to_log(_self.message(:circuit_build_ok_new_flags, _unset, cid))
+			_endif 
+		_endif
+	_protection
+		_self.terminate()
+	_endprotect
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.terminate ()
+	## 
+	## Terminate the builder_engine
+	##
+
+	.builder_engine.terminate()
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.circuit_build( _optional section_types )
+	## 
+	## Run QA circuit build routines registered in a group
+	## circuit_build to build circuit.
+	## SECTION_TYPES is a rope that can contain the values:
+	##  :circuit_source_section
+	##  :build_isolatable_sections
+	## SECTION_TYPES is optional, so if it is unset, then both
+	## sections are generated.
+	##
+	source_data << property_list.new_with(:circuit, .circuit,
+					     :section_types, section_types)
+	
+	.builder_engine.run_checks(:circuit_build,
+				   eo_circuit_builder_dialog_source,
+				   :application, .application,
+				   :source_data, source_data)
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.post_circuit_build ( )
+	## 
+	## Run QA circuit build routines registered in a group
+	## post_circuit_build to run further checks after circuit was built.
+	##
+
+	.builder_engine.run_checks(:post_circuit_build,
+				   eo_qm_circuit_source,
+				   :application, .application,
+				   :source_data, .circuit)
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_dialog.flag_check_predicate()
+	## Returns a predicate to find relevant QA flags
+	## 
+	alternative_proc << _proc @flag_created_in_current_alternative( a_flag )
+				    >> a_flag.created_in_the_current_alternative?
+			    _endproc
+	alternative_pred << predicate.using( alternative_proc )
+	
+	>> predicate.new(:status_type,:|~=|,:ignore).and(alternative_pred)
+_endmethod
+$
+
+_pragma(classify_level=basic, usage={subclassable})
+_method eo_circuit_builder_dialog.wm_close(_optional window)
+	##
+	## Method to correctly handle the closing of the circuit
+	## builder dialog.
+	##
+	
+	_local open?
+	open? << _self.exit()
+	_if open? _isnt _unset
+	_then
+		_return open?
+	_else 
+		_return _false
+	_endif
+_endmethod
+$
+

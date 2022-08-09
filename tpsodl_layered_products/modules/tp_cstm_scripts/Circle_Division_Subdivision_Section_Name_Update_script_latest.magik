@@ -1,0 +1,107 @@
+_block
+	ev  << gis_program_manager.cached_dataset(:electric)
+	lv << gis_program_manager.cached_dataset(:land)
+	a_col_subdivision << lv.collections[:lnd_subdivision]
+	a_col_division << lv.collections[:tp_division]
+	a_col_section << lv.collections[:lnd_section]
+
+	a_sv << {:eo_meter,:et_tower,:eo_power_xfrmr_inst,:ed_decorative_pole,:eo_service_point,:eo_wire_segment_inst,:eo_measuring_eqpt_inst,:eo_connector_segment_inst,:ed_cabinet,:eo_cable_segment_inst,:sub_substation,:eo_connector_point_inst,:eo_isolating_eqpt_inst,:ed_pole}
+#a_sv << {:sub_substation}
+	
+	_for a_col_type _over a_sv.fast_elements()
+	_loop
+		a_col << ev.collections[a_col_type]
+#		write("+++  +++", a_col)
+
+		_for a_rec _over a_col.fast_elements()
+		_loop
+#			write("+++a_rec  +++",a_rec)
+			
+			_if _not a_rec.has_field?(:tp_circle_name) _then _continue _endif
+			#write("+++a_recaa  +++",a_rec,a_rec.cs_default_geometry_name,a_rec.default_geometry)
+			#a_rec.tp_circle_name << "City"
+
+			_if a_rec.cs_default_geometry_name _isnt _unset _then
+			
+			_if a_rec.default_geometry _is _unset _then _continue _endif
+			
+				_if a_rec.default_geometry.geom_type _is :point
+				_then
+
+					_if a_rec.source_collection.name _is :eo_measuring_eqpt_inst
+					_then
+						ps_point << pseudo_point.new(a_rec.source_location)
+					_else
+						ps_point << pseudo_point.new(a_rec.location)
+					_endif
+					
+					#l_geom <<a_rec.cs_default_geometry_name
+					#write("+++ l_geom +++",l_geom)
+					
+			
+				ps_point.world << lv.world
+				pred_1 << predicate.interacts(:extent, ps_point)
+			
+				_elif  a_rec.default_geometry.geom_type _is :chain
+				_then
+					
+
+					_if a_rec.source_collection.name _is :eo_isolating_eqpt_inst
+					_then
+						ps_chain << pseudo_chain.new(a_rec.connector)
+					_else
+						ps_chain << pseudo_chain.new(a_rec.route)
+					_endif
+					
+				
+				ps_chain.world << lv.world
+				pred_2 << predicate.interacts(:extent, ps_chain)
+
+			
+				_endif
+			
+				a_sub_div << a_col_subdivision.select(pred_1 _or pred_2).an_element()
+				a_div << a_col_division.select(pred_1 _or pred_2).an_element()
+				a_sec << a_col_section.select(pred_1 _or pred_2).an_element()
+
+				_if a_sub_div _isnt _unset _then 
+				    	_try
+#						write("+++sub_div  +++",a_sub_div.name.uppercase,%tab,a_rec)
+						
+					     a_rec.tp_sub_division_name << a_sub_div.name.uppercase
+					_when error
+					      write("+++  Error Occured +++",a_rec,%tab,a_sub_div.name)
+					_endtry
+					
+				_endif
+
+				
+				_if a_div _isnt _unset _then 
+				    	_try
+#						write("+++div  +++",a_div.tp_name.uppercase,%tab,a_rec)
+					     a_rec.tp_division_name << a_div.tp_name.uppercase
+					_when error
+					      write("+++  Error Occured +++",a_rec,%tab,a_div.name)
+					_endtry
+					
+				_endif
+				
+				_if a_sec _isnt _unset _then 
+				    	_try
+	#					write("+++sec  +++",a_sec.tp_name,%tab,a_rec)
+					     a_rec.tp_section_name << a_sec.tp_name
+					_when error
+						write("+++ Error Occured +++",a_rec,%tab,a_sec.name)
+					_endtry
+					
+				_endif 	
+			_endif 
+			
+		_endloop 
+		
+
+	_endloop 
+	
+_endblock
+
+$

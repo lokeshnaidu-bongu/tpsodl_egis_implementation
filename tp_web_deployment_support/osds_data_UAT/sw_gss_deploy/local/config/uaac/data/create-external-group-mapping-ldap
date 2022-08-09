@@ -1,0 +1,4 @@
+UAA_GROUP_NAME|EXTERNAL_GROUP_DN|ORIGIN|
+gss.user|ex_group1|ldap|
+gss.user|ex_group2|ldap|
+gss.user|ex_group3|ldap|

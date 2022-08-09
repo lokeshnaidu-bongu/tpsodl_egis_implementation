@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+  <!-- Define the xml files for specific collections -->
+  <collection collection_name = "eo_isolating_eqpt_spec">
+    <fields field_name = "tp_rated_current" external_name = "Rated Current" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Ampere" mode = "insert" />
+    <fields field_name = "tp_fault_current" external_name = "Fault Current" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Kilo Ampere" mode = "insert" />
+    <fields field_name = "tp_max_operating_voltage" external_name = "Max Operating Voltage" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No"  mode = "insert" />
+    <fields field_name = "tp_sub_type" external_name = "Sub Type" mandatory = "false" field_type="tp_isolating_sub_type" field_size ="32" unset_value="" default_value ="" field_index="No"  mode = "insert" />
+  </collection>
+</tp_collections>

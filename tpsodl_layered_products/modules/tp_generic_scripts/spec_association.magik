@@ -1,0 +1,106 @@
+_block
+	ele_dt << gis_program_manager.cached_dataset(:electric)	       
+	ele_dt.checkpoint("b4_spec_association")
+		spec_val_col << rope.new_with(:eo_cable_segment_inst,:eo_wire_segment_inst,:eo_regulating_eqpt_inst,:eo_connector_segment_inst,:eo_power_xfrmr_inst,:eo_protective_eqpt_inst,:eo_isolating_eqpt_inst,:eo_connector_point_inst)
+	#	spec_val_col << rope.new_with(:eo_power_xfrmr_inst)	
+	# 	:eo_connector_point_spec :eo_current_transformer_spec :eo_voltage_transformer_spec
+	
+	_for a_col _over spec_val_col.fast_elements()
+	_loop
+		
+		l_col <<ele_dt.collections[a_col]
+		_for a_rec _over l_col.fast_elements()
+		_loop
+			_if a_rec.existing_assets.size > 1
+			
+			_then
+				write("More than one assets associted to the installation record ",%tab,a_rec.tp_migration_unique_id ,%tab, a_rec.id)
+			_elif a_rec.existing_assets.size < 1
+			_then
+				write("No assets associted to the installation record ",%tab,a_rec.tp_migration_unique_id ,%tab, a_rec.id)
+
+			_elif a_rec.existing_assets.size = 1
+			_then
+
+
+				_if a_rec.source_collection.name _is :eo_cable_segment_inst
+				_then
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					
+					spec_view <<ele_dt.collections[:eo_cable_spec]
+					
+				_elif a_rec.source_collection.name _is :eo_wire_segment_inst
+				_then
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					
+					spec_view <<ele_dt.collections[:eo_wire_spec]
+				_elif a_rec.source_collection.name _is :eo_connector_segment_inst
+				_then
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					
+					spec_view <<ele_dt.collections[:eo_connector_segment_spec]
+					
+				_elif a_rec.source_collection.name _is :eo_power_xfrmr_inst
+				_then
+					
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					spec_view <<ele_dt.collections[:eo_power_xfrmr_spec]
+					
+					
+				_elif a_rec.source_collection.name _is :eo_protective_eqpt_inst
+				_then
+					spec_view <<ele_dt.collections[:eo_protective_eqpt_spec]
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					
+				_elif a_rec.source_collection.name _is :eo_regulating_eqpt_inst
+				_then
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					
+					spec_view <<ele_dt.collections[:eo_regulating_eqpt_spec]
+					
+				_elif a_rec.source_collection.name _is :eo_isolating_eqpt_inst
+				_then
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					
+					spec_view <<ele_dt.collections[:eo_isolating_eqpt_spec]
+
+				_elif a_rec.source_collection.name _is :eo_connector_point_inst
+				_then
+					sp_name<< a_rec.existing_assets.an_element().tp_mig_spec
+					
+					spec_view <<ele_dt.collections[:eo_connector_point_spec]
+				_endif				
+
+				write(a_rec)
+				cb_spec << spec_view.select(predicate.eq(:spec_name,sp_name))
+
+
+				_if cb_spec.an_element() _isnt _unset
+				_then 
+					
+					#_then("+++ Spec +++",%tab,cb_spec.an_element())
+					_if a_rec.existing_assets.an_element() _isnt _unset
+					_then
+
+						
+						_if a_rec.existing_assets.an_element().specification _is _unset
+						_then
+	
+							a_rec.existing_assets.an_element().specification << cb_spec.an_element()
+							
+#							write("Spec Associated",%tab,a_rec.existing_assets.an_element().specification,%tab,a_rec.existing_assets.an_element(),%tab,a_rec)
+						_endif
+					_else
+						write("Already Avalaibale")
+					_endif 
+				_else
+					write("Specification Not Available === ",sp_name)
+				_endif 
+			_endif
+		_endloop
+		
+	_endloop
+	ele_dt.checkpoint("after_spec_association")
+_endblock
+
+$

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config base="gss_basic_vertx_application.gss_basic_vertx_config">
+
+	<framework_data>
+    <!-- enable authorisation using datastore referenced by SW_AUTH_DB_DIR -->
+    <property name="authorisation?" value="false"/>
+		<spatial_context name="geographic" ace_name="EO_Web"
+			universe_name="gis" />
+		<spatial_context name="internals" ace_name="EO_Web_internals"
+			universe_name="internals" />
+		<spatial_context name="plotting" ace_name="drawing"
+			universe_name="drawing" />
+
+		<service_providers>
+		  <!-- set true to test differences with rollforward -->
+		  <provider class_name="admin_service_provider">
+		    <property name="test_rollforward?" value="false"/>
+		  </provider>
+
+		  <!--web trace -->
+		  <provider class_name="trace_service_provider">
+		    <property name="visible_trace_types" value="eo_web_trace_upstream, eo_web_trace_downstream"/>
+		  </provider>
+		  
+		  <!--web plot -->
+		  <provider class_name="sw_layout_series_service">
+		    <property name="layout_type_config_file_name" value="eo_web_vertx_server_application.layout_series_config"/>
+		  </provider>
+		  
+		  <!--web world info -->
+		  <provider class_name="world_info_service_provider">
+		    <property name="filters_configs" value="standard: eo_web_vertx_server_application.standard_internals_filters_config"/>
+		  </provider>
+		  
+		  <!-- find -->
+		  <provider class_name="find_service_provider">
+		    <property name="search_config_file_name" value="eo_web_vertx_server_application.find_config"/>
+		  </provider>
+		  
+		  <!--web map location info -->
+		  <provider class_name="map_location_service_provider">
+		    <property name="config_file_name" value="eo_web_vertx_server_application.map_location_config" />
+		  </provider>
+		</service_providers>
+		
+	</framework_data>
+
+	<plugins>
+		<plugin name="http" class_name="http_service_request_handler_plugin">
+			<property name="port_number" value="7771"/>
+			<property name="http_server" value="http_service_request_handler"/>
+			<property name="load_balancer_url" value="${BIFROST_URL}"/>
+			<property name="resources_root_dir" value="${EIS_RESOURCES_PATH}"/>
+			<paths>
+				<path string="agent" param="method">
+					<service string="status" provider="agent_admin_service_provider.status" db_spec_name=""/>
+					
+				</path>
+				<path string="maps" param="request">
+					<!-- gss_basic_vertx_application.gss_basic_vertx_config -->
+					<service string="GetFeatureInfo" provider="map_service_provider.wmts_selection"/>
+					<service string="GetTile" provider="map_service_provider.render_tile"/>
+					<service string="layers" provider="map_layers_service.get_layers"/>
+				</path>
+				<path string="gss" param="method">
+					<!-- gss_basic_vertx_application.gss_basic_vertx_config -->
+					<service string="describe" provider="description_service_provider.describe" db_spec_name=""/>
+					<service string="listServices" provider="description_service_provider.listservices" db_spec_name=""/>
+					<service string="describeService" provider="description_service_provider.describeservice" db_spec_name=""/>
+					<service string="describeMethod" provider="description_service_provider.describemethod" db_spec_name=""/>
+					<service string="spatialContexts" provider="object_info_service.spatial_contexts"/>
+					<service string="info" provider="object_info_service.info"/>
+					<service string="joinedObjects" provider="object_info_service.joined_objects"/>	
+					<service string="joinedObjectInfo" provider="object_info_service.joined_object_info"/>	
+					<service string="joinedObjectCounts" provider="object_info_service.joined_object_counts"/>
+					<service string="associatedDocuments" provider="object_info_service.associated_documents"/>
+					<service string="taskInfo" provider="tasks_service_provider.task_info"/>
+					<service string="submitGeojsonSketchTask" provider="tasks_service_provider.submit_geojson_sketch_task"/>
+					<service string="getStyles" provider="redline_info_service_provider.get_styles"/>
+					<service string="map" provider="map_service_provider.map"/>
+
+					<!--web find -->
+					<service string="getFindConfiguration" provider="find_service_provider.find_configuration"/>
+					<service string="find" provider="find_service_provider.find"/>
+
+					<!--web internals -->
+					<service string="internalRwos" provider="world_info_service_provider.internal_rwos"/>
+					<service string="spatialContextForObject" provider="world_info_service_provider.spatial_context_for_object"/>
+
+					<!--web plot -->
+					<service string="layout_types" provider="sw_layout_series_service.get_layout_types"/>
+					<service string="web_pdf_plot" provider="sw_layout_series_service.web_pdf_plot_start"/>
+
+					<!--web trace -->
+					<service string="getTraceTypes" provider="trace_service_provider.get_trace_types"/>
+					<service string="runTrace" provider="trace_service_provider.run_trace"/>
+
+					<!-- map location -->
+					<service string="getRWOmapLocation" provider="map_location_service_provider.rwo_map_location"/>
+					<service string="getCoordMapLocation" provider="map_location_service_provider.coord_map_location"/>
+				</path>
+				<path string="rollforward" param="method">
+					<!-- gss_basic_vertx_application.gss_basic_vertx_config -->
+					<service string="map_tiles_to_invalidate" provider="rollforward_service_provider.map_tiles_to_invalidate"/>
+				</path>
+				<path string="admin" param="method">
+					<service string="fileSweep" provider="file_sweep_service_provider.file_sweep" db_spec_name=""/>
+				</path>
+			</paths>
+		</plugin>
+		
+		<plugin name="request_processor" class_name="service_provider_session_manager">
+			<property name="default_projection" value="google_mercator" />
+			<property name="default_unit" value="m" />
+			<property name="coordinate_system_dataset" value="electric" />
+		</plugin>
+
+		<plugin name="map_cache_manager" class_name="map_cache_manager">
+			<colour_by 
+				config_module_name = "eo_web_vertx_server_application"
+				config_file_name = "colour_by_definitions.xml" />
+
+			<external_cache_layers>
+				<external_cache_layer name="Transmission network" type="WMTS" colour_by="electric_circuit_id(), electric_eo_line_voltage"
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="EO_Web" themes="Transmission network"   />
+				<external_cache_layer name="MV network" type="WMTS" colour_by="electric_circuit_id(), electric_eo_line_voltage"
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="EO_Web" themes="MV network"   />
+				<external_cache_layer name="LV network" type="WMTS" colour_by="electric_circuit_id(), electric_eo_line_voltage"
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="EO_Web" themes="LV network"   />
+				<external_cache_layer name="Distribution structures" type="WMTS" colour_by=""
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="EO_Web" themes="Distribution structures"   />
+				<external_cache_layer name="Transmission structures" type="WMTS" colour_by=""
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="EO_Web" themes="Transmission structures"   />
+				<external_cache_layer name="Design Boundaries" type="WMTS" colour_by=""
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="EO_Web" themes="Design Boundaries"   />
+				<external_cache_layer name="Areas" type="WMTS" colour_by=""
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="EO_Web" themes="Areas"   />
+				<external_cache_layer name="Land" type="WMTS" colour_by=""
+					profile="NV_WMTS_900913_512" tileset="EPSG-900913" ace="LAND" themes="LandData"   />
+				<external_cache_layer name="Internals" type="Detail"
+					profile="DETAIL_256" ace="EO_Web_Internals" />
+				<external_cache_layer name="Ortho Schematics" type="Detail"
+					profile="DETAIL_256_ortho_schematics" ace="EO Schematics"/>
+				<external_cache_layer name="Geo Schematics" type="Detail"
+					profile="DETAIL_256_geo_schematics" ace="EO Schematics"/>
+			</external_cache_layers>
+
+		</plugin>
+
+		<plugin name="database_pool" class_name="concurrent_database_pool_plugin">
+			<property name="soc_name" value="electric_dm,cs_config"/>
+			<property name="max_concurrent_dbs" value="4"/>
+			<property name="max_dbs" value="4"/>
+			<database_specifications>
+			    <default_db_spec>
+				<dataset name="gis"  alternative="|" />
+				<dataset name="electric"  alternative="|Final_Electric_Mig_data" has_rollforward_checkpoint="true" />
+				<dataset name="design_admin"  alternative="|" />
+				<dataset name="design_work"  alternative="|" />
+				<dataset name="cs_config"  alternative="|" />
+				<dataset name="land"  alternative="|Land_migration_19012022_new" />
+				<!-- <dataset name="cis"  alternative="|" /> -->
+			    </default_db_spec>
+			</database_specifications>
+		</plugin>
+
+		<plugin name="map_options_provider" class_name="map_options_plugin">
+			<property name="bookmark_ace_name" value="EO_Web" />
+			<property name="bookmark_data_name" value="bookmarks.xml" />
+			<property name="bookmarks_application_name" value="dpr_demo_eo_user" />
+			<property name="bookmarks_group_name" value="" />
+		</plugin>
+
+		<plugin name="eo_spatial_context_provider" class_name="eo_spatial_context_provider" />
+
+		<plugin name="eo_ape_spatial_context_provider" class_name="eo_ape_spatial_context_provider" />
+
+		<plugin name="schematic_spatial_context_provider" class_name="schematic_spatial_context_provider">
+		  <property name="ace_name" value="EO Schematics"/>
+		</plugin>
+
+	</plugins>
+</config>

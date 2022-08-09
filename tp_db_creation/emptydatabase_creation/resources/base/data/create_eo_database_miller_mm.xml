@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="ISO-10646-UCS-2" standalone="yes"?>
+<serial_xml_thing format="1">
+	<keyed class="sw:property_list" size="10">
+		<entry key="ace_location">
+			<string>F:\gis_db\tp_gis_db_mm\utm</string>
+		</entry>
+		<entry key="description">
+			<string>TPSODL Electric Office with land</string>
+		</entry>
+		<entry key="dataset_creators">
+			<indexed class="sw:rope" size="5">
+				<slotted class="sw:dataset_creator" size="1">
+					<properties>
+						<keyed class="sw:property_list" size="6">
+							<entry key="type">
+								<symbol>geometric</symbol>
+							</entry>
+							<entry key="ace_location">
+								<string>F:\gis_db\tp_gis_db_mm\utm</string>
+							</entry>
+							<entry key="system64?">
+								<atomic>sw:unset</atomic>
+							</entry>
+							<entry key="universe_creators">
+								<indexed class="sw:rope" size="2">
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>gis</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="1">
+														<slotted class="sw:world_creator" size="1">
+															<properties>
+																<keyed class="sw:property_list" size="4">
+																	<entry key="coordinate_system">
+																		<symbol>transverse_mercator_mm</symbol>
+																	</entry>
+																	<entry key="name">
+																		<string>world</string>
+																	</entry>
+																	<entry key="units">
+																		<symbol>mm</symbol>
+																	</entry>
+																	<entry key="world_bounds">
+																		<slotted class="sw:bounding_box" size="4">
+																			<xmin>
+																				<number>-2.147483647e+009</number>
+																			</xmin>
+																			<ymin>
+																				<number>-2.147483647e+009</number>
+																			</ymin>
+																			<xmax>
+																				<number>2.147483647e+009</number>
+																			</xmax>
+																			<ymax>
+																				<number>2.147483647e+009</number>
+																			</ymax>
+																		</slotted>
+																	</entry>
+																</keyed>
+															</properties>
+														</slotted>
+													</indexed>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>drawing</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="0"/>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+								</indexed>
+							</entry>
+							<entry key="name">
+								<string>gis</string>
+							</entry>
+							<entry key="universes">
+								<number>4</number>
+							</entry>
+						</keyed>
+					</properties>
+				</slotted>
+				<slotted class="sw:dataset_creator" size="1">
+					<properties>
+						<keyed class="sw:property_list" size="6">
+							<entry key="type">
+								<symbol>geometric</symbol>
+							</entry>
+							<entry key="ace_location">
+								<string>F:\gis_db\tp_gis_db_mm\utm</string>
+							</entry>
+							<entry key="system64?">
+								<atomic>sw:unset</atomic>
+							</entry>
+							<entry key="universe_creators">
+								<indexed class="sw:rope" size="2">
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>gis</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="1">
+														<slotted class="sw:world_creator" size="1">
+															<properties>
+																<keyed class="sw:property_list" size="4">
+																	<entry key="coordinate_system">
+																		<symbol>transverse_mercator_mm</symbol>
+																	</entry>
+																	<entry key="name">
+																		<string>world</string>
+																	</entry>
+																	<entry key="units">
+																		<symbol>mm</symbol>
+																	</entry>
+																	<entry key="world_bounds">
+																		<slotted class="sw:bounding_box" size="4">
+																			<xmin>
+																				<number>-2.147483647e+009</number>
+																			</xmin>
+																			<ymin>
+																				<number>-2.147483647e+009</number>
+																			</ymin>
+																			<xmax>
+																				<number>2.147483647e+009</number>
+																			</xmax>
+																			<ymax>
+																				<number>2.147483647e+009</number>
+																			</ymax>
+																		</slotted>
+																	</entry>
+																</keyed>
+															</properties>
+														</slotted>
+													</indexed>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>drawing</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="0"/>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+								</indexed>
+							</entry>
+							<entry key="name">
+								<string>land</string>
+							</entry>
+							<entry key="universes">
+								<number>4</number>
+							</entry>
+						</keyed>
+					</properties>
+				</slotted>
+				<slotted class="sw:dataset_creator" size="1">
+					<properties>
+						<keyed class="sw:property_list" size="6">
+							<entry key="type">
+								<symbol>geometric</symbol>
+							</entry>
+							<entry key="ace_location">
+								<string>F:\gis_db\tp_gis_db_mm\utm</string>
+							</entry>
+							<entry key="system64?">
+								<atomic>sw:unset</atomic>
+							</entry>
+							<entry key="universe_creators">
+								<indexed class="sw:rope" size="2">
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>gis</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="1">
+														<slotted class="sw:world_creator" size="1">
+															<properties>
+																<keyed class="sw:property_list" size="4">
+																	<entry key="coordinate_system">
+																		<symbol>transverse_mercator_mm</symbol>
+																	</entry>
+																	<entry key="name">
+																		<string>world</string>
+																	</entry>
+																	<entry key="units">
+																		<symbol>mm</symbol>
+																	</entry>
+																	<entry key="world_bounds">
+																		<slotted class="sw:bounding_box" size="4">
+																			<xmin>
+																				<number>-2.147483647e+009</number>
+																			</xmin>
+																			<ymin>
+																				<number>-2.147483647e+009</number>
+																			</ymin>
+																			<xmax>
+																				<number>2.147483647e+009</number>
+																			</xmax>
+																			<ymax>
+																				<number>2.147483647e+009</number>
+																			</ymax>
+																		</slotted>
+																	</entry>
+																</keyed>
+															</properties>
+														</slotted>
+													</indexed>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>drawing</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="0"/>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+								</indexed>
+							</entry>
+							<entry key="name">
+								<string>raster</string>
+							</entry>
+							<entry key="universes">
+								<number>4</number>
+							</entry>
+						</keyed>
+					</properties>
+				</slotted>
+				<slotted class="sw:dataset_creator" size="1">
+					<properties>
+						<keyed class="sw:property_list" size="6">
+							<entry key="type">
+								<symbol>geometric</symbol>
+							</entry>
+							<entry key="ace_location">
+								<string>F:\gis_db\tp_gis_db_mm\utm</string>
+							</entry>
+							<entry key="system64?">
+								<atomic>sw:unset</atomic>
+							</entry>
+							<entry key="universe_creators">
+								<indexed class="sw:rope" size="3">
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>gis</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="1">
+														<slotted class="sw:world_creator" size="1">
+															<properties>
+																<keyed class="sw:property_list" size="4">
+																	<entry key="coordinate_system">
+																		<symbol>transverse_mercator_mm</symbol>
+																	</entry>
+																	<entry key="name">
+																		<string>world</string>
+																	</entry>
+																	<entry key="units">
+																		<symbol>mm</symbol>
+																	</entry>
+																	<entry key="world_bounds">
+																		<slotted class="sw:bounding_box" size="4">
+																			<xmin>
+																				<number>-2.147483647e+009</number>
+																			</xmin>
+																			<ymin>
+																				<number>-2.147483647e+009</number>
+																			</ymin>
+																			<xmax>
+																				<number>2.147483647e+009</number>
+																			</xmax>
+																			<ymax>
+																				<number>2.147483647e+009</number>
+																			</ymax>
+																		</slotted>
+																	</entry>
+																</keyed>
+															</properties>
+														</slotted>
+													</indexed>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>drawing</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="0"/>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+									<slotted class="sw:universe_creator" size="1">
+										<properties>
+											<keyed class="sw:property_list" size="4">
+												<entry key="name">
+													<string>internals</string>
+												</entry>
+												<entry key="worlds">
+													<number>1073741824</number>
+												</entry>
+												<entry key="priority_bits">
+													<number>0</number>
+												</entry>
+												<entry key="world_creators">
+													<indexed class="sw:rope" size="0"/>
+												</entry>
+											</keyed>
+										</properties>
+									</slotted>
+								</indexed>
+							</entry>
+							<entry key="name">
+								<string>electric</string>
+							</entry>
+							<entry key="universes">
+								<number>4</number>
+							</entry>
+						</keyed>
+					</properties>
+				</slotted>
+				<slotted class="sw:dataset_creator" size="1">
+					<properties>
+						<keyed class="sw:property_list" size="2">
+							<entry key="type">
+								<symbol>job</symbol>
+							</entry>
+							<entry key="ace_location">
+								<string>F:\gis_db\tp_gis_db_mm\utm</string>
+							</entry>
+						</keyed>
+					</properties>
+				</slotted>
+			</indexed>
+		</entry>
+		<entry key="default_universes">
+			<number>4</number>
+		</entry>
+		<entry key="default_coordinate_system">
+			<symbol>transverse_mercator_mm</symbol>
+		</entry>
+		<entry key="default_units">
+			<symbol>mm</symbol>
+		</entry>
+		<entry key="default_world_bounds">
+			<slotted class="sw:bounding_box" size="4">
+				<xmin>
+					<number>-2.147483649e+009</number>
+				</xmin>
+				<ymin>
+					<number>-2.147483649e+009</number>
+				</ymin>
+				<xmax>
+					<number>2.147483647e+009</number>
+				</xmax>
+				<ymax>
+					<number>2.147483647e+009</number>
+				</ymax>
+			</slotted>
+		</entry>
+		<entry key="system64?">
+			<atomic>sw:true</atomic>
+		</entry>
+		<entry key="no_auth_dataset?">
+			<atomic>sw:false</atomic>
+		</entry>
+		<entry key="xml_version">
+			<string>create_database_engine 1.0</string>
+		</entry>
+	</keyed>
+</serial_xml_thing>

@@ -1,0 +1,114 @@
+## Used to check specified user can access application or not
+## and sends mail.
+## The following proc should be called the following way in any Procedure or Module -
+
+## For Proc - write_email(:proc_name,system.user_name)
+## For Module  - write_email(_self.module_name,system.user_name)
+## for module --> user_access_check_with_module to be defined
+## in plugin while write_email to be defined in engine.
+
+_global user_access_check_with_module << _proc@user_access_check_with_module(l_module_name,user_name)
+						 
+					l_xml_file << "C:\Users\AsokaG\Desktop\Test\apps_access_mail_usage_code\resources\base\data\apps_n_user_access_xml_final_test.xml"
+					
+					xml_hndl << serial_xml_thing.new(l_xml_file)   
+					dt << xml_hndl.read_thing_from(l_xml_file)
+					
+					_if (l_mod_handl << dt[l_module_name]) _isnt _unset
+					_then							 
+						_if l_mod_handl[:user_name].includes?("all") _orif
+						    l_mod_handl[:user_name].includes?("ALL")  _orif
+						    l_mod_handl[:user_name].includes?("All")
+						_then
+							_return _true, l_mod_handl 
+							
+						_elif l_mod_handl[:user_name].includes?(user_name)
+						_then
+							_return _true, l_mod_handl								 
+							
+						_else
+							
+							write("Don't have Access to this ") 
+							_return _false, _unset 
+						_endif 
+					_else
+						
+											
+						_return _true  , _unset 
+					_endif
+					
+				      _endproc
+$
+
+
+
+## For Proc - write_email(:proc_name,system.user_name,l_reports(should be a rope))
+## For Module  - write_email(_self.module_name,system.user_name,l_reports(should be a rope))
+## for module --> user_access_check_with_module to be defined
+## in plugin while write_email to be defined in engine.
+
+_global write_email << _proc@write_email(l_module, user_name,l_reports,_optional app_name,sub_app_name)			       
+	
+	(l_val?, l_data) << user_access_check_with_module(l_module,user_name)
+	
+	_if l_val? _isnt _true
+	_then
+		write("Don't have Access to this ")
+		_return 
+	_endif
+	
+	write("you have Access to this ")
+	_if l_data _isnt _unset
+	_then 		
+		l_dt_tm << date_time.now().write_string
+		
+		l_from << l_data[:mail_list][1]
+		l_to << l_data[:mail_list][2]
+
+		_if l_data[:mail_list].size = 3
+		_then 
+			l_cc << l_data[:mail_list][3]
+		_endif 
+		
+		l_subject << l_data[:subject].write_string+" "+system.user_name.write_string+" at "+l_dt_tm
+		
+		l_output_str << internal_text_output_stream.new()
+		l_output_str.write(l_data[:mail_content][1])
+		l_output_str.newline()
+		l_output_str.newline()
+		l_output_str.write(l_data[:mail_content][2]+" "+system.user_name.write_string+" at "+l_dt_tm)
+		l_output_str.newline()
+		l_output_str.newline()
+		l_output_str.write(l_data[:mail_content][3])
+		l_output_str.newline()
+		l_output_str.newline()
+		l_output_str.write(l_data[:mail_content][4])
+		l_output_str.newline()
+		l_output_str.write(l_data[:mail_content][5])
+	
+		
+#		_if l_data[:tracking] = "True"
+#		_then
+#			
+#			update_application_user_file(system.user_name ,app_name.default(l_module.write_string),_unset,sub_app_name.default("Run"))
+#			
+#		_endif
+
+		_if l_data[:mail] = "True"
+		_then
+			_if l_data[:attachment] = "True"
+			_then
+				all_reports << rope.new()
+				_for a_fl_name _over l_reports.fast_elements()
+				_loop
+					all_reports.add(a_fl_name)
+				_endloop				
+				
+				auto_generate_mail(l_from,l_to,l_cc,l_output_str,l_subject,all_reports)				
+			_else  
+				auto_generate_mail(l_from,l_to,l_cc,l_output_str,l_subject)
+			_endif
+		_endif 
+	
+	_endif 
+_endproc

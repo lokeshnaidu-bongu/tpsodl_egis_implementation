@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+  <!-- Define the xml files for specific collections -->
+  <collection collection_name = "eo_power_xfrmr_inst" >
+	<fields field_name = "tp_census_code" external_name = "Census Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_georeference" external_name = "Geo-Reference ID" mandatory = "false" field_type="ds_char16_vec" field_size ="256" unset_value="" default_value ="" field_index="No" mode = "insert" />  
+	<fields field_name = "tp_la_provided" external_name = "LA Provided?" mandatory = "false" field_type="eo_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No"  mode = "insert" />
+	<fields field_name = "tp_location_y" external_name = "Y Location" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="" mode = "insert" />	 	  
+	<fields field_name = "tp_maximum_demand" external_name = "Maximum Demand" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Mega Volt Ampere" mode = "insert" />
+	<fields field_name = "tp_mig_phase" external_name = "Mig Phase" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />		
+	<fields field_name = "tp_mig_spec" external_name = "Specification" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+	<fields field_name = "tp_panchayat_code" external_name = "Geo-Panchayat Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_primary_side_protection" external_name = "Primary Side Protection" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />		
+	<fields field_name = "tp_secondary_side_protection" external_name = "Secondary Side Protection" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />		
+	<fields field_name = "tp_village_code" external_name = "Geo-Village Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+    <fields field_name = "tp_average_pf" external_name = "Average PF" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="percent" mode = "insert" />
+    <fields field_name = "tp_circle_name" external_name = "Geo-Circle Name" mandatory = "false" field_type="tp_land_circle_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_con_oil_pre_system" external_name = "Conservator Oil Preserving System?" mandatory = "false" field_type="eo_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_condition" external_name = "Xfrmr Condition" mandatory = "false" field_type="tp_condition" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_consumer_number" external_name = "Consumer Number" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />		
+    <fields field_name = "tp_consumption_type" external_name = "Consumption Type" mandatory = "false" field_type="tp_consumption_type" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_cyme_id" external_name = "CYME Id" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_data_updated_by_gis" external_name = "Data Updated By GIS" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_date_of_creation_in_gis" external_name = "Date of Creation in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_date_of_filtration" external_name = "Date of Filtration" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_date_of_last_updation_in_gis" external_name = "Date Last Updated in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_division_name" external_name = "Geo-Division Name" mandatory = "false" field_type="tp_land_division_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_dt_uq_nameplate_photo" external_name = "Uq DT Nameplate Photo" mandatory = "false" field_type="ds_char16_vec" field_size ="254" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+    <fields field_name = "tp_dt_uq_structure_photo" external_name = "Uq DT Structure Photo" mandatory = "false" field_type="ds_char16_vec" field_size ="254" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_failure_date_and_time" external_name = "Failure Date and Time" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_failure_reason" external_name = "Failure Reason" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_feeder_code" external_name = "Feeder Code" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_feeder_name" external_name = "Feeder Name" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_hvds" external_name = "HVDS?" mandatory = "false" field_type="eo_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_installation_type" external_name = "Installation Type" mandatory = "false" field_type="tp_installation_type" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_last_max_load" external_name = "Last Max Load" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>	
+    <fields field_name = "tp_location_x" external_name = "X Location" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="" mode = "insert" />	  
+    <fields field_name = "tp_max_load_for_last_month" external_name = "Max Load for last month" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+    <fields field_name = "tp_max_load_last_13_months" external_name = "Max Load last 13Months" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode="insert"/>
+    <fields field_name = "tp_meter_number" external_name = "Meter Number" mandatory = "false" field_type="ds_char16_vec" field_size ="32" unset_value="" default_value ="" field_index="No"  mode = "insert" />
+    <fields field_name = "tp_metering_type" external_name = "Metering Type" mandatory = "false" field_type="tp_metering_type" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+    <fields field_name = "tp_migration_unique_id" external_name = "Migration Unique Id" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_mru" external_name = "MRU" mandatory = "false" field_type="ds_int" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />    
+    <fields field_name = "tp_neutral_earthing_type" external_name = "Neutral Earthing Type" mandatory = "false" field_type="tp_neutral_earthing_type" field_size ="32" unset_value="" default_value ="" field_index="No"  mode = "insert" />
+    <fields field_name = "tp_ngt" external_name = "NGT?" mandatory = "false" field_type="eo_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_number" external_name = "Number" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_peak_load" external_name = "Peak Load" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_pole_code" external_name = "Pole Code" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_previous_installed_location" external_name = "Prev. Installed Location" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_pss_code" external_name = "PSS Code" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_sap_functional_location" external_name = "SAP Functional Location" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_sap_id" external_name = "SAP ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_section_name" external_name = "Geo-Section Name" mandatory = "false" field_type="tp_land_section_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_sub_division_name" external_name = "Geo-Sub Division Name" mandatory = "false" field_type="tp_land_sub_division_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_sub_locality" external_name = "Sub Locality" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_sub_mounting" external_name = "Sub Mounting" mandatory = "false" field_type="tp_sub_mounting" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_wbs_id" external_name = "WBS ID" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_work_order_id" external_name = "Work Order ID" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	
+  </collection>
+</tp_collections>
+
+
+
+
+
+

@@ -1,0 +1,9 @@
+tp_session_config	config_product
+
+title
+	TPSODL Session Configuration
+end
+
+description
+	Configuration product for TPSODL Office Sessions.
+end

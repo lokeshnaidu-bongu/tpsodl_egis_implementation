@@ -1,0 +1,24 @@
+id: 'bsf-local-provisioner'
+api_version: '5.3.0'
+targets:
+  - id: 'local-provisioner'
+    products:
+      - id: 'pdi-local-provisioner'
+        local_dir_mount_path: /osds_data/sw_gss_deploy/local/kubeconfig/.
+        pdi:
+          image: 'dtr.predix.io/pwr-smallworld/pdi-local-provisioner'
+          tag: '1.0.0'
+        param_groups:
+          - id: 'environment'
+            params:
+              NAMESPACE: 'nexus'
+          - id: 'values-local-provisioner'
+            params:
+              image:
+                repository: dtr.predix.io/pwr-smallworld/local-path-provisioner
+                tag: v0.0.14
+              imagePullSecrets:
+                - name: regsecret
+              storageClass:
+                name: local-path
+              nodePathMap: [{node: DEFAULT_PATH_FOR_NON_LISTED_NODES, paths: [/smallworld]}]

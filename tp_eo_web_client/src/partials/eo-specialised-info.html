@@ -1,0 +1,32 @@
+<header class="module-header">
+  <h3 class="voice voice-brand">{{messages.object_details.eoSpecialisedInfo.title}}</h3>
+</header>
+<div class="module-body">
+  <div class='item'>
+    {{#feature}}
+    <table class='table wfs-table'>
+      <tbody>
+        {{#attributes}}
+        <tr>
+          <td>
+            <strong>{{attrib}}</strong>
+          </td>
+          <td>{{value}}
+            {{#joins}}
+            <div class="join" id="{{urn}}">{{name}}:({{description}})</div>
+            {{/joins}}
+            {{#links}}
+            <div><a class="link" href="{{link}}" target="_blank" >{{link}}</a></div>
+            {{/links}}
+            {{#others}}
+            <div>{{name}}</div>
+            {{/others}}
+          </td>
+        </tr>
+        {{/attributes}}
+      </tbody>
+    </table>
+ {{/feature}}{{^feature}} {{infoMessage}} {{/feature}}
+  </div>
+</div>
+<footer class="module-footer"></footer>

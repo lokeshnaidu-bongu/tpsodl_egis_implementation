@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<gui>
+	<work_area>
+		<paned_window side_by_side="yes">
+			<plugin plugin_name="test"/>
+		</paned_window>
+	</work_area>
+	
+</gui>

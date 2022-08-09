@@ -1,0 +1,31 @@
+<header class="module-header">
+  <h3 class="voice voice-brand">{{messages.object_details.eoGenericInfo.title}}</h3>
+</header>
+<div class="module-body">
+  <div class='item'>
+    {{#feature}}
+    <table class='table wfs-table'>
+      <tbody>
+        {{#attributes}}
+        <tr>
+          <td>
+            <strong>{{attrib}}</strong>
+          </td>
+          <td>{{value}}
+            {{#joins}}
+            <div class="join" id="{{urn}}">{{name}}:({{description}})</div>
+            {{/joins}}
+            {{#links}}
+            <div class='link-container'>
+              <label class="link" style="margin-bottom:0px;" data-toggle="popover" data-placement="top" data-html="true" data-content="<div class='associated-doc' style='padding:5px;color:black;'><i class='icon-remove-sign' style='float:right;cursor:pointer;'></i>{{messages.object_details.eoGenericInfo.associated_documents_popover}}<input type='text' style='cursor:inherit;background-color:inherit;'class='form-control' value='{{link}}' readonly></input></div>">{{link}}</label>
+              </div>
+            {{/links}}
+          </td>
+        </tr>
+        {{/attributes}}
+      </tbody>
+    </table>
+    {{/feature}}{{^feature}} {{infoMessage}} {{/feature}}
+  </div>
+</div>
+<footer class="module-footer"></footer>

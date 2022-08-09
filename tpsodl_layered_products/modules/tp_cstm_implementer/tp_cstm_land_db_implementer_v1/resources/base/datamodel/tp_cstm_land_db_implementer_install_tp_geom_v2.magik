@@ -1,0 +1,126 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Physical & Enumerator Fields for the object tp_gate
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_land_db_implementer.register(:datamodel_name, "tp_cstm_land_db_imp_v2", 
+				     :version, 2,
+				     :implementer_comment,        "Add new Geom fields to Custom Land Objects",
+				     :upgrade?, _false,
+				     :case_change_method,         :|v2_adding_new_geom_field()|,
+				     :case_change_results_method, :|v2_geom_case_change_results()|,
+				     :dataset_names, {{:land_case, :land}})
+$
+
+
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v2_adding_new_geom_field(p_target_case_view)
+	## 
+	##
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_local l_case_colls<<rope.new_with(:tp_builtup,:tp_circle,
+				  :tp_cluster_of_trees,:tp_division,
+				  :tp_environment,:tp_estate_land_type,
+				  :tp_flood_map,:tp_footpath,
+				  :tp_gate,:tp_green,:tp_locality_boundary,
+				  :tp_municipal_ward_boundary,:tp_non_builtup,
+				  :tp_obstacle,:tp_right_of_way,:tp_shop,
+				  :tp_slum_area,:tp_sub_locality,:tp_telecom,
+				  :tp_tpsodl_building,:tp_tpsodl_boundary,
+				  :tp_transit_area,:tp_tree,:tp_utility_points,
+				  :tp_village_boundary,:tp_vehicle_demarcated_boundary)
+	_for a_each_coll_name _over l_case_colls.elements() 
+	_loop
+		_if (l_coll << p_target_case_view.get_case_object(a_each_coll_name)) _is _unset
+		_then
+			
+			_continue
+		_endif 
+		l_props_1 << property_list.new_with(:external_name,"Leader Line",
+						    :mandatory?,_false )
+		l_field_name<<:leader_line
+		l_field_type<<:simple_chain
+		_self.add_geom_fld_to_cstm_objects(l_coll,l_field_name,l_field_type,l_props_1)
+		l_props_2 << property_list.new_with(:external_name,"Annotation",
+						    :mandatory?,_false )
+		l_field_name<<:annotation
+		l_field_type <<:text
+		_self.add_geom_fld_to_cstm_objects(l_coll,l_field_name,l_field_type,l_props_2)
+	_endloop
+	
+	
+	
+
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.add_geom_fld_to_cstm_objects(p_case_obj,p_fld_name,p_fld_type,p_props)
+	## 
+	## 
+	_local l_props << p_props
+	_local l_case_obj << p_case_obj
+	_local l_fld_name << p_fld_name
+	_local l_fld_type << p_fld_type
+	l_case_obj.add_geometry_field( l_fld_name,l_fld_type ,l_props)
+	l_geom_fld << l_case_obj.get_field(l_fld_name)
+	l_geom_fld.set_trigger(:attach, "geometry_trigger()")
+	l_geom_fld.set_trigger(:detach, "geometry_trigger()")
+	l_geom_fld.set_trigger(:update, "geometry_trigger()")
+	l_geom_fld.priority << 1
+	l_geom_fld.set_geometry_type(l_fld_type)
+
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v2_geom_case_change_results()
+	## 
+	## 
+	_local ccr_for_dd_extension << case_change_result.new()
+	_local l_case_colls<<rope.new_with(:tp_builtup,:tp_circle,
+				  :tp_cluster_of_trees,:tp_division,
+				  :tp_environment,:tp_estate_land_type,
+				  :tp_flood_map,:tp_footpath,
+				  :tp_gate,:tp_green,:tp_locality_boundary,
+				  :tp_municipal_ward_boundary,:tp_non_builtup,
+				  :tp_obstacle,:tp_right_of_way,:tp_shop,
+				  :tp_slum_area,:tp_sub_locality,:tp_telecom,
+				  :tp_tpsodl_building,:tp_tpsodl_boundary,
+				  :tp_transit_area,:tp_tree,:tp_utility_points,
+				  :tp_village_boundary,:tp_vehicle_demarcated_boundary)
+	_for a_each_coll_name _over l_case_colls.elements() 
+	_loop
+		ccr_for_dd_extension.add_new(a_each_coll_name)
+	_endloop 
+	>> {ccr_for_dd_extension}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+  
+  <collection collection_name = "sub_substation" ds_name="electric"/>
+  <collection collection_name = "eo_connector_segment_inst" ds_name="electric"/>
+  <collection collection_name = "eo_power_xfrmr_inst" ds_name="electric"/>
+  <collection collection_name = "eo_meter" ds_name="electric"/>
+  <collection collection_name = "eo_isolating_eqpt_inst" ds_name="electric"/>
+  <collection collection_name = "eo_cable_segment_inst" ds_name="electric"/>
+  <collection collection_name = "eo_connector_point_inst" ds_name="electric"/>
+  <collection collection_name = "lnd_section" ds_name="land"/>
+  
+</tp_collections>

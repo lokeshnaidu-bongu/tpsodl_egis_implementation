@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1.0,maximum-scale=1.0">
+  <title>TPSODL</title>
+  <!-- For third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="components/brandkit/favicon/favicon-144px.png">
+  <!-- For iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="components/brandkit/favicon/favicon-114px.png">
+  <!-- For first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="components/brandkit/favicon/favicon-72px.png">
+  <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="components/brandkit/favicon/favicon.png">
+
+  <link rel="icon" href="components/brandkit/favicon/favicon.ico">
+  <link href="components/fontawesome/css/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="lib/common/css/iids.css" rel="stylesheet" type="text/css">
+  <link href="lib/common/css/responsive.css" rel="stylesheet" type="text/css">
+  <link href="lib/common/css/map.css" rel="stylesheet" type="text/css">
+  <link href="lib/common/css/full-screen-map.css" rel="stylesheet" type="text/css">
+  <link href="src/css/eo_web.css" rel="stylesheet" type="text/css">
+  <!-- <link href="components/screenshot/cropper.css" rel="stylesheet" type="text/css"> -->
+  <link href="components/datatables/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+   <link href="components/datatables/css/buttons.dataTables.min.css" rel="stylesheet">
+   <link href="components/steps/css/jquery.steps.css" rel="stylesheet" type="text/css">
+   <link href="components/steps/css/jquery.steps.css" rel="stylesheet" type="text/css">
+<link href="components/steps/css/jquery.steps.css" rel="stylesheet" type="text/css">
+   <!-- <link href="tpsodl_custom_modules/tpsodl_menu_slider_for_sidebar_items/css/tpsodl_menu_slider_for_sidebar_items.css" rel="stylesheet" type="text/css"> -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script> -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script> -->
+	<!-- <script src="https://unpkg.com/konva@7.2.5/konva.min.js"></script> -->
+
+	<!-- <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=fetch,requestAnimationFrame,Element.prototype.classList,URL,TextDecoder"></script> -->
+	<!-- <script src="https://unpkg.com/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> -->
+
+
+  <script src="/auth/pre-check-token.js"></script>
+  <!--[if lt IE 9]>
+  <link id="theme-ie" href="iids/css/ie.css" rel="stylesheet" type="text/css">
+  <![endif]-->  
+  <script src="components/modernizr/modernizr.js"></script>
+</head>
+
+<body>
+
+  <div class="navbar navbar-static-top navbar-default">
+	<span class="pull-left overlay-chooser" style="margin: 50px 0px 0px -5px !important;font-size: 20px; cursor: pointer; width: 40px; height: 20px;border-radius: 10px 10px 0px 0px; padding: 0px 0px 0px 3px;float: left !important;">
+	
+	<!-- <div class="pull-left overlay-chooser" style="width: 35%;max-width:350px;"> -->
+	
+	<i style="height: 28px;padding: 3px;color:#aaa;opacity:0.7;" id="showHideToolbar" class="icon-ico_chevron_up_lg" rel="tooltip" data-container="body" data-placement="bottom" title="" data-original-title="Show/Hide Toolbar"></i></span> 
+    <span class="pull-left overlay-chooser" style="margin: 25px 0px 0px 0px !important;font-size: 20px; cursor: pointer; width: 20px; height: 40px;border-radius: 10px 0px 0px 10px; padding: 20px 0px 0px 0px;float: right !important;"><i style="height: 28px;padding: 3px;color:#aaa;opacity:0.7;" id="showHideSidebar" class="icon-ico_chevron_right_lg" rel="tooltip" data-container="body" data-placement="bottom" title="" data-original-title="Show/Hide Sidebar"></i></span>
+	<div id="user_login_time" style="margin-left: 75%;color: white;margin-bottom: -7%;padding-top: 20px;font-size:12px;"></div>
+    <div class="fullscreen-map">
+      <div class="navbar-header">
+        <a class="navbar-brand" href=""><span class="ge-logo"></span> <span><span id="documentHeader"></span> <small><i><span id="poweredBy"></span></i> <span id="documentSubHeader"></span></small></span></a>
+      </div>
+      <div id="logout" class="pull-right"></div>
+    </div>
+  </div>
+
+  <div id="app-window">
+
+    <div class="frame-container">
+		<div id="sidebar-controls" class="frame-controls"></div>
+		<div id='sidebarContainer' class="frame"></div>
+		<div id='mapContainer' class="main" style='width:100%'>
+			<div id='gmap' style='width:100%; height:100%'>
+			<div id='data_info'><span id="info1"></span></div>
+			</div>
+		</div>
+		
+		<div id="tpsodl_add_external_data_div" style="max-height:500px;overflow-y:scroll;border:1px solid #ccc;width:280px;background-color:#ffffff;opacity:0.8;display:none;position: absolute; top: 60px; top: 60px !important;; padding: 5px;">
+			<div id="tpsodl_add_external_data_result"></div>
+			
+		</div>
+		<!-- <div id="tpsodl_add_external_data_to_map" style="position: absolute;bottom: 90px;left:20px;width: 20px;height: 20px;display:none;"> -->
+			<!-- <span class="pull-left overlay-chooser" id="map-drag-drop-custom-tools"><i style="height: 28px;padding: 5px;color:white;" id="tpsodl_add_external_data_to_map" class="icon-tint" rel="tooltip" data-container="body" data-placement="top" title="" data-original-title="Drag and drop KML, GeoJson"></i></span> -->
+		 <!-- </div> -->
+		<div id="only_map_component_view" style="background-color:cadetblue;position: absolute;bottom: 50px;left:20px;width: 20px;height: 20px;display:none;">
+			<span class=" overlay-chooser btn btn-map" style=" height:35px;">
+				<i style="height: 28px; color:midnightblue;  vertical-align: -webkit-baseline-middle;" id="only_map_component_view" class="icon-ico_fullscreen_lg" rel="tooltip" data-container="body" data-placement="top" title="" data-original-title="Map View"></i>
+			</span>
+		</div> 
+		
+		<div id="projectionDiv" style="background-color:rgba(10,130,180,0.7);padding:5px;position: absolute;bottom: 35px;left:75px;width: auto;height: 35px;float:left;display:none;">
+			<form>
+				<select rel="tooltip" data-container="body" data-placement="top" title="" data-original-title="Projection" 
+				id="projection" style="float:left;height:25px;color:midnightblue;">
+					<option value="EPSG:4326"><b>Lat-Long WGS84</b></option>
+				</select>
+				<input style="float:left;height:25px;margin-left:5px;color:midnightblue;" rel="tooltip" data-container="body" data-placement="top" title="" 
+				data-original-title="Precision" id="precision" type="number" min="0" max="12" value="4">
+				<label style="height:30px;margin-left:5px;margin-top:5px;color:white;font-weight:bold" id ="mouse-position"></label>
+			</form>
+		</div>
+    </div>
+  </div>
+
+  <script src="components/requirejs/require.js"></script>
+  <script src="components/jszip/jszip.js"></script>
+  <script src="https://assets.what3words.com/sdk/v3/what3words.js?key=EX3P4WLU"></script>
+  <!-- <script src="components/xml-writer/lib/xml-writer.js"></script> -->
+  
+	<!-- <script src="components/jszip/jszip-load.js"></script> -->
+  	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.js"></script> -->
+	<script src="common.js"></script>
+  
+</body>
+</html>

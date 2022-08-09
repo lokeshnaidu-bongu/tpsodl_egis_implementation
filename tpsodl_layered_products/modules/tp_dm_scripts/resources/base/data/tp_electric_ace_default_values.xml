@@ -1,0 +1,474 @@
+<!-- Created with Liquid Technologies Online Tools 1.0 (https://www.liquid-technologies.com) -->
+<tp_collections>
+  <collection collection_name="eo_circuit">
+    <fields default_value="No" fld_name="tap_line_ind" />
+    <fields default_value="No" fld_name="ug_exit_ind" />
+    <fields default_value="No" fld_name="ug_vented_ind" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="HV" fld_name="tp_network_type" />
+    <fields default_value="Existing" fld_name="tp_status" />
+    <!--<fields default_value="Others" fld_name="tp_device_type" />-->
+    <fields default_value="Unknown" fld_name="load_shed_priority" />
+    <!--<fields default_value="11.000 kV" fld_name="tp_nominal_voltage" />-->
+  </collection>
+  <collection collection_name="eo_connector_point_inst">
+    <!--<fields default_value="11.000 kV" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="HV" fld_name="network_type" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Pole" fld_name="tp_sub_mounting" />
+  </collection>
+  <collection collection_name="eo_wire">
+    <fields default_value="Havells" fld_name="manufacturer" />
+  </collection>
+  <collection collection_name="eo_fiber_optic">
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="0" fld_name="tp_leased_cores" />
+    <fields default_value="8" fld_name="tp_number_of_cores" />
+    <fields default_value="Pole" fld_name="tp_sub_mounting" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="Larsen and Toubro" fld_name="manufacturer" />
+    <fields default_value="8" fld_name="tp_free_cores" />
+    <fields default_value="Armored" fld_name="type" />
+    <fields default_value="Existing" fld_name="status" />
+  </collection>
+  <collection collection_name="eo_cable">
+    <fields default_value="XLPE" fld_name="tp_insulation_type" />
+    <fields default_value="Hpl Electric and Power" fld_name="manufacturer" />
+  </collection>
+  <collection collection_name="eo_connector_point">
+    <fields default_value="Termination" fld_name="device_type" />
+    <fields default_value="ABB" fld_name="manufacturer" />
+    <fields default_value="Heat Shrink" fld_name="tp_sub_type" />
+  </collection>
+  <collection collection_name="eo_cable_segment_inst">
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="HV Feeder" fld_name="usage" />
+    <fields default_value="Underground" fld_name="mounting" />
+    <fields default_value="XLPE" fld_name="tp_cable_type" />
+    <fields default_value="Cable Ducts" fld_name="tp_cable_support" />
+    <fields default_value="HV" fld_name="network_type" />
+    <fields default_value="No" fld_name="tp_cable_sick" />
+    <fields default_value="Metallic Conduit" fld_name="arrangement" />
+    <fields default_value="3" fld_name="tp_number_of_core" />
+    <fields default_value="Basement" fld_name="tp_sub_mounting" />
+    <!--<fields default_value="11.000 kV" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+  </collection>
+  <collection collection_name="eo_wire_segment_inst">
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="HV Feeder" fld_name="usage" />
+    <fields default_value="HV" fld_name="network_type" />
+    <fields default_value="Horizontal" fld_name="arrangement" />
+    <fields default_value="Pole" fld_name="tp_sub_mounting" />
+    <fields default_value="Yes" fld_name="tp_ac_or_dc" />
+    <!--<fields default_value="415.000 V" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="Triangular" fld_name="tp_wire_configuration" />
+    <fields default_value="ABC" fld_name="phase_order" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+  </collection>
+  <collection collection_name="eo_power_xfrmr">
+    <fields default_value="ONAN" fld_name="tp_cooling_type" />
+    <!--<fields default_value="200.000 A" fld_name="load_fuse_size" />-->
+    <fields default_value="On Load" fld_name="tp_tap_changer_type" />
+    <fields default_value="No" fld_name="current_limiting_fuse_ind" />
+    <fields default_value="Crgo" fld_name="tp_core" />
+    <fields default_value="Unknown" fld_name="load_fuse_type" />
+    <fields default_value="0" fld_name="tp_number_of_steps" />
+    <fields default_value="Oil Cooled" fld_name="tp_sub_type" />
+    <fields default_value="No" fld_name="tp_load_tap_chng_indicator" />
+    <fields default_value="1" fld_name="tp_number_of_taps" />
+    <!--<fields default_value="200.000 A" fld_name="source_fuse_size" />-->
+    <!--<fields default_value="100.000 kV" fld_name="tp_rated_capacity" />-->
+    <fields default_value="Unknown" fld_name="source_fuse_type" />
+    <fields default_value="3 Star" fld_name="tp_star_rating" />
+    <fields default_value="Distribution Transformer" fld_name="device_type" />
+    <fields default_value="Solid" fld_name="tp_neutral_grounding_type" />
+    <fields default_value="Good" fld_name="tp_condition_of_xfrmr" />
+    <fields default_value="ABB" fld_name="manufacturer" />
+    <fields default_value="ABB" fld_name="tp_tap_changer_make" />
+    <fields default_value="0" fld_name="tp_number_of_fans" />
+  </collection>
+  <collection collection_name="eo_energy_storage">
+    <fields default_value="Battery" fld_name="tp_sub_type" />
+    <fields default_value="GEC Alsthom" fld_name="manufacturer" />
+    <fields default_value="Battery" fld_name="device_type" />
+  </collection>
+  <collection collection_name="eo_meter">
+    <fields default_value="LV" fld_name="network_type" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="3 Phase" fld_name="tp_phase_connection" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="CT" fld_name="tp_sub_type" />
+    <fields default_value="ABCN" fld_name="tp_phase" />
+    <fields default_value="Poly Carbonate" fld_name="tp_seal_type" />
+    <fields default_value="Good" fld_name="tp_seal_condition" />
+    <fields default_value="Available" fld_name="tp_meter_box" />
+    <fields default_value="No" fld_name="tp_abt_activated" />
+    <fields default_value="Yes" fld_name="tp_amr_installed" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Good" fld_name="tp_display_condition" />
+    <fields default_value="Yes" fld_name="tp_space_for_modem_installation" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="Larsen and Toubro" fld_name="tp_manufacturer" />
+    <fields default_value="Outside" fld_name="tp_meter_location" />
+    <fields default_value="DT Meter" fld_name="tp_function" />
+    <fields default_value="AMR Meter" fld_name="tp_type" />
+    <fields default_value="Secondary Meter" fld_name="device_type" />
+    <fields default_value="6" fld_name="tp_no_of_digits" />
+    <fields default_value="No" fld_name="tp_meter_height" />
+    <fields default_value="No" fld_name="tp_net_meter" />
+    <fields default_value="Optical" fld_name="tp_communication_port" />
+    <!--<fields default_value="415.000 V" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="Electronic" fld_name="tp_mechanism" />
+    <fields default_value="Non-DLMS" fld_name="tp_communication_type" />
+  </collection>
+  <collection collection_name="eo_power_xfrmr_inst">
+    <fields default_value="Yes" fld_name="tp_con_oil_pre_system" />
+    <!--<fields default_value="11.000 kV" fld_name="source_nominal_voltage_pp" />-->
+    <fields default_value="Pad" fld_name="structure_mounting" />
+    <fields default_value="None" fld_name="scada_type" />
+    <fields default_value="No" fld_name="tp_hvds" />
+    <fields default_value="LV Metering" fld_name="tp_metering_type" />
+    <fields default_value="No" fld_name="banked_ind" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Yes" fld_name="tp_oil_preserving_system" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="HV" fld_name="source_network_type" />
+    <fields default_value="Yes" fld_name="parallel_ind" />
+    <fields default_value="Plinth" fld_name="tp_sub_mounting" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="LV" fld_name="load_network_type" />
+    <fields default_value="No Special Loading" fld_name="special_loading" />
+    <!--<fields default_value="415.000 V" fld_name="load_nominal_voltage_pp" />-->
+    <fields default_value="No" fld_name="tp_ngt" />
+    <fields default_value="GI Flat" fld_name="tp_neutral_earthing_type" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="Delta-UnGrd/Wye-Grd" fld_name="bank_configuration" />
+  </collection>
+  <collection collection_name="eo_isolating_eqpt_inst">
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="No" fld_name="tp_built_in_ct" />
+    <fields default_value="Optical" fld_name="tp_communication_port" />
+    <!--<fields default_value="11.000 kV" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="No" fld_name="tp_bypass" />
+    <fields default_value="Transformer" fld_name="tp_usage" />
+    <fields default_value="LV" fld_name="network_type" />
+    <fields default_value="No" fld_name="mirrored_ind" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Pole" fld_name="tp_sub_mounting" />
+    <fields default_value="None" fld_name="scada_type" />
+    <fields default_value="No" fld_name="tp_tie" />
+    <fields default_value="No" fld_name="tp_auto_reclose" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="2" fld_name="tp_number_of_poles" />
+  </collection>
+  <collection collection_name="eo_composite_switch">
+    <fields default_value="LV" fld_name="network_type" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="No" fld_name="tp_auxiliary_role" />
+    <!--<fields default_value="415.000 V" fld_name="tp_nominal_voltage" />-->
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <!--<fields default_value="415.000 V" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="No" fld_name="tp_ctpt_combined" />
+    <fields default_value="ABC" fld_name="phasing" />
+    <fields default_value="No" fld_name="tp_motorized" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="Others" fld_name="tp_mechanism" />
+    <fields default_value="Panel Mounted" fld_name="tp_sub_mounting" />
+    <fields default_value="Distribution Panel" fld_name="device_type" />
+    <fields default_value="1 Way" fld_name="tp_number_of_ways" />
+    <fields default_value="Existing" fld_name="status" />
+  </collection>
+  <collection collection_name="eo_regulating_eqpt">
+    <fields default_value="Capacitor" fld_name="device_type" />
+    <fields default_value="ABB" fld_name="manufacturer" />
+  </collection>
+  <collection collection_name="eo_energy_storage_inst">
+    <!--<fields default_value="415.000 V" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="None" fld_name="scada_type" />
+    <fields default_value="LV" fld_name="network_type" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="In Door" fld_name="tp_installation_type" />
+  </collection>
+  <collection collection_name="eo_comms_device">
+    <fields default_value="HV" fld_name="network_type" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Relay" fld_name="device_type" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="ABC" fld_name="phasing" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="ABB" fld_name="tp_manufacturer" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="AT and T" fld_name="carrier" />
+    <!--<fields default_value="11.000 kV" fld_name="nominal_voltage_pp" />-->
+  </collection>
+  <collection collection_name="eo_protective_eqpt_inst">
+    <fields default_value="In Door" fld_name="tp_installation_type" />
+    <!--<fields default_value="415.000 V" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="None" fld_name="scada_type" />
+    <fields default_value="Kiosk" fld_name="tp_sub_mounting" />
+    <fields default_value="Over Current" fld_name="protection_type" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="HV" fld_name="network_type" />
+    <fields default_value="Overhead" fld_name="mounting" />
+    <fields default_value="Yes" fld_name="tp_insulating_base" />
+    <fields default_value="LED" fld_name="tp_indicator_type" />
+    <fields default_value="No" fld_name="tp_fpi_communicable" />
+  </collection>
+  <collection collection_name="eo_protective_eqpt">
+    <fields default_value="Device Relays" fld_name="tp_sub_type" />
+    <fields default_value="Relay" fld_name="device_type" />
+    <fields default_value="Silver Cadmium Oxide-Relay" fld_name="tp_material" />
+    <fields default_value="ABB" fld_name="manufacturer" />
+    <fields default_value="Yes" fld_name="tp_earthing" />
+  </collection>
+  <collection collection_name="eo_service_point">
+    <fields default_value="LV" fld_name="network_type" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="A" fld_name="phasing" />
+    <fields default_value="Residential" fld_name="connection_type" />
+    <fields default_value="Others" fld_name="tp_sub_mounting" />
+    <fields default_value="DOM" fld_name="tp_tariff_category" />
+    <fields default_value="Residential Type 1" fld_name="default_class" />
+    <fields default_value="LV Consumer" fld_name="tp_function" />
+    <!--<fields default_value="415.000 V" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="Overhead" fld_name="tp_mounting" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+  </collection>
+  <collection collection_name="eo_service_connection">
+    <fields default_value="A" fld_name="tp_phase_connection" />
+    <fields default_value="Company Owned" fld_name="tp_owner_type" />
+    <fields default_value="No" fld_name="tp_theft" />
+    <fields default_value="A" fld_name="tp_phase_connection_in_fg" />
+    <fields default_value="DOM" fld_name="tp_category" />
+    <fields default_value="A" fld_name="phasing" />
+    <fields default_value="Yes" fld_name="tp_bill_shown" />
+    <fields default_value="Existing" fld_name="tp_lifecycle_status" />
+    <fields default_value="DOM" fld_name="tp_category_in_fg" />
+    <fields default_value="Residential" fld_name="connection_type" />
+    <fields default_value="Yes" fld_name="tp_treat_as_billing_address" />
+    <fields default_value="Yes" fld_name="tp_address_not_located" />
+    <fields default_value="A" fld_name="tp_phase" />
+    <fields default_value="Yes" fld_name="tp_meter_availability" />
+    <fields default_value="No" fld_name="tp_vigilance_case" />
+    <fields default_value="Residential Type 1" fld_name="default_class" />
+    <fields default_value="No" fld_name="tp_bypass" />
+    <fields default_value="Yes" fld_name="tp_fg_consumer_match" />
+    <fields default_value="No" fld_name="tp_defaulter" />
+    <fields default_value="Yes" fld_name="tp_bill_delivered" />
+  </collection>
+  <collection collection_name="eo_energy_source">
+    <fields default_value="Existing" fld_name="status" />
+    <!--<fields default_value="415.000 V" fld_name="nominal_voltage_pp" />-->
+    <fields default_value="HV" fld_name="network_type" />
+    <fields default_value="Automatic" fld_name="tp_regulation_scheme" />
+    <fields default_value="Air" fld_name="tp_protection_class" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="ABC" fld_name="phasing" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="No" fld_name="tp_portable" />
+    <fields default_value="Oil" fld_name="tp_cooling_type" />
+    <fields default_value="Boost Charging" fld_name="device_type" />
+    <fields default_value="G" fld_name="tp_insulation_class" />
+    <fields default_value="Yes" fld_name="tp_distribution_box" />
+  </collection>
+  <collection collection_name="eo_measuring_eqpt_inst">
+    <!--<fields default_value="415.000 V" fld_name="load_nominal_voltage_pp" />-->
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="HV" fld_name="source_network_type" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Existing" fld_name="status" />
+    <!--<fields default_value="0.000 V" fld_name="tertiary_nominal_voltage_pp" />-->
+    <fields default_value="Overhead" fld_name="mounting" />
+    <!--<fields default_value="11.000 kV" fld_name="source_nominal_voltage_pp" />-->
+    <fields default_value="None" fld_name="scada_type" />
+    <fields default_value="LV" fld_name="load_network_type" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="Yes" fld_name="tp_earthing" />
+    <fields default_value="No" fld_name="tp_synchronization_indicator" />
+    <fields default_value="No" fld_name="tp_relay_indicator" />
+    <fields default_value="Current" fld_name="measurement_type" />
+    <fields default_value="No" fld_name="tp_synch_indicator" />
+  </collection>
+  <collection collection_name="ed_switchgear">
+    <fields default_value="Unknown" fld_name="auto_throwover_ind" />
+    <fields default_value="Overhead" fld_name="tp_mounting" />
+    <fields default_value="Cubicle" fld_name="type" />
+    <fields default_value="Kiosk" fld_name="tp_sub_mounting" />
+    <fields default_value="No" fld_name="tp_auxiliary_role" />
+    <fields default_value="In Door" fld_name="tp_installation_type" />
+    <fields default_value="No" fld_name="tp_motorized" />
+    <fields default_value="1 Way" fld_name="tp_number_of_ways" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="ABB" fld_name="manufacturer" />
+    <fields default_value="No" fld_name="tp_ctpt_combined" />
+    <!--<fields default_value="11.000 kV" fld_name="tp_nominal_voltage" />-->
+    <fields default_value="ABC" fld_name="tp_phasing" />
+    <fields default_value="HV" fld_name="tp_network_type" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Manual" fld_name="tp_mechanism" />
+  </collection>
+  <collection collection_name="ed_cabinet">
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="No" fld_name="live_front_ind" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="LV" fld_name="tp_network_type" />
+    <!--<fields default_value="15 kV" fld_name="rated_voltage" />-->
+    <!--<fields default_value="415.000 V" fld_name="tp_nominal_voltage" />-->
+    <fields default_value="ABB" fld_name="manufacturer" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="LV Cubicle" fld_name="tp_device_type" />
+    <fields default_value="Plinth" fld_name="tp_sub_mounting" />
+    <fields default_value="3 Phase Feed Thru" fld_name="type" />
+  </collection>
+  <collection collection_name="eo_conduit">
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Unknown" fld_name="tp_ward_code" />
+    <fields default_value="In Door" fld_name="tp_installation_type" />
+    <fields default_value="Overhead" fld_name="tp_mounting" />
+    <fields default_value="Basement" fld_name="tp_sub_mounting" />
+    <fields default_value="Electric Utility-TPSODL" fld_name="owner_name" />
+    <fields default_value="Conduit" fld_name="tp_conduit_type" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Hpl Electric and Power" fld_name="manufacturer" />
+  </collection>
+  <collection collection_name="ed_pole">
+    <fields default_value="Porcelain" fld_name="tp_insulator_material" />
+    <fields default_value="No" fld_name="tp_branching_status" />
+    <fields default_value="External" fld_name="receptacle" />
+    <fields default_value="Yes" fld_name="tp_composite_status" />
+    <fields default_value="Yes" fld_name="tp_la_provided" />
+    <fields default_value="HV + LV" fld_name="tp_composite_type" />
+    <fields default_value="Yes" fld_name="tp_anti_climbing_device" />
+    <fields default_value="No" fld_name="tp_shared" />
+    <fields default_value="Yes" fld_name="tp_couping" />
+    <fields default_value="HV" fld_name="tp_network_type" />
+    <fields default_value="Primary" fld_name="usage" />
+    <fields default_value="Unknown" fld_name="treatment" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Good" fld_name="tp_condition_of_pole" />
+    <fields default_value="Yes" fld_name="tp_danger_board_status" />
+    <fields default_value="30 Feet" fld_name="height" />
+    <fields default_value="Pin" fld_name="tp_hv_insulator_type" />
+    <fields default_value="Unknown" fld_name="reinforcement_type" />
+    <fields default_value="5" fld_name="class" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="11" fld_name="tp_cross_arm_pin_type" />
+    <fields default_value="Rail" fld_name="material" />
+    <fields default_value="Shackle+Pin" fld_name="tp_lv_insulator_type" />
+    <fields default_value="10000 lbf" fld_name="strength" />
+    <fields default_value="Yes" fld_name="tp_clearance_from_nearest_house" />
+    <fields default_value="Yes" fld_name="tp_road_cross_guarding" />
+    <!--<fields default_value="Disc" fld_name="tp_ehv_insulator_type" />-->
+    <fields default_value="No" fld_name="tp_street_light_status" />
+    <fields default_value="Good" fld_name="tp_earthing_condition" />
+    <fields default_value="V Cross arm" fld_name="tp_cross_arm" />
+    <fields default_value="150x150" fld_name="tp_dimensions" />
+    <fields default_value="Yes" fld_name="tp_earthing" />
+    <fields default_value="LED" fld_name="tp_street_light_type" />
+    <!--<fields default_value="415.000 V" fld_name="tp_nominal_voltage" />-->
+    <fields default_value="No" fld_name="tp_cut_point" />
+    <fields default_value="No" fld_name="tp_cable_raising_term" />
+    <fields default_value="Single Pole" fld_name="tp_structure_type" />
+  </collection>
+  <collection collection_name="ed_decorative_pole">
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="Yes" fld_name="banner_arm_ind" />
+    <fields default_value="Galvanized" fld_name="finish" />
+    <fields default_value="Round Straight" fld_name="type" />
+    <fields default_value="GI" fld_name="material" />
+    <fields default_value="White" fld_name="color" />
+    <fields default_value="Fluted" fld_name="pole_style" />
+    <fields default_value="8.5 Feet" fld_name="pole_height" />
+    <fields default_value="Side Mount/Mast Arm" fld_name="light_mount_type" />
+    <fields default_value="Platform Mounted" fld_name="tp_sub_mounting" />
+    <fields default_value="Anchor Base" fld_name="foundation" />
+    <fields default_value="Overhead" fld_name="tp_mounting" />
+    <!--<fields default_value="415.000 V" fld_name="tp_nominal_voltage" />-->
+    <fields default_value="LV" fld_name="tp_network_type" />
+    <fields default_value="None" fld_name="receptacle" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+  </collection>
+  <collection collection_name="et_tower">
+    <fields default_value="HV + HV" fld_name="tp_composite_type" />
+    <fields default_value="Good" fld_name="tp_condition" />
+    <fields default_value="No" fld_name="tp_la_provided" />
+    <fields default_value="Unknown" fld_name="class" />
+    <fields default_value="No" fld_name="tp_cut_point" />
+    <fields default_value="Tran/Dist" fld_name="use" />
+    <fields default_value="Larsen and Toubro" fld_name="manufacturer" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="No" fld_name="tp_composite_status" />
+    <fields default_value="No" fld_name="box_arm_ind" />
+    <fields default_value="Yes" fld_name="tp_road_cross_guarding" />
+    <fields default_value="Steel" fld_name="material" />
+    <fields default_value="Yes" fld_name="tp_danger_board_status" />
+    <fields default_value="Pin" fld_name="tp_type_of_insulator_lv" />
+    <fields default_value="Yes" fld_name="tp_clearance_from_nearest_house" />
+    <!--<fields default_value="33.000 kV" fld_name="tp_nominal_voltage" />-->
+    <fields default_value="Steel Lattice" fld_name="configuration" />
+    <fields default_value="LED" fld_name="tp_street_light_type" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+    <fields default_value="Yes" fld_name="tp_ground_clearance" />
+    <fields default_value="Disc" fld_name="tp_type_of_insulator_hv" />
+    <fields default_value="Yes" fld_name="tp_earthing" />
+    <fields default_value="EHV" fld_name="tp_network_type" />
+    <fields default_value="Angle" fld_name="type" />
+    <fields default_value="Yes" fld_name="tp_couping" />
+    <fields default_value="No" fld_name="tp_guard_wires" />
+    <fields default_value="Yes" fld_name="tp_anti_climbing_device" />
+  </collection>
+  <collection collection_name="sub_substation">
+    <fields default_value="Primary Substation" fld_name="type" />
+    <fields default_value="Distribution/Distribution" fld_name="class" />
+    <fields default_value="1" fld_name="tp_number_of_11kv_fdrs" />
+    <fields default_value="Brick Masoned" fld_name="tp_fence_type" />
+    <fields default_value="Good" fld_name="tp_earthing_condition" />
+    <fields default_value="0" fld_name="tp_number_of_cap_banks" />
+    <fields default_value="Brick Masoned" fld_name="tp_civil_type" />
+    <fields default_value="Yes" fld_name="tp_control_room_building" />
+    <fields default_value="Yes" fld_name="tp_cable_trench" />
+    <fields default_value="Out Door" fld_name="tp_installation_type" />
+    <fields default_value="1" fld_name="tp_number_of_bus_secs" />
+    <fields default_value="1" fld_name="tp_number_of_ups_systems" />
+    <fields default_value="Yes" fld_name="tp_earth_mat_exist" />
+    <fields default_value="Yes" fld_name="tp_switchyard_illumntn" />
+    <fields default_value="Yes" fld_name="tp_space_for_addnl_xfrmr" />
+    <fields default_value="1" fld_name="tp_number_of_outgoing_fder" />
+    <fields default_value="Overhead" fld_name="tp_mounting" />
+    <fields default_value="Yes" fld_name="tp_parallel_opearation" />
+    <fields default_value="1" fld_name="tp_number_of_incoming_fder" />
+    <fields default_value="Kiosk" fld_name="tp_type_extension" />
+    <fields default_value="Perimeter" fld_name="electric_fence_type" />
+    <fields default_value="Yes" fld_name="tp_earthing" />
+    <fields default_value="1" fld_name="tp_number_of_33kv_fdrs" />
+    <fields default_value="Existing" fld_name="status" />
+    <fields default_value="1" fld_name="tp_num_of_fire_extin" />
+    <fields default_value="Yes" fld_name="tp_fire_alarm_sys_provd" />
+    <fields default_value="Lattice Welded" fld_name="tp_sub_mounting" />
+    <fields default_value="1" fld_name="tp_number_of_earthing_pits" />
+    <fields default_value="None" fld_name="scada_type" />
+    <fields default_value="Mixed" fld_name="tp_substation_usage" />
+    <fields default_value="Company Owned" fld_name="owner_type" />
+  </collection>
+</tp_collections>

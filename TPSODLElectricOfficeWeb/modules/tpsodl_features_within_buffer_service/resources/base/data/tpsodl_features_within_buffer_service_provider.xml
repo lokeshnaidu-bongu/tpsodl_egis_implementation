@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service>
+  <!-- Global request and response elements are available for use in all methods in the service -->
+  <global>
+    <request>
+      
+    </request>
+    
+    <response>
+    </response>
+  </global>
+  
+  <!-- Definitions for the methods -->
+  <method name="get_buffer_collections">
+    <commment>Returns all the collections</commment>
+    <request use_global="true">
+      <element name="ds_name" type="java.lang.String">
+	<comment>DataSet Name</comment>
+      </element>
+    </request>
+    <response use_global="true">
+      <element name="collection_list" type="java.util.Hashtable">
+	<comment>A list of collection names</comment>
+      </element>
+    </response>
+  </method>
+
+  <method name="get_selection_features">
+    <comment>Will draw a circular buffer around given object of given radius</comment>
+    <request>
+      <element name="urns_list" type="java.util.List" required="false" store="false">
+	<comment>list of the urns of the objects which are selected on the map.</comment>
+      </element>
+      <element name="collection" type="java.lang.String" required="false" store="false">
+	<comment>objects for selection
+	</comment>
+      </element>
+      <element name="buffer_radius" type="java.lang.String">
+	<comment>which passes the buffer distance to the service side.</comment>
+      </element>
+      <element name="missing_bp"  required="false" type="boolean">
+	<comment>Query for the Missing Bp Collections or not </comment>
+      </element>
+
+    </request>
+    <response use_global="true">
+      <element name="feature_start" type="java.lang.Integer">
+	<comment>features information</comment>
+      </element>  
+      <element name="feature_count" type="java.lang.Integer">
+	<comment>features information</comment>
+      </element>  
+      <element name="feature_total" type="java.lang.Integer">
+	<comment>features information</comment>
+      </element>  
+      <element name="features" type="com.gesmallworld.serf.acpt.MSFRwoSet">
+	<comment>features information</comment>
+      </element>  
+      <element name="table_counts" type="java.util.Map">
+	<comment>features information</comment>
+      </element>  
+      <element name="table_totals" type="java.util.Map">
+	<comment>features information</comment>
+      </element>  
+
+      <element name="error" type="java.lang.String">
+	<commment>Conatins the cause for the request to end without proceeding to completiton 
+	</commment>
+      </element>
+
+    </response>
+  </method>
+  <method name="get_trail_point_features">
+    <comment>Will draw a Rectangular buffer around given object of given radius</comment>
+    <request>
+      
+      <element name="trail_coordinates" type="java.lang.String" required="true" store="false">
+	<comment>which passes the trail coordinates the service side.</comment>
+      </element>
+      <element name="buffer_radius" type="java.lang.String">
+	<comment>which passes the buffer distance to the service side.</comment>
+      </element>	
+      <element name="collection" type="java.lang.String" required="false" store="false">
+	<comment>objects for selection
+	</comment>
+      </element>
+      
+      <element name="missing_bp"  required="false" type="boolean">
+	<comment>Query for the Missing Bp Collections or not </comment>
+      </element>
+      
+    </request>
+    <response use_global="true">
+      
+      
+      <element name="feature_start" type="java.lang.Integer">
+	<comment>Pagenation</comment>
+      </element>
+      <element name="feature_count" type="java.lang.Integer">
+	<comment>pagenation</comment>
+      </element>
+      <element name="feature_total" type="java.lang.Integer">
+	<comment>pagenation</comment>
+      </element>
+      <element name="features" type="com.gesmallworld.serf.acpt.MSFRwoSet">
+      </element>
+      <element name="error" type="java.lang.String">
+	<commment>Conatins the cause for the request to end without proceeding to completiton 
+	</commment>
+      </element>
+    </response>
+  </method>	
+ 
+</service>

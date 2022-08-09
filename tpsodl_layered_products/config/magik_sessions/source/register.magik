@@ -1,0 +1,138 @@
+#% text_encoding = iso8859_1
+_package sw
+
+!global_auto_declare?! << _true
+$
+
+_block
+
+	_local startup_options <<
+		{
+                        :ds_environment_options,
+			{
+				:npcls,     65536,
+				:nslots,    50000,
+				:lwt_space, 2**24
+			},
+			:alternative_control_enabled?, _false
+		}
+
+	_local open_database_proc <<
+		_proc@open_database_proc( a_session )
+
+			# Set the unit type for the current locale
+			write( "Setting !current_locale! to ", :metric )
+			!current_locale![:unit_type] << :metric
+
+			ace_dir << a_session.open_socs()
+			write( "Database Opened: ", ace_dir )
+
+			write( "Electric ds path : ", gis_program_manager.cached_dataset(:electric).searchpath.an_element() )
+			
+			# HACK to remove authorisation from cs_config partition
+			_if gis_program_manager.cached_dataset(:cs_config) _isnt _unset
+			_then
+				gis_program_manager.cached_dataset(:cs_config).auth_view << _unset
+			_endif 
+
+			# make sure !current_package! is user before save
+			write( "Setting !current_package! to ", :user )
+			_global !current_package!
+			!current_package! << sw:package(:user)
+
+
+			_local remove_applications << equality_set.new_with(
+							      :dm_cu_user_application,
+							      :dm_cu_admin_application,
+							      :config,
+							      :sweo_dm_user,
+							      :sweo_wm_user )
+			
+			_for an_application _over smallworld_product.application_definitions.elements()
+			_loop
+				_if remove_applications.includes?(an_application.application_name)
+				_then
+					
+					smallworld_product.application_definitions.remove(an_application)
+				_endif 
+			_endloop
+			
+			smallworld_product.changed(:application_definitions)
+
+		_endproc
+	
+	magik_session.register_new(
+		"tp_closed",
+
+		:parent_session, "sw_electric_office:eo_closed",
+
+		:add_products, {:sw_core,
+				:sw_common_office,
+				:sw_electric_office,				       
+				:sw_land_office,
+				:tpsodl_layered_products,
+				:fme},
+
+		:optional_products, { },
+
+		:load_modules, {:ldap_gui,
+				:ldap_manager,
+				:asset_search_plugin,
+				:tp_eo_application,
+				:tp_cstm_land_adds,
+				:tp_cstm_electric_mods,
+				:dm_admin_application,
+				:swaf_fme_application},
+		
+		:startup_options, startup_options )
+	
+	magik_session.register_new(
+		"tp_open",
+
+		:parent_session, "tp_closed",
+
+		:add_products, { },
+
+		:startup_proc, :startup,
+
+		:soc_names, { :electric_dm, :design_config },
+
+		:load_modules,{:cs_land},
+		
+		:startup_options, startup_options,
+		
+		:open_database_proc, open_database_proc )
+
+	
+	magik_session.register_new(
+		"tp_fme_closed",
+
+		:parent_session, "sw_common_office:common_office",
+
+		:add_products, { :sw_dm, :soms, :fme},
+
+		:optional_products, { :sw_core_lp, :sw_dm_lp, :soms_lp, :sw_common_office_lp, :sw_electric_office_lp, :sw_land_office_lp},
+
+		:load_modules, { :sw_eo_image, :swaf_fme_application },
+		
+		:startup_options, startup_options )
+
+	magik_session.register_new(
+		"tp_fme_open",
+
+		:parent_session, "eo_closed",
+
+		:add_products, { :sw_land_office,:tp_cstm_product},
+
+		:startup_proc, :startup,
+
+		:soc_names, { :electric_dm, :design_config},
+
+		:load_modules,{:cs_land,:tp_cstm_land_adds},
+		
+		:startup_options, startup_options,
+		
+		:open_database_proc, open_database_proc )
+	
+_endblock
+$

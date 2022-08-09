@@ -1,0 +1,8 @@
+{
+  "defaultSrc": ["'self'", "dc-gisdev-webm1:*", "192.168.200.35:*"],
+  "scriptSrc": ["'self'", "dc-gisdev-webm1:*", "192.168.200.35:*", "'unsafe-eval'", "maps.googleapis.com", "fonts.googleapis.com", "nominatim.openstreetmap.org" ],
+  "scriptSrcElem": ["'self'", "dc-gisdev-webm1:*","192.168.200.35:*", "'unsafe-eval'", "maps.googleapis.com", "fonts.googleapis.com", "nominatim.openstreetmap.org" ],
+  "styleSrc": ["'self'", "dc-gisdev-webm1:*","192.168.200.35:*", "'unsafe-inline'", "maps.gstatic.com", "fonts.gstatic.com", "fonts.googleapis.com"],
+  "imgSrc": ["'self'", "dc-gisdev-webm1:*","192.168.200.35:*", "*.openstreetmap.org", "*.googleapis.com", "maps.gstatic.com", "*.ggpht.com", "data:", "blob:"],
+  "fontSrc": ["'self'","192.168.200.35:*", "fonts.googleapis.com", "fonts.gstatic.com"]
+}

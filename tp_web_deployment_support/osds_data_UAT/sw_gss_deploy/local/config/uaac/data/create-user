@@ -1,0 +1,7 @@
+USER_NAME|PASSWORD|EMAIL|
+gss_user|gss_user|gss_user@example.com|
+gss_admin|gss_admin|gss_admin@example.com|
+gss_none|gss_none|gss_none@example.com|
+gss_both|gss_both|gss_both@example.com|
+gss_north|gss_north|gss_north@example.com|
+gss_west|gss_west|gss_west@example.com|

@@ -1,0 +1,132 @@
+// Dependencies
+// --------------------------------------------------
+
+// @import "bootstrap/less/responsive-navbar.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+@media (max-width: @navbarCollapseWidth) {
+
+  .visible-desktop {
+    display: none !important;
+  }
+
+  .navbar-collapse .btn {
+    font-weight: bold;
+    border: none;
+  }
+  .nav li.dropdown ul.dropdown-menu:before, .nav li.dropdown ul.dropdown-menu:after {
+    display: none;
+  }
+  .navbar-collapse .nav {
+    &.pull-left, &.pull-right {
+      float: none!important;
+    }
+    > li {
+      border-top: 1px solid @grayLighter;
+      float: none;
+      &.open .dropdown-menu {
+        position: static;
+        float: none;
+        > .open {
+          float: none;
+        }
+      }
+      &.dropdown > a,
+      &.dropdown > a:hover,
+      &.dropdown.open > a {
+        margin: 0;
+      }
+      > a {
+        font-weight: bold;
+        color: @textColor;
+      }
+    }
+  }
+  
+  .workspace-navbar .nav > li {
+    border-top: 0;
+  }
+
+  .navbar-collapse .dropdown-menu {
+    display: none;
+    float: left;
+    left: 0;
+    position: absolute;
+    padding-left: 45px;
+    top: 100%;
+    &.message-list {
+      padding-left: 0;
+    }
+    a {
+      margin-right: 30px;
+      margin-bottom: 0;
+
+      &:hover {
+        background: transparent;
+        color: @linkColor;
+      }
+    }
+    .active > a{
+      color: @linkColor;
+    }
+  }
+  
+  .navbar-collapse .open .dropdown-menu {
+    display: block;
+  }
+
+  // moved from responsive.less
+
+  .toolbar-container {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+
+  .btn-toolbar {
+    display: inline-block;
+  }
+
+  .navbar .brand {
+    margin: 17px 0 0 -17px;
+  }
+
+  .navbar {
+    &.navbar-small {
+      .brand {
+        margin: 6px 0 0 0;
+      }
+      .primary-navbar {
+        margin-left: 0px;
+      }
+    }
+  }
+
+  .navbar-collapse .navbar-form,
+  .navbar-collapse .navbar-search {
+    float: none;
+    padding: 0;
+    margin: 0;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .navbar .primary-navbar .dropdown-menu {
+    border: none;
+  }
+  
+  .navbar-collapse .dropdown-menu .nav > li > a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  
+}
+
+@media (min-width: @screen-sm) {
+  .secondary-nav {
+    float: right;
+  }
+}

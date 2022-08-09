@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: uaac
+  namespace: gss-prod
+spec:
+  containers:
+  - name: uaac-pod
+    image: pull.dc-gisuat-webm1:30443/pwr-smallworld/sw-uaac:2.7.3-4.2.0
+    command: ["/bin/sh"]
+    args: ["-c", "cd /app; sh entry_point.sh"]
+    volumeMounts:
+    - name: uaac-secret-volume
+      mountPath: "/usr/src/data"
+      readOnly: true
+    - name: uaac-cm-volume
+      mountPath: "/usr/src/scripts"
+      readOnly: true
+    env:
+    - name: UAA_ADMIN_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: uaa-secret
+          key: uaapassword
+    - name: GSS_CALLBACK_URL
+      value: https://dc-gisuat-webm1:30443/auth/uaa/callback
+    - name: GSS_LOGOUT_URL
+      value: https://dc-gisuat-webm1:30443/auth/logout
+    - name: GSS_UNAUTHENTICATED_URL
+      value: https://dc-gisuat-webm1:30443/auth/unauthenticated
+    - name: CLIENT_SCHEDULE_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: client-credential-secret
+          key: password
+    - name: CLIENT_GUEST_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: anonymous-access-secret
+          key: password
+    - name: GSS_SERVER_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: bifrost-uaa-secret
+          key: password
+  initContainers:
+  - name: init-uaa-svc
+    image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+    imagePullPolicy: IfNotPresent
+    command: ['sh', '-c', 'until nc -z uaa-service 8080; do echo waiting for uaa-service; sleep 2; done;']
+  volumes:
+  - name: uaac-secret-volume
+    secret:
+      secretName: uaac-secret
+  - name: uaac-cm-volume
+    configMap:
+      name: uaac-scripts
+  imagePullSecrets:
+  - name: regsecret
+  restartPolicy: OnFailure

@@ -1,0 +1,287 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/forms.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+select,
+select.form-control,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  color: @grayDark;
+  border: 1px solid @formsBorderColor;
+  font-size: @formsFontSize;
+  background-color: @formsBackgroundColor;
+ // line-height: normal; // Centers input placeholders vertically.
+  padding: @formsPadding;
+  .border-radius(@baseBorderRadius);
+  &:focus,
+  &.focused {
+    border-color: @formsBorderColorFocused;
+  }
+}
+// Removing webkit appearance for some items so they look like
+// standard text inputs. This might look good for other input types
+// like datetime, month, url, etc.
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="search"],
+input[type="tel"] {
+  -webkit-appearance: none;
+}
+input[type="file"] {
+  line-height: 1;
+  height: 26px; // Fixes https://github.com/twitter/bootstrap/issues/270
+}
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  color: @errorBackground;
+  border-color: @errorBackground;
+  &:focus {
+    border-color: darken(@errorBackground, 10%);
+  }
+}
+.uneditable-input {
+  cursor: not-allowed;
+  //line-height: @baseLineHeight * 1.5!important; // Removed with BS3 upgrade by BF
+  &:hover {
+    border-color: @inputHoverBorder;
+  }
+}
+select, 
+select.form-control {
+  background-color: @inputBackground;
+  border: 1px solid @inputBorder;
+  height: 28px;
+  margin-bottom: @baseLineHeight / 2;
+  vertical-align: middle;
+  &:focus {
+    border: 1px solid @inpurFocusBorder;
+    outline: none;
+  }
+}
+
+select[multiple].form-control{
+height:80px;
+}
+//Widht for ipad
+
+@media only screen and (device-width: 768px) {
+  select[multiple].form-control{
+	height:28px;
+	}
+}
+
+
+// override border rule on select, which (inexplicably) troubles Mobile Safari
+.touch select,
+.touch select.form-control {
+  border: 1px solid @webkitBaseBorder;
+  background-color: @white;
+  border-radius: 5px;
+    &:focus {
+      border: 1px solid @inpurFocusBorder;
+    }
+  }
+
+label {
+  margin-bottom: @baseLineHeight / 2;
+  font-weight: normal;
+}
+.no-spacer-bottom {
+  display: block;
+}
+
+.form-control {
+  .box-shadow(none);
+}
+
+span.form-control.uneditable-input {
+	padding-top: 8px;
+	padding-bottom: 2px;
+}
+
+.form-actions {
+  padding: (@baseLineHeight - 1) 20px @baseLineHeight;
+  margin-top: @baseLineHeight;
+  margin-bottom: @baseLineHeight;
+  border-top: 1px solid #e5e5e5;
+  background-color: @white;
+}
+
+.form-horizontal {
+  .form-group {
+    margin-bottom: 5px;
+  }
+  .controls, input {
+    display: inline-block;
+  }
+  .control-label {
+    vertical-align: top;
+    &:hover{
+    cursor: pointer;
+    }
+  }
+}
+
+.help-block,
+.help-inline {
+  color: @gray; // lighten the text some for contrast
+}
+
+// DISABLED STATE
+// --------------
+
+// Disabled and read-only inputs
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  background-color: @inputDisabledBackground;
+  border-color: @inputDisabledBackground;
+  &:hover {
+    border-color: @inputDisabledBackground;
+  }
+}
+// Explicitly reset the colors here
+input[type="radio"][disabled],
+input[type="checkbox"][disabled],
+input[type="radio"][readonly],
+input[type="checkbox"][readonly] {
+  -webkit-text-fill-color: @white;
+}
+
+// input append - prepend
+
+.rounded-right {
+  -webkit-border-radius: 0 @baseBorderRadius @baseBorderRadius 0;
+  -moz-border-radius: 0 @baseBorderRadius @baseBorderRadius 0;
+  border-radius: 0 @baseBorderRadius @baseBorderRadius 0;
+}
+.rounded-left {
+  -webkit-border-radius: @baseBorderRadius 0 0 @baseBorderRadius;
+  -moz-border-radius: @baseBorderRadius 0 0 @baseBorderRadius;
+  border-radius: @baseBorderRadius 0 0 @baseBorderRadius;
+}
+
+.horizontal-margin-clear {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.form-inline .input-append .search-query,
+.navbar-search .input-append .search-query {
+  .rounded-left;
+}
+
+// inline text input
+.form-inline {
+  input {
+    :not(:last-of-type):not(:first-of-type) {
+      .border-radius(0);
+    }
+    &:not(:last-of-type):first-of-type {
+      .rounded-left;
+      margin-right: -1px; // override mixin attributes
+    }
+    &:not(:first-of-type):last-of-type {
+      .rounded-right;
+      //margin-left: -1px; // override mixin attributes // commented out to fix de 442
+    }
+  }
+  input, button, .btn {
+    margin-bottom : 5px;
+  }
+}
+
+// place holder text
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"] {
+  &::-webkit-input-placeholder {
+   font-style: italic;
+  }
+
+  &:-moz-placeholder { /* Firefox 18- */
+    font-style: italic;
+  }
+
+  &::-moz-placeholder {  /* Firefox 19+ */
+    font-style: italic;
+  }
+
+  &:-ms-input-placeholder {
+    font-style: italic;
+  }
+  &.disabled {
+    &::-webkit-input-placeholder {
+     font-style: italic;
+    }
+
+    &:-moz-placeholder { /* Firefox 18- */
+      font-style: italic;
+    }
+
+    &::-moz-placeholder {  /* Firefox 19+ */
+      font-style: italic;
+    }
+
+    &:-ms-input-placeholder {
+      font-style: italic;
+    }
+  }
+}
+
+// FORM FIELD FEEDBACK STATES
+// --------------------------
+
+// Warning
+.form-group.warning {
+  .formFieldState(@warningText, @warningText, @warningBackground);
+}
+// Error
+.form-group.error {
+  .formFieldState(@errorText, @errorText, @errorBackground);
+}
+// Success
+.form-group.success {
+  .formFieldState(@successText, @successText, @successBackground);
+}
+// Success
+.form-group.info {
+  .formFieldState(@infoText, @infoText, @infoBackground);
+}

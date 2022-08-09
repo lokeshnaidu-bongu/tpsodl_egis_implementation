@@ -1,0 +1,28 @@
+// Dependencies
+// --------------------------------------------------
+
+
+// Overrides
+// --------------------------------------------------
+
+// Turn off gradient filters in IE9 because the conflict when also using border-radius
+.navbar,
+.navbar li *,
+.navbar button,
+.secondary-nav li *,
+.workspace-navbar li * {
+   filter: "progid:DXImageTransform.Microsoft.gradient(enabled=false)" !important;
+}
+
+.navbar-inner {
+  background-color: @navbarBackground;
+}
+
+.navbar-fixed-top {
+  border: 0;
+}
+
+// Fix mega-dropdown menus
+.navbar .primary-navbar .mega-dropdown > li {
+  float: left;
+}

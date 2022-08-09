@@ -1,0 +1,110 @@
+# Adding service account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-elasticsearch
+  namespace: logging
+  labels:
+    k8s-app: elasticsearch-logging
+    addonmanager.kubernetes.io/mode: Reconcile
+---
+# Adding Role for ES
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: elasticsearch
+  namespace: logging
+  labels:
+    env: dev
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  verbs:
+  - get
+---
+# Adding RoleBinding for ES
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: elasticsearch
+  namespace: logging
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: elasticsearch
+subjects:
+- kind: ServiceAccount
+  name: sa-elasticsearch
+  namespace: logging
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: es-cluster
+  namespace: logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/elasticsearch:7.9.1
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+        resources:
+            limits:
+              cpu: 1000m
+            requests:
+              cpu: 100m
+        ports:
+        - containerPort: 9200
+          name: rest
+          protocol: TCP
+        - containerPort: 9300
+          name: inter-node
+          protocol: TCP
+        volumeMounts:
+        - name: elasticsearch-data-storage
+          mountPath: /usr/share/elasticsearch/data
+        env:
+          - name: cluster.name
+            value: k8s-logs
+          - name: node.name
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: cluster.initial_master_nodes
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: ES_JAVA_OPTS
+            value: "-Xms512m -Xmx512m"
+      initContainers:
+      - name: fix-permissions
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        command: ["sh", "-c", "chown -R 1000:1000 /usr/share/elasticsearch/data"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: elasticsearch-data-storage
+          mountPath: /usr/share/elasticsearch/data
+      - name: increase-vm-max-map
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      volumes:
+      - name: elasticsearch-data-storage
+        persistentVolumeClaim:
+          claimName: nfs-storage-class-elasticsearch-logging-pvc
+      imagePullSecrets:
+      - name: regsecret

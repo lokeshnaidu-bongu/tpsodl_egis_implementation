@@ -1,0 +1,81 @@
+_pragma(classify_level=restricted)
+_method eo_circuit_source.get_circuit_source_incoming_links(_optional direction)
+	## 522 code.
+	## If self is a point geometry, returns the set of incoming
+	## links as stop links. Otherwise, returns an empty set.
+	## @RESULTS - AN EQUALITY_SET
+
+	return_set << equality_set.new()
+	iter_meths << property_list.new_with(:downstream, :|int!last_node_links()|,
+					     :upstream, :|int!first_node_links()|)
+
+	#!-->MM_SD: Modified.
+	#!_if (iter_meth << iter_meths[direction]) _is _unset _orif
+	_if (iter_meth << iter_meths[direction.default(:downstream)]) _is _unset _orif
+	    #!<--MM_SD
+	    (eq << _self.get_circuit_source_asset()) _is _unset
+	_then
+	
+		_return return_set
+	_endif
+
+	source_info << eq.get_circuit_source_info(direction)
+
+	_if source_info[:geom].geom_type _is :point
+	_then
+		return_set << equality_set.new_from_iter(source_info[:start_node], iter_meth)
+	_endif
+
+	>> return_set
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_engine.is_valid_downstream_source?(p_rwo, p_traced_rwos)
+	## Checks the given p_rwo is a valid downstream source or not. 
+	## 
+	# If there any incorrect network changes, we may hit circuit
+	# source of other circuit. If it is, raise a condition
+
+	source_info << p_rwo.get_circuit_source_info()
+	geom_type << source_info[:geom].geom_type
+	down_circuit << p_rwo.get_circuit_source().get_circuit()
+	
+	
+	_if geom_type _is :point
+	_then
+		_if p_rwo.descriptor.name = :eo_energy_source 
+		_then
+			# Energy source should not belong to different circut. Raise an error
+			condition.raise(:found_incorrect_tie_between_circuits,
+					:circuit_tie_asset,  p_rwo,
+					:current_circuit,    .current_circuit,
+					:downstream_circuit, p_rwo.get_circuit_source().get_circuit())
+		
+		_endif
+		condition.raise(:eo_circuit_point_tie_information,
+				:circuit_tie_asset,  p_rwo,
+				:current_circuit,    .current_circuit,
+				:downstream_circuit, down_circuit)
+	_endif 
+
+	tied_rwos << source_info[:assets].intersection(p_traced_rwos)
+	#!-->MM_SD:
+	#!_if ~ tied_rwos.empty?
+	_if p_rwo.source_collection.name <> :eo_connector_point_inst _andif
+	    ~ tied_rwos.empty? 
+	#!<--MM_SD
+	_then
+				
+		condition.raise(:found_incorrect_tie_between_circuits,
+				:circuit_tie_assets,  tied_rwos,
+				:circuit_tie_assets_count, tied_rwos.size,
+				:circuit_tie_asset, p_rwo,
+				:current_circuit, .current_circuit,
+				:downstream_circuit, down_circuit)
+	_endif 
+	_return _true
+	
+_endmethod
+$

@@ -1,0 +1,18 @@
+{
+  "name": "trays",
+  "author": "General Electric",
+  "description": "Collapsible tray variants for use within IIDS & Hdx",
+  "version": "0.8.0",
+  "private": true,
+  "homepage": "http://gesdh.com/",
+  "devDependencies": {
+    "bower": "~0.10.0",
+    "grunt": "~0.4.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-less": "~0.6.1",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-bower-requirejs": "~0.5.0",
+    "grunt-contrib-jshint": "*",
+    "karma-support": "git+https://github.sw.ge.com/DT/karma-support.git#v1.0.5"
+  }
+}

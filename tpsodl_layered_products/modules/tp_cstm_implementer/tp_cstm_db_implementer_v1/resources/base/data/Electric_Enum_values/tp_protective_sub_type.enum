@@ -1,0 +1,21 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Road Gap Arrester	1
+Sphere Gap Arrester	2
+Horn Gap Arrester	3
+Multiple-Gap Arrester	4
+Impulse Protective Gap Arrester	5
+Electrolytic Arrester	6
+Expulsion Type Lightning Arrester	7
+Thyrite Lightning Arrester	8
+Oxide Film Arrester	9
+Metal Oxide Lightning Arrester	10
+Electromagnetic Relays/FPI	11
+Solid State Relays/FPI	12
+Numerical Relays/FPI	13
+Device Relays	14
+Others	15

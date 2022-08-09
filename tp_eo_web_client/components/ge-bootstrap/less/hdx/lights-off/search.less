@@ -1,0 +1,38 @@
+.form-inline {
+  .input-append {
+    .search-query {
+      border-right: none;
+    }
+
+    .btn.btn-icon {
+      background: @inputBackground;
+      border-left: none;
+
+      i {
+        color: @white;
+      }
+      &:active{
+      background: @btnSelectedBackground;
+      }
+    }
+  }
+}
+
+.typeahead.dropdown-menu {
+  border-color: @grayDarker;
+}
+
+.typeahead-faceted.dropdown-menu {
+  background-color: lighten(@black, 11.5);
+  border-color: @grayDarker;
+
+  .facet-name {
+    color: @grayLighter;
+  }
+
+  .facet-results,
+  > ul > li:last-child {
+    background-color: @black;
+    border-color: @grayDarker;
+  }
+}

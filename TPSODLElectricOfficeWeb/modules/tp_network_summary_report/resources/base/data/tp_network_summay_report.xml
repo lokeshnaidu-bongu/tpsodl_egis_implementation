@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service>
+ 
+  <!-- Definitions for the methods -->
+  <method name="get_dt_summary">
+    <commment>Returns DT Summary</commment>
+    <response>
+      <element name="summary" type="com.gesmallworld.serf.acpt.MSFRwoSet">
+	<comment>A list of collection names</comment>
+      </element>
+    </response>
+  </method>
+
+  <method name="get_counts">
+    <commment>Returns DT Summary</commment>
+    <response>
+      <element name="summary" type="anyType">
+	<comment>A list of collection names</comment>
+      </element>
+    </response>
+  </method>
+
+</service>

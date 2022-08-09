@@ -1,0 +1,3 @@
+  name: map-google
+  version: 0.1.1
+  source: https://devcloud.sw.ge.com/source/scm/dxc/map-google

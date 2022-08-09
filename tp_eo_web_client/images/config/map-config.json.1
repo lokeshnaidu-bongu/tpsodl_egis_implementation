@@ -1,0 +1,356 @@
+{
+  "ProductName": "Electric Office Web",
+  "LayerOrder": [
+    "Transmission network",
+    "MV colour by Line Voltage",
+    "MV colour by Circuit",
+    "MV network",
+    "LV network",
+    "Distribution structures",
+    "Transmission structures",
+    "Design Boundaries",
+    "Areas",
+    "Google Traffic"
+  ],
+  "Layers": {
+    "Google": [
+      {
+        "ExternalLayerName": "Google Streets",
+        "Type": "roadmap"
+      },
+      {
+        "ExternalLayerName": "Google Hybrid",
+        "Type": "hybrid",
+        "maxZoom": 20
+      },
+      {
+        "ExternalLayerName": "Google Satellite",
+        "Type": "satellite"
+      },
+      {
+        "ExternalLayerName": "Google Traffic",
+        "OverlayType": "Traffic",
+        "Type": "overlay",
+        "Visible": false
+      }
+    ],
+    "WMTS": [
+      {
+        "ExternalLayerName": "Transmission network",
+        "InternalLayerName": "Transmission network",
+        "MatrixSet": "EPSG-900913",
+        "ZoomLevels": 21,
+        "TileSize": 512,
+        "Opacity": 0.7,
+        "IsBaseLayer": false,
+        "URL": "/maps",
+        "IsStyledLayer": true
+      },
+      {
+        "ExternalLayerName": "MV network",
+        "InternalLayerName": "MV network",
+        "MatrixSet": "EPSG-900913",
+        "ZoomLevels": 21,
+        "TileSize": 512,
+        "Opacity": 0.7,
+        "IsBaseLayer": false,
+        "URL": "/maps",
+        "IsStyledLayer": true
+      },
+      {
+        "ExternalLayerName": "LV network",
+        "InternalLayerName": "LV network",
+        "MatrixSet": "EPSG-900913",
+        "ZoomLevels": 21,
+        "TileSize": 512,
+        "Opacity": 0.7,
+        "IsBaseLayer": false,
+        "URL": "/maps",
+        "IsStyledLayer": true
+      },
+      {
+        "ExternalLayerName": "Distribution structures",
+        "InternalLayerName": "Distribution structures",
+        "MatrixSet": "EPSG-900913",
+        "ZoomLevels": 21,
+        "TileSize": 512,
+        "Opacity": 0.7,
+        "IsBaseLayer": false,
+        "URL": "/maps"
+      },
+      {
+        "ExternalLayerName": "Transmission structures",
+        "InternalLayerName": "Transmission structures",
+        "MatrixSet": "EPSG-900913",
+        "ZoomLevels": 21,
+        "TileSize": 512,
+        "Opacity": 0.7,
+        "IsBaseLayer": false,
+        "URL": "/maps"
+      },
+      {
+        "ExternalLayerName": "Design Boundaries",
+        "InternalLayerName": "Design Boundaries",
+        "MatrixSet": "EPSG-900913",
+        "ZoomLevels": 21,
+        "TileSize": 512,
+        "Opacity": 0.7,
+        "IsBaseLayer": false,
+        "URL": "/maps"
+      },
+      {
+        "ExternalLayerName": "Areas",
+        "InternalLayerName": "Areas",
+        "MatrixSet": "EPSG-900913",
+        "ZoomLevels": 21,
+        "TileSize": 512,
+        "Opacity": 0.7,
+        "IsBaseLayer": false,
+        "URL": "/maps"
+      }
+    ],
+    "AdditionalWorlds": [
+      {
+        "SpatialContextName": "internals",
+        "InternalLayerName": "Internals",
+        "ZoomLevels": 21,
+        "maxResolution": 16777215.9921875,
+        "minResolution": 15.999,
+        "TileSize": 256
+      }, {
+        "SpatialContextName": "Geo-schematic",
+        "InternalLayerName": "Geo Schematics",
+        "ProjectionName": "EPSG:3857",
+        "Units": "m",
+        "MaxExtent": [-2147483647.0, -2147483647.0, 2147483647.0, 2147483647.0],
+        "ZoomLevels": 30,
+        "TileSize": 256
+     }, {
+        "SpatialContextName": "MV ortho-schematic",
+        "InternalLayerName": "Ortho Schematics",
+        "ProjectionName": "EPSG:27700",
+        "Units": "m",
+        "maxResolution": 16777215.9921875,
+        "MaxExtent": [-2147483647.0, -2147483647.0, 2147483647.0, 2147483647.0],
+        "ZoomLevels": 30,
+        "TileSize": 256
+     }, {
+        "SpatialContextName": "MV ortho-schematic (<33kV)",
+        "InternalLayerName": "Ortho Schematics",
+        "ProjectionName": "EPSG:27700",
+        "Units": "m",
+        "MaxExtent": [-2147483647.0, -2147483647.0, 2147483647.0, 2147483647.0],
+        "ZoomLevels": 30,
+        "TileSize": 256
+     }, {
+        "SpatialContextName": "MV ortho-schematic (>=33kV)",
+        "InternalLayerName": "Ortho Schematics",
+        "ProjectionName": "EPSG:27700",
+        "Units": "m",
+        "MaxExtent": [-2147483647.0, -2147483647.0, 2147483647.0, 2147483647.0],
+        "ZoomLevels": 30,
+        "TileSize": 256
+     }, {
+        "SpatialContextName": "MV ortho-schematic (GE West)",
+        "InternalLayerName": "Ortho Schematics",
+        "ProjectionName": "EPSG:27700",
+        "Units": "m",
+        "MaxExtent": [-2147483647.0, -2147483647.0, 2147483647.0, 2147483647.0],
+        "ZoomLevels": 30,
+        "TileSize": 256
+     }, {
+        "SpatialContextName": "MV ortho-schematic (GE North)",
+        "InternalLayerName": "Ortho Schematics",
+        "ProjectionName": "EPSG:27700",
+        "Units": "m",
+        "MaxExtent": [-2147483647.0, -2147483647.0, 2147483647.0, 2147483647.0],
+        "ZoomLevels": 30,
+        "TileSize": 256
+     }, {
+        "SpatialContextName": "HV ortho-schematic",
+        "InternalLayerName": "Ortho Schematics",
+        "ProjectionName": "EPSG:27700",
+        "Units": "m",
+        "MaxExtent": [-2147483647.0, -2147483647.0, 2147483647.0, 2147483647.0],
+        "ZoomLevels": 30,
+        "TileSize": 256
+     }
+    ]
+  },
+  "AddressSearch": "Google",
+  "MapOptions": {
+    "CentreLat"   : 52.21433,
+    "CentreLong"  : -0.064096,
+    "DefaultZoom": 15,
+    "ZoomLevels": 21,
+    "MaxExtent": [-20037508.3400, -20037508.3400, 20037508.3400, 20037508.3400],
+    "MaxResolution": 78271.5169640,
+    "MapProjectionName": "EPSG:3857",
+    "MapProjectionDefinition": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"
+  },
+  "StreetView":{
+    "Enabled": true
+  },  
+  "Google": {
+    "googleClientID": "",
+    "googleChannelID": ""
+  },
+  "SideBarControls": [
+    {
+      "target": "find",
+      "fontAwesome": true,
+      "icon": "ico_search_lg",
+      "span": 4
+    },
+    {
+      "target": "object_details",
+      "icon": "smallworld_cube_sm",
+      "span": 4
+    },
+    {
+      "target": "trace",
+      "icon": "icon-trace",
+      "span": 4
+    },
+    {
+      "target": "sketching",
+      "icon": "icon-sketch",
+      "span": 3
+    },
+    {
+      "target": "plotting",
+      "icon": "icon-print",
+      "span": 3
+    },
+    {
+      "target": "download",
+      "fontAwesome": true,
+      "icon": "ico_download_lg",
+      "span": 3
+    }
+  ],
+  "export": {
+    "xlsx": {
+      "availableTo": [
+        {
+          "component": "all"
+        }
+      ],
+      "pubEvent": "exportRecordsXLSX"
+    },
+    "csv": {
+      "availableTo": [
+        {
+          "component": "all"
+        }
+      ],
+      "pubEvent": "exportRecordsCSV"
+    }
+  },
+  "ObjectDetails": {
+    "layout": [
+      {
+        "name": "eo_phase_info"
+      },
+      {
+        "name": "object_info"
+      },
+      {
+        "name": "spatial_contexts"
+      },
+      {
+        "name": "internals"
+      },
+      {
+        "name": "eo_generic_info"
+      },
+      {
+        "name": "eo_specialised_info"
+      },
+      {
+        "name": "eo_location_info"
+      }
+    ],
+    "visible_spatial_contexts" :["geographic", "internals", "Geo-schematic", "MV ortho-schematic", "MV ortho-schematic (<33kV)", "MV ortho-schematic (>=33kV)", "MV ortho-schematic (GE West)", "MV ortho-schematic (GE North)", "HV ortho-schematic"],
+    "return_info" : "all_joined_objects,eo_generic_info,eo_asset_phase_spec_info,eo_specialised_info"
+  },
+  "sketching": {
+    "line_strokes": [
+      "solid",
+      "dash"
+    ],
+    "area_strokes": [
+      "solid",
+      "empty"
+    ],
+    "colours": {
+      "red": "rgba(238, 51, 36, 0.75)",
+      "green": "rgba(118, 185, 0, 0.75)",
+      "blue": "rgba(8, 165, 225, 0.75)",
+      "black": "rgba(0, 0, 0, 0.75)"
+    }
+  },
+  "AttributeHandlers" : {
+    "Related Document.Full File Name": "makeFileLink"
+  },
+  "plotting":{
+    "hasViewPort":[
+      "map_view_centre_geometry_source"
+    ],
+    "hasNotViewPort":[
+      "sw_layout_series_service_geometry_source",
+      "map_view_bounds_geometry_source"
+    ]
+  },
+  "style": {
+    "tracing": {
+      "strokeWidth": 5,
+      "strokeColor": "rgba(255, 153, 0, 0.75)"
+    },
+    "highlighter": {
+      "strokeWidth": 10,
+      "strokeColor": "rgba(255, 105, 180, 0.75)",
+      "fillColor": "rgba(255, 105, 180, 0.75)",
+      "pointRadius": 2.5
+    }
+  },
+  "distanceUnits": "m",
+  "assetSearchSpatialBoost": "10",
+  "tags": {
+    "objectDetails": "web_export",
+    "internals": "internals_tag",
+    "results": "results_tag"
+  },
+  "settings": {
+    "trace_types": ["all"],
+    "layout_types": ["all"],
+    "search_config": ["all"]
+  },
+  "mapVisualization": {
+	"items": [{
+		"id": "default",
+		"name": "Network type (default)"
+	},
+	{
+		"id": "electric_circuit_id()",
+		"name": "Circuit colour"
+	},
+	{
+		"id": "electric_eo_line_voltage",
+		"name": "Operating voltage"
+	}
+	],
+	"layers": ["Transmission network", "MV network", "LV network"]
+  },
+  "layerAuth": {},
+  "internalWorldFilterAlias": "standard",
+  "searchTag": "*",
+  "mapLocation": true,
+  "maxKineticTime": 600,
+  "minKineticDeceleration": 0.006,
+  "pixelHitRadius": 5,
+  "touchPixelHitRadius": 8,
+  "mapCurrentLocationEnabled": false,
+  "mapCurrentLocationZoomLevel": 18,
+  "dateFormat": "iso"
+}

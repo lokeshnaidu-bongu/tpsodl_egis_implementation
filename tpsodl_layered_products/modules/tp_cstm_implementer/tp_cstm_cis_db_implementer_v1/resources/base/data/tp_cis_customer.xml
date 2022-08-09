@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+<collection collection_name = "cis_customer" >
+  <fields field_name = "tp_address_not_located" external_name = "Address not located?" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_arrear_amount" external_name = "Arrear Amount( Last billing month)" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_assesment" external_name = "Assesment- Current month Bill" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_bill_delivered" external_name = "Bill Delivered?" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_bill_shown" external_name = "Bill Shown" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_billing_status" external_name = "Billing Status" mandatory = "false" field_type="tp_billing_status" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_building_reference_number" external_name = "Building Reference Number" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_bypass" external_name = "Bypass?" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_category" external_name = "Category" mandatory = "false" field_type="tp_tariff_categeory" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_category_in_fg" external_name = "Category in FG" mandatory = "false" field_type="tp_tariff_categeory" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_census_code" external_name = "Census Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_circle_name" external_name = "Geo-Circle Name" mandatory = "false" field_type="tp_land_circle_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_connected_pole" external_name = "Survey Connected Pole" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />	  
+  <fields field_name = "tp_customer_mobile_number" external_name = "Customer Mobile Number" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_customer_mobile_number_fg" external_name = "Customer Mobile Number FG" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_cyme_id" external_name = "CYME Id" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_data_updated_by_gis" external_name = "Data Updated By GIS" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_date_of_bill_payement" external_name = "Date of Bill Payement" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_date_of_creation_in_gis" external_name = "Date of Creation in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_date_of_last_maintenance" external_name = "Date of Last Maintenance" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_date_of_last_updation_in_gis" external_name = "Date Last Updated in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_defaulter" external_name = "Defaulter?" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_division_name" external_name = "Geo-Division Name" mandatory = "false" field_type="tp_land_division_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_ea_equipment_id" external_name = "EA Equipment ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_emial" external_name = "Email" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_fg_consumer_match" external_name = "FG Consumer match?" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_flat_no" external_name = "Flat No" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_landmark" external_name = "Landmark" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_last_payment" external_name = "last payment" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_maximum_demand" external_name = "Maximum Demand" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Kilo Watt" mode = "insert" />
+  <fields field_name = "tp_meter_availability" external_name = "Meter Availability" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_meter_sequence_no" external_name = "Meter Sequence No" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_migration_unique_id" external_name = "Migration Unique Id" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_mru" external_name = "MRU" mandatory = "false" field_type="ds_int" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_neighbouring_pole" external_name = "Neighbouring Pole" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_net_payment" external_name = "Net Payment: Pending Payment" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_new_account_number" external_name = "New Account Number" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_old_account_number" external_name = "Old Account Number" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_owner_name" external_name = "Owner Name" mandatory = "false" field_type="tp_owner_name_value" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_owner_type" external_name = "Owner Type" mandatory = "false" field_type="tp_owner" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_panchayat_code" external_name = "Geo-Panchayat Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />   
+  <fields field_name = "tp_payment_date" external_name = "Payment date" mandatory = "false" field_type="ds_date" field_size ="" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_payment_due" external_name = "Payment Due (Rs.)" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_payment_due_date" external_name = "Payment Due Date" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_pdc_date" external_name = "PDC Date" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_pdc_reason" external_name = "PDC Reason" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_peak_load" external_name = "Peak Load" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_phase_connection" external_name = "Phase Connection" mandatory = "false" field_type="tp_phase" field_size ="6" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_phase_connection_in_fg" external_name = "Phase Connection in FG" mandatory = "false" field_type="tp_phase" field_size ="6" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_sap_functional_location" external_name = "SAP Functional Location" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_sap_id" external_name = "SAP ID" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_sc_number" external_name = "Sc Number" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_scada_control_id" external_name = "SCADA Control ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_scada_monitor_id" external_name = "SCADA Monitor ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_section_name" external_name = "Geo-Section Name" mandatory = "false" field_type="tp_land_section_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_serial_number" external_name = "Serial Number" mandatory = "false" field_type="ds_char16_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />	  
+  <fields field_name = "tp_status" external_name = "Lifecycle Status" mandatory = "false" field_type="tp_status" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_sub_division_name" external_name = "Geo-Sub Division Name" mandatory = "false" field_type="tp_land_sub_division_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_theft" external_name = "Theft?" mandatory = "false" field_type="tp_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_time_of_data_collection" external_name = "Time of data collection" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_treat_as_billing_address" external_name = "Treat As Billing Address?" mandatory = "false" field_type="tp_yes_no" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_vigilance_case" external_name = "Vigilance Case?" mandatory = "false" field_type="tp_yes_no" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_village_code" external_name = "Geo-Village Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+  <fields field_name = "tp_work_order_id" external_name = "Work Order ID" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  <fields field_name = "tp_location_x" external_name = "X Location" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="" mode = "insert" />	  
+  <fields field_name = "tp_location_y" external_name = "Y Location" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="" mode = "insert" />	 	  	  
+</collection>
+</tp_collections>

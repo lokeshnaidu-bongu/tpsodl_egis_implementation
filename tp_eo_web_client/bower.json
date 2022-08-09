@@ -1,0 +1,52 @@
+{
+  "name": "networkviewer",
+  "version": "5.0.1",
+  "ignore": [
+    "dist",
+    "docs",
+    "node_modules",
+    "test"
+  ],
+  "dependencies": {
+    "brandkit":                   "https://github.build.ge.com/DXC/brandkit.git#2.7.0",
+    "cascading-list":             "https://github.build.ge.com/DXC/cascading-list.git#0.4.0",
+    "collapsible-list":           "https://github.build.ge.com/DXC/collapsible-list.git#0.6.0",
+    "datepicker":                 "https://github.build.ge.com/smallworld-sw5x/datepicker.git#gss-develop",
+    "declarative-visualizations": "https://github.build.ge.com/DXC/declarative-visualizations.git#1.6.0",
+    "file-saver":                 "1.3.4",
+    "font-awesome":               "https://github.build.ge.com/DXC/font-awesome-standin.git",
+    "fontawesome":                "4.3.0",
+    "footer":                     "https://github.build.ge.com/DXC/footer.git#1.1.4",
+    "ge-bootstrap":               "https://github.build.ge.com/smallworld-sw5x/ge-bootstrap.git#gss-develop",
+    "jquery":                     "https://github.com/components/jquery.git#3.5.1",
+    "js-xlsx":                    "0.7.11",
+    "jszip":                      "2.0.0",
+    "jumpnav":                    "https://github.build.ge.com/DXC/jumpnav.git#0.9.0",
+    "modernizr":                  "https://github.com/Modernizr/Modernizr.git#2.6.3",
+    "multi-step-navigation":      "https://github.build.ge.com/DXC/multi-step-navigation.git#0.7.0",
+    "navbar":                     "https://github.build.ge.com/DXC/navbar.git#1.4.0",
+    "prettify":                   "https://github.build.ge.com/DXC/prettify.git#0.2.1",
+    "proj4":                      "https://github.com/proj4js/proj4js.git#2.3.12",
+    "requirejs":                  "https://github.com/jrburke/requirejs-bower.git#2.1.16",
+    "requirejs-i18n":             "2.0.5",
+    "requirejs-text":             "https://github.com/requirejs/text.git#2.0.12",
+    "respond":                    "https://github.com/GeneralElectric/Respond.git#1.2.1",
+    "responsive-tables":          "https://github.build.ge.com/DXC/responsive-tables.git#0.6.0",
+    "slider":                     "https://github.build.ge.com/DXC/slider.git#0.8.0",
+    "spinner":                    "https://github.build.ge.com/DXC/spinner.git#0.7.0",
+    "toggle-switch":              "https://github.build.ge.com/DXC/toggle-switch.git#1.2.0",
+    "trays":                      "https://github.build.ge.com/DXC/trays.git#0.8.0",
+    "typeahead.js":               "0.10.2",
+    "underscore-amd":             "1.5.2"
+  },
+  "devDependencies": {
+    "squire": "0.2.0"
+  },
+  "resolutions": {
+    "bootstrap":      "3.4.1",
+    "brandkit":       "2.7.0",
+    "ge-bootstrap":   "gss-develop",
+    "jquery":         "3.5.1",
+    "underscore-amd": "1.5.2"
+  }
+}

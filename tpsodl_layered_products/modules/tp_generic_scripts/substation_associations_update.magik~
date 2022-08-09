@@ -1,0 +1,54 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## CSPDCL Project
+##
+## Created By: Sesidhar Turaka, MagikMinds
+## 
+## Date: 2/03/2020
+## 
+## Description: Post Upgrade Script
+## This is one time script.
+## The distribution transformer,meter,isolating switch that are
+## present in the DTC will be assigned to the join fields of DTC
+##
+########################################################################
+_package user
+$
+
+_block
+	_local l_ds_view << gis_program_manager.cached_dataset(:electric)
+	_local l_dtc_coll << l_ds_view.collections[:cseb_dtc]
+	_local result << rwo_set.new()
+	_for a_dtc _over l_dtc_coll.fast_elements()
+	_loop
+		_if a_dtc.extent _isnt _unset 
+		_then
+			_local l_sub_sec << a_dtc.extent.sectors
+			_local l_sub_bounds << pseudo_area.new_for_world(l_sub_sec,l_ds_view.world)
+			_local l_xmr_coll << l_ds_view.collections[:eo_power_xfrmr_inst]
+			_local l_mtr_coll << l_ds_view.collections[:eo_meter]
+			_local l_iso_coll << l_ds_view.collections[:eo_isolating_eqpt_inst]
+			_local l_pred1 << predicate.within(:location,l_sub_bounds)
+			_local l_pred2 << predicate.within(:connector,l_sub_bounds)
+			_local l_req_xmr << l_xmr_coll.select(l_pred1)
+			_local l_req_mtr << l_mtr_coll.select(l_pred1)
+			_local l_req_iso << l_iso_coll.select(l_pred2)
+			a_dtc.eo_power_xfrmr_insts.empty()
+			a_dtc.eo_isolating_eqpt_insts.empty()
+			a_dtc.eo_meter.empty()
+			_for a_xfrmr _over l_req_xmr.fast_elements()
+			_loop
+				a_dtc.eo_power_xfrmr_insts.add(a_xfrmr)
+			_endloop
+			_for a_meter _over l_req_mtr.fast_elements()
+			_loop
+				a_dtc.eo_meter.add(a_meter)
+			_endloop
+			_for a_switch _over l_req_iso.fast_elements()
+			_loop
+				a_dtc.eo_isolating_eqpt_insts.add(a_switch)	
+			_endloop
+		_endif
+	_endloop
+_endblock

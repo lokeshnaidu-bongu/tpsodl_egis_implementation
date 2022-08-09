@@ -1,0 +1,99 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/panels.less";
+@import "mixins.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+.panel-group .panel {
+	.border-radius(0);
+	.box-shadow(none);
+	margin-bottom: 0;
+	margin-top: @accordionGroupMarginTop;
+	background-color: @accordionGroupBGColor;
+	+ .panel {
+  	margin-top: @accordionGroupMarginTop;
+	}
+	&:first-child {
+		.border-radius(@baseBorderRadius @baseBorderRadius 0 0);
+		margin-top: 0;
+	}
+	&:last-child {
+		.border-radius(0 0 @baseBorderRadius @baseBorderRadius);
+	}
+}
+
+.panel-default .panel-heading {
+  background-color: @accordionHeaderBGColor;
+  color: @accordionTextColor;
+}
+
+.panel-heading {
+  padding: @accordionHeadingPadding;
+  a:focus{
+	
+		color: @accordionTextColor;
+		 text-decoration: none;
+		&:hover {
+		color: @linkColor;
+		//text-decoration: none;
+	}
+	}
+}
+
+.panel-toggle {
+	color: @accordionTextColor;
+	.transition(all linear .1s);
+	[class^="icon-"],
+	[class*=" icon-"] {
+        display: inline-block;
+		margin-right: 6px;
+		.transition(all linear .1s);
+		font-size: @accordionGroupIconFontSize;
+		vertical-align: middle;
+		padding-bottom: 1px;
+        .rotate(90deg);
+	}
+	&:hover {
+		color: @linkColor;
+		text-decoration: none;
+	}
+	&.in {
+	 color: @accordionTextColor;
+	 //When the item is opened, make link colored only on hover.
+	 &:hover {
+		color: @linkColor;
+		}
+	}
+	&.collapsed [class^="icon-"],
+	&.collapsed [class*=" icon-"] {
+    .transition(all linear .1s);
+		.rotate(0deg);
+	}
+}
+
+.panel-inner {
+	border-top-width: 0;
+    padding: 9px 15px;
+}
+
+.panel-title {
+	padding: 8px 0;
+	display: block;
+}
+
+.panel-group.chromeless {
+  margin: 0;
+  .panel {
+    border: none;
+  }
+}
+
+.panel-default > .panel-heading, .panel-group .panel-heading {
+  + .panel-collapse .panel-body {
+    border-top: 0;
+  }
+}

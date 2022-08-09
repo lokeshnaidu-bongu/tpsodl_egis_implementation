@@ -1,0 +1,324 @@
+condition.define_condition(:bad_string_for_unit_value, :user_error,
+	{:string_value, :dimensionality},
+	"#1 is not a valid unit string notation for dimesionality #2")
+
+
+get_all_enums_and_mappings << _proc @get_all_enums_and_mappings()
+				      all_enum_values << equality_hash_table.new()
+				      all_mappings << equality_hash_table.new()
+
+				      soc << gis_program_manager.spatial_object_controller(:electric_dm).dataset_caches(:dd_enumerators)
+
+				      _for a_enum_coll _over soc.fast_elements()
+				      _loop
+					      _if a_enum_coll.empty? _orif
+						  (dd << a_enum_coll.an_element().dd) _is _unset _orif 
+						  _not dd.supports_dd_extensions?
+					      _then
+						      _continue
+					      _endif
+					      
+					      _for a_enum _over a_enum_coll.fast_elements()
+					      _loop
+
+						      vals << a_enum.sorted_values
+
+						      # Sort by canonical strings, numbers sorted numerically
+						      _local order_proc << sorted_collection.figure_order_proc(:strings_with_numbers, vals.size)
+						      sortproc << _proc@canonical_strings_with_nums(a,b)
+									  _import order_proc
+									  >> order_proc(a[1].write_string.canonical, b[1].write_string.canonical)
+								  _endproc
+
+						      e_vals << all_enum_values[a_enum] << sorted_collection.new(vals.size, sortproc)
+
+
+						      _for val _over vals.fast_elements()
+						      _loop
+							      _try 
+								      id << a_enum.id_for(val).write_string
+							      _when enumerator_value_not_found
+								      id << _unset 
+							      _endtry 
+							      e_vals.add({val, id})
+						      _endloop
+						      
+						      all_mappings[a_enum.name]<<a_enum
+					      _endloop
+					      
+				      _endloop
+				      
+				      >> all_enum_values,all_mappings
+			   _endproc
+
+
+figure_changes << _proc @figure_changes(enum,menu_values)
+			  
+			  ## Work out what changes are needed to be made to ENUM given
+			  ## the new enumatator values and id's contained in the
+			  ## collecton MENU_VALUES.
+
+			  new_values << rope.new()
+			  deleted_values << equality_set.new_from(enum.sorted_values)
+			  additional_values_to_delete << rope.new()
+
+			  _for enum_data _over menu_values.fast_elements()
+			  _loop
+				  (val, string_id) << (_scatter enum_data)
+				  id  << enum.storage_class.from_write_string(string_id)
+				  
+				  _if enum.type _is :simple _then id << val _endif
+
+				  # If we were given something we couldn't convert then witter
+				  _if id _is _unset _andif
+				      string_id <> ""
+				  _then
+					  write("****Error****::input values is worong for enum*****",enum)
+					  write("***changes are not done for enum******",enum.name)
+					  _return rope.new(),equality_set.new()
+					  #condition.raise(:enum_cant_convert_value, :value, string_id, :class, enum.storage_class.class_name)
+					  
+				  _endif
+
+				  deleted_values.remove(val)
+
+				  # Find the old id for the new value
+				  _try 
+					  old_id  << enum.id_for(val)
+				  _when enumerator_value_not_found
+					  old_id << _unset 
+				  _endtry
+				  
+				  _if id _is _unset _andif
+				      old_id _isnt _unset
+				  _then
+					  # if we have no id but we managed to find an old_id we may end
+					  # up trying to add more values with the same id, we sort out
+					  # this here (see 130826)
+					  _for my_enum_data _over menu_values.fast_elements()
+					  _loop
+						  ( my_val, my_string_id) << ( _scatter my_enum_data)
+				
+						  _if ( my_id << enum.storage_class.from_write_string( my_string_id)) _is _unset
+						  _then
+							  _continue
+						  _endif
+				
+						  _if my_id = old_id
+						  _then
+							  additional_values_to_delete.add( enum.value_for( my_id))
+							  old_id << _unset
+							  _leave 
+						  _endif 
+					  _endloop
+			
+				  _endif
+
+				  _if id _is _unset _andif
+				      (id << old_id) _is _unset
+				  _then
+
+					   write("****Error****::input values is worong for enum*****",enum)
+					  write("***changes are not done for enum******",enum.name)
+					  _return rope.new(),equality_set.new()
+					  
+#					  # Reload the values so we have least chance of clashing with
+#					  # someone else
+#					 
+#						  enum.dd.rollforward()
+#						  enum.reload_values()
+#					 
+#
+#					  # Generate a new internal ID
+#					  last_value << id << _self.figure_new_id(enum, last_value)
+				  _endif
+
+				  # Find out whether we had an old value for this id
+				  (old_val, constructed?) << enum.value_for(id)
+				  _if constructed? _then old_val << _unset _endif
+
+				  # If we didn't find an old id then it's either an add or an update
+				  add? << old_id _is _unset
+
+				  # Check whether we are updating an id
+				  _if old_id _isnt _unset _andif
+				      id <> old_id
+				  _then
+					  add? << _true
+					  deleted_values.add(val)
+				  _endif
+
+				  # Put our new value and id in
+				  _if add?
+				  _then
+					  _if enum.type _isnt :simple
+					  _then
+						  new_values.add_last(id)
+					  _endif
+					  new_values.add_last(val)
+				  _endif
+
+				  # If we have an id then make sure it's the one displayed
+				  _if id _isnt _unset
+				  _then
+					  enum_data[2] << id.write_string
+				  _endif
+			  _endloop
+
+			  _if _not additional_values_to_delete.empty?
+			  _then
+				  deleted_values.add_all( additional_values_to_delete)
+			  _endif 
+	
+			  >> new_values, deleted_values
+			  		  
+		  _endproc
+
+
+
+true_value << _proc @true_value(string_value,enum)
+	
+
+	
+	dc << enum.domain_class
+
+	_if dc.responds_to?(:unit)
+	_then
+		_try
+			true_value << enum.make_value_for( string_value)
+		_when error
+			true_value << _unset
+		_endtry 
+	
+		_if true_value.is_kind_of?(unit_value)
+		_then
+			# Prevents the user from entering a unit_value with a wrong dimensionality
+			true_value.cf(dc)
+		_else
+			condition.raise(:bad_string_for_unit_value,
+					:string_value, string_value,
+					:dimensionality, dc.dimensionality.name)
+		_endif
+		
+		_return true_value 
+	_else
+		_return dc.from_write_string(string_value)
+	_endif
+
+	      _endproc
+
+
+_block
+	enum_files_folder_path << "C:\Users\AsokaG\Desktop\Extensible_enum_automate\"
+	(all_enum_values,all_mappings) << get_all_enums_and_mappings()
+	
+	source_file_path << "C:\Users\AsokaG\Desktop\Extensible_enum_automate\file_names.txt"
+	file_stream_1 <<  external_text_input_stream.new(source_file_path)
+	_protect
+		_loop
+			_if (line_out << file_stream_1.get_line()) _is _unset
+			_then
+				_leave
+			_endif
+
+			file_path << enum_files_folder_path + line_out + ".enum"
+
+			##actul logic
+	
+			file_stream <<  external_text_input_stream.new(file_path)
+	
+			current_enum_name << line_out
+			current_enum << all_mappings[current_enum_name.as_symbol()]
+			
+			_if current_enum _is _unset
+			_then
+				write("+++********* Enum not found in database*********  +++",line_out)
+				
+				_continue
+				
+			_endif
+			current_values << all_enum_values[current_enum].default({})
+
+			_protect 
+				_loop
+					_if (line << file_stream.get_line()) _is _unset
+					_then
+						_leave
+					_elif line.first = %#
+					_then
+						_continue
+					_endif
+
+	
+					(new_val, new_id) << (_scatter line.trim_spaces().split_by(tab_char))
+					new_val << true_value(new_val,current_enum)
+					
+			
+					_for enum_data _over current_values.fast_elements()
+					_loop
+						write("+++  +++",enum_data)
+				
+						(val, id) << (_scatter enum_data)
+						_if val = new_val
+						_then
+							_leave
+						_elif new_id = id
+						_then
+							new_id << ""
+						_endif
+					_finally
+						current_values.add({new_val, new_id})
+						
+					_endloop
+				_endloop
+		
+			_protection 
+				file_stream.close()
+			_endprotect
+
+		##actual logic end	
+	
+		_endloop
+		
+	_protection
+		file_stream_1.close()
+	_endprotect
+	
+	###applying to database()
+
+	write("+++ before_apply +++")
+	
+
+	_for enum, values _over all_enum_values.fast_keys_and_elements()
+	_loop
+		# Only do extensible enumerators
+		_if _not enum.extensible?
+		_then
+			_continue
+		_endif
+
+		# Work out what the changes are
+		(new_values, deleted_values) << figure_changes(enum, values)
+
+		# values we haven't seen need deleting
+		_if _not deleted_values.empty?
+		_then 
+			enum.remove_extended_values_from(deleted_values)
+		_endif
+
+		# Add the new pairs we have to the extended enumerator.
+		_if _not new_values.empty?
+		_then
+			_if enum.type _is :simple
+			_then
+				enum.add_extended_values_from(new_values)
+			_else
+				enum.add_extended_pairs_from(new_values)
+			_endif
+		_endif
+	_endloop
+
+	
+
+_endblock
+

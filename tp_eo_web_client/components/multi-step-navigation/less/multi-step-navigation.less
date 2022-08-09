@@ -1,0 +1,68 @@
+// Dependencies
+// --------------------------------------------------
+@import "variables.less";
+@import "brandkit/less/fonts.less";
+
+// Styles
+// --------------------------------------------------
+
+.multi-step-nav {
+	.navbar {
+		background: @multistep-backgroundColor;
+	}
+	.navbar .nav li a {
+		padding:10px 15px 10px;
+		margin: @multistep-button-margin;
+	}
+	a:focus {
+		outline: 5px auto -webkit-focus-ring-color;
+	}
+	.container {
+		background-color: @multistep-backgroundColor;
+		background-image:none;
+		margin:@container-margin auto;
+		width: 100%;
+	}
+	.nav-pills {
+		margin-left: 0;
+		li {
+			a [class^="icon-"]{
+				color:@multistep-navbar-text-color;
+				margin-left: @icon-LeftMargin;
+			}
+
+			&:hover,
+			&.active {
+				a {
+					background-color: @multistep-navbar-hover-bkg-color;
+					color:@multistep-navbar-active-link-color; //@navbarLinkColorActive;
+					
+					[class^="icon-"] {
+						color: @multistep-navbar-active-link-color;
+					}
+				}
+			}
+		}
+	}
+	
+	.tab-content {
+		margin-right: 10px !important;
+		padding-right: 10px;
+	}
+	
+	.tab-content > .pager > li a,
+	.pager > li span {
+		font-weight: @multistep-pagerbutton-fontweight;
+		text-transform: normal; 
+	}
+	.pager {
+	  > li a:hover
+	   {
+			 cursor: pointer;
+	  	}
+	   > li.disabled a:hover,
+	   {
+			 cursor: not-allowed;
+	  	}
+ }
+}

@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: bifrost-ingress
+  namespace: gss-prod
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location ~ ^/uaa/info {
+        deny all;
+      }
+spec:
+  rules:
+# simple fanout
+  - host: dc-gisuat-webm1
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: bifrost-service
+          servicePort: 3001
+      - path: /uaa
+        backend:
+          serviceName: uaa-service
+          servicePort: 8080
+  tls:
+  - hosts:
+      - dc-gisuat-webm1
+    secretName: bifrost-ingress-tls

@@ -1,0 +1,267 @@
+// Dropdowns
+.dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-submenu:hover > a {
+	#gradient > .vertical(@blue, darken(@blue, 15%));
+}
+
+// Page Header
+.page-header {
+	> h1 {
+		small {
+			color: @gray;
+		}
+	}
+	.btn-group {
+		.btn-icon {
+			// Button icons in the header need white backgrounds,
+			// not the standard button group porcelain background.
+			background-color: @offBlack;
+			border-color: @grayDarker;
+			color: @gray;
+			&:hover {
+				background-color: @grayDarkest;
+			}
+			&.active,
+			&:active {
+				background-color: darken(@white, 15%);
+				color: @white;
+			}
+			&:not(:first-child) {
+				border-left-color: @grayDarker;
+			}
+		}
+	}
+}
+
+// Default button groups
+.btn-group {
+	.btn,
+	.btn + .dropdown-backdrop,
+	&.open .btn,
+	&.open .btn + .dropdown-backdrop {
+		+ .btn.btn-primary.dropdown-toggle {
+			border-left: 1px solid lighten(@black, 11.5%);
+		}
+
+		+ .btn.btn-inverse.dropdown-toggle {
+			border-left: 1px solid @black;
+		}
+
+		+ .btn.btn-info.dropdown-toggle {
+			border-left: 1px solid @blue;
+		}
+
+		+ .btn.btn-success.dropdown-toggle {
+			border-left: 1px solid darken(@green, 10%);
+			background-color: @btnBackground;
+		}
+
+		+ .btn.btn-warning.dropdown-toggle {
+			border-left: 1px solid darken(@orange, 10%);
+			background-color: @btnBackground;
+		}
+
+		+ .btn.btn-danger.dropdown-toggle {
+			border-left: 1px solid darken(@red, 10%);
+			background-color: @btnBackground;
+		}
+	}
+
+	&.open {
+		.btn.btn-inverse.dropdown-toggle,
+		.btn.dropdown-toggle,
+		&.btn + .btn.dropdown-toggle {
+			//	border-left: 1px solid @black;
+			// 	border-top-color: darken(@blue, 10%);
+			//  border-bottom-color: darken(@blue, 10%);
+			//  border-right-color: darken(@blue, 10%);
+			border-color: darken(@blue, 10%);
+			#gradient > .vertical(@blue, darken(@blue, 11.5%));
+			.reset-filter();
+			background-color: @blue;
+		}
+
+		.btn {
+			&.btn-primary.dropdown-toggle,
+			&.btn-primary.dropdown-toggle + .btn.dropdown-toggle {
+				// border-top-color: darken(@blue, 10%);
+				//  border-bottom-color: darken(@blue, 10%);
+				//   border-right-color: darken(@blue, 10%);
+				border-color: darken(@blue, 10%);
+				#gradient > .vertical(@blue, darken(@blue, 11.5%));
+				.reset-filter();
+				background-color: @blue;
+			}
+
+			&.btn-info.dropdown-toggle {
+				border-color: darken(@blue, 10%);
+				background-color: @blue;
+				#gradient > .vertical(@blue, darken(@blue, 11.5%));
+				.reset-filter();
+			}
+
+			&.btn-success.dropdown-toggle,
+			&.btn-success + .btn.dropdown-toggle {
+				&:before {
+					color: @white;
+				}
+				&:hover,
+				&.hover {
+					color: @white;
+					background: darken(@green, 10%) none;
+				}
+				color: @white;
+				border-color: darken(@green, 10%);
+			}
+
+			&.btn-warning.dropdown-toggle,
+			&.btn-warning + .btn.dropdown-toggle {
+
+				&:before {
+					color: @white;
+				}
+				&:hover,
+				&.hover {
+					color: @white;
+					background: darken(@orange, 10%) none;
+				}
+				color: @white;
+				border-color: darken(@orange, 10%);
+				background-image: none;
+			}
+
+			&.btn-danger.dropdown-toggle,
+			&.btn-danger + .btn.dropdown-toggle {
+				&:before {
+					color: @white;
+				}
+				&:hover,
+				&.hover {
+					color: @white;
+					background: darken(@red, 10%) none;
+				}
+				color: @white;
+				border-color: darken(@red, 10%);
+			}
+		}
+
+	}
+	// &.open
+	> .btn-primary {
+		+ .btn-primary {
+			margin-left: 1px;
+			// border-left-color:@grayDark;
+		}
+
+		&:not(:last-child),
+		&:not(:first-child) {
+			border-left-color: @grayDark;
+			border-right-color: @grayDark;
+		}
+		//noinspection ALL
+		@media screen and (-webkit-min-device-pixel-ratio: 0) {
+			//windows safari only override
+			::i-block-chrome, + .btn-primary {
+				margin-left: -3px;
+			}
+		}
+	}
+}
+
+// .btn-group
+.btn-group .btn {
+	&.disabled:active,
+	&.disabled.active {
+		background-color: @btnBackground;
+	}
+}
+// Mega Button Groups
+.btn-mega-group li .btn {
+	border-color: @grayDarker;
+	background-color: @mega-btn-bkg-color;
+	#gradient > .vertical(@btnBackground, darken(@btnBackground, 3.5%));
+	.reset-filter();
+
+	&:hover {
+		color: @white;
+		border-color: @blue;
+		// background: @btnHoverBackground;
+		//gradient start and end are set same to fix issues with flcikerign on hover.
+		#gradient > .vertical(@btnHoverBackground, @btnHoverBackground);
+		.reset-filter();
+
+		i {
+			color: @blue;
+		}
+	}
+
+	&:active {
+		color: @white;
+		#gradient > .vertical(@blue, darken(@blue, 11.5%));
+		.reset-filter();
+
+		i {
+			color: @white;
+		}
+	}
+
+	&.disabled,
+	&:disabled {
+		&:hover,
+		&:active {
+
+			&, i {
+				color: @grayDark;
+			}
+
+			border-color: @grayDarkest;
+			#gradient > .vertical(@btnBackground, darken(@btnBackground, 3.5%));
+			background-color: @btnBackground;
+			.reset-filter();
+
+		}
+	}
+}
+
+// Filters
+.btn-group.btn-filter .btn {
+	background: @black;
+	border: 1px solid @grayDarker;
+
+	&.btn-remove i {
+		.opacity(100);
+	}
+
+	&:hover,
+	&.hover {
+		border: 1px solid @grayDarker;
+		background-color: lighten(@black, 11.5%);
+	}
+
+	&:active,
+	&.active {
+		color: @white;
+		border-color: darken(@blue, 10%);
+		#gradient > .vertical(@blue, darken(@blue, 11.5%));
+		.reset-filter();
+	}
+}
+
+// Toggle, radio, check
+.btn[data-toggle]:active,
+.btn.btn-primary[data-toggle]:active,
+.btn.active[data-toggle],
+.btn.btn-primary.active[data-toggle],
+.btn-group[data-toggle=buttons] .btn:active {
+	#gradient > .vertical(@blue, darken(@blue, 15%));
+	background-color: mix(@blue, darken(@blue, 15%), 60%);
+	.reset-filter();
+}
+
+.btn-group, .btn-group.open {
+	.btn.disabled + .btn.dropdown-toggle.disabled {
+		border-left: 1px solid transparent;
+	}
+}
+

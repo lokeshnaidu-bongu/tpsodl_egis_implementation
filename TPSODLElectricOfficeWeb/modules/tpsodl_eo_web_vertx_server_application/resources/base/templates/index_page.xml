@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<serial_xml_thing format="1">
+	<slotted class="sw:layout_document" size="6">
+		<name>
+			<string>Layout 2</string>
+		</name>
+		<description>
+			<atomic>sw:unset</atomic>
+		</description>
+		<current_page_nr>
+			<number>1</number>
+		</current_page_nr>
+		<pages>
+			<indexed class="sw:rope" size="1">
+				<slotted class="sw:layout_page" size="5">
+					<name>
+						<atomic>sw:unset</atomic>
+					</name>
+					<role>
+						<atomic>sw:unset</atomic>
+					</role>
+					<paper_bounds>
+						<slotted class="sw:bounding_box" size="4">
+							<xmin>
+								<number>0.00000000000</number>
+							</xmin>
+							<ymin>
+								<number>0.00000000000</number>
+							</ymin>
+							<xmax>
+								<number>2970.00000000</number>
+							</xmax>
+							<ymax>
+								<number>2100.00000000</number>
+							</ymax>
+						</slotted>
+					</paper_bounds>
+					<locked>
+						<atomic>sw:false</atomic>
+					</locked>
+					<elements>
+						<indexed class="sw:rope" size="1">
+							<slotted class="sw:index_layout" size="36">
+								<unique_id>
+									<number>1</number>
+								</unique_id>
+								<bounds>
+									<slotted class="sw:bounding_box" size="4">
+										<xmin>
+											<number>50.0000000000</number>
+										</xmin>
+										<ymin>
+											<number>50.0000000000</number>
+										</ymin>
+										<xmax>
+											<number>2920.00000000</number>
+										</xmax>
+										<ymax>
+											<number>2050.00000000</number>
+										</ymax>
+									</slotted>
+								</bounds>
+								<outline_style>
+									<slotted class="sw:line_style" size="7">
+										<foreground_colour>
+											<slotted class="sw:colour" size="3">
+												<red>
+													<number>0.00000000000</number>
+												</red>
+												<green>
+													<number>0.00000000000</number>
+												</green>
+												<blue>
+													<number>0.00000000000</number>
+												</blue>
+											</slotted>
+										</foreground_colour>
+										<background_colour>
+											<atomic>sw:unset</atomic>
+										</background_colour>
+										<width>
+											<number>0</number>
+										</width>
+										<dash_pattern>
+											<slotted class="sw:dash_pattern" size="1">
+												<dashes>
+													<indexed class="sw:integer_vector" size="0"/>
+												</dashes>
+											</slotted>
+										</dash_pattern>
+										<cap_style>
+											<symbol>butt</symbol>
+										</cap_style>
+										<join_style>
+											<symbol>miter</symbol>
+										</join_style>
+										<overlay_style>
+											<atomic>sw:unset</atomic>
+										</overlay_style>
+									</slotted>
+								</outline_style>
+								<fill_style>
+									<slotted class="sw:fill_style" size="6">
+										<foreground_colour>
+											<slotted class="sw:colour" size="3">
+												<red>
+													<number>1.00000000000</number>
+												</red>
+												<green>
+													<number>1.00000000000</number>
+												</green>
+												<blue>
+													<number>1.00000000000</number>
+												</blue>
+											</slotted>
+										</foreground_colour>
+										<percent>
+											<atomic>sw:unset</atomic>
+										</percent>
+										<pattern>
+											<atomic>sw:unset</atomic>
+										</pattern>
+										<origin>
+											<slotted class="sw:pixel_coordinate" size="2">
+												<x>
+													<number>0</number>
+												</x>
+												<y>
+													<number>0</number>
+												</y>
+											</slotted>
+										</origin>
+										<outline_style>
+											<atomic>sw:unset</atomic>
+										</outline_style>
+										<overlay_style>
+											<atomic>sw:unset</atomic>
+										</overlay_style>
+									</slotted>
+								</fill_style>
+								<locked>
+									<atomic>sw:false</atomic>
+								</locked>
+								<name>
+									<string>Index 1</string>
+								</name>
+								<centre_x>
+									<number>0.00000000000</number>
+								</centre_x>
+								<centre_y>
+									<number>0.00000000000</number>
+								</centre_y>
+								<view_scale>
+									<number>1.00000000000</number>
+								</view_scale>
+								<view_angle>
+									<number>0.00000000000</number>
+								</view_angle>
+								<ace_name>
+									<string>Default</string>
+								</ace_name>
+								<style_system_category>
+									<string>Default</string>
+								</style_system_category>
+								<universe_id>
+									<number>-1</number>
+								</universe_id>
+								<world_id>
+									<number>-1</number>
+								</world_id>
+								<trail>
+									<atomic>sw:true</atomic>
+								</trail>
+								<selection>
+									<atomic>sw:true</atomic>
+								</selection>
+								<post_render>
+									<atomic>sw:true</atomic>
+								</post_render>
+								<display_grid>
+									<atomic>sw:false</atomic>
+								</display_grid>
+								<grid_x_spacing>
+									<number>0.00000000000</number>
+								</grid_x_spacing>
+								<grid_y_spacing>
+									<number>0.00000000000</number>
+								</grid_y_spacing>
+								<grid_x_origin>
+									<number>0.00000000000</number>
+								</grid_x_origin>
+								<grid_y_origin>
+									<number>0.00000000000</number>
+								</grid_y_origin>
+								<grid_density>
+									<number>10</number>
+								</grid_density>
+								<parent_viewport_id>
+									<number>0</number>
+								</parent_viewport_id>
+								<view_scale_lock>
+									<atomic>sw:false</atomic>
+								</view_scale_lock>
+								<view_angle_lock>
+									<atomic>sw:false</atomic>
+								</view_angle_lock>
+								<projection_lock>
+									<atomic>sw:false</atomic>
+								</projection_lock>
+								<ace_lock>
+									<atomic>sw:false</atomic>
+								</ace_lock>
+								<display_style_lock>
+									<atomic>sw:false</atomic>
+								</display_style_lock>
+								<style_category_lock>
+									<atomic>sw:false</atomic>
+								</style_category_lock>
+								<display_grid_lock>
+									<atomic>sw:false</atomic>
+								</display_grid_lock>
+								<include_viewport_name>
+									<atomic>sw:true</atomic>
+								</include_viewport_name>
+								<include_page_reference>
+									<atomic>sw:true</atomic>
+								</include_page_reference>
+								<automatic_bounds>
+									<atomic>sw:true</atomic>
+								</automatic_bounds>
+								<neighbours_only>
+									<atomic>sw:false</atomic>
+								</neighbours_only>
+							</slotted>
+						</indexed>
+					</elements>
+				</slotted>
+			</indexed>
+		</pages>
+		<properties>
+			<keyed class="sw:property_list" size="2">
+				<entry key="created">
+					<slotted class="sw:date_time" size="2">
+						<day_number>
+							<number>16030</number>
+						</day_number>
+						<milliseconds>
+							<number>57282000</number>
+						</milliseconds>
+					</slotted>
+				</entry>
+				<entry key="modified">
+					<slotted class="sw:date_time" size="2">
+						<day_number>
+							<number>16030</number>
+						</day_number>
+						<milliseconds>
+							<number>57282000</number>
+						</milliseconds>
+					</slotted>
+				</entry>
+			</keyed>
+		</properties>
+		<attributes>
+			<keyed class="sw:property_list" size="14">
+				<entry key="Author">
+					<string></string>
+				</entry>
+				<entry key="Client">
+					<string></string>
+				</entry>
+				<entry key="Department">
+					<string></string>
+				</entry>
+				<entry key="Owner">
+					<string></string>
+				</entry>
+				<entry key="Project">
+					<string></string>
+				</entry>
+				<entry key="Status">
+					<string></string>
+				</entry>
+				<entry key="Checked by">
+					<string></string>
+				</entry>
+				<entry key="Date complete">
+					<string></string>
+				</entry>
+				<entry key="Destination">
+					<string></string>
+				</entry>
+				<entry key="Office">
+					<string></string>
+				</entry>
+				<entry key="Publisher">
+					<string></string>
+				</entry>
+				<entry key="Purpose">
+					<string></string>
+				</entry>
+				<entry key="Reference">
+					<string></string>
+				</entry>
+				<entry key="Title">
+					<string></string>
+				</entry>
+			</keyed>
+		</attributes>
+	</slotted>
+</serial_xml_thing>

@@ -1,0 +1,16 @@
+_method eo_connector_segment_inst.style_subcode_metadata
+	##
+	## Return a property_list of the form key=field name, element=multiplier,
+	## used in the generation of the style_subcode value.
+	##
+  _return property_list.new_with(
+          :nominal_voltage_pp,100,
+	  :device_type,10,
+	  :status,1
+
+			)
+
+_endmethod
+
+
+

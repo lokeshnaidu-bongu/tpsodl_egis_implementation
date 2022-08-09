@@ -1,0 +1,230 @@
+.table_st{
+	border: 1px solid black;
+}
+.th_st {
+	border: 1px solid black;
+	background: rgb(66, 230, 245);
+	text-align: center;
+}
+.td_st {
+	text-align: center;
+	border: 1px solid black;
+}
+.rightnav {
+	width: 30px;
+	//text-align: right;
+}
+.background {
+	background: black;
+	background-blend-mode: darken;
+	background-size: cover;
+}
+
+.box1 {
+    display: block;
+    padding: 10px;
+    margin-bottom: 30px;
+    text-align: justify;
+}
+.box2 {
+    display: block;
+    padding: 10px;
+	margin-bottom: 30px;
+    text-align: justify;
+}
+.box3 {
+    display: block;
+    padding: 10px;
+    text-align: justify;
+}
+.cntr {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+/* .btn { */
+	/* padding: 8px 20px; */
+	/* margin: 7px 0; */
+	/* border: 2px solid white; */
+	/* border-radius: 8px; */
+	/* background: none; */
+	/* color: white; */
+	/* cursor: pointer; */
+/* } */
+
+/* .btn-sm { */
+	/* padding: 6px 10px; */
+	/* vertical-align: middle; */
+/* } */
+
+
+/* #search { */
+	/* padding: 5px; */
+	/* font-size: 17px; */
+	/* border: 2px solid grey; */
+	/* border-radius: 2px 2px 2px 2px; */
+	/* margin: 5px 5px 3px 5px; */
+	/* height: 37px; */
+/* } */
+/* /* */
+
+
+
+
+/* .nav-list { */
+	/* width: 70%; */
+	/* display: flex; */
+	/* align-items: center; */
+/* } */
+
+/* .logo { */
+	/* display: flex; */
+	/* justify-content: center; */
+	/* align-items: center; */
+/* } */
+
+/* .logo img { */
+	/* width: 180px; */
+	/* border-radius: 50px; */
+/* } */
+
+/* .nav-list li { */
+	/* list-style: none; */
+	/* padding: 26px 30px; */
+/* } */
+
+/* .nav-list li a { */
+	/* text-decoration: none; */
+	/* color: white; */
+/* } */
+
+/* .nav-list li a:hover { */
+	/* color: grey; */
+/* } */
+
+
+
+/* #search { */
+	/* padding: 5px; */
+	/* font-size: 17px; */
+	/* border: 2px solid grey; */
+	/* border-radius: 9px; */
+/* } */
+
+/* .firstsection { */
+	/* border: 2px solid black; */
+	/* padding: 25px; */
+	/* background-image: url("tp.jpg"); */
+	/* height: 600px; */
+	/* width: 700px; */
+	/* background-repeat: no-repeat; */
+	/* background-size: cover; */
+/* } */
+
+/* .box-main { */
+	/* display: flex; */
+	/* justify-content: center; */
+	/* align-items: center; */
+	/* color: black; */
+	/* max-width: 80%; */
+	/* margin: auto; */
+	/* height: 80%; */
+/* } */
+
+/* .firsthalf { */
+	/* width: 100%; */
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* justify-content: center; */
+/* } */
+
+/* .secondhalf { */
+	/* width: 30%; */
+/* } */
+
+/* .secondhalf img { */
+	/* width: 70%; */
+	/* border: 4px solid white; */
+	/* border-radius: 150px; */
+	/* display: block; */
+	/* margin: auto; */
+/* } */
+
+/* .text-big { */
+	/* font-family: 'Piazzolla', serif; */
+	/* font-weight: bold; */
+	/* font-size: 35px; */
+/* } */
+
+/* .text-small { */
+	/* font-size: 18px; */
+/* } */
+
+
+
+/* .section { */
+	/* height: 400px; */
+	/* display: flex; */
+	/* align-items: center; */
+	/* justify-content: center; */
+	/* max-width: 90%; */
+	/* margin: auto; */
+/* } */
+
+/* .section-Left { */
+	/* flex-direction: row-reverse; */
+/* } */
+
+/* .paras { */
+	/* padding: 0px 65px; */
+/* } */
+
+/* .thumbnail img { */
+	/* width: 250px; */
+	/* border: 2px solid black; */
+	/* border-radius: 26px; */
+	/* margin-top: 19px; */
+/* } */
+
+/* .center { */
+	/* text-align: center; */
+/* } */
+
+/* .text-footer { */
+	/* text-align: center; */
+	/* padding: 30px 0; */
+	/* font-family: 'Ubuntu', sans-serif; */
+	/* display: flex; */
+	/* justify-content: center; */
+	/* color: white; */
+/* } */
+/* table{ */
+	/* width: auto; */
+	/* height: auto; */
+	/* border-collapse: collapse; */
+	/* border-spacing: 0; */
+	/* background-color: blue; */
+	/* background:blue; */
+	/* size: 100vw 100vh; */
+	
+/* } */
+/* th{ */
+	/* padding: 5px; */
+	/* border: 5px solid #111; */
+	/* background-color: rgb(52, 219, 235); */
+	/* font-size: 16px; */
+/* } */
+/* td{ */
+	/* padding: 10px 20px; */
+	/* border: 5px solid #111; */
+	/* font-size: 16px; */
+/* } */
+
+/* .dis{ */
+	/* background-color: red; */
+	/* font-weight: bold; */
+/* } */
+/* .my_class{ */
+	/* background-color:blue; */
+	/* font-size:30px; */
+/* }*/ */

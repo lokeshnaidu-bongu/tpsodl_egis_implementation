@@ -1,0 +1,55 @@
+// Bootstrap Overrides
+// --------------------------------------------------
+a.btn-large {
+  // padding: 10px 12px;
+}
+
+.btn, .btn-default {
+  .ge-button-variant(@grayDark; @buttonBackgroundColorStandard; @grayLighter);
+  &.disabled, &[disabled] {
+    .disabled-mixin(@gray, @grayLightest);
+  }
+}
+.btn-primary {
+  .ge-button-variant(@white; @grayDarkest; transparent);
+  &.disabled, &[disabled] {
+    .disabled-mixin();
+  }
+}
+.btn-inverse {
+  .ge-button-variant(@gray; @grayDarker; transparent);
+  &:hover {
+    color: @white;
+  }
+  &.disabled, &[disabled] {
+    .disabled-mixin();
+  }
+}
+// Success appears as green
+.btn-success {
+  .ge-button-variant(@white; @green; transparent);
+  &.disabled, &[disabled] {
+    .disabled-mixin();
+  }
+}
+// Info appears as blue-green
+.btn-info {
+  .ge-button-variant(@white; @blue; transparent);
+  &.disabled, &[disabled] {
+    .disabled-mixin();
+  }
+}
+// Warning appears as orange
+.btn-warning {
+  .ge-button-variant(@white; @orange; transparent);
+  &.disabled, &[disabled] {
+    .disabled-mixin();
+  }
+}
+// Danger and error appear as red
+.btn-danger {
+  .ge-button-variant(@white; @red; transparent);
+  &.disabled, &[disabled] {
+    .disabled-mixin();
+  }
+}

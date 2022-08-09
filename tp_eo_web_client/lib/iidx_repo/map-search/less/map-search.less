@@ -1,0 +1,263 @@
+@import (reference) "brandkit/less/iidx-variables.less";
+@import (reference) "map-core/less/mixins.less";
+
+// override existing elements to fix margin and padding issues
+.map-toolbar > .pull-right {
+    .btn-group {
+        margin:0;
+        /*
+        .dropdown-menu {
+            right:0;
+        }*/
+    }
+}
+
+// make inline to vertically align with sibling inline elements
+
+.form-inline {
+    display: inline-block;
+    margin:0;
+
+    div.input-prepend {
+        margin:0;
+        >.btn {
+            padding:2px 10px;
+        }
+        >.btn:first-child {
+            border-top-left-radius: @baseBorderRadius;
+            border-bottom-left-radius: @baseBorderRadius;
+            border-color: transparent;
+            background-color: @white;
+            margin-right:0;
+            border-right:none;
+            cursor: default;
+            color: @gray;
+        }
+
+        >input.search-query {
+            //background: url('@{componentsPath}/map-search/img/search.png') 4px center no-repeat #fff;
+            //padding:1px 4px 1px 30px;
+
+            padding:2px 4px 2px 0;
+            min-width:226px;
+            border-left:none;
+            border-right:none;
+            border-color: transparent;
+            background-color: @white;
+            box-shadow: none;
+            // fixes the placeholder position in chrome, safari
+            line-height:14px;
+
+            &:focus {
+                outline:none;
+                box-shadow: none;
+                // prevent text field resizing with focus
+                //padding: 2px 4px 2px;
+            }
+            &::-moz-placeholder {
+                .search-placeholder
+            }
+            &::-webkit-input-placeholder {
+                .search-placeholder
+            }
+            &:-ms-input-placeholder {
+                .search-placeholder
+            }
+        }
+    }
+}
+
+// mixin for placeholder
+.search-placeholder() {
+    font-style: normal;
+}
+
+.form-inline  .btn-group {
+    .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left: 1px solid @grayLighter;
+        padding: 3px 10px;
+        // TODO: investigate real cause of spacing
+        margin-left:-4px;
+    }
+    .dropdown-menu {
+        left:auto;
+        right:0;
+        padding:0;
+        li {
+
+            cursor: pointer;
+            height: 28px;
+            line-height: 28px;
+            padding: 0 20px 0 10px;
+            min-width: 175px;
+            color: @grayDark;
+
+            &.divider{
+                height: 1px;
+                border: none;
+                margin: 0;
+            }
+
+            &:hover{
+                background-color: #e1e2e5;
+            }
+
+            &:first-child{
+                padding-top: 5px;
+            }
+
+            &:last-child{
+                padding-bottom: 5px;
+            }
+
+            >i {
+                margin-right: 5px;
+                width: 18px;
+                height: 19px;
+                display: inline-block;
+                font-size: 16px;
+                text-align:center;
+            }
+
+            >label{
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+                display: inline-block;
+                max-width: 155px;
+                text-wrap: none;
+                text-overflow:ellipsis;
+                vertical-align: middle;
+                font-size: 12px;
+                .no-selection;
+            }
+        }
+
+        // not necessary because enabled no longer used in markup
+        /*
+        li.enabled{
+            >label{
+                font-weight: bold;
+            }
+
+            >span{
+                height: 15px;
+                width:15px;
+                vertical-align: -3px;
+            }
+            >span.icon-asset {
+                background: url('@{componentsPath}/map-search/img/clipboard_dark.png');
+            }
+            >span.icon-address {
+                background: url('@{componentsPath}/map-search/img/pin_dark.png');
+            }
+        }
+        */
+    }
+
+}
+
+// center icon next to chevron in dropdown, no shifting when the icon changes
+.btn-group .btn.btn-map{
+    i:first-child {
+        display: inline-block;
+        min-width: 16px;
+    }
+}
+
+
+// using Font Awesome now, but keep this around in case
+//Custom icon for search context drop down toggle button
+/*
+.btn-group .btn.btn-map{
+    i.icon-current-facet{
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+    }
+}
+
+*/
+
+.map-toolbar div.facet-name {
+    margin:0;
+}
+
+// search results container (faceted and non-faceted)
+// match width of search bar with buttons
+.map-toolbar .tt-dropdown-menu {
+
+    .tt-suggestions {
+      width: 317px;
+    }
+
+    .tt-dataset-default-faceted .tt-suggestion,
+    div[class*="-faceted-dataset"] .tt-suggestion {
+        margin: 0;
+        padding: 0;
+        line-height: 32px;
+    }
+
+    // hover for search results
+    .tt-suggestion {
+
+        white-space:nowrap;
+
+        .tt-faceted-result.first-of-facet {
+            padding-top: 3px;
+        }
+
+        .nowrap-container {
+            white-space:nowrap;
+        }
+
+        p {
+            cursor: pointer;
+        }
+
+
+        &.tt-cursor {
+            background-image: none;
+            background-color: @grayLighter;
+            color: @grayDarkest;
+            filter:none;
+        }
+
+        .tt-facet-name {
+            background-color: @grayLightest;
+            color: @grayDarkest;
+            display: inline-block;
+            min-width: 120px;
+            min-height: 32px;
+            vertical-align: top;
+            padding-right: 20px;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+
+            strong.tt-highlight {
+                font-weight: normal;
+            }
+        }
+
+        .tt-faceted-suggestion {
+            display: inline-block;
+            margin: 0 0 0 0 ;
+            padding: 0 10px;
+          vertical-align: middle;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 200px;
+        }
+    }
+}
+
+
+// icon-asset does not exist in IIDS, but it should be coming
+// as it is in the current AI file for supported icons
+// we will map it to icon-paste until it's ready, so the markup is correct
+.icon-asset:before { content: "\f0ea"; }

@@ -1,0 +1,26 @@
+{
+  "name": "trays",
+  "description": "Collapsible tray variants for use within IIDS & HDX.",
+  "version": "0.7.3",
+  "author": "General Electric",
+  "main": [
+    "js/trays.js",
+    "less/trays.less",
+    "less/responsive.less",
+    "less/hdx-trays.less",
+    "less/hdx-trays-lights-off.less"
+  ],
+  "ignore": [
+    "components",
+    "css",
+    "node_modules",
+    ".*",
+    "Gruntfile.js",
+    "js/require.config.js"
+  ],
+  "dependencies": {
+    "ge-bootstrap": "git@github.sw.ge.com:DXC/ge-bootstrap#master",
+    "requirejs": "https://github.com/jrburke/requirejs-bower.git#~2.1.11",
+    "jquery": "https://github.com/components/jquery.git#~1.10.2"
+  }
+}

@@ -1,0 +1,67 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eo-web-client-service
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: load-balancer
+    service: eo-web-client
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    protocol: TCP
+  selector:
+    app: predix
+    service-cluster: load-balancer
+    service: eo-web-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eo-web-client-deployment
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: load-balancer
+    service: eo-web-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predix
+      service-cluster: load-balancer
+      service: eo-web-client
+  template:
+    metadata:
+      labels:
+        app: predix
+        service-cluster: load-balancer
+        service: eo-web-client
+    spec:
+      containers:
+      - name: eo-web-client-pod
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/eo-web-client:SW528-PROD-1
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: SW_LOCALE
+          value: en-GB
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: client-config-volume
+          mountPath: /app/client/config
+        - name: client-mount
+          mountPath: /app/client
+      imagePullSecrets:
+      - name: regsecret
+      volumes:
+        - name: client-config-volume
+          configMap:
+            name: eo-web-client-config-cm
+        - name: client-mount
+          hostPath:
+            path: /var/nfsshare/eo_web_client

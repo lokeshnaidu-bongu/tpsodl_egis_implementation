@@ -1,0 +1,89 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/tables.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+.table {
+  > thead > tr > th {
+    border-bottom: none; //bs3
+  }
+}
+
+// Remove border-radius and wrapping border on "bordered" type.
+.table-bordered {
+  .border-radius(0);
+  // For first th or td in the first row in the first thead or tbody
+  thead:first-child tr:first-child > th:first-child,
+  tbody:first-child tr:first-child > td:first-child {
+    .border-top-left-radius(0);
+  }
+  thead:first-child tr:first-child > th:last-child,
+  tbody:first-child tr:first-child > td:last-child {
+    .border-top-right-radius(0);
+  }
+  // For first th or td in the last row in the last thead or tbody
+  thead:last-child tr:last-child > th:first-child,
+  tbody:last-child tr:last-child > td:first-child,
+  tfoot:last-child tr:last-child > td:first-child {
+    .border-bottom-left-radius(0);
+  }
+  thead:last-child tr:last-child > th:last-child,
+  tbody:last-child tr:last-child > td:last-child,
+  tfoot:last-child tr:last-child > td:last-child {
+    .border-bottom-right-radius(0);
+  }
+  // Special fixes to round the left border on the first td/th
+  caption + thead tr:first-child th:first-child,
+  caption + tbody tr:first-child td:first-child,
+  colgroup + thead tr:first-child th:first-child,
+  colgroup + tbody tr:first-child td:first-child {
+    .border-top-left-radius(0);
+  }
+  caption + thead tr:first-child th:last-child,
+  caption + tbody tr:first-child td:last-child,
+  colgroup + thead tr:first-child th:last-child,
+  colgroup + tbody tr:first-child td:last-child {
+    .border-top-right-radius(0);
+  }
+  // Remove left border from cells so that NO cells have
+  // left or right borders. However this means we need to
+  // have a fix for cells that span a row when they are
+  // first-children, so there isn't a missing border.
+  th:first-child,
+  td:first-child {
+    border-left-width: 0;
+    &[rowspan] {
+      border-right: 1px solid @tableBorder;
+      //right: -1px;
+    }
+	  // Datatables programatically adds rowspan=1 which should not show a border.
+	  &[rowspan="1"] {
+		  border-right: 0;
+	  }
+  }
+}
+
+.table-bordered {
+  border: 0;
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th,
+      > td {
+        border-width:1px 0 0 1px;
+      }
+    }
+  }
+  > thead > tr {
+    > th,
+    > td {
+      border-bottom-width: 0;
+    }
+  }
+}
+

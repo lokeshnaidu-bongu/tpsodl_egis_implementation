@@ -1,0 +1,68 @@
+_block
+	ev<<gis_program_manager.databases[:electric]
+	lv<<gis_program_manager.databases[:land]
+	l_elec_prop_list<<property_list.new()
+	l_elec_bag << bag.new()
+	l_land_prop_list<<property_list.new()
+	l_land_bag << bag.new()
+	
+	_for a_each_coll _over ev.collections.fast_elements()
+	_loop
+		_if l_elec_prop_list[a_each_coll.name] _is _unset 
+		_then
+			l_elec_prop_list[a_each_coll.name] << equality_bag.new()
+		_endif
+		_for a_fld _over a_each_coll.all_fields.fast_elements()
+		_loop
+			
+			l_elec_prop_list[a_each_coll.name].add(a_fld.external_name)
+		_endloop
+	_endloop
+	_for a_each_coll _over lv.collections.fast_elements()
+	_loop
+		_if l_land_prop_list[a_each_coll.name] _is _unset 
+		_then
+			l_land_prop_list[a_each_coll.name]<<equality_bag.new()
+		_endif
+		_for a_fld _over a_each_coll.all_fields.fast_elements()
+		_loop
+			_if l_land_prop_list[a_each_coll.name].includes?(a_fld.external_name)
+			_then
+			#write("+++ --------------------------------------- +++",a_each_coll.name,%tab,a_fld.name,%tab,a_fld.external_name)
+				
+			_endif
+			
+			l_land_prop_list[a_each_coll.name].add(a_fld.external_name)
+			
+		_endloop
+	_endloop
+_endblock
+
+_block
+	_for a_Coll_name, fld_bag _over l_elec_prop_list.fast_keys_and_elements()
+	_loop
+	
+		_for fld_name,fld_count _over fld_bag.elements_and_occurrences()
+		_loop
+			_if fld_count>1
+			_then
+				write("Collection name ",a_Coll_name,%tab,"+++ Field Name +++",fld_name,%tab,"Field Count->",fld_count)
+			_endif
+			
+			
+		_endloop
+	_endloop
+
+	_for a_Coll_name, fld_bag _over l_land_prop_list.fast_keys_and_elements()
+	_loop
+	
+		_for fld_name,fld_count _over fld_bag.elements_and_occurrences()
+		_loop
+			_if fld_count >1
+			_then
+				write("Collection name ",a_Coll_name,%tab,"+++ Field Name +++",fld_name,%tab,"Field Count->",fld_count)
+			_endif
+			
+		_endloop
+	_endloop
+_endblock

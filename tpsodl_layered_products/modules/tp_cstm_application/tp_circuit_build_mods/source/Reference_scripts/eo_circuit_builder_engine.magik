@@ -1,0 +1,603 @@
+#% text_encoding = iso8859_1
+_package sw
+$
+
+_pragma(classify_level=restricted)
+##
+## Does the trace from circuit sources in a circuit and
+## associates the rwos found in the trace to the circuit
+##
+## DISASSOCIATED_JOINS is the list of all rwo that were
+## previously associated with a the circuit, but should no
+## longer be after the circuit is built
+## ASSOCIATED_JOINS is the set of all new rwo's that will be
+## associated with the circuit after it is built
+def_slotted_exemplar(:eo_circuit_builder_engine,
+	{
+		{ :disassociated_joins, _unset },
+		{ :associated_joins, _unset},
+		{ :transactions,        _unset },
+		{ :current_circuit,     _unset }
+	},
+	{:sw_component})
+$
+
+
+_pragma(classify_level=restricted, usage={redefinable})
+##
+## The work state to use for tracing.
+##
+## It can be set to either :current of :future.
+##
+## By default it is set to :future.
+##
+eo_circuit_builder_engine.define_shared_constant(:trace_work_state,
+	:future,
+	_false)
+$
+
+_pragma(classify_level=basic, usage={redefinable})
+## Configuration to set the extent during the process of
+## circuit building, by default it would be _true and can be
+## set to _false in case circuit extents are undesirable
+eo_circuit_builder_engine.define_shared_constant(
+	:set_extent?,
+	_true,
+	:public)
+$
+
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_engine.init()
+	## 
+	##
+	
+	_return _self 
+_endmethod
+$
+
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_engine.new()
+	## 
+	## 
+	_return _clone.init()
+_endmethod
+$
+
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_engine.run( p_circuit, _optional section_types, build_view )
+	##
+	## Does the trace from circuit sources that feeds the circuit
+	## and associates the rwos find in the trace to the circuit
+	## @param P_CIRCUIT
+	##
+	
+	_self.validate_circuit_relationships(p_circuit)
+
+	.transactions << rope.new()
+	.current_circuit << p_circuit
+	
+	l_circuit_rwos << _self.run_section_engine( section_types, build_view )
+	_self.build_circuit_associations(l_circuit_rwos)
+	_self.run_transactions()
+	_self.report_successful_build()
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.validate_circuit_relationships(p_circuit)
+	## 
+	## Checks whether the circuit is ready to be built,
+	## This checks the followng scenarios.
+	## 1. Circuits not having circuit sources
+	## 2. Circuit sources not having assets
+	## 3. Assets not having geometry.
+	
+	condition.raise(:eo_circuit_information,:string,_self.message(:validate_circuit_relationships))
+	
+	_local l_circuit_sources << p_circuit.get_circuit_sources()
+	
+	_if l_circuit_sources.empty?
+	_then
+		condition.raise(:no_circuit_source_for_circuit,
+				:a_circuit,p_circuit,
+				:a_circuit_id,p_circuit.circuit_id())
+	_endif
+
+	_for a_circuit_source _over l_circuit_sources.fast_elements()
+	_loop
+		_if (l_asset << a_circuit_source.get_circuit_source_asset()) _is _unset 
+		_then
+			condition.raise(:no_asset_for_circuit_source,
+					:a_circuit_source,a_circuit_source,
+					:a_circuit_source_id,a_circuit_source.circuit_source_id())
+		_elif l_asset.get_circuit_source_start_node() _is _unset  _then 
+			condition.raise(:no_geometry_for_circuit_source_asset,
+					:a_circuit_source,a_circuit_source,
+					:a_circuit_source_id,a_circuit_source.circuit_source_id())
+		_endif
+	_endloop
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.run_section_engine(section_types, build_view)
+	##
+	## Run the circuit section engine on the current circuit.
+	##
+	## SECTION_TYPES specifies the a list of circuit sectioning types.
+	##
+	## BUILD_VIEW specifies the view to build on. The vaue should
+	## be :current, :future or _unset. If _unset the default value
+	## is determined in the trace engine.
+	## 
+	a_section_engine << eo_circuit_section_engine.new()
+
+	build_section_types << _if section_types _isnt _unset _andif _not section_types.empty?
+			       _then
+				       >> section_types
+			       _endif
+
+	build_result << a_section_engine.build( .current_circuit, build_section_types, build_view )
+	(l_circuit_rwos, section_transactions) << (_scatter build_result)
+
+	_if section_types _isnt _unset
+	_then 
+		.transactions.add_all_last( section_transactions )
+	_endif
+	
+	_return l_circuit_rwos
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.build_circuit_associations( p_circuit_rwos )
+	##
+	## Creates or updates circuit joins for the given rwos
+	##
+	condition.raise(:eo_circuit_information,:string,_self.message(:building_circuit_association))
+	# To hold the disassociated joins
+	ls_fld_nm<< .current_circuit.get_line_segments_join_name
+	eq_fld_nm<< .current_circuit.get_equipment_join_name
+	.disassociated_joins << property_list.new()
+	.associated_joins << rwo_set.new()
+	a_trans << record_transaction.new_update(.current_circuit, property_list.new())
+	
+	_self.build_other_circuit_associations(p_circuit_rwos)
+	
+	_for type, proposed_circ_rwos _over p_circuit_rwos.fast_keys_and_elements()
+	_loop
+		current_circ_rwos << .current_circuit.perform(type).rwo_set()
+		l_remove_rwos << current_circ_rwos.difference(proposed_circ_rwos)
+		l_add_rwos << proposed_circ_rwos.difference(current_circ_rwos)
+
+		_self.remove_circuit_for_deenergised_rwos_to_add( l_add_rwos )
+		_self.keep_deenergised_rwos_to_remove( l_remove_rwos, proposed_circ_rwos )
+		
+		_if _not ( l_remove_rwos.empty? _andif l_add_rwos.empty? )
+		_then
+			# At least one rwo has been removed from the circuit or added
+			# to the circuit
+			_if type _is ls_fld_nm _orif type _is eq_fld_nm
+			_then
+				.associated_joins << .associated_joins.union(l_add_rwos)
+			_endif 
+
+			.disassociated_joins[type] << l_remove_rwos
+			
+			_self.remove_circuit_id_for( .current_circuit.circuit_id(), l_remove_rwos )
+			a_trans.set_value(type, proposed_circ_rwos )
+		_endif
+	_endloop
+	_if _not a_trans.proposed_values.empty?
+	_then
+		.transactions.add( a_trans )
+	_endif 
+
+	_self.set_circuit_extents( a_trans.proposed_values )
+	# set circuit ids on added objects objects
+	_self.prepare_post_build_updates()
+
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.run_transactions()
+	##
+	## Run any transactions that have been added to .transactions.
+	## 
+	_if _not .transactions.empty?
+	_then
+		# to prevent multiple refreshes slowing down performance
+		# both eo_circuit_builder_dialog and quality_check_tool refresh maps at the after routines are complete		
+		_dynamic !notify_database_data_changes?!<< _false 
+		condition.raise(:eo_circuit_updated_information,:string,_self.message(:running_database_transactions))
+		.transactions.add_last( record_transaction.new_update( .current_circuit, property_list.new_with( :date_last_updated, date.now() ) ) )
+		dataset_transaction.new(.transactions, _self.message(:circuit_build, .current_circuit.circuit_id)).run()
+	_endif 	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.report_successful_build()
+	##
+	## Reports a successful build of the current circuit by raising
+	## a eo_circuit_success_information condition.
+	## 
+	condition.raise(:eo_circuit_success_information,
+			:string,_self.message( :circuit_summary,
+					       .current_circuit.get_equipment().size,
+					       .current_circuit.get_structures().size,
+					       .current_circuit.get_line_segments().size,
+					       .current_circuit.get_boundary_assets().size,
+					       .current_circuit.get_circuit_sections( "Circuit Source Section" ).size,
+					       .current_circuit.get_circuit_sections( "Isolatable Section" ).size,
+					       .current_circuit.get_circuit_stoppers().size,
+					       .current_circuit.get_upstream_circuits().size,					       
+					       .current_circuit.get_downstream_circuits().size,
+					       .current_circuit.get_originating_substations().size)
+		  )
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.set_circuit_extents ( proposed_values )
+	## 
+	## Add a transaction to the list of transactions that will set
+	## the extent based on the line segments and equipment found in
+	## PROPOSED_VALUES (an indexed collection by key)
+	##
+	## Returns nothing
+	##
+
+	_if _self.set_extent?
+	_then
+		ls_fld_nm << .current_circuit.get_line_segments_join_name
+		eq_fld_nm << .current_circuit.get_equipment_join_name
+	
+		l_proposed_eqs << proposed_values[eq_fld_nm]
+		l_proposed_lss << proposed_values[ls_fld_nm]
+		l_future_eqs << l_proposed_eqs.default( .current_circuit.perform(eq_fld_nm).rwo_set() )
+		l_future_lss << l_proposed_lss.default( .current_circuit.perform(ls_fld_nm).rwo_set() )
+		
+		condition.raise(:eo_circuit_information,:string,_self.message(:creating_extents))
+		trans << .current_circuit.set_extents( l_future_lss, l_future_eqs )
+
+		.transactions.add_all_last( trans )
+	_endif
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.remove_circuit_for_deenergised_rwos_to_add ( an_rwo_set )
+	## 
+	## Check if any of the rwos in AN_RWO_SET is de-energised.
+	## We need to dissociate them from any existing circuit
+	## before we can associate them to this one. If we don't, then
+	## when we rebuild the circuit owning these rwos, the circuit
+	## will still have them since they are de-energised. The final
+	## outcome is that the installation will belong to two circuits
+	## and there is no way to dissociate them by rebuilding circuits
+	##
+	## Add new transactions to the transaction list when we need to
+	## remove an rwo from a circuit.
+	##
+	## Returns nothing
+	##
+
+	_for rwo_to_add _over an_rwo_set.elements()
+	_loop
+		_if (_not rwo_to_add.responds_to?(:|is_abandoned??()|) _orif
+		     rwo_to_add.is_abandoned??() _isnt _true) _andif
+		    rwo_to_add.responds_to?(:|is_deenergised??()|) _andif
+                    rwo_to_add.is_deenergised??() _isnt _false _andif
+                    rwo_to_add.responds_to?(:|get_circuits()|) _andif
+                    _not ( circuits << rwo_to_add.get_circuits() ).empty? _andif
+                    _not circuits.includes?(.current_circuit) _andif
+                    (field_name << rwo_to_add.get_circuit_join_field_name()) _isnt _unset 
+		_then
+			proposed_values << property_list.new_with(field_name, {} )
+			new_trans << record_transaction.new_update( rwo_to_add, proposed_values )
+			.transactions.add( new_trans )
+		_endif
+	_endloop
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.keep_deenergised_rwos_to_remove ( remove_rwos, proposed_circ_rwos )
+	## Check whether any of the proposed rwos to remove
+	## (REMOVE_RWOS) are de-energised. In that case, keep
+	## them (by adding them to PROPOSED_CIRC_RWOS and removing them
+	## from REMOVE_RWOS)
+	##
+	## Returns nothing.
+	##
+
+	_for rwo_to_remove _over remove_rwos.elements()
+	_loop
+		_if (_not rwo_to_remove.responds_to?(:|is_abandoned??()|) _orif
+		     rwo_to_remove.is_abandoned??() _isnt _true) _andif
+		    rwo_to_remove.responds_to?(:|is_deenergised??()|) _andif
+                    rwo_to_remove.is_deenergised??() _isnt _false
+		_then
+			# It should still be part of the circuit
+			remove_rwos.remove( rwo_to_remove )
+			proposed_circ_rwos.add( rwo_to_remove )
+		_endif
+	_endloop
+_endmethod
+
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.build_other_circuit_associations(p_circuit_rwos)
+	## Updates other circuit joins like upstream circuits,
+	## downstream circuits and originating substations.
+	##
+	
+	p_circuit_rwos[.current_circuit.get_circuit_stoppers_join_name]        << rwo_set.new()
+	p_circuit_rwos[.current_circuit.get_downstream_circuits_join_name]     << rwo_set.new()
+	p_circuit_rwos[.current_circuit.get_upstream_circuits_join_name]       << rwo_set.new()
+	p_circuit_rwos[.current_circuit.get_originating_substations_join_name] << rwo_set.new()
+
+	ls_fld_nm << .current_circuit.get_line_segments_join_name
+	eq_fld_nm << .current_circuit.get_equipment_join_name
+	
+	p_traced_rwos << rwo_set.new_from( p_circuit_rwos[ls_fld_nm] )
+	p_traced_rwos.add_all( p_circuit_rwos[eq_fld_nm] )
+
+	_for a_rwo _over p_circuit_rwos[.current_circuit.get_boundary_assets_join_name].fast_elements()
+	_loop
+		_if a_rwo.is_circuit_source?
+		_then
+			an_obj << a_rwo.get_circuit_source()
+			_if .current_circuit.circuit_id() = an_obj.get_circuit().circuit_id()
+			_then
+				_if (an_obj << _self.get_other_circuit(a_rwo, p_traced_rwos)) _isnt _unset 
+				_then 
+					p_circuit_rwos[.current_circuit.get_upstream_circuits_join_name].add(an_obj)
+				_endif
+				
+				l_substation << rwo_set.new_from(a_rwo.get_all_world_owners()).select_collection( {:sub_substation} )
+				# If the rwo has soft join relationships to substation, get
+				# them as well.
+				_if a_rwo.method(:|structures()|) _isnt _unset 
+				_then 
+					l_substation.add_all(a_rwo.structures().select_collection( {:sub_substation} )) 
+				_endif
+				
+				p_circuit_rwos[.current_circuit.get_originating_substations_join_name].add_all(l_substation)
+			_else
+				# If there any incorrect network changes, we may hit circuit
+				# source of other circuit. If it is, raise a condition
+				_if _self.is_valid_downstream_source?(a_rwo, p_traced_rwos)
+				_then
+					p_circuit_rwos[.current_circuit.get_downstream_circuits_join_name].add(an_obj.get_circuit())
+				_endif
+			_endif
+		_elif a_rwo.is_circuit_stopper?
+		_then
+			p_circuit_rwos[.current_circuit.get_circuit_stoppers_join_name].add(a_rwo.get_circuit_stopper())
+		_endif
+	_endloop
+_endmethod
+$
+
+## 
+## Indicates if point objects can be valid as a downstream source. Can be
+## subclassed, default false
+## 
+_pragma(classify_level=restricted, usage={subclassable})
+eo_circuit_builder_engine.define_shared_constant(:point_objects_valid_as_source?, _false, :private)
+$
+
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_engine.is_valid_downstream_source?(p_rwo, p_traced_rwos)
+	## Checks the given p_rwo is a valid downstream source or not. 
+	## 
+	# If there any incorrect network changes, we may hit circuit
+	# source of other circuit. If it is, raise a condition
+	source_info<< p_rwo.get_circuit_source_info()
+	geom_type<< source_info[:geom].geom_type
+	down_circuit<< p_rwo.get_circuit_source().get_circuit()
+	
+	_if geom_type _is :point _andif
+	    _self.point_objects_valid_as_source?
+	_then
+		_return _true
+	_endif	
+	
+	_if geom_type _is :point
+	_then
+		_if p_rwo.descriptor.name = :eo_energy_source
+		_then
+			# Energy source should not belong to different circuit. Raise an error
+			condition.raise(:found_incorrect_downstream_circuit_source,
+					:circuit_tie_asset,  p_rwo,
+					:current_circuit,    .current_circuit,
+					:downstream_circuit, down_circuit)
+		_endif
+		condition.raise(:eo_circuit_point_tie_information,
+				:circuit_tie_asset,  p_rwo,
+				:current_circuit,    .current_circuit,
+				:downstream_circuit, down_circuit)
+	_endif
+	
+	tied_rwos<< source_info[:assets].intersection(p_traced_rwos)
+	
+	_if ~ tied_rwos.empty?
+	_then
+		# Raise a condition that rwo is a circuit tie between source_circuit and rwo_circuit
+		condition.raise(:found_incorrect_tie_between_circuits,
+				:circuit_tie_assets,  tied_rwos,
+				:circuit_tie_assets_count,  tied_rwos.size,
+				:circuit_tie_asset, p_rwo,
+				:current_circuit,    .current_circuit, 
+				:downstream_circuit, down_circuit)
+	_endif 	
+	
+	>> _true 
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.remove_circuit_id_for(p_circuit_id, p_rwos)
+	## DESCRIPTION: Removes P_CIRCUIT_ID references in p_rwos
+	## (either from network_id or network_id2 fields) 
+	## @ARGUMENTS - P_CIRCUIT_ID, P_RWOS
+	## @RETURNS - Nothing
+	
+	_for a_rwo _over p_rwos.fast_elements()
+	_loop
+		_if a_rwo.responds_to?(:get_circuit_id_field_name) _andif
+		    a_rwo.field(a_rwo.get_circuit_id_field_name) _isnt _unset _andif
+		    a_rwo.field(a_rwo.get_circuit_id_field_name).is_physical?
+		_then 
+			_if a_rwo.field(a_rwo.get_circuit_id2_field_name) _isnt _unset
+			_then
+				# It is a circuit tie. If circuit_id matches with p_circuit_id,
+				# set the value of circuit_id2 to circuit_id.
+				_if a_rwo.circuit_id() = p_circuit_id
+				_then
+					.transactions.add( record_transaction.new_update(
+								   a_rwo, property_list.new_with(a_rwo.get_circuit_id_field_name, a_rwo.circuit_id2())))
+				_endif
+				.transactions.add( record_transaction.new_update(
+							   a_rwo, property_list.new_with(a_rwo.get_circuit_id2_field_name, "")))
+			_else
+				# If the rwo does not have circuit_id2 field, then set its
+				# circuit_id to "".			
+				.transactions.add( record_transaction.new_update(
+							   a_rwo, property_list.new_with(a_rwo.get_circuit_id_field_name, "")))
+			_endif
+		_endif		
+	_endloop
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.prepare_post_build_updates()
+	##
+	## Stores the record transactions for updating annotations and
+	## associated schematic records of P_CONDUCTING_EQUIPMENTS and disassociated joins
+	## Returns nothing.
+	##
+	_for a_rwo _over .associated_joins.fast_elements()
+	_loop
+		_if ( a_field_nm << a_rwo.get_circuit_id_field_name )_isnt _unset _andif
+		    ( a_field << a_rwo.field(a_field_nm) ) _isnt _unset _andif
+		    a_rwo.circuit_id() <> .current_circuit.circuit_id()
+		_then
+			.transactions.add( method_transaction.new(a_rwo.source_view, a_rwo, :update_text_fields|()|, ""))
+			.transactions.add( method_transaction.new(a_rwo.source_view, a_rwo, :update_schematic_records_properties|()|, ""))
+		_endif
+	_endloop
+
+	_for rwo_type, rwo_list _over .disassociated_joins.fast_keys_and_elements()
+	_loop
+		_if rwo_type <> :downstream_circuits _andif
+		    rwo_type <> :upstream_circuits
+		_then
+			_for a_rwo _over rwo_list.fast_elements()
+			_loop
+				.transactions.add( method_transaction.new(a_rwo.source_view, a_rwo, :update_text_fields|()|, ""))
+				.transactions.add( method_transaction.new(a_rwo.source_view, a_rwo, :update_schematic_records_properties|()|, ""))
+			_endloop
+		_endif
+	_endloop
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_engine.is_rwo_open?(p_rwo, _optional build_view)
+	## Returns true if the P_RWO is entirely open, else false
+	##
+	## This is a class method and can be called on the exemplar. It
+	## doesn't use any state of the class.
+	## 
+	
+	_local is_open?   << _false
+	_local is_closed? << _false
+	
+	_if p_rwo.method(:|is_isolating_device?|) _isnt _unset _andif p_rwo.is_isolating_device?
+	_then
+		a_work_state << build_view.default( _self.trace_work_state )
+		all_ac_phases << electric_phase_manager.get_electric_phase_manager(_unset, _unset).ac_trace_phases()
+		_for a_phase _over all_ac_phases.fast_elements()
+		_loop 
+			_if p_rwo.represents_phase?(a_phase, a_work_state)
+			_then
+				_if _not p_rwo.closed_on_phase?(a_phase, a_work_state)
+				_then
+					is_open? << _true
+				_else
+					is_closed? << _true
+				_endif 
+			_endif
+		_endloop
+	_endif
+
+	_return is_open? _andif _not is_closed?
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_engine.get_disassociated_rwos()
+	##
+	## RETURNS dissasociated joins from the circuit under process,
+	## should be called after circuit building else it'll
+	## return _unset
+	##
+	##
+	##
+	
+	>> .disassociated_joins
+
+_endmethod
+$
+
+
+_pragma(classify_level=restricted)
+_private _method eo_circuit_builder_engine.get_other_circuit(p_circuit_rwo, p_rwos)
+	## Returns the other circuit associated to p_circuit_rwo
+	## excluding p_rwos
+	
+	# Get the valid geometry fields and loop through all
+	# its nodes. If the node is a valid rwo and has circuit
+	# join field, get the other circuit than given P_CIRCUIT in the
+	# join field and return  
+	_local manifold_names << {:elec_dist_primary, :elec_dist_secondary, :elec_trans, :elec_sub}
+	
+	_for gf _over p_circuit_rwo.geometry_fields()
+	_loop
+	      	_if gf.mapped? _is _false _andif
+		    gf.has_topology? _andif
+		    manifold_names.includes?(gf.manifold_name) _andif 
+		    (l_geom << p_circuit_rwo.perform(gf.name)) _isnt _unset 
+		_then 
+			_for a_node _over p_circuit_rwo.perform(gf.name).all_nodes()
+			_loop
+				_for a_geom _over a_node.top_level_geoms()
+				_loop
+					_if ( a_rwo << a_geom.rwo ) _isnt _unset _andif
+					    _not p_rwos.includes?(a_rwo) _andif
+					    a_rwo.field(a_fld << a_rwo.get_circuit_join_field_name()) _isnt _unset _andif
+					    ( circuits << a_rwo.perform(a_fld).rwo_set().select_collection({:eo_circuit})) _isnt _unset _andif
+					    ( l_other_circuit << circuits.difference(rwo_set.new_with(.current_circuit)).an_element() ) _isnt _unset
+					_then
+						_return l_other_circuit
+					_endif
+				_endloop
+			_endloop
+		_endif
+	_endloop
+	
+_endmethod
+$
+

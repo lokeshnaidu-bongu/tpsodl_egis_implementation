@@ -1,0 +1,96 @@
+_block
+	
+	sw:smallworld_product.register_application( :sweo_wm_user,:application,
+						    :resource_module_name, :sweo_wm_user_application,
+						    :description, "TPSODL Smallworld Electric Office User application",
+						    :external_name, "TPSODL Smallworld Electric Office",
+						    :dm_application?, _true,
+						    :html_help_file_name, "Default.htm",
+						    :html_help_resource_module_name, :sweo_wm_user_application,
+						    :default_application_coordinate_system_name, :tpsodl_utm_app,
+						    :application_coordinate_system_unit,:mm,
+						    :soc_name, :electric_dm,								
+						    #:initial_layout_name, "default_layout",
+						    #:initial_width, 1250,
+						    #:initial_height, 920,
+						    :ace_name, :|EO| )
+	sw:smallworld_product.register_application( :sweo_dm_admin_application,:application,
+						    :resource_module_name, :sweo_dm_administration_application,
+						    :description, "TPSODL Smallworld Electric Office Admin application",
+						    :external_name, "TPSODL Smallworld Electric Office Administration",
+						    :dm_application?, _true,
+						    :html_help_file_name, "Default.htm",
+						    :html_help_resource_module_name, :sweo_dm_administration_application,
+						    :default_application_coordinate_system_name, :tpsodl_utm_app,
+						    :application_coordinate_system_unit,:mm,
+						    :soc_name, :electric_dm,
+						    #:initial_layout_name, "default_layout",
+						    #:initial_width, 1250,
+						    #:initial_height, 920,
+						    :ace_name, :|EO| )
+	sw:smallworld_product.register_application( :tp_eo_application,:application,
+						    :resource_module_name, :tp_eo_application,
+						    :description, "TPSODL EO User Application",
+						    :external_name, "TPSODL EO User Application",
+						    :dm_application?, _true,
+						    :html_help_file_name, "Default.htm",
+						    :html_help_resource_module_name, :sweo_wm_user_application,
+						    :default_application_coordinate_system_name, :tpsodl_utm_app,
+						    :application_coordinate_system_unit,:mm,
+						    :soc_name, :electric_dm,
+						    #:initial_layout_name, "default_layout",
+						    #:initial_width, 1250,
+						    #:initial_height, 920,
+						    :ace_name, :|EO| )
+	
+	sw:smallworld_product.register_application( :swaf_fme_application,:application,
+						    :resource_module_name, :swaf_fme_application,
+						    :html_help_file_name, "swafProFME",
+						    :html_help_resource_module_name, :swaf_fme_application,
+						    :description, "FME Import/Export Application using SWAF Architecture",
+						    :external_name, "FME Import & Export",						    
+						    :default_application_coordinate_system_name, :tpsodl_utm_app,
+						    :application_coordinate_system_unit, :mm,
+						    :soc_name, :electric_dm,
+						    :ace_name, :|Electricity|)
+
+	#gis_program_manager.known_office_applications[:electric].add( :tp_eo_application )
+	
+	_local start_plotting_application <<
+		_proc@start_plotting_application()
+			app << smallworld_product.application_definition( :eo_plotting_sfa_application ).int!start()
+			app.simple_application_shutdown? << _true 
+		_endproc
+
+	_local start_pdf_generator_application <<
+		_proc@start_pdf_generator_application()
+ 			app << smallworld_product.application_definition( :eo_pdf_generator ).int!start()
+			app.simple_application_shutdown? << _true 
+		_endproc
+
+	_local start_cbyd_application <<
+		_proc@start_cbyd_application()
+ 			app << smallworld_product.application_definition( :eo_cbyd ).int!start()
+			app.simple_application_shutdown? << _true 
+		_endproc
+
+	_local job_server_setup_build_proc <<
+		_proc@job_server_setup_build_proc()
+			smallworld_product.application_procedures.remove( start_application_manager )
+		_endproc
+	
+#	_local tpsodl_fme_setup_open_build_proc <<
+#		_proc@tpsodl_fme_setup_open_build_proc()
+#			sw:smallworld_product.register_application( :swaf_fme_application,:application,
+#								    :resource_module_name, :swaf_fme_application,
+#								    :html_help_file_name, "swafProFME",
+#								    :html_help_resource_module_name, :swaf_fme_application,
+#								    :description, "FME Import/Export Application using SWAF Architecture",
+#								    :external_name, "FME Import & Export",
+#								    :ace_name, :|Electricity|,
+#								    :default_application_coordinate_system_name, :tpsodl_utm_app,
+#								    :application_coordinate_system_unit, :mm )
+#			
+#		_endproc
+_endblock
+$

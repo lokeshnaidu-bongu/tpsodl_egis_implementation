@@ -1,0 +1,119 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Physical & Enumerator Fields for the object tp_consumer_consumption_data_arc
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 11
+
+tp_cstm_stagging_db_implementer.register(:datamodel_name, "tp_cstm_dbstag_imp_v13", 
+				:version, 13,
+				:implementer_comment,        "TPSODL New Object",
+				:upgrade?, _false,
+				:case_change_method,         :|v13_adding_new_field_to_consumer_consumption_data_arc()|,
+				:case_change_results_method, :|v13_consumer_consumption_data_arc_case_change_results()|,
+				:dataset_names, {{:stagging_case, :stagging}})
+$
+
+
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.v13_adding_new_field_to_consumer_consumption_data_arc(p_target_case_view)
+	## 
+	##
+
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_if (l_case_obj << p_target_case_view.get_case_object(:tp_consumer_consumption_data_arc)) _is _unset
+	_then		
+	      l_new_coord << coordinate.new( -385966,-293192 )
+		l_point << pseudo_point.new_with(l_new_coord)
+		l_point.world<< p_target_case_view.world
+		l_case_obj << l_case_manager.new_case_object(:tp_consumer_consumption_data_arc,
+							     property_list.new_with(
+								     :external_name, "Consumer Consumption Data Archive",
+								     :record_exemplar_name, :tp_consumer_consumption_data_arc,
+								     :description,"TPSODL Custom Object",
+								     :location,l_point))
+		
+		
+	_endif
+		l_fld_map_val << _self.tp_fld_mandatory_mapping_val
+	l_fld_su_map_val << _self.tp_fld_stored_unit_mapping_val
+	l_coll_name << :tp_consumer_consumption_data_arc
+	_self.int!add_key_field(p_target_case_view,l_coll_name)
+	l_consumer_consumption_data_arc_fields <<_self.tp_read_flds_from_xml(l_coll_name)
+	_for  a_prop_val_key , l_prop_fields _over l_consumer_consumption_data_arc_fields.fast_keys_and_elements() 
+	_loop
+		l_fld_name << l_prop_fields[:field_name].as_symbol()
+		l_mandatory << l_prop_fields[:mandatory].lowercase.as_symbol()
+		l_stored_unit << l_prop_fields[:stored_unit]
+		l_fld_ext_name << l_prop_fields[:external_name]
+		l_fld_mand << l_fld_map_val[l_mandatory]
+		l_fld_type << l_prop_fields[:field_type].as_symbol()
+		l_fld_size << l_prop_fields[:field_size].as_number()
+		l_fld_unset_val << l_prop_fields[:unset_value]
+		l_fld_def_val << l_prop_fields[:default_value]
+		l_fld_def_su <<  l_fld_su_map_val[l_stored_unit]
+		_if l_fld_map_val[l_fld_type] _isnt _unset 
+		_then
+			l_fld_unset_val<< l_fld_map_val[l_fld_type ]
+			l_fld_def_val<< l_fld_map_val[l_fld_type ]
+		_endif 
+		l_props << property_list.new_with(:mandatory?,l_fld_mand,
+						  :field_type,l_fld_type,
+						  :external_name,l_fld_ext_name,
+						  :field_size,l_fld_size,
+						  :unset_value,l_fld_unset_val,
+						  :default_value,l_fld_def_val,
+						  :stored_unit,l_fld_def_su)
+			                        
+		_if l_fld_def_su _is _unset _orif
+		    l_fld_def_su = "NA"
+		_then
+			l_props.remove_key(:stored_unit)
+		_endif
+	
+		_if l_case_obj.get_field(l_fld_name) _isnt _unset 
+		_then
+			_continue 
+		_endif
+		l_case_obj.add_physical_field( l_fld_name, l_props)
+		
+	_endloop
+
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.v13_consumer_consumption_data_arc_case_change_results()
+	## 
+	## 
+	_local ccr_for_dd_extension << case_change_result.new()
+     	ccr_for_dd_extension.add_new(:tp_consumer_consumption_data_arc)
+	>> {ccr_for_dd_extension}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_stagging_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

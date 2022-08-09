@@ -1,0 +1,132 @@
+#_block
+#	_local land << gis_program_manager.databases[:land]
+#	_local land_coll << land.collections[:lnd_building]
+#	_local elec << gis_program_manager.databases[:electric]
+#	_local elec_coll << elec.collections[:eo_meter]
+#	_local wrld  << land.world
+#
+#
+#	_for each_record _over land_coll.fast_elements()
+#	_loop
+#		_try _with cond
+#		_if each_record.extent _isnt _unset
+#		_then
+#			_local sec << each_record.extent.sectors
+#			_local sub_bounds << pseudo_area.new_for_world(sec,wrld)
+#			_local pred << predicate.within(:location,sub_bounds)			
+#			_local req_mtr << elec_coll.select(pred)
+##			write(req_mtr.size)
+#
+#		_endif
+#		_when error
+#			write("Record Error",%tab,each_record.id)
+#			_endtry 
+#	_endloop
+#
+#_endblock
+#$
+#
+#_block
+#	_local land << gis_program_manager.databases[:land]
+#	_local land_coll << land.collections[:lnd_building]
+#	_local elec << gis_program_manager.databases[:electric]
+#	_local elec_coll << elec.collections[:eo_meter]
+#	_local wrld  << land.world
+#
+#
+#	_for each_record _over elec_coll.fast_elements()
+#	_loop
+#		_try _with cond
+#			_if each_record.location _isnt _unset
+#			_then
+#				_local sec << each_record.location.sectors
+#				_local sub_bounds << pseudo_point.new_for_world(sec,wrld)
+#				_local pred << predicate.overlays(:extent,sub_bounds)			
+#				_local req_mtr << land_coll.select(pred)
+#				_if req_mtr.size >1
+#				_then 
+#					write("Record",%tab,each_record.id,%tab,req_mtr.size)
+#				_endif 
+#
+#
+#			_endif
+#		_when error
+#			write("Record Error",%tab,each_record.id)
+#		_endtry 
+#	_endloop
+#
+#_endblock
+#$
+#_block
+#	_local land << gis_program_manager.databases[:land]
+#	_local land_coll << land.collections[:lnd_building]
+#	_local elec << gis_program_manager.databases[:electric]
+#	_local elec_coll << elec.collections[:eo_meter]
+#	_local wrld  << land.world
+#
+#
+#	_for each_record _over land_coll.fast_elements()
+#	_loop
+#		_try _with cond
+#			_if each_record.extent _isnt _unset
+#			_then
+#				_local sec << each_record.extent.sectors
+#				_local sub_bounds << pseudo_area.new_for_world(sec,wrld)
+#				_local pred << predicate.within(:location,sub_bounds)			
+#				_local prd_mtr << elec_coll.select(pred)
+#				_if prd_mtr.size ~=0
+#				_then
+#					_for i _over prd_mtr.fast_elements()
+#					_loop
+#						_if i _isnt _unset
+#						_then
+#							i.tp_building_reference_number << each_record.tp_building_reference_number
+#							#			write(req_mtr.size)
+#						_endif
+#					_endloop
+#				_endif 
+#
+#			_endif
+#		_when error
+#			write("Record Error",%tab,each_record.id)
+#		_endtry 
+#	_endloop
+#
+#_endblock
+$
+_block
+	_local land << gis_program_manager.databases[:land]
+	_local land_coll << land.collections[:lnd_building]
+	_local elec << gis_program_manager.databases[:electric]
+	_local elec_coll << elec.collections[:eo_service_point]
+	_local wrld  << land.world
+
+
+	_for each_record _over land_coll.fast_elements()
+	_loop
+		_try _with cond
+			_if each_record.extent _isnt _unset
+			_then
+				_local sec << each_record.extent.sectors
+				_local sub_bounds << pseudo_area.new_for_world(sec,wrld)
+				_local pred << predicate.within(:location,sub_bounds)			
+				_local prd_mtr << elec_coll.select(pred)
+				_if prd_mtr.size ~=0
+				_then
+					_for i _over prd_mtr.fast_elements()
+					_loop
+						_if i _isnt _unset
+						_then
+							i.tp_building_reference_number << each_record.tp_building_reference_number
+						_endif
+					_endloop
+				_endif 
+
+			_endif
+		_when error
+			write("Record Error",%tab,each_record.id)
+		_endtry 
+	_endloop
+
+_endblock
+$

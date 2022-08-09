@@ -1,0 +1,157 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Implementation Project
+##
+## Created by: Sai Kumar Veturi, TCS
+## Date: 04/03/2022
+##
+## Description:
+## Network Summary Report for Downstream & Upstream
+##
+########################################################################
+_package user
+$
+
+#---------------------------------------------------------------------------------
+# Class definition
+#---------------------------------------------------------------------------------
+remex(:tp_network_summay_report)
+$
+
+_pragma(classify_level=basic, topic={summary_report}, usage={subclassable})
+def_slotted_exemplar(:tp_network_summay_report,
+	## 
+	## Exemplar Definition
+	## 
+	{
+		#{:items,property_list.new()},
+		#{:summary}
+	},
+	{:service_provider,:gss_service_provider_mixin})
+$
+
+_pragma(classify_level=basic, topic={summary_report}, usage={subclassable})
+_method tp_network_summay_report.init( _gather args)
+	## 
+	## Initialise the Service
+	##
+	
+	_super.init(_scatter args)	
+	_return _self
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={summary_report}, usage={subclassable})
+_method tp_network_summay_report.get_counts( a_service_call )
+	## 
+	## Returns the summary for all the objects at initial level
+	##
+	
+	_local resp << a_service_call.response
+	_local l_summary << equality_property_list.new()
+	
+	ev <<  _self.application.database.dataset(:electric)
+	lv << _self.application.database.dataset(:land)
+	
+	l_wire_coll << ev.collection(:eo_wire_segment_inst)
+	l_cable_coll << ev.collection(:eo_cable_segment_inst)
+	gss_coll << ev.collection(:sub_substation).select(predicate.eq(:type,"Grid Substation"))
+	dss_coll << ev.collection(:sub_substation).select(predicate.eq(:type,"Distribution Substation"))
+	pss_coll << ev.collection(:sub_substation).select(predicate.eq(:type,"Primary Substation"))
+	
+	l_lv_in_wire << l_wire_coll.select(predicate.lt(:nominal_voltage_pp,unit_value.new(11,:kv))).size
+	l_lv_in_cable << l_cable_coll.select(predicate.lt(:nominal_voltage_pp,unit_value.new(11,:kv))).size
+	lt_fdrs << l_lv_in_wire + l_lv_in_cable
+	l_11kv_in_wire << l_wire_coll.select(predicate.eq(:nominal_voltage_pp,unit_value.new(11,:kv))).size
+	l_11kv_in_cable << l_cable_coll.select(predicate.eq(:nominal_voltage_pp,unit_value.new(11,:kv))).size
+	l_11kv_fdrs << l_11kv_in_wire + l_11kv_in_cable
+
+	l_33kv_in_wire << l_wire_coll.select(predicate.eq(:nominal_voltage_pp,unit_value.new(33,:kv))).size
+	l_33kv_in_cable << l_cable_coll.select(predicate.eq(:nominal_voltage_pp,unit_value.new(33,:kv))).size
+	l_33kv_fdrs << l_33kv_in_wire + l_33kv_in_cable
+	
+	l_summary["Circle"] << lv.collection(:tp_circle).size
+	l_summary["Division"] << lv.collection(:tp_division).size
+	l_summary["Sub-Division"]  <<  lv.collection(:lnd_subdivision).size
+	l_summary["Section"] <<  lv.collection(:lnd_section).size
+	l_summary["GSS"] << gss_coll.size
+	l_summary["33kv Feeder"] << l_33kv_fdrs
+	l_summary["PSS"] << pss_coll.size
+	l_summary["11kv Feeder"] << l_11kv_fdrs
+	l_summary["DSS"] << dss_coll.size
+	l_summary["LT Feeder"] << lt_fdrs
+	l_summary["Consumer"] << ev.collection(:eo_meter).size
+	
+	resp.set_parameter(:summary,l_summary)
+	_return resp
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={summary_report}, usage={subclassable})
+_method tp_network_summay_report.get_dt_summary( a_service_call )
+	## 
+	## Get DT Summary 
+	##
+	_local resp << a_service_call.response
+	ev <<  _self.application.database.dataset(:electric)
+	
+
+	dss_coll << ev.collection(:sub_substation).select(predicate.eq(:type,"Distribution Substation"))
+	l_dwn_summary << equality_property_list.new()
+	l_up_summary << equality_property_list.new()
+	tr_coll <<  ev.collection(:eo_power_xfrmr_inst)
+	
+	_for i_dss  _over dss_coll.fast_elements()
+	_loop
+		
+		_if i_dss.extent _is _unset
+		_then
+			_continue
+		_endif
+		
+		l_con_xfrmr << tr_coll.select(predicate.within(:location,i_dss.extent)).an_element()
+
+		_if l_con_xfrmr _is _unset
+		_then
+			_continue 
+		_endif
+		l_data << equality_property_list.new()
+		
+		l_data["Circle"] << i_dss.tp_circle_name.default("NA")
+		l_data["Division"] << i_dss.tp_division_name.default("NA")
+		l_data["Sub-Division"]  <<  i_dss.tp_sub_division_name.default("NA")
+		l_data["Section"] <<  i_dss.tp_section_name.default("NA")
+		l_data["GSS"] << "NA"
+		l_data["33kv Feeder"] << "NA"
+		l_data["PSS"] << "NA"
+		l_data["11kv Feeder"] << l_con_xfrmr.tp_feeder_name.default("NA")
+		
+		l_dwn_summary[i_dss.id.write_string] << {0,0}
+		l_up_summary[i_dss.id.write_string] << l_data
+		
+	_endloop
+	
+	_local ace_name << _self.session.ace_name.default( :default )
+	a_service_call.set_parameter(:ace_name, ace_name)
+	crs << _self.session.get_coordinate_system("EPSG:900913")	
+	a_service_call.set_parameter(:feature_count,dss_coll.size)
+	a_service_call.set_parameter(:ace_visibility_tag,:default)
+	a_service_call.set_parameter(:crs,"EPSG:900913")
+	a_service_call.set_parameter(:result_type,"all")
+
+	_self.process_rwo_result(dss_coll,a_service_call,resp,crs)
+	resp.set_parameter(:downstream,l_dwn_summary)
+	resp.set_parameter(:upstream,l_up_summary)
+	_return resp
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={summary_report}, usage={subclassable})
+_method tp_network_summay_report.get_lt_feeders( a_service_call )
+	## 
+	## 
+	_local resp << a_service_call.response
+_endmethod
+$

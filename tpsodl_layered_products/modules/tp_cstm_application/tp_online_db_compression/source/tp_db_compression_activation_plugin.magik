@@ -1,0 +1,89 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 15-02-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+_package user
+$
+
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+
+remex(:tp_db_compression_activation_plugin)
+$
+
+_pragma(classify_level=basic, topic={tp_db_compression_activation_plugin}, usage={TPSODL})
+def_slotted_exemplar(:tp_db_compression_activation_plugin,
+	{
+		{:a_fw, _unset}
+	},
+	:plugin )
+$
+_pragma(classify_level=basic, topic={tp_db_compression_activation_plugin}, usage={TPSODL})
+_method tp_db_compression_activation_plugin.init(f, args )
+	## 
+	## 
+	_super.init(f, args)
+	>> _self
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_db_compression_activation_plugin}, usage={TPSODL})
+_method tp_db_compression_activation_plugin.init_actions()
+	## 
+	## 
+	_self.add_action(
+		sw_action.new( :start_application_gui,
+			       :engine, _self,
+			       :action_message, :start_application_gui|()| ) )
+
+_endmethod
+$
+
+
+#-------------------------------------------------------------------------------
+# Method Start_application_gui()
+##-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_activation_plugin}, usage={TPSODL})
+_method tp_db_compression_activation_plugin.start_application_gui()
+	## 
+	## To start the Application
+	##
+	##Parameters  : <Nothing>
+	##
+	##Returns     :  <Nothing>
+	##
+	_if ( .a_fw << _self.get_dialog(:tp_db_compression)) _is _unset
+	_then 
+		.a_fw << tp_db_compression_framework.new(:tp_db_compression_activation_plugin,
+							 _self,
+							 :resource_module_name,_self.module_name,
+							 :config_definition_file_name, "config.xml",
+							 :gui_definition_file_name, "gui.xml",
+							 :title,_self.message(:tp_db_compression),
+							 :maximizable?,_false,
+							 :minimizable?,_true,
+							 :resizable?,_false)
+		
+		_self.cache_dialog( :tp_db_compression, .a_fw )
+	_endif
+	
+	.a_fw.activate()
+	
+	#.a_fw.activate_relative_to( _unset,_unset,smallworld_product.start_application().top_frame , 500, 200)
+_endmethod
+$

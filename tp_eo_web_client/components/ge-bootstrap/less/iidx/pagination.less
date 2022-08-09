@@ -1,0 +1,29 @@
+// Bootstrap Overrides
+// --------------------------------------------------
+
+.pagination {
+	> li > a {
+		color: @grayDark;
+		border-color: @grayLighter;
+		font-size: @baseFontSize - 2;
+		padding: 4px 10px;
+		margin-right: -1px;
+		> i { 
+  		  vertical-align: bottom;
+		}
+  }
+	> .disabled {
+		> span,
+		> a,
+		> a:hover,
+		> a:focus {
+			background-color: transparent; }
+	}
+	> li > a:hover,
+	> .active > a,
+	> .active > a:hover,
+	> .active > span {
+		background-color: @paginationActiveBackground;
+		border-color: @paginationActiveBackground;
+		color: @white; }
+}

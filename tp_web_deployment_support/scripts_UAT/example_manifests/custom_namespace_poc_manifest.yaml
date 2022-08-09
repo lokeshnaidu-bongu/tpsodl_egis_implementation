@@ -1,0 +1,23 @@
+id: 'sw_gss_deploy'
+api_version: '5.3.0'
+targets:
+  - id: 'sw-gss'
+    products:
+      - id: 'gss-custom-namespace-poc'
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local'
+        pdi:
+          # Change <REGISTRY_ADDRESS> to the address of your docker registry
+          image: '<REGISTRY_ADDRESS>/pwr-smallworld/custom-namespace-poc-pdi'
+          tag: 'SW527-PROD-1'
+        param_groups:
+          - id: 'environment'
+            params:
+              ######################## MANDATORY
+              K8SHOST: '<KUBERNETES_HOST_NAME>'
+              K8SPORT: '<KUBERNETES_PORT_NUMBER>'
+              DOCKER_REGISTRY: '<REGISTRY_ADDRESS>'
+              SIMPLE_CUSTOM_SERVICE_VERSION: 'SW527-PROD-1'
+              ######################## OPTIONAL
+              GSS_CUSTOM_NAMESPACE: 'gss-custom'  
+              ######################## DEV ONLY
+              # DOCKER_REPOSITORY: ''         

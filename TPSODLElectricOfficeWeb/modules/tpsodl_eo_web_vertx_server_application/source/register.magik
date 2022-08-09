@@ -1,0 +1,63 @@
+########################################################################
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Implementation Project
+##
+## Created By:  Sai Kumar Veturi, TCS
+## Date: 2/1/2021
+##
+## Description:
+## Registering Custom TPSODL EO WEB Vetx application and removing unnecessary applications
+########################################################################
+
+_package user
+$
+
+_block 
+	_local remove_applications << equality_set.new_with(
+					      :gss_admin,
+					      :case_swaf,
+						  :config,
+						  :eo_web_vertx_server_application,
+					      :eo_web_vertx_server_application_opco,
+					      :sweo_wm_user,
+					      :sweo_dm_user,
+					      :sweo_dm_admin_application,
+					      :swaf_fme_application,
+						  :swift_view,
+						  :pdf_generator,
+						  :style_symbol_editor,
+					      :swift_examples,
+					      :dm_cu_user_application,
+					      :dm_cu_admin_application )
+
+	_for an_application _over smallworld_product.application_definitions.elements()
+	_loop
+		_if remove_applications.includes?(an_application.application_name)
+		_then
+			smallworld_product.application_definitions.remove(an_application)
+		_endif 
+	_endloop
+
+	smallworld_product.changed(:application_definitions)
+
+_endblock 
+$
+										 
+smallworld_product.register_application( 
+					 :|tpsodl_server_application|,
+					 :server_framework,
+					 :description,                 "TPSODL service provider application using Vert.X",
+					 :external_name,               "TPSODL Service Provider using Vert.X",
+					 :resource_module_name,        :tpsodl_eo_web_vertx_server_application,
+					 :config_definition_file_name, "server_config.xml",
+					 :default_application_coordinate_system_name, "google_mercator",
+					 :config_from_command_line?, _true
+					 
+		   )
+
+$
+
+# Register this a a known office application
+gis_program_manager.known_office_applications[:electric].add( :|tpsodl_server_application| )

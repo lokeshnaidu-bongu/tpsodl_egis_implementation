@@ -1,0 +1,37 @@
+_package user
+$
+_pragma(classify_level=basic)
+def_slotted_exemplar(:tpsodl_query_builder_activation_plugin,
+	{
+		{:a_fw, _unset}
+	},
+	:plugin )
+$
+_pragma(classify_level=basic)
+_method tpsodl_query_builder_activation_plugin.init(f, args )
+	## 
+	## 
+	_super.init(f, args)
+	>> _self
+_endmethod
+$
+_pragma(classify_level=basic)
+_method tpsodl_query_builder_activation_plugin.start_application_gui()
+	## 
+	## 
+	_if ( .a_fw << _self.get_dialog(:tpsodl_query_builder_activation_plugin)) _is _unset
+	_then 
+		.a_fw << tpsodl_query_builder_framework.new(:tpsodl_query_builder_activation_plugin,
+							_self,
+							:resource_module_name,_self.module_name,
+							:config_definition_file_name, "config.xml",
+							:gui_definition_file_name, "gui.xml",
+							:title,"Sample SWAF Application")
+		
+		_self.cache_dialog( :sample_application_activation, .a_fw )
+	_endif
+	.a_fw.maximizable? << _false 
+	.a_fw.resizable? << _false
+	#.a_fw.activate_relative_to( _unset,_unset,smallworld_product.pni_application().top_frame , 500, 200)
+_endmethod
+$

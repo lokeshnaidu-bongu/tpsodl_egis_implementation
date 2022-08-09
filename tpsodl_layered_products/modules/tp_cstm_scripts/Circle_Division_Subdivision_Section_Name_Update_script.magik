@@ -1,0 +1,133 @@
+#Circle Name Update
+_block
+	
+	       	ele_dt << gis_program_manager.cached_dataset(:electric)
+		lnd_dt << gis_program_manager.cached_dataset(:land)
+		l_col << lnd_dt.collections[:tp_circle]
+	
+		_for a_cl _over l_col.fast_elements()
+		_loop
+			
+			l_name << a_cl.tp_name
+			write(l_name)
+			bd << a_cl.extent.bounds
+ 	       		scannerb << ele_dt.geometry_scanner(:general)
+	       		scannerb.start_scan(bd)
+				_loop
+				_local l_geom << scannerb.get()
+				       _if l_geom _is _unset _then _leave _endif
+				       	   
+				       	  _if l_geom.rwo.responds_to?(:tp_circle_name)
+					   _then 
+					   write(l_geom.rwo)
+					   write(l_geom.rwo.tp_circle_name)
+					   values << property_list.new_with(:tp_circle_name,l_name)
+					   rt << record_transaction.new_update(l_geom.rwo,values)
+					   rt.run()
+					   write("Circle Name Update for the Record",%tab,l_geom.rwo)
+					   _endif
+				_endloop
+		_endloop
+		
+       _endblock
+$
+
+#Division Name Update
+
+_block
+	
+	       	ele_dt << gis_program_manager.cached_dataset(:electric)
+		lnd_dt << gis_program_manager.cached_dataset(:land)
+		l_col << lnd_dt.collections[:tp_division]
+		#print(l_col )
+		_for a_cl _over l_col.fast_elements()
+		_loop
+			
+			l_name << a_cl.tp_name
+			write(l_name)
+			bd << a_cl.extent.bounds
+ 	       		scannerb << ele_dt.geometry_scanner(:general)
+	       		scannerb.start_scan(bd)
+				_loop
+				_local l_geom << scannerb.get()
+				       _if l_geom _is _unset _then _leave _endif
+				       	   #write(l_geom.rwo.source_table_name)
+				       	   _if l_geom.rwo.responds_to?(:tp_division_name)
+					   _then 
+					   write(l_geom.rwo)
+					   write(l_geom.rwo.tp_division_name)
+					   values << property_list.new_with(:tp_division_name,l_name)
+					   rt << record_transaction.new_update(l_geom.rwo,values)
+					   rt.run()
+					   _endif
+				_endloop
+		_endloop
+		
+       _endblock
+$
+
+#Subdivision Name Update
+
+_block
+	
+	       	ele_dt << gis_program_manager.cached_dataset(:electric)
+		lnd_dt << gis_program_manager.cached_dataset(:land)
+		l_col << lnd_dt.collections[:lnd_subdivision]
+		#print(l_col )
+		_for a_cl _over l_col.fast_elements()
+		_loop			
+			l_name << a_cl.name
+			write(l_name)
+			bd << a_cl.extent.bounds
+ 	       		scannerb << ele_dt.geometry_scanner(:general)
+	       		scannerb.start_scan(bd)
+				_loop
+				_local l_geom << scannerb.get()
+				       _if l_geom _is _unset _then _leave _endif
+				       	   #write(l_geom.rwo.source_table_name)
+				       	    _if l_geom.rwo.responds_to?(:tp_sub_division_name)
+					  
+					   _then 
+					   write(l_geom.rwo)
+					   write(l_geom.rwo.tp_sub_division_name)
+					   values << property_list.new_with(:tp_sub_division_name,l_name)
+					   rt << record_transaction.new_update(l_geom.rwo,values)
+					   rt.run()
+					   _endif
+				_endloop
+		_endloop
+		
+       _endblock
+$
+
+#Section Name Update
+_block
+	
+	       	ele_dt << gis_program_manager.cached_dataset(:electric)
+		lnd_dt << gis_program_manager.cached_dataset(:land)
+		l_col << lnd_dt.collections[:lnd_section]
+		#print(l_col )
+		_for a_cl _over l_col.fast_elements()
+		_loop			
+			l_name << a_cl.tp_name
+			write(l_name)
+			bd << a_cl.extent.bounds
+ 	       		scannerb << ele_dt.geometry_scanner(:general)
+	       		scannerb.start_scan(bd)
+				_loop
+				_local l_geom << scannerb.get()
+				       _if l_geom _is _unset _then _leave _endif
+				       	   #write(l_geom.rwo.source_table_name)
+				       	   _if l_geom.rwo.responds_to?(:tp_section_name)
+					   _then 
+					   write(l_geom.rwo)
+					   write(l_geom.rwo.tp_section_name)
+					   values << property_list.new_with(:tp_section_name,l_name)
+					   rt << record_transaction.new_update(l_geom.rwo,values)
+					   rt.run()
+					   _endif
+				_endloop
+		_endloop
+		
+       _endblock
+$

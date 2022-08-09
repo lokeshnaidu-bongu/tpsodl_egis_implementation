@@ -1,0 +1,138 @@
+
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 15-02-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+
+_package user
+$
+
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+
+remex(:tp_db_compression_framework)
+$
+
+def_slotted_exemplar(:tp_db_compression_framework, 
+	{ },
+	{:gui_framework}
+)
+$
+
+
+#------------------------------------------------------------------------------
+# Shared Constants 
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_framework}, usage={TPSODL})
+##
+## Action Definitions
+## ------------------
+##
+tp_db_compression_framework.define_shared_constant(
+	:action_definitions,
+	keyed_set.new_with(
+		# displays the help file 
+		sw_action_def.new(
+			:help,
+			:action_message, :|help_wanted()|,
+			:image, { :help, :ui_resources },
+			:enabled?, _true) ,	
+		
+		
+		sw_action_def.new(
+			# quits the framework	
+			:quit,
+			:dialog_control,:button_item,
+			:action_message, :|close()|,
+			:image, { :exit_application, tp_db_compression_framework.module_name } ,
+			:enabled?, _true)) ,
+	
+	:public )
+$
+
+
+#-------------------------------------------------------------------------------
+# Method set_status_info()
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_framework}, usage={TPSODL})
+_method tp_db_compression_framework.set_status_info( a_string )
+	## 
+	## Description: sets A_STRING to status bar 
+	## 
+	## Parameters : A_STRING is a string  
+	## 
+	## Returns    : <Nothing> 
+	## 
+	
+	# Send a notification with the keys :text and :label. If the
+	# controls exist on the GUI. They get updated
+	# :text - relates to the status bar
+	_self.changed(
+		:status_info,
+		:text,
+		a_string )
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method close()
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_framework}, usage={TPSODL})
+_method tp_db_compression_framework.close()
+	## 
+	## Description: Close the Application.
+	## 
+	## Parameters : <none>
+	## 
+	## Returns    : <Nothing> 
+	##
+	
+	_super.close()
+_endmethod
+$
+
+#-------------------------------------------------------------------------------
+# Method help_wanted()
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_db_compression_framework}, usage={TPSODL})
+_method tp_db_compression_framework.help_wanted()
+	## 
+	## Description: Opens the help document contained folder.
+	##
+	##Parameters : <none>
+	##
+	##Returns    : <Nothing>
+	##
+	
+	_local l_f_path << "D:\tp_cstm_product\documents"
+	_if _not (system.file_exists? (l_f_path))
+	_then 	
+		system.mkdir(l_f_path)
+		
+	_endif
+	
+	_local dir << system.getenv("")
+	_local dialog << file_dialog.new(_self, :path_selected|()|, _unset,:directory, l_f_path)
+	dialog.filter << {"docx","DOCX"}
+	dialog.activate()
+	
+_endmethod
+$

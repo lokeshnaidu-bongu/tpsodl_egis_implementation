@@ -1,0 +1,448 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Implementation Project
+##
+## Created by: Sai Kumar Veturi, TCS
+## Date: 04/03/2022
+##
+## Description:
+## Defined custom indexable_field_names and solr_position methods to
+## perform asset search after indexing.
+##
+########################################################################
+_package user
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_tpsodl_building.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_circle.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_division.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_subdivision.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:name,
+		:type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_section.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:number,
+		:type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_zip.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:zip
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_locality_boundary.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_sub_locality.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_municipal_ward_boundary.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_village_boundary.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_slum_area.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_environment.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_flood_map.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_waterbody.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:name,
+		:type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_wetland.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:nwi_code
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_estate_land_type.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_cluster_of_trees.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_tree.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_transit_area.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_vehicle_demarcated_boundary.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_railroad.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:name,
+		:length,
+		:type,
+		:status
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_street.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:name,
+		:class,
+		:status,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_street_segment.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:class,
+		:street_name,
+		:status,
+		:toll_ind,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_footpath.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_right_of_way.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_obstacle.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_utility_points.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_telecom.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_restricted_area.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:name,
+		:type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_landmark.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:name,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_non_builtup.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_builtup.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_gate.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_green.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id,
+		:tp_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_shop.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method tp_tpsodl_boundary.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:id
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method lnd_building.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:type,
+		:dwelling_size
+	}
+_endmethod
+$

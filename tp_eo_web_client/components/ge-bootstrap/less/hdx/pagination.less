@@ -1,0 +1,42 @@
+.pagination {
+	li > a {
+
+		&:hover {
+			color: @paginationHoverColor;
+			background-color: @grayLightest;
+		}
+	}
+	> .active > a,
+	> .active > span {
+		&,
+		&:hover,
+		&:focus {
+			background-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+			border-color: transparent;
+		}
+	}
+}
+
+.pagination, .pager {
+	li > a {
+
+		padding-top:6px;
+		padding-bottom:5px;
+
+		[class^="icon-"],
+		[class*=" icon-"] {
+			&:before {
+				vertical-align: middle;
+			}
+		}
+
+	}
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+	.pagination, .pager {
+		li > a {
+			padding-top:5px;
+		}
+	}
+}

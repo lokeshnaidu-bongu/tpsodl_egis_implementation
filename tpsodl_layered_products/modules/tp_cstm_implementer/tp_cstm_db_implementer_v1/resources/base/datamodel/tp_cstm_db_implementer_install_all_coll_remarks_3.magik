@@ -1,0 +1,142 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add New Remark Fields to
+## the Objects by reading from tp_text_join_fld.xml 
+## xml path : tp_cstm_db_implementer\resources\base\data
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_db_implementer.register(:datamodel_name, "tp_cstm_db_implementer_3", 
+				:version, 3,
+				:implementer_comment,        "Add New Remark Fields to Objects",
+				:upgrade?, _false,
+				:case_change_method,         :|v3_adding_new_remark_flds()|,
+				:case_change_results_method, :|v3_case_change_results()|,
+				:dataset_names, {{:electric_case, :electric}})
+$
+
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.v3_adding_new_remark_flds(p_target_case_view)
+	## 
+	##
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_local l_coll_wise_flds  <<_self.tp_read_remarks_flds_from_xml()
+	_for  a_coll_name , a_prop_fields _over l_coll_wise_flds.fast_keys_and_elements() 
+	_loop
+		l_coll_name << a_coll_name.as_symbol()
+	
+		_for a_key, a_fld_def _over a_prop_fields.fast_keys_and_elements()
+		_loop
+			l_fld_name << a_fld_def[:field_name].as_symbol()
+			l_fld_base_name << a_fld_def[:field_base_name].as_symbol()
+			l_case_obj << p_target_case_view.get_case_object(l_coll_name)
+			l_field_exist << l_case_obj.get_field(l_fld_name)
+			_if l_field_exist _isnt _unset 
+			_then
+				_continue 
+			_endif
+			l_case_obj.add_text_join_field(l_fld_name,l_fld_base_name)
+			l_fld << l_case_obj.get_field(l_fld_name)
+			_if l_fld.e_name.index_of_seq("Tp") _isnt _unset _orif
+			    l_fld.e_name.index_of_seq("TP") _isnt _unset 
+			_then
+				l_e_name << l_fld.e_name.replace_all_instances_of("Tp ","")
+				l_fld.e_name<< l_e_name
+			_endif
+			
+			l_parent_base_fld << l_case_obj.get_field(l_fld_base_name)
+			l_parent_base_fld.mandatory?<<_false 
+		_endloop
+		
+	_endloop
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.tp_read_remarks_flds_from_xml()
+	## 
+	##
+	_local l_xml_file_name <<"tp_text_join_fld"+".xml"
+	tp_colls << sw_module_manager.module(:tp_cstm_db_implementer).get_resource_file(l_xml_file_name,"data")
+	
+	l_path  <<  system.canonicalise(tp_colls)
+	str << external_text_input_stream.new(l_path)
+	
+	xml_def << simple_xml.read_element_from( str, sw:editable_xml_thing.new(:tp_collections))			
+	
+	l_tp_enum_flds << property_list.new()
+	
+	
+	_for a_tp_Coll _over xml_def.xml_elements()
+	_loop
+		#show(i.attributes["collection_name"])
+		
+		l_coll_name << a_tp_Coll.attributes["collection_name"].as_symbol()
+	
+		_if l_tp_enum_flds[l_coll_name] _is _unset 
+		_then
+			l_tp_enum_flds[l_coll_name] << property_list.new()
+		_endif
+		count << 0
+		_for a_each_tp_coll _over a_tp_Coll.xml_elements()
+		_loop
+			count << count+1
+			l_fld_list << a_each_tp_Coll.attributes
+			_if l_tp_enum_flds[l_coll_name][count] _is _unset 
+			_then
+				l_tp_enum_flds[l_coll_name][count] << property_list.new()
+			_endif
+			_for a_tp_fld_key, a_tp_fld_def _over l_fld_list.fast_keys_and_elements()
+			_loop
+				l_tp_enum_flds[l_coll_name][count][a_tp_fld_key.as_symbol()]<< a_tp_fld_def
+			_endloop
+		_endloop
+	_endloop
+
+	_return l_tp_enum_flds
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.v3_case_change_results()
+	## 
+	##
+	_local ccr_for_dd_extension << case_change_result.new()
+	_local l_coll_wise_flds  <<_self.tp_read_remarks_flds_from_xml(l_coll_name)
+	_for  a_coll_name , a_prop_fields _over l_coll_wise_flds.fast_keys_and_elements() 
+	_loop
+		l_coll_name << a_coll_name.as_symbol()
+		ccr_for_dd_extension.add_new(l_coll_name)
+	_endloop 
+	>> {ccr_for_dd_extension}
+	
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

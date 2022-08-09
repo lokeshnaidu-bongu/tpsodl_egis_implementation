@@ -1,0 +1,17 @@
+#% text_encoding = iso8859_1
+_package user
+$
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+
+message_handler(:tp_eo_application).set_uses_list(
+						{
+							:sweo_dm_user_application, 
+							:sweo_wm_user_application,
+							:sweo_base_user_application,
+							:office_base_application,
+							:cu_user_application
+						}
+					 )
+$

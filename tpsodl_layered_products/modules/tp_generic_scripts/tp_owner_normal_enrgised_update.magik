@@ -1,0 +1,28 @@
+_block 
+	ev<<gis_program_manager.databases[:electric]
+	cab << ev.collections[:eo_cable_exi_phase]
+	wre << ev.collections[:eo_wire_exi_phase]
+	bus << ev.collections[:eo_connector_segment_exi_phase]	
+	_for i _over cab.fast_elements()
+	_loop
+		_if i.owned _isnt _unset 
+		_then 
+		i.owned << _true
+		_endif 
+	_endloop	
+	_for j _over wre.fast_elements()
+	_loop
+		_if i.owned _isnt _unset
+		_then 		
+		j.owned << _true
+		_endif 
+	_endloop
+	_for k _over bus.fast_elements()
+	_loop
+		_if i.owned _isnt _unset
+		_then 		
+		k.owned << _true
+		_endif 
+	_endloop	
+
+_endblock 

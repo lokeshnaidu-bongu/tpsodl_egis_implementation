@@ -1,0 +1,16 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Residential	1
+Water Supply	2
+Unknown	11
+Commercial	3
+Others	10
+Mixed	6
+Industrial	4
+Govt Offices	5
+Agricultural	7
+Hospital	8

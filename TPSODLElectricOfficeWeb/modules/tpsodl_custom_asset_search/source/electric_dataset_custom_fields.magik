@@ -1,0 +1,374 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Implementation Project
+##
+## Created by: Sai Kumar Veturi, TCS
+## Date: 04/03/2022
+##
+## Description:
+## Defined custom indexable_field_names and solr_position methods to
+## perform asset search after indexing.
+##
+########################################################################
+_package user
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method ed_cabinet.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:owner_type,
+		:type,
+		:rated_voltage,
+		:tp_network_type,
+		:tp_device_type,
+		:tp_nominal_voltage
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_cable_segment_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_circuit.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:circuit_id,
+		:tp_status,
+		:tp_network_type,
+		:tp_device_type,
+		:tp_nominal_voltage
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_comms_device.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:device_type,
+		:network_type,
+		:phasing,
+		:owner_type,
+		:mounting,
+		:tp_number,
+		:tp_previous_installed_location
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_conduit.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:owner_type,
+		:tp_city
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_connector_point_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting,
+		:tp_circle_code,
+		:tp_circle_name
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_connector_segment_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method ed_decorative_pole.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:owner_type,
+		:pole_height,
+		:tp_name,
+		:tp_previous_installed_location,
+		:tp_network_type,
+		:tp_nominal_voltage
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_energy_source.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:device_type,
+		:status,
+		:network_type,
+		:phasing,
+		:owner_type,
+		:tp_previous_installed_location
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_energy_storage_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting,
+		:tp_model_number,
+		:tp_previous_installed_location
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_fiber_optic.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:mounting,
+		:owner_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_isolating_eqpt_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting,
+		:tp_previous_installed_location
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_measuring_eqpt_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:source_network_type,
+		:owner_type,
+		:mounting
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_meter.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:device_type,
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting,
+		:tp_communication_type,
+		:tp_display_condition?,
+		:tp_function,
+		:tp_meter_location,
+		:tp_meter_height,
+		:tp_sub_division_code,
+		:tp_sub_division_name,
+		:tp_sub_type,
+		:tp_type,
+		:tp_ward_code
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method ed_pole.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:owner_type,
+		:treatment,
+		:strength
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_power_xfrmr_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:source_network_type,
+		:load_network_type,
+		:owner_type,
+		:mounting
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_protective_eqpt_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_service_connection.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:service_point,
+		:tp_phase_connection,
+		:tp_phase_connection_in_fg
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_service_point.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:phasing,
+		:owner_type,
+		:tp_tariff_category
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method sub_substation.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:type,
+		:class,
+		:electric_fence_type,
+		:owner_type
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method ed_switchgear.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:owner_type,
+		:type,
+		:rated_voltage,
+		:auto_throwover_ind,
+		:tp_network_type,
+		:tp_phasing,
+		:tp_mechanism,
+		:tp_nominal_voltage
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method et_tower.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:owner_type,
+		:configuration,
+		:class,
+		:use
+	}
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_eo_web, asset_search}) 
+_method eo_wire_segment_inst.indexable_field_names
+	##
+	## Returns indexable field names
+	##
+	 _return {
+		:status,
+		:network_type,
+		:owner_type,
+		:mounting,
+		:tp_number,
+		:tp_material
+	}
+_endmethod
+$

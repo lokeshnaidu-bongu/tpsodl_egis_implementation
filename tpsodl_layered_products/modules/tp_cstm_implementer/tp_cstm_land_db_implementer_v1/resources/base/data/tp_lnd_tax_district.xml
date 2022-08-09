@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+<collection collection_name = "lnd_tax_district" >
+<fields field_name = "name" external_name = "Name" mandatory = "false" field_type="tp_land_district_name" field_size ="" unset_value="" default_value ="" field_index="No" mode ="update"/>
+<fields field_name = "tp_fme_unique_id" external_name = "FME Unique ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_calculated_area" external_name = "Calculated Area" mandatory = "false" field_type="ds_double" field_size ="32" unset_value="(0.0)" default_value ="(0.0)" field_index="No" stored_unit="Meter" mode ="insert"/>
+
+</collection>
+</tp_collections>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+<collection collection_name = "lnd_building" >
+<fields field_name = "tp_belongs_to_vip" external_name = "Belongs To Vip?" mandatory = "false" field_type="tp_yes_no" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<!--<fields field_name = "tp_building_name" external_name = "Building Name" mandatory = "false" field_type="ds_char16_vec" field_size ="128" unset_value="" default_value ="" field_index="No" mode ="insert"/>-->
+<fields field_name = "tp_building_reference_number" external_name = "Building Reference Number" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_city" external_name = "City" mandatory = "false" field_type="tp_land_city_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_construction_status" external_name = "Construction Status?" mandatory = "false" field_type="tp_land_construction_type" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_created_date_in_gis" external_name = "Created Date in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_digital_door_number" external_name = "Digital Door Number" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_district" external_name = "District" mandatory = "false" field_type="tp_land_district_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_division_name" external_name = "Geo-Division Name" mandatory = "false" field_type="tp_land_division_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>	<fields field_name = "tp_circle_name" external_name = "Geo-Circle Name" mandatory = "false" field_type="tp_land_circle_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_encroachment" external_name = "Encroachment?" mandatory = "false" field_type="tp_yes_no" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_encroachment_notice_given" external_name = "Encroachment Notice Given?" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_fme_unique_id" external_name = "FME Unique ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_land_owner_name" external_name = "Land Owner Name" mandatory = "false" field_type="ds_char16_vec" field_size ="128" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_locality" external_name = "Locality" mandatory = "false" field_type="tp_land_locality_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_mru_seq_number" external_name = "MRU Seq Number" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_mru_seq_old_number" external_name = "MRU Seq Old Number" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_no_of_connections" external_name = "No of Connections" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_no_of_flats" external_name = "No of Flats" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_no_of_shops" external_name = "No of Shops" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_pincode" external_name = "Pincode" mandatory = "false" field_type="tp_land_pincode" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_road_name" external_name = "Road Name" mandatory = "false" field_type="ds_char16_vec" field_size ="128" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_section_name" external_name = "Geo-Section Name" mandatory = "false" field_type="tp_land_section_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_society_name" external_name = "Society Name" mandatory = "false" field_type="ds_char16_vec" field_size ="128" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_sub_division_name" external_name = "Geo-Sub Division Name" mandatory = "false" field_type="tp_land_sub_division_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_sub_locality" external_name = "Sub Locality" mandatory = "false" field_type="tp_land_sublocality_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_updated_by" external_name = "Updated By" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_updated_date_in_gis" external_name = "Updated Date in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_ward_name" external_name = "Ward Name" mandatory = "false" field_type="tp_land_ward_name" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "type"  external_name = "Type" mandatory = "false" field_type="tp_land_building_type"  field_size ="12" unset_value="" default_value ="" field_index="No" mode ="update"/>
+<fields field_name = "name" external_name = "Name" mandatory = "false" field_type="ds_char16canon_vec" field_size ="120" unset_value="" default_value ="" field_index="No" mode = "update" />
+<fields field_name = "tp_address" external_name = "Address" mandatory = "false" field_type="ds_char16_vec" field_size ="250" unset_value="" default_value ="" field_index="No" mode = "insert" />
+</collection>
+
+</tp_collections>

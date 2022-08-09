@@ -1,0 +1,905 @@
+/**
+ * Displays results list of the trace. Show and hide popovers with objects
+ * details.
+ * @module ResultsList
+ * @requires jQuery
+ * @requires Underscore
+ * @requires OpenLayers
+ * @requires MapHelper
+ * @requires MapLoader
+ * @requires Hogan
+ * @requires Export
+ * @requires PubSub
+ * @version 1.0
+ */
+define([
+    'jquery',
+    'underscore',
+    'OpenLayers3',
+    'map-helper',
+    'i18n!viewer/nls/messages',
+    'map-loader',
+    'text!results-list-partials/results-list.html',
+    'text!results-list-partials/paging.html',
+    'text!results-list-partials/filter.html',
+    'text!viewer-partials/popover.html',
+    'hogan',
+    'text!results-list-partials/marker_normal.svg',
+    'export',
+    'popovers',
+    'map-core-component/pubsub'
+  ],
+  function ResultsList($, _, OpenLayers, MapHelper, Messages, Config, template, pagingRawTemplate, filterRawTemplate, popoverTemplate, hogan, DefaultMarkerSvg, Export, PopOvers) {
+    'use strict';
+
+    var cardTemplate = hogan.compile(template),
+      popOver = hogan.compile(popoverTemplate),
+      svgTemplate = hogan.compile(DefaultMarkerSvg),
+      pageTemplate = hogan.compile(pagingRawTemplate),
+      filterTemplate = hogan.compile(filterRawTemplate),
+      defaultOptions = {
+        useGeographic: true,
+        selector: undefined,
+        paging: true,
+        pageSize: 10,
+        map: {
+          olMap: undefined,
+          mapName: undefined
+        },
+        parentComponent: undefined,
+        parentComponentResultType: undefined
+      },
+      mapProj = MapHelper.getMapProjection(),
+      availableExports;
+
+
+    var ResultsListComponent = function ResultsListComponent(opts) {
+
+      var options = opts,
+        $selector = opts.selector,
+        showMarkers = false,
+        showNumberBadges = false,
+        showExport = opts.export || false,
+        showFilter = opts.filter || false,
+        markers,
+        $filterButton,
+        results,
+        data,
+        filterData,
+        pageData,
+        params,
+        oldFilter;
+
+      /**
+       * @memberof module:ResultsList
+       * @private
+       * @listens ViewerEvents.leavingSidebar
+       */
+      var eventSubscribe = function eventSubscribe() {
+        $.subscribe('leavingSidebar', function () {
+          $('.result.selected', $selector).popover('destroy');
+          ($filterButton) ? $filterButton.popover('destroy'): '';
+        });
+        $.subscribe('beforePopupCreated', function() {
+            $('.result.selected', $selector).popover('destroy');
+            ($filterButton) ? $filterButton.popover('destroy'): '';
+            $('.result.selected', $selector).removeClass('selected');
+        });
+      };
+
+      /**
+       * @memberof module:ResultsList
+       * @public
+       * @arg {Object[]} results feature collection of results GeoJSON standard
+       * @arg {Object[]} additional parameters
+       */
+      var renderResults = function renderResults(_results, _options) {
+
+        var pageNumber,
+          resultsForRender;
+
+        results = _results;
+        params = _.extend({
+          pageNumber: 1,
+          showMarkers: false,
+          showNumberBadges: false,
+          geographic_context: [],
+          resultType: undefined,
+          export: {
+            fileName: Messages.results_list.exportDefaultFileTitle,
+            title: Messages.results_list.exportDefaultFileName
+          }
+        }, _options);
+        showMarkers = params.showMarkers;
+        showNumberBadges = params.showNumberBadges;
+        options.parentComponentResultType = params.resultType;
+
+        pageNumber = params.pageNumber;
+        if(options.parentComponent == "csp_consumer-arrears_ssp" ){
+          resultsForRender = {
+            results: results,
+            geographic_context: params.geographic_context,
+            contexts: params.contexts,
+            inx_st_count: params.stCount
+          };
+        }else{
+          resultsForRender = {
+            results: results,
+            geographic_context: params.geographic_context,
+            contexts: params.contexts
+          };
+        }
+
+        data = processResultsForRender(resultsForRender);
+        filterData = data;
+
+        if (options.paging)
+          getPageData(pageNumber);
+        else
+          pageData = filterData;
+
+        getFilterOptions();
+        if (params.keepCurrentFilter) restoreFilter();
+        else oldFilter = undefined;
+        renderData();
+      };
+
+      var renderData = function renderData() {
+        clear();
+        var totalCount = pageData.total.filtered ? pageData.total.filtered : pageData.total.count;
+        if (pageData.total.end > totalCount)
+          pageData.total.end = totalCount;
+        if (totalCount === 0)
+          pageData.total.start = 0;
+        var renderOptions = {
+          total: pageData.total,
+          results: pageData.results,
+          messages: Messages,
+          filters: filterOptions,
+          options: {
+            export: {
+              active: Config.isAvailable('download') && showExport && getExportOptionsList().length > 0,
+              optionsList: getExportOptionsList()
+            },
+            filter: showFilter,
+            filterActive: isDataFiltered()
+          }
+        };
+
+        if ($.isNumeric(pageData.total.filtered)) {
+          var start = pageData.total.filtered ? pageData.total.start : 0,
+            end = pageData.total.filtered ? pageData.total.end : 0;
+          renderOptions.listCount = Messages.results_list.listFilteredCount.replace('$1', pageData.total.filtered).replace('$2', pageData.total.count).replace('$3', start).replace('$4', end);
+        } else {
+          if(options.parentComponent == "csp_consumer-arrears_ssp" ){
+            if(pageData.total.count == 10){
+              renderOptions.listCount = Messages.results_list.listCount.replace('$1', params.totalCount).replace('$2', params.stCount).replace('$3', params.stCount+9);
+            } else{
+              var roundoff = 0;
+              roundoff = pageData.total.count - 1;
+              renderOptions.listCount = Messages.results_list.listCount.replace('$1', params.totalCount).replace('$2', params.stCount).replace('$3', params.stCount+roundoff);              
+            }   
+            // renderOptions.listCount = Messages.results_list.listCount.replace('$1', params.totalCount).replace('$2', params.stCount).replace('$3', params.stCount+9);
+            }else{
+                renderOptions.listCount = Messages.results_list.listCount.replace('$1', pageData.total.count).replace('$2', pageData.total.start).replace('$3', pageData.total.end);
+            }
+        }
+        renderOptions.showNumberBadges = showNumberBadges;
+        $selector.html(cardTemplate.render(renderOptions));
+        if (showMarkers) {
+          displayMarkers();
+        }
+
+        $('.result', $selector).click(handleResultClicks);
+        $('.btn.filter', $selector).click(handleFilterClick);
+        $('.btn-group.export li a', $selector).click(handleExportClick);
+        $('.btn-group.export', $selector).click(function () {
+          ($filterButton) ? $filterButton.popover('destroy'): '';
+        });
+        if(options.parentComponent == "csp_consumer-arrears_ssp"){
+        
+        }else{
+          createPageControls();
+        }
+      };
+
+      var filterOptions = [];
+
+      var isDataFiltered = function isDataFiltered() {
+        return $.isNumeric(pageData.total.filtered);
+      };
+
+      var getFilterOptions = function getFilterOptions() {
+        var filters = {};
+        filterOptions = [];
+        _.each(data.results, function (item) {
+          filters[item.type] = item.type;
+        });
+        _.each(filters, function (filter) {
+          filterOptions.push({
+            filter: filter,
+            enabled: true
+          });
+        });
+        filterOptions = _.sortBy(filterOptions, 'filter');
+      };
+
+      var handleFilterClick = function handleFilterClick() {
+        var $this = $(this);
+        $filterButton = $this;
+        $this.popover({
+          html: true,
+          placement: 'auto',
+          trigger: 'manual',
+          container: 'body',
+          template: '<div class="popover filter-results-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+          viewport: '#sidebarContainer',
+          content: filterTemplate.render({
+            filters: filterOptions,
+            noFilter: !(isDataFiltered()),
+            Messages: Messages
+          })
+        }).on('click', function (e) {
+          e.preventDefault();
+        });
+
+        $this.popover().on('shown.bs.popover', function () {
+          addFilterButtonHandler($this);
+        });
+
+        $(this).popover('toggle');
+      };
+
+      var addFilterButtonHandler = function addFilterButtonHandler(filter) {
+        $('.filter-results-popover .filter-popover #okButton').click(okFilterClickHandler);
+        $('.filter-results-popover .filter-popover #cancelButton').click(cancelFilterClickHandler);
+        $('.filter-results-popover .filter-popover input:checkbox#show_all').change(selectAllFilterClickHandler);
+        $('.filter-results-popover .filter-popover input:checkbox:not(#show_all)').change(filterClickHandler);
+      };
+
+      var okFilterClickHandler = function okFilterClickHandler() {
+        $('.filter-popover radio');
+
+        _.map(filterOptions, function (filterOption) {
+          filterOption.enabled = false;
+        });
+
+        var enabled = $('.filter-popover input:checkbox:checked');
+        _.each(enabled, function (filter) {
+          _.each(filterOptions, function (filterOption) {
+            if (filterOption.filter === filter.value)
+              filterOption.enabled = true;
+          });
+        });
+        $filterButton.popover('destroy');
+        doFilter();
+      };
+
+      var cancelFilterClickHandler = function cancelFilterClickHandler() {
+        $filterButton.popover('destroy');
+      };
+
+      var filterClickHandler = function filterClickHandler() {
+        if (!$(this).is(':checked')) {
+          $('.filter-results-popover #show_all:checkbox').prop('checked', false);
+        }
+      };
+
+      var selectAllFilterClickHandler = function selectAllFilterClickHandler(evt) {
+        var $this = $(this);
+
+        if ($this.is(':checked')) {
+          //select all
+          $('.filter-results-popover :checkbox:not(:checked) ').prop('checked', true);
+        } else {
+          //unselect all
+          $('.filter-results-popover :checkbox:checked ').prop('checked', false);
+        }
+      };
+
+      var doFilter = function doFilter() {
+        var filter = [];
+        _.each(filterOptions, function (filterOption) {
+          if (filterOption.enabled) {
+            filter.push(filterOption.filter);
+          }
+        });
+        var filteredData = [];
+        _.each(data.results, function (item) {
+          if (_.find(filter, function (filt) {
+              return filt === item.type;
+            }))
+            filteredData.push(item);
+        });
+
+        _.map(filteredData, function (item, key) {
+          item.index = key + 1;
+        });
+
+        filterData = {
+          results: filteredData,
+          total: {
+            start: 1,
+            end: filteredData.length,
+            filtered: (filteredData.length === data.results.length) ? undefined : filteredData.length,
+            count: data.results.length
+          }
+        };
+
+        oldFilter = filterOptions;
+
+        getPageData(1);
+        renderData();
+      };
+
+      var handleExportClick = function handleExportClick() {
+        $.publish($(this).data('event'), [filterData.results, {
+          title: params.export.title,
+          fileName: params.export.fileName,
+        }]);
+      };
+
+      var createPageControls = function createPageControls() {
+        if (!options.paging) {
+          return;
+        }
+
+        var pageOpts = {},
+          featureCount = options.pageSize,
+          featureStart = pageData.total.start,
+          featureTotal = parseInt($.isNumeric(pageData.total.filtered) ? pageData.total.filtered : pageData.total.count),
+          _pageCount = Math.ceil(featureTotal / featureCount),
+          currentPage = featureTotal ? Math.ceil(featureStart / featureCount) : 0;
+
+        pageOpts = {
+          prevDisabled: (currentPage <= 1),
+          nextDisabled: (currentPage === _pageCount),
+          nextTarget: currentPage + 1,
+          prevTarget: currentPage - 1,
+          pageCount: Messages.results_list.pageCount.replace('$1', currentPage).replace('$2', _pageCount),
+          Messages: Messages
+        };
+
+        $('#results-page-controls', $selector).html(pageTemplate.render(pageOpts));
+        $('#results-page-controls li:not(.disabled) a', $selector).click(pageClickHandler);
+
+      };
+
+      var getPageData = function getPageData(pageNumber) {
+        if (!filterData) {
+          return {};
+        }
+        var first = options.pageSize * (pageNumber - 1),
+          last = options.pageSize * pageNumber,
+          dataSlice = filterData.results.slice(first, last);
+
+        pageData = {
+          results: dataSlice,
+          total: {
+            start: first + 1,
+            end: last,
+            filtered: filterData.total.filtered,
+            count: filterData.total.count
+          }
+        };
+      };
+
+      var gotoPage = function gotoPage(pageNumber) {
+        getPageData(pageNumber);
+        renderData();
+      };
+
+      var pageClickHandler = function pageClickHandler(event) {
+        gotoPage($(this).data('page-target'));
+      };
+
+      var handleResultClicks = function handleResultClicks(event) {
+        $.publish('beforePopupCreated');
+
+        var $this = $(this),
+          isSelected = $this.hasClass('selected'),
+          popoverOptions;
+
+        // First destroy all popover instances
+        $('.result.selected', $selector).popover('destroy');
+        ($filterButton) ? $filterButton.popover('destroy'): '';
+
+        // Deselect result item row when selected
+        if (isSelected) {
+          $this.removeClass('selected');
+        }
+        if(filterData.results[0].name=="Optimal consumer sequence"){
+       
+           var index = ($(this).data('orsorder')),
+          result = filterData.results[index] || filterData.results[0];
+        }else
+        {
+          if(options.parentComponent == "csp_consumer-arrears_ssp" ){
+            var index = ($(this).data('index') - params.stCount)
+          }else{
+            var index = ($(this).data('index') - 1)
+          }
+           
+          result = filterData.results[index] || filterData.results[0];
+        }
+
+        if (options.map.mapName === 'main_map' && result.geographicLonLat && !MapHelper.containsFeature(MapHelper.getMapBounds(options.map.olMap), result)) {
+          MapHelper.setCurrentMapCentre(options.map.olMap, result.geographicLonLat);
+        }
+
+        //Set options to use for the popover
+        popoverOptions = {
+          element: $this,
+          template: popOver,
+          popoverType: 'results',
+          isCarousel: false,
+          data: result,
+          messages: Messages,
+          parentComponent: options.parentComponent || 'results',
+          urn: filterData.results[index].id,
+          toggleIn: false
+        };
+
+        PopOvers.createContentPopover(popoverOptions);
+
+        $this.popover().on('hidden.bs.popover', function () {
+          $('.result.selected', $selector).popover('destroy');
+          ($filterButton) ? $filterButton.popover('destroy'): '';
+          $this.removeClass('selected');
+          if (!isSelected)
+            clearHighlight();
+        });
+
+        $this.popover().on('hide.bs.popover', function () {
+          isSelected = false;
+        });
+
+        $this.popover().on('show.bs.popover', function () {
+          $('.result.selected', $selector).removeClass('selected');
+          $this.addClass('selected');
+          isSelected = true;
+
+          var publishGeom = result.parsedGeom,
+            lonlat = result.centerLonLat,
+            extent;
+
+          if (options.useGeographic && result.geographicLonLat) {
+            lonlat = result.geographicLonLat;
+            publishGeom = result.geographicGeom;
+          }
+
+          if (publishGeom.length) {
+            //Check if the map view contains the coordinate, if not center the viewport on it.
+            extent = options.map.olMap.getView().extent;
+            if (extent && !OpenLayers.extent.containsCoordinate(extent, lonlat)) {
+              MapHelper.setCurrentMapCentre(options.map.olMap, lonlat);
+            }
+            $.publish('highlightFeatures', [options.map.mapName, publishGeom]);
+          }
+        });
+
+        $this.popover().on('shown.bs.popover', function () {
+          fixPopoverPosition($this);
+        });
+
+        $this.popover('toggle');
+
+        //Add close handler logic to the popover
+        $('.results #popUpClose').click(function () {
+          $('.result.selected', $selector).popover('destroy');
+          $('.result.selected', $selector).removeClass('selected');
+        });
+        $.publish('afterPopupCreated');
+      };
+
+      var fixPopoverPosition = function ($this) {
+        // Re-position popover to ensure it is visible and prevent overlap with map copyright links.
+        var $popover = $('.popover'),
+          $arrow = $('.arrow', $popover),
+          height = $popover.height(),
+          minTop = $('.navbar').height() + $('.map-toolbar').height() + 5,
+          maxTop = $popover.parent().height() - height - 20,
+          top = parseInt($popover.css('top')),
+          targetTop;
+
+        if (top > maxTop) {
+          $popover.css('top', maxTop + 'px');
+          top = maxTop;
+        }
+        if (top < minTop) {
+          $popover.css('top', minTop + 'px');
+          top = minTop;
+        }
+
+        if ($arrow) {
+          // Arrow is positioned relative to the popover
+          targetTop = $this.offset().top - $popover.parent().offset().top + $this.height() / 2;
+          if (targetTop < top + 10 || targetTop > top + height - 10) {
+            // Hide the arrow if it cannot point to the selected target
+            $arrow.css('display', 'none');
+          } else {
+            $arrow.css('top', targetTop - top + 'px');
+          }
+        }
+      };
+
+      var sidebarContainerOnScroll = function sidebarContainerOnScroll() {
+        $('#sidebarContainer').on('scroll', function () {
+          $('.result', $selector).popover('destroy');
+          ($filterButton) ? $filterButton.popover('destroy'): '';
+        });
+      };
+
+      var clearResults = function clearResults() {
+        $selector.html('');
+      };
+
+      var restoreFilter = function restoreFilter() {
+        if (oldFilter && (filterOptions !== oldFilter)) {
+          filterOptions = oldFilter;
+          doFilter();
+        }
+      };
+
+      var processResultsForRender = function processResultsForRender(params) {
+         console.log(" >> processResultsForRender")
+        var data = params.results.features,
+          total = {},
+          geom,
+          igeom,
+          contextName,
+          geom_coords;
+        if(params.inx_st_count){
+          total.start = params.inx_st_count;
+        }else{
+          total.start = 1;
+        }
+        total.count = params.results.features.length;
+        //total.start = 1;
+        total.end = total.start + total.count - 1;
+       
+        _.map(data, function (result, key) {
+			console.log("result");
+			console.log(result);
+          // if(result.name.toString()=="Optimal consumer sequence")
+          // {
+            
+            // result.index = parseInt(result["properties"]["Sequence No."]);
+            // // result.name = "Optimal Route";
+            // result.name = "Optimal consumer sequence";
+            // result.orsorder=key
+          // }else
+          // {
+			result.index = key + total.start;
+             result.type = result.name || Messages.results_list.noCollectionType;
+          // }
+          
+          result.attributes = [];
+
+          /* This is the geometry in the geographic world. It can be sourced from:
+           * - the geographic_context, if there is an entry indexed by the record's URN (result.id)
+           * - the geometry of the record
+           */
+          if (params.geographic_context)
+          {
+            geom_coords = params.geographic_context[result.id];
+          }
+                  
+          /* result.geometry is set to an array here as the methods expect it to be an array of
+           * objects, not just an object
+           */
+          geom = geom_coords || [result.geometry]; 
+         
+          if (geom) {
+            result.geographicGeom = MapHelper.parseData(geom);
+            result.geographicLonLat = MapHelper.findCentrePointOfGeometry(geom[0]);
+          }
+
+          /* This is the geometry in an internal world. It can be sourced from:
+           * - the context.<context_name> section, indexed by the record's URN (result.id)
+           * - the geometry of the record
+           */
+          if (params.contexts && Object.keys(params.contexts).length) {
+            // Assumes we only have a spatial context name
+            contextName = Object.keys(params.contexts)[0];
+            igeom = params.contexts[contextName][result.id];
+            // If we have an internal geometry, then use it later
+            if (igeom) {
+              geom = igeom;
+            }
+          }
+
+          if (geom) {
+            result.parsedGeom = MapHelper.parseData(geom);
+            result.centerLonLat = MapHelper.findCentrePointOfGeometry(geom[0]);
+          }
+
+          _.each(result.properties, function (property, key) {
+            //Don't show blank fields
+            if (property === 'unset' || property === null || property === '') return;  
+            result.attributes.push({
+              value: property,
+              key: key
+            });
+          });
+          return result;
+        });
+        return {
+          results: data,
+          total: total
+        };
+      };
+
+      var getImageSvg = function getImageSvg(text) {
+        var width = 40,
+          height = 40,
+          svgResult = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(svgTemplate.render({
+            height: height,
+            width: width,
+            text: text,
+            class: 'info'
+          }));
+        return svgResult;
+      };
+
+      /**
+       * Special selection handler for the 'Results Markers' layer.
+       * Create a popover if the user has clicked on a map marker.  Perform
+       * no further selections
+       *  @memberof module:results-list
+       *  @private
+       */
+      var handleResultMarkerClick = function handleResultMarkerClick(feature) {
+        var foundMarker = false,
+          markerCenter = feature.getGeometry().getCoordinates();
+
+        _.find(results, function (result) {
+          //Check if the result actually has geometry first.
+          if (result.centerLonLat) {
+            if ((result.centerLonLat[0] === markerCenter[0]) && (result.centerLonLat[1] === markerCenter[1])) {
+              //Create the popover
+              PopOvers.createPopup(markerCenter, {
+                features: [result]
+              }, options.map.olMap, options.map.mapName);
+              foundMarker = true;
+              //This return predicate is needed to break out of the _.find() loop
+              //when the correct result has been matched.
+              return 1 === 1;
+            }
+          }
+        });
+        MapHelper.setContinueSelecting(!foundMarker);
+
+      };
+
+
+
+
+      var displayMarkers = function displayMarkers() {
+        if (markers) {
+          clearMarkers();
+        }
+
+        var markerSource = new OpenLayers.source.Vector({}),
+          markerStyle,
+          optionMap = options.map.olMap,
+          layerName = 'Results Markers';
+
+        markerSource.layer = layerName;
+        markers = new OpenLayers.layer.Vector({
+          name: layerName,
+          source: markerSource
+        });
+
+        optionMap.addLayer(markers);
+        $.publish('registerSpecialSelectionHandler', [layerName, handleResultMarkerClick]);
+
+        _.each(pageData.results, function (feature) {
+          if (feature.geographicLonLat !== undefined) {
+            var lonlat = feature.geographicLonLat,
+              marker = new OpenLayers.Feature({
+                geometry: new OpenLayers.geom.Point(lonlat)
+              });
+            markerStyle = new OpenLayers.style.Style({
+              image: new OpenLayers.style.Icon({
+                src: getImageSvg(feature.index),
+                size: [40, 40],
+                // specify imgSize for IE 11, see documentation for ol.style.Icon
+                imgSize: [40, 40]
+              }),
+              radius: 40
+            });
+            marker.setStyle(markerStyle);
+            feature.marker = marker;
+            markerSource.addFeature(marker);
+          }
+        });
+
+        if (markers.getSource().getFeatures().length > 0) {
+          MapHelper.gotoExtentsOfLayer(optionMap, markers);
+        }
+      };
+
+      var clearMarkers = function clearMarkers() {
+        clearHighlight();
+        if (markers) {
+          options.map.olMap.removeLayer(markers);
+          markers = undefined;
+        }
+      };
+
+      var getResults = function getResults() {
+        return results;
+      };
+
+      var clearHighlight = function clearHighlight() {
+        $.publish('clearHighlight', [options.map.mapName]);
+      };
+
+      var clear = function clear() {
+        $('.result', $selector).popover('destroy');
+        ($filterButton) ? $filterButton.popover('destroy'): '';
+        if (markers) {
+          clearMarkers();
+        }
+        clearResults();
+      };
+
+      var getExportOptionsList = function getExportOptionsList() {
+        var exportOptions = [];
+
+        if (!availableExports) {
+          $.publish('getAvailableExports', [{
+            callback: function (exportTypes) {
+              availableExports = exportTypes;
+            }
+          }]);
+        }
+
+        _.each(availableExports, function (availableExport) {
+          var exportAvailable = false;
+          _.each(availableExport.availableTo, function (component) {
+            if (component.component === options.parentComponent) {
+              if (typeof component.type === 'string' && (component.type === 'all' || component.type === options.parentComponentResultType)) {
+                exportAvailable = true;
+              } else if (_.find(component.type, function (type) {
+                  return type === options.parentComponentResultType;
+                })) {
+                exportAvailable = true;
+              }
+            } else if (component.component === 'all') {
+              exportAvailable = true;
+            }
+          });
+          if (exportAvailable) {
+            exportOptions.push({
+              pubEvent: availableExport.pubEvent,
+              name: availableExport.publishName
+            });
+          }
+        });
+
+        return exportOptions;
+      };
+
+      eventSubscribe();
+      sidebarContainerOnScroll();
+
+      var api = {
+        renderResults: renderResults,
+        displayMarkers: displayMarkers,
+        clearMarkers: clearMarkers,
+        clear: clear,
+        getResults: getResults
+      };
+      /* test-code */
+      api.__TEST_ONLY__ = {
+        handleResultClicks: handleResultClicks,
+        renderResults: renderResults,
+        getPageData: getPageData,
+        processResultsForRender: processResultsForRender,
+        createPageControls: createPageControls,
+        displayMarkers: displayMarkers,
+        doFilter: doFilter,
+        okFilterClickHandler: okFilterClickHandler,
+        selectAllFilterClickHandler: selectAllFilterClickHandler,
+        handleFilterClick: handleFilterClick,
+        addFilterButtonHandler: addFilterButtonHandler,
+        getExportOptionsList: getExportOptionsList,
+        getSelector: function () {
+          return $selector;
+        },
+        clearMarkers: clearMarkers,
+        setSelector: function (sel) {
+          $selector = sel;
+        },
+        setData: function (result) {
+          data = result;
+        },
+        getFilterData: function () {
+          return filterData;
+        },
+        setFilterData: function (data) {
+          filterData = data;
+        },
+        setOlMap: function (map) {
+          options.map.olMap = map;
+        },
+        getMap: function () {
+          return options.map.olMap;
+        },
+        getMapName: function () {
+          return options.map.mapName;
+        },
+        setPageTemplate: function (template) {
+          pageTemplate = template;
+        },
+        setCardTemplate: function (template) {
+          cardTemplate = template;
+        },
+        setResults: function (res) {
+          results = res;
+        },
+        getMarkers: function () {
+          return markers;
+        },
+        setMarkers: function (data) {
+          markers = data;
+        },
+        setOptions: function (opt) {
+          options = opt;
+        },
+        setFilterButton: function (button) {
+          $filterButton = button;
+        },
+        setFilterOptions: function (opt) {
+          filterOptions = opt;
+        },
+        getFilterOptions: function () {
+          return filterOptions;
+        },
+        setPageData: function (data) {
+          pageData = data;
+        },
+        setAvailableExports: function (data) {
+          availableExports = data;
+        }
+      };
+      /* end-test-code */
+
+      return api;
+    };
+
+    /**
+     * @memberof module:ResultsList
+     * @name ResultsListObject
+     * @constructs
+     * @param {Object} options - Configuration objects
+     * @param {Object} options.selector - jQuery selector for creating results list
+     * @param {boolean} [options.export=false] - Show the export buttons
+     * @param {boolean} [options.filter=false] - Show the filter buttons
+     * @param {boolean} [options.useGeographic=true] - useGeographicContext information if available
+     * @param {boolean} [options.paging=false] - Split information into pages
+     * @param {Number} [options.pageSize=10] - How many to show on one page
+     * @param {Object} [options.map]
+     * @param {Object} [options.map.olMap=undefined] - OpenLayers map instance
+     * @param {string} [options.map.mapName=undefined] - Map Name
+     * @param {string} [options.parentComponent=undefined] - Name of parent component
+     * @param {string} [options.parentComponentResultType=undefined] - Result type name
+     */
+    var getNewResultsList = function getNewResultsList(options) {
+      return new ResultsListComponent(_.extend({}, defaultOptions, options));
+    };
+
+    var api = {
+      getNewResultsList: getNewResultsList
+    };
+
+    /* test-code */
+    api.__TEST_ONLY__ = {
+      getNewResultsList: getNewResultsList,
+    };
+    /* end-test-code */
+
+    return api;
+  });

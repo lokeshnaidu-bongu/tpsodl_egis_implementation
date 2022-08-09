@@ -1,0 +1,119 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Indices for objects
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_cis_db_implementer.register(:datamodel_name, "tp_cstm_db_imp_instal_v1", 
+				:version, 1,
+				:implementer_comment,        "Add Indices to Objects",
+				:upgrade?, _false,
+				:case_change_method,         :|v1_adding_new_indices()|,
+				:case_change_results_method, :|v1_case_change_results()|,
+				:dataset_names, {{:cis_case, :cis}})
+$
+_pragma(classify_level=restricted)
+tp_cstm_cis_db_implementer.define_shared_constant(:add_fields_to_indices,
+	##
+	## Object Internal Names along with the fields to be indexed
+	##
+	property_list.new_with(:cis_customer,
+			       {
+				       :tp_arrear_amount,
+				       :tp_bill_delivered,
+				       :tp_billing_status,
+				       :tp_building_reference_number,
+				       :tp_circle_name,
+				       :tp_connected_pole,
+				       :tp_customer_mobile_number,
+				       :tp_date_of_bill_payement,
+				       :tp_division_name,
+				       :tp_maximum_demand,
+				       :tp_meter_sequence_no,
+				       :tp_migration_unique_id,
+				       :tp_neighbouring_pole,
+				       :tp_net_payment,
+				       :tp_new_account_number,
+				       :tp_old_account_number,
+				       :tp_payment_date,
+				       :tp_payment_due,
+				       :tp_payment_due_date,
+				       :tp_peak_load,
+				       :tp_sap_functional_location,
+				       :tp_sc_number,
+				       :tp_section_name,
+				       :tp_serial_number,
+				       :tp_sub_division_name,
+				       :tp_village_code
+			       }
+		      ),
+	:public)
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.v1_adding_new_indices(p_target_case_view)
+	## 
+	##
+
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_for a_tbl, a_fld_vec _over _self.add_fields_to_indices.fast_keys_and_elements()
+	_loop
+		
+		l_coll << l_case_manager.get_case_object(a_tbl)
+	
+		_for a_fld _over 1.upto(a_fld_vec.size)
+		_loop
+			 l_fld_id << l_coll.get_field(a_fld_vec[a_fld])
+			_if a_fld_vec[a_fld] _isnt _unset _andif
+			    l_fld_id _isnt _unset 
+			_then
+				l_c << rope.new_with(l_coll.get_field(l_fld_id.id))
+				l_coll.make_index_on_fields(rope.new_with(l_coll.get_field(a_fld_vec[a_fld]).id))
+			_endif
+		_endloop 
+	_endloop 
+	
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.v1_case_change_results()
+	## 
+	##
+	_local l_ccr << case_change_result.new()
+	
+	_for a_tbl, a_fld_vec _over _self.add_fields_to_indices.fast_keys_and_elements() 
+	_loop
+		l_ccr.add(a_tbl)
+	_endloop
+	
+	>> {l_ccr}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_cis_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

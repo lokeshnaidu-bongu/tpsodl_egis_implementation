@@ -1,0 +1,27 @@
+
+//@import "ge-bootstrap/less/hdx-bootstrap-lights-off.less";
+
+@import "hdx-multi-step-navigation.less";
+@import "ge-bootstrap/less/hdx-bootstrap-lights-off.less";
+@import "hdx-variables-lights-off.less";
+.multi-step-nav{
+ /*.navbar {
+    border-radius: 0;
+  }*/
+	ul.nav-pills {
+	  > li {
+	    &.active > a,
+	    &.active > a:hover {
+	      #gradient > .vertical(@blue, darken(@blue, 11.5%));
+	    }
+	  }
+	}
+	
+	.navbar .nav li {
+		&.active{
+				a{
+				 	#gradient > .vertical(@blue, darken(@blue, 11.5%));
+				}
+			}
+	}
+}

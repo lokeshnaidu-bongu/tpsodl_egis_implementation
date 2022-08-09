@@ -1,0 +1,74 @@
+{
+  "base": "server_config_base.json",
+  "externalEndpoints": {
+    "designExtractor_invalidation_endpoint":{
+      "endpoint": {
+        "secure": true,
+        "host": "${SSM_NOTIFICATION_ENDPOINT_HOST}",
+        "port": "${SSM_NOTIFICATION_ENDPOINT_PORT}",
+        "path": "/designExtractor_invalidation_endpoint"
+      },
+      "methods": ["post"]
+    },
+    "designExtractor_newEndpoint": {
+      "endpoint": {
+        "secure": true,
+        "host": "${SSM_NOTIFICATION_ENDPOINT_HOST}",
+        "port": "${SSM_NOTIFICATION_ENDPOINT_PORT}",
+        "path": "/designExtractor_newEndpoint"
+      },
+      "methods": ["post"]
+    },
+    "rollforwardDeltas_newEndpoint": {
+      "endpoint": {
+        "secure": true,
+        "host": "${SSM_NOTIFICATION_ENDPOINT_HOST}",
+        "port": "${SSM_NOTIFICATION_ENDPOINT_PORT}",
+        "path": "/rollforwardDeltas_newEndpoint"
+      },
+      "methods": ["post"]
+    }
+  },
+  "extensions": {
+    "tileCache": {
+      "enabled": true,
+      "useTileCache": true,
+      "rollforward": {
+        "invalidateDesigns": true
+      }
+    },
+    "designExtractor": {
+      "enabled": true,
+      "invalidationEndpoint": "designExtractor_invalidation_endpoint",
+      "newEndpoint": "designExtractor_newEndpoint",
+      "requestBodyLengthLimit": "2mb"
+    },
+    "rollforwardDeltas": {
+      "enabled": true,
+      "newEndpoint": "rollforwardDeltas_newEndpoint"
+    }
+  },
+  "paths": {
+    "/schema": {
+      "security_roles": ["gss.admin", "gss.user"]
+    },
+    "/deltas": {
+      "security_roles": ["gss.admin", "gss.user"]
+    },
+    "/ssm_trace": {
+      "security_roles": ["gss.user"]
+    },
+    "/style": {
+      "security_roles": ["gss.admin", "gss.user"]
+    },
+    "/records": {
+      "security_roles": ["gss.user"]
+    },
+    "/world": {
+      "security_roles": ["gss.user"]
+    },
+    "/designs": {
+      "security_roles": ["gss.admin", "gss.user"]
+    }
+  }
+}

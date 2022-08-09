@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Bridge	1
+Divider	2
+Flyover	3
+Over Bridges	4
+Others	5
+Over head Foot Ways	6
+Railway Level Crossing	7
+Railway Under Bridges	8
+Subways	9
+Subways Under Rail tracks	10
+Water Tank	11

@@ -1,0 +1,59 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 15-02-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+
+_package user
+$
+remex(:tpsodl_db_compression_activation_plugin)
+_pragma(classify_level=basic)
+def_slotted_exemplar(:tpsodl_db_compression_activation_plugin,
+	{
+		{:a_fw, _unset}
+	},
+	:plugin )
+$
+_pragma(classify_level=basic)
+_method tpsodl_db_compression_activation_plugin.init(f, args )
+	## 
+	## 
+	_super.init(f, args)
+	>> _self
+_endmethod
+$
+_pragma(classify_level=basic)
+_method tpsodl_db_compression_activation_plugin.start_application_gui()
+	## 
+	## 
+	_if ( .a_fw << _self.get_dialog(:tpsodl_db_compression)) _is _unset
+	_then 
+		.a_fw << tpsodl_db_compression_framework.new(:tpsodl_db_compression_activation_plugin,
+							     _self,
+							     :resource_module_name,_self.module_name,
+							     :config_definition_file_name, "config.xml",
+							     :gui_definition_file_name, "gui.xml",
+							     :title,_self.message(:tpsodl_db_compression),
+							     :maximizable?,_false,
+							     :minimizable?,_true,
+							     :resizable?,_false)
+		
+		_self.cache_dialog( :tpsodl_db_compression, .a_fw )
+	_endif
+	
+	#.a_fw.activate_relative_to( _unset,_unset,smallworld_product.pni_application().top_frame , 500, 200)
+	.a_fw.activate_relative_to( _unset,_unset,smallworld_product.start_application().top_frame , 500, 200)
+_endmethod
+$

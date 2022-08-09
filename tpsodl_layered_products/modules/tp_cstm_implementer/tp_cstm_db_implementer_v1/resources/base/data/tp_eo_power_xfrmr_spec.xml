@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+  <!-- Define the xml files for specific collections -->
+  <collection collection_name = "eo_power_xfrmr_spec" >
+    <fields field_name = "tp_copper_loss" external_name = "Copper Loss" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No"/>
+    <fields field_name = "tp_iron_losses" external_name = "Iron Losses" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No"/>  
+</collection>
+</tp_collections>

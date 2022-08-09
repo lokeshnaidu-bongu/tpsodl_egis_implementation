@@ -1,0 +1,12 @@
+<?xml version='1.0' standalone='no'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg  class="control-icon" width='{{width}}' height='{{height}}' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink= 'http://www.w3.org/1999/xlink'>
+  <symbol id='line' viewBox='0 0 20 20' overflow='visible' preserveAspectRatio='xMinYMin meet'>
+    <g>
+      <path
+        style='fill:none; stroke:{{color}};stroke-dasharray:{{dashArray}}; stroke-width:{{strokeWidth}};'
+        d='M 1 18 L 6 10 L 14 10 L 18 1' />
+    </g>
+  </symbol>
+  <use xlink:href='#line' width='20' height='20'/>
+</svg>

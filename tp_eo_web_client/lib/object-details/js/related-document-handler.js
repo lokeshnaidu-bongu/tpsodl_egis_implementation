@@ -1,0 +1,2 @@
+/*! ElectricOfficeWeb 5.0.1 2021-06-16 */
+define(["jquery","link-creator","map-core-component/pubsub"],function(a,b){"use strict";var c=function(){a.subscribe("makeFileLink",function(c,d){var e;e=b.isHttpRequest(c)?a("<div/>").html(b.makeHttpLink({url:c,description:c})).text():a("<div/>").html(b.makeFileLink({path:c,description:c})).text(),d(e)})};c();var d={};return d.__TEST_ONLY__={},d});

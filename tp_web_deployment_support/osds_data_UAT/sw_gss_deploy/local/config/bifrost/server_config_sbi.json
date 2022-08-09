@@ -1,0 +1,66 @@
+{
+  "base": "server_config_soap.json",
+  "externalEndpoints": {
+    "sbi_eam_design_estimate": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 8181,
+        "path": "/cxf/DesignEstimate"
+      },
+      "wsdl": "./wsdl/DesignEstimate.wsdl",
+      "soap_version": "soap11"
+    },
+    "sbi_eam_link_assets": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 8181,
+        "path": "/cxf/LinkAssets"
+      },
+      "wsdl": "./wsdl/LinkAssets.wsdl",
+      "soap_version": "soap11"
+    },
+    "sbi_eam_system_monitoring": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 8181,
+        "path": "/cxf/SystemMonitoring"
+      },
+      "wsdl": "./wsdl/SystemMonitoring.wsdl",
+      "soap_version": "soap11"
+    },
+    "sbi_eam_publish_assets": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 8181,
+        "path": "/cxf/UploadAssets"
+      },
+      "wsdl": "./wsdl/UploadAssets.wsdl",
+      "soap_version": "soap11"
+    }
+  },
+  "extensions": {
+    "soap": {
+      "enabled": true,
+      "soap_version": "soap12",
+      "validate_soap": true,
+      "inbound_paths": {
+        "/gss/web/services/AssetURNConversion": {
+          "wsdl": "./wsdl/AssetURNConversion.wsdl",
+          "soap_version": "soap11"
+        },
+        "/gss/web/services/DesignAdmin": {
+          "wsdl": "./wsdl/DesignAdmin.wsdl",
+          "soap_version": "soap11"
+        },
+        "/gss/web/services/ProcessAssets": {
+          "wsdl": "./wsdl/ProcessAssets.wsdl",
+          "soap_version": "soap11"
+        }
+      }
+    }
+  }
+}

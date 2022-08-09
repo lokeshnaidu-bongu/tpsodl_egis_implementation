@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<collections>
+    <!-- Define the xml files for specific collections -->
+    <collection collection_name = "eo_cable_spec " >
+
+	<fields field_name = "tp_armoured" external_name = "Armoured?" mandatory = "false" field_type="eo_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_rated_current" external_name = "Rated Current" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Ampere" mode = "insert" />
+    </collection>
+</collections>

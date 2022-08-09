@@ -1,0 +1,33 @@
+{
+  "name": "navbar",
+  "description": "Variant of the GE Bootstrap navbar.",
+  "version": "1.4.0",
+  "author": "General Electric",
+  "main": [
+    "js/navbar.js",
+    "less/hdx-navbar.less",
+    "less/iidx-navbar.less",
+    "less/hdx-responsive.less",
+    "less/iidx-responsive.less"
+  ],
+  "ignore": [
+    "components",
+    "css",
+    "node_modules",
+    ".*",
+    "Gruntfile.js",
+    "js/require.config.js"
+  ],
+  "dependencies": {
+    "ge-bootstrap": "git@github.sw.ge.com:DXC/ge-bootstrap#master",
+    "message-list": "git@github.sw.ge.com:DXC/message-list#v0.8.4",
+    "responsive-emitter": "git@github.sw.ge.com:DXC/responsive-emitter#~0.8.2",
+    "requirejs": "git://github.com/jrburke/requirejs-bower#~2.1.11",
+    "jquery": "git://github.com/components/jquery#~1.10.2",
+    "respond": "git://github.com/GeneralElectric/Respond.git#~1.2.1"
+  },
+  "resolutions": {
+    "ge-bootstrap": "master",
+    "brandkit": "master"
+  }
+}

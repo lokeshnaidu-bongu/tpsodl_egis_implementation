@@ -1,0 +1,8 @@
+{
+  "defaultSrc": ["'self'"],
+  "scriptSrc": ["'self'", "'unsafe-eval'", "maps.googleapis.com", "fonts.googleapis.com" ],
+  "scriptSrcElem": ["'self'", "'unsafe-eval'", "maps.googleapis.com", "fonts.googleapis.com" ],
+  "styleSrc": ["'self'", "'unsafe-inline'", "maps.gstatic.com", "fonts.gstatic.com", "fonts.googleapis.com"],
+  "imgSrc": ["'self'", "*.googleapis.com", "maps.gstatic.com", "*.ggpht.com", "data:", "blob:"],
+  "fontSrc": ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"]
+}

@@ -1,0 +1,322 @@
+<tp_collections>
+  <collection collection_name="lnd_building">
+    <enum_fields fld_name="tp_land_circle_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+	<enum_fields fld_name="tp_yes_no">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+     <enum_fields fld_name="tp_land_building_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_city_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_construction_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_district_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_division_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    
+    <enum_fields fld_name="tp_land_locality_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_pincode">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_section_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_sub_division_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_sublocality_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_builtup_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_ward_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="lnd_division">
+  </collection>
+  <collection collection_name="lnd_landmark">
+    <enum_fields fld_name="tp_land_importance">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_landmark_subtype">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_landmark_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+     <enum_fields fld_name="tp_land_sublocaility_name">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="lnd_railroad">
+    <enum_fields fld_name="tp_land_rail_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+   
+  </collection>
+  <collection collection_name="lnd_restricted_area">
+    <enum_fields fld_name="tp_land_resrticted_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="lnd_street">
+     <enum_fields fld_name="tp_land_authority">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_road_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_corridor_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="lnd_street_segment">
+    <enum_fields fld_name="tp_land_number">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_road_surface_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_street_segment_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="lnd_building">
+    <enum_fields fld_name="tp_land_property">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="lnd_waterbody">
+    <enum_fields fld_name="tp_land_water_area_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+ <collection collection_name="tp_transit_area">
+    <enum_fields fld_name="tp_land_transit_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value ="998" display_value =""/>
+	<enum_fld_vals store_value ="999" display_value ="Unknown"/>
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="tp_builtup">
+  </collection>
+  <!--<collection collection_name="tp_circle">
+        </collection>-->
+  <!--collection collection_name="tp_cluster_of_trees">
+        </collection>-->
+  <collection collection_name="tp_environment">
+    <enum_fields fld_name="tp_environment_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="tp_estate_land_type">
+    <enum_fields fld_name="tp_land_asset_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <!--<collection collection_name="tp!flood_map">
+        </collection>-->
+  <collection collection_name="tp_footpath">
+    <enum_fields fld_name="tp_land_surface_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <!--<collection collection_name="tp_gate">
+        </collection>-->
+  <collection collection_name="tp_greeen">
+    <enum_fields fld_name="tp_green_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <!--<collection collection_name="tp!locality_boundary">
+        </collection>-->
+  <!--<collection collection_name="tp!municipal_ward_boundary">
+        </collection>-->
+  <collection collection_name="tp_non_builtup">
+  </collection>
+  <collection collection_name="tp_obstacle">
+    <enum_fields fld_name="tp_land_obstacle_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_non_builtup_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <!--<collection collection_name="tp!right_of_way">
+        </collection>-->
+  <!--<collection collection_name="tp!shop">
+        </collection>-->
+  <collection collection_name="tp_slum">
+    <enum_fields fld_name="tp_land_slum_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <!--<collection collection_name="tp_sub_locality">
+        </collection>-->
+  <collection collection_name="tp_telecom">
+    <enum_fields fld_name="tp_land_telecom_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="tp_tpsodl">
+  </collection>
+  <collection collection_name="tp_transit_area">
+  </collection>
+  <!--<collection collection_name="tp_tree">
+        </collection>-->
+  <collection collection_name="tp_utility_points">
+    <enum_fields fld_name="tp_land_owner">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_utility_type">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+    <enum_fields fld_name="tp_land_utility_subtype">
+      <enum_fld_type fld_type="ds_uint">
+        <enum_fld_vals store_value="998" display_value="" />
+        <enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+  <collection collection_name="tpsodl_building">
+    <enum_fields fld_name="tp_land_tpsodl_building_type">
+      <enum_fld_type fld_type="ds_uint">
+	<enum_fld_vals store_value="998" display_value="" />
+	<enum_fld_vals store_value="999" display_value="Unknown" />
+      </enum_fld_type>
+    </enum_fields>
+  </collection>
+</tp_collections>

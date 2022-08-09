@@ -1,0 +1,114 @@
+// Text inputs
+
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input,
+textarea, 
+textarea.form-control {
+  &:focus,
+  &.focused {
+    color: @grayLightest;
+    border-color: @formsBorderColorFocused;
+  }
+}
+
+.input-append {
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"],
+  .uneditable-input,
+  textarea {
+    &:focus ~ .btn {
+      border-color: @formsBorderColorFocused;
+    }
+  }
+}
+
+// From frog - TODO: a number of the :focus styles for various input types below breaks IE9
+// styling for modules, so they are commented out now
+
+.form-group.success,
+.form-group.warning,
+.form-group.error {
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    &:focus,
+    &.focused {
+      color: @grayLightest;
+    }
+  }
+}
+
+.input-append .add-on,
+.input-prepend .add-on {
+	#gradient > .vertical(@btnBackground, darken(@btnBackground, 3.5%));
+}
+
+.form-actions {
+  background-color: lighten(@black, 11.5%);
+  border-top-color: @grayDarker;
+}
+
+select,
+select.form-control {
+  &:focus {
+    border-color: @formsBorderColorFocused;
+  }
+  //#gradient > .vertical(@btnBackground, darken(@btnBackground, 3.5%)); // Introducing this breaks iPad select boxes.
+  background-color: @grayDarkest;
+}
+
+label[disabled]{
+	cursor:not-allowed;
+}
+
+input[disabled]{
+ &:hover{
+ 	border-color:@btnBorder;
+ }
+}
+
+// iOS devices fail at overriding their gradient correctly so the result needs to be the default.
+.touch {
+	select,
+	select.form-control {
+		background-color: @grayLightest; // Just in case.
+		color: @grayDarkest;
+	}
+}
+

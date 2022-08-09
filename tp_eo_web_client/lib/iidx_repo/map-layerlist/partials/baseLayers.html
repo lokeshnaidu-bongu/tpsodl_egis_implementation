@@ -1,0 +1,12 @@
+<div class="base-layer-chooser{{#twoLayers}} toggle{{/twoLayers}}">
+  <ul>
+    {{#layers}}
+    <li class="{{type}}{{#visibility}} selected{{/visibility}}"
+      rel="tooltip"
+      data-title="{{name}}"
+      data-container="body"
+      data-layer-id={{id}}>
+    </li>
+    {{/layers}}
+  </ul>
+</div>

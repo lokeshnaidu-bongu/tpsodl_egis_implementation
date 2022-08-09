@@ -1,0 +1,10 @@
+<?xml version='1.0' standalone='no'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg  class="control-icon" width='{{width}}' height='{{height}}' viewBox='0 0 40 40' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink= 'http://www.w3.org/1999/xlink'>
+  <symbol id='area' viewBox='0 0 20 20' overflow='visible' preserveAspectRatio='xMinYMin meet'>
+    <g>
+      <path style='fill:{{fill}}; fill-opacity:0.4; stroke:{{color}}; stroke-width:{{strokeWidth}};' d='M 4 5 L 16 3 L 17 14 L 10 17 L 3 14 Z' />
+    </g>
+  </symbol>
+  <use xlink:href='#area' x='0' y='0' width='40' height='40'/>
+</svg>

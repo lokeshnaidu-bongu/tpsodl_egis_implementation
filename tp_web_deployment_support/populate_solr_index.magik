@@ -1,0 +1,24 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By:  Sai Kumar Veturi, TCS
+## Date: 3/1/2021
+##
+## Description:
+## Customised the Asset Search Config File module Name
+########################################################################
+
+_block
+        _local extractor
+        extractor << start_lucene_index_build(:tpsodl_eo_web_vertx_server_application)
+
+        # The magik session terminates when this thread finishes.  Since the extraction happens
+        # on seperate threads, wait until the extractor is no longer running
+        _loop
+                _if _not extractor.running? _then _leave _endif
+                _thisthread.sleep(60)
+        _endloop
+_endblock
+$

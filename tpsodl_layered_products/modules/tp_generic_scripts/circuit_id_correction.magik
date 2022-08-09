@@ -1,0 +1,60 @@
+
+
+###
+_block
+	_local ev << gis_program_manager.databases[:electric]
+	_local conn_pnt << ev.collections[:eo_connector_point_inst]
+	_local req_conn_pnt_coll << conn_pnt.select(predicate.eq(:network_type,"LV") _and
+						    (predicate.eq(:nominal_voltage_pp,unit_value(415.000,:V)) _or
+						     predicate.eq(:nominal_voltage_pp,unit_value(240.000,:V))))
+	_local conn_pnt_src_stp,ckt
+	_local fdr_code,dt_code,lt_ckt_num,ckt_id
+
+	
+		_local cnt << 0
+		_for a_cp _over req_conn_pnt_coll.fast_elements()
+		_loop
+			fdr_code << "NA"
+			dt_code << "NA"
+			lt_ckt_num << "NA"
+			ckt_id << ""
+
+			conn_pnt_src_stp << a_cp.circuit_source_stopper
+			_if conn_pnt_src_stp _is _unset
+			_then
+				_continue
+			_endif
+
+			ckt << conn_pnt_src_stp.eo_circuit
+
+			_if ckt _is _unset
+			_then
+				_continue
+			_endif
+
+			_if a_cp.tp_feeder_code _isnt _unset _andif
+			    a_cp.tp_feeder_code <> ""
+			_then
+				fdr_code << a_cp.tp_feeder_code
+			_endif
+
+			_if a_cp.tp_dss_code _isnt _unset _andif
+			    a_cp.tp_dss_code <> ""
+			_then
+				dt_code << a_cp.tp_dss_code
+			_endif
+
+			_if a_cp.tp_lt_ckt_number _isnt _unset _andif
+			    a_cp.tp_lt_ckt_number <> ""
+			_then
+				lt_ckt_num << a_cp.tp_lt_ckt_number
+			_endif
+
+			ckt_id << fdr_code + "-" + dt_code + "-" + lt_ckt_num
+
+			ckt.circuit_id << ckt_id
+		
+		_endloop
+	
+		ev.commit()
+_endblock

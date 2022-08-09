@@ -1,0 +1,27 @@
+// Modal
+.modal {
+	.modal-header {
+		.close {
+			text-shadow: none;
+			line-height: @baseFontSize + 3;
+			margin-top: 0;
+		}
+	}
+}
+
+.modal.fade {
+	-webkit-transition: opacity 0.1s in;
+	-moz-transition: opacity 0.1s in;
+	-o-transition: opacity 0.1s in;
+	//transition: opacity 0.1s in;
+	transition: opacity .1s linear, top .1s ease-out;
+}
+
+.modal-body {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.modal-content {
+	top: 0px;
+}

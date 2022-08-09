@@ -1,0 +1,425 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Indices for objects
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_db_implementer.register(:datamodel_name, "tp_cstm_db_implementer_v1", 
+				:version, 1,
+				:implementer_comment,        "Add Indices to Objects",
+				:upgrade?, _false,
+				:case_change_method,         :|v1_adding_new_indices()|,
+				:case_change_results_method, :|v1_case_change_results()|,
+				:dataset_names, {{:electric_case, :electric}})
+$
+_pragma(classify_level=restricted)
+tp_cstm_db_implementer.define_shared_constant(:add_fields_to_indices,
+	##
+	## Object Internal Names along with the fields to be indexed
+	##
+	 property_list.new_with(
+		 :ed_cabinet,
+		 {
+			 :asset_id,
+			 :tp_city,
+			 :tp_device_type,
+			 :tp_migration_unique_id,
+			 :tp_network_type,
+			 :tp_nominal_voltage,
+			 :number,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :tp_serial_number,
+			 :status
+		 },
+		 :eo_cable,
+		 {
+			 :asset_id,
+			 :tp_serial_number
+		 },
+		 :eo_cable_exi_phase,
+		 {	
+			 :phase
+		 },
+		 :eo_cable_segment_inst,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :network_type,
+			 :nominal_voltage_pp,
+			 :tp_number
+		 },
+		 :eo_circuit,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :tp_migration_unique_id,
+			 :tp_network_type,
+			 :tp_nominal_voltage,
+			 :number,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :tp_status
+		 },
+		 :eo_comms_device,
+		 {	
+			 :asset_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :tp_number,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :serial_number
+		 },
+		 :eo_conduit,
+		 {	
+			 :tp_asset_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :tp_number,
+			 :tp_serial_number
+		 },
+		 :eo_connector_point,
+		 {	
+			 :asset_id,
+			 :device_type,
+			 :serial_number		
+		 },
+		 :eo_connector_point_exi_phase,
+		 {	
+			 :phase
+		 },
+		 :eo_connector_point_inst,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :network_type,
+			 :nominal_voltage_pp,
+			 :tp_sap_functional_location,
+			 :tp_sap_id
+		 },
+		 :eo_connector_segment,
+		 {	
+			 :asset_id,
+			 :device_type,
+			 :tp_serial_number
+			 
+		 },
+		 :eo_connector_segment_exi_phase,
+		 {	
+			 :phase
+		 },
+		 :eo_connector_segment_inst,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :network_type,
+			 :nominal_voltage_pp
+		 },
+		 :ed_decorative_pole,
+		 {	
+			 :asset_id,
+			 :tp_city,
+			 :tp_migration_unique_id,
+			 :tp_network_type,
+			 :tp_nominal_voltage,
+			 :number,
+			 :status
+		 },
+		 :eo_energy_source,
+		 {	
+			 :asset_id,
+			 :tp_city,
+			 :device_type,
+			 :status,
+			 :tp_migration_unique_id,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :tp_serial_number
+		 },
+		 :eo_energy_storage,
+		 {	
+			 :asset_id,
+			 :device_type,
+			 :serial_number,
+			 :tp_sub_type
+		 },
+		 :eo_energy_storage_inst,
+		 {
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :tp_sap_functional_location,
+			 :tp_sap_id
+		 },
+		 :eo_fiber_optic,
+		 {	
+			 :asset_id,
+			 :tp_city,
+			 :tp_migration_unique_id,
+			 :tp_number,
+			 :status
+		 },
+		 :eo_isolating_eqpt,
+		 {	
+			 :asset_id,
+			 :device_type,
+			 :serial_number
+		 },
+		 :eo_isolating_eqpt_exi_phase,
+		 {	
+			 :normal_status,
+			 :phase
+		 },
+		 :eo_isolating_eqpt_inst,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :network_type,
+			 :nominal_voltage_pp,
+			 #:normal_status,
+			 :tp_number,
+			 :tp_sap_functional_location,
+			 :tp_sap_id
+		 },
+		 :eo_measuring_eqpt,
+		 {	
+			 :asset_id,
+			 :device_type,
+			 :tp_number,
+			 :serial_number
+		 },
+		 :eo_measuring_eqpt_exi_phase,
+		 {	
+			 :phase
+		 },
+		 :eo_measuring_eqpt_inst,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :load_nominal_voltage_pp,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :source_nominal_voltage_pp
+		 },
+		 :eo_meter,
+		 {	
+			 :status,
+			 :tp_migration_unique_id,
+			 :network_type,
+			 :nominal_voltage_pp,
+			 :device_type,
+			 :tp_pole_code,
+			 :tp_sc_number,
+			 :tp_new_account_number,
+			 :tp_building_reference_number,
+			 :serial_number,
+			 :tp_feeder_name,
+			 :tp_function,
+			 :tp_fg_serial_number
+
+		 },
+		 :ed_pole,
+		 {	
+			 :asset_id,
+			 :tp_city,
+			 :tp_condition_of_pole,
+			 :tp_dimensions,
+			 :tp_earthing_condition?,
+			 :tp_migration_unique_id,
+			 :tp_network_type,
+			 :tp_nominal_voltage,
+			 :number,
+			 :status
+		 },
+		 :eo_power_xfrmr,
+		 {	
+			 :asset_id,
+			 :tp_core,
+			 :device_type,
+			 :serial_number,
+			 :tp_tap_changer_make
+		 },
+		 :eo_power_xfrmr_exi_phase,
+		 {	
+			 :phase
+		 },
+		 :eo_power_xfrmr_inst,
+		 {	
+			 #					:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :tp_number,
+			 :source_network_type,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :load_network_type
+		 },
+		 :eo_protective_eqpt,
+		 {	
+			 :asset_id,
+			 :device_type,
+			 :tp_number,
+			 :serial_number
+		 },
+		 :eo_power_xfrmr_exi_phase,
+		 {	
+			 :phase
+		 },
+		 
+		 :eo_service_connection,
+		 {	
+			 :tp_city,
+			 :tp_migration_unique_id,
+			 :phasing,
+			 :tp_phase_connection,
+			 :tp_phase_connection_in_fg,
+			 :tp_sap_functional_location,
+			 :tp_sap_id
+		 },
+		 :eo_service_point,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :nominal_voltage_pp
+		 },
+		 :sub_substation,
+		 {	
+			 :asset_id,
+			 :tp_city,
+			 :tp_migration_unique_id,
+			 :number,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :status
+		 },
+		 :ed_switchgear,
+		 {	
+			 :asset_id,
+			 :tp_city,
+			 :tp_migration_unique_id,
+			 :tp_network_type,
+			 :tp_nominal_voltage,
+			 :number,
+			 :tp_phasing,
+			 :tp_sap_functional_location,
+			 :tp_sap_id,
+			 :tp_serial_number,
+			 :status
+		 },
+		 :et_tower,
+		 {	
+			 :tp_city,
+			 :tp_condition,
+			 :tp_migration_unique_id,
+			 :tp_network_type,
+			 :tp_nominal_voltage,
+			 :number,
+			 :status,
+			 :tp_street_light_type,
+			 :type
+		 },
+		 :eo_wire,
+		 {	
+			 :asset_id
+		 },
+		 :eo_wire_exi_phase,
+		 {	
+			 :phase
+		 },
+		 :eo_wire_segment_inst,
+		 {	
+			 #:circuit_id,
+			 :tp_city,
+			 :status,
+			 :tp_migration_unique_id,
+			 :network_type,
+			 :nominal_voltage_pp,
+			 :tp_number
+		 }
+		       ),
+	 :public)
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.v1_adding_new_indices(p_target_case_view)
+	## 
+	##
+
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_for a_tbl, a_fld_vec _over _self.add_fields_to_indices.fast_keys_and_elements()
+	_loop
+		
+		l_coll << l_case_manager.get_case_object(a_tbl)
+	
+		_for a_fld _over 1.upto(a_fld_vec.size)
+		_loop
+			 l_fld_id << l_coll.get_field(a_fld_vec[a_fld])
+			_if a_fld_vec[a_fld] _isnt _unset _andif
+			    l_fld_id _isnt _unset 
+			_then
+				l_c << rope.new_with(l_coll.get_field(l_fld_id.id))
+				l_coll.make_index_on_fields(rope.new_with(l_coll.get_field(a_fld_vec[a_fld]).id))
+			_endif
+		_endloop 
+	_endloop 
+	
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.v1_case_change_results()
+	## 
+	##
+	_local l_ccr << case_change_result.new()
+	
+	_for a_tbl, a_fld_vec _over _self.add_fields_to_indices.fast_keys_and_elements() 
+	_loop
+		l_ccr.add(a_tbl)
+	_endloop
+	
+	>> {l_ccr}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

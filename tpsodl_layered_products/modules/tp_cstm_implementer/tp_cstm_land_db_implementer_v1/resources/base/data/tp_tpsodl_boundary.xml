@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+<collection collection_name = "tp_tpsodl_boundary" >
+<fields field_name = "extent" external_name = "Extent" mandatory = "false" field_type="area" field_size ="" unset_value="(0.0)" default_value ="(0.0)" field_index="No" mode ="insert"/>
+<fields field_name = "tp_calculated_area" external_name = "Calculated Area" mandatory = "false" field_type="ds_double" field_size ="32" unset_value="(0.0)" default_value ="(0.0)" field_index="No" stored_unit="Meter" mode ="insert"/>
+<fields field_name = "tp_code" external_name = "Code" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_created_by" external_name = "Created By" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_created_date_in_gis" external_name = "Created Date in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_fme_unique_id" external_name = "FME Unique ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_name" external_name = "Name" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_remarks" external_name = "Remarks" mandatory = "false"  field_type="ds_char16_vec" field_size ="250" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_survey_remark" external_name = "Survey Remarks" mandatory = "false"  field_type="ds_char16_vec" field_size ="250" unset_value="" default_value ="" field_index="No" mode ="insert" />
+<fields field_name = "tp_updated_by" external_name = "Updated By" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+<fields field_name = "tp_updated_date_in_gis" external_name = "Updated Date in GIS" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+</collection>
+</tp_collections>

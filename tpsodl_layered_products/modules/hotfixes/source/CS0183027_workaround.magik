@@ -1,0 +1,62 @@
+# http://vhelp-desk.nms.dev.ps.ge.com/php/call_report.php?call_log_id=686000
+# https://digitalenergy.service-now.com/sn_customerservice_case.do?sys_id=24b82b24dbeea01099f810c91396198f&sysparm_view=case
+# CS0183027
+#
+
+_pragma(classify_level=restricted)
+_method eo_bulk_accurate_route_associations_plugin.manage_actions()
+	##
+	## Manage the visibility of the actions.
+	##
+	## Disable the :bulk_associate_with_accurate_route and
+	## :bulk_dissociate_from_accurate_route buttons if:
+	## - there are no selected cables, or
+	## - the database is readonly
+	##
+	## Disable the :bulk_associate_with_accurate_route button if:
+	## - there isn't an active trail, or
+	## - the current selected cables are associated with accurate routes
+	##   already
+	##
+	## Disable the :bulk_dissociate_from_accurate_route button if:
+	## - the current selected cables are not associated with any accurate
+	##   route
+	##
+	
+	selected_rwos << _self.get_rwo_map_selection()
+	#FIX	associated? << enabled? << _not selected_rwos.empty? _andif selected_rwos.an_element().source_view.mode _is :write
+	associated? << enabled? << _not selected_rwos.empty? _andif 
+		(a_view << selected_rwos.an_element().source_view).responds_to?(:mode) _andif 
+		a_view.mode _is :write
+	at_least_one_associated? << _false
+	
+	_for so _over selected_rwos.fast_elements()
+	_loop
+		_if _not eo_ape_structure_manager.is_line_segment?(so)
+                                _then
+					enabled? << _false
+					associated? << _false
+					at_least_one_associated? << _false
+					_leave
+		_endif
+		
+		associated? << associated? _andif enabled? _andif _not so.accurate_routes(_true).empty?
+		
+		_if _not at_least_one_associated?
+		_then
+			at_least_one_associated? << _not so.accurate_routes(_true).empty? _andif enabled?
+		_endif
+		
+	_endloop
+	
+	mt << _self.get_map_trail()
+	active_trail? << mt _isnt _unset _andif mt.first_coord _isnt _unset
+	_self.action(:bulk_associate_with_accurate_route).enabled? << enabled? _andif active_trail?
+	_self.action(:bulk_dissociate_from_accurate_route).enabled? << associated? _orif at_least_one_associated?
+	
+_endmethod
+$
+
+_method sas_collection_stream.interrupt << val 
+_endmethod
+$

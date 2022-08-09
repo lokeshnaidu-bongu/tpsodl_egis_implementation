@@ -1,0 +1,441 @@
+
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By: Haritha, TCS
+## Date: 28/03/2021
+##
+## Description: Block to Perform Down Stream from Connector
+## Point LV with Voltage 11.000 Kv till Service Point and
+## Identify Connector Point Installation with Network Type LV
+## & Voltage 240.000 V / 415.000 V, Then with same Network Type
+## and Voltage, Script will Insert Circuit and  Circuit
+## Source with Asset (Connector Point Inst ) and Circuit
+## Circuit ID Nomenclature -
+## SEC 10 - PSS Substaton (Field- PSS Code)
+## F01 - Substation - Incomming Conductor (Field- Feeder Code) 
+## D001- DSS Substation (Field- DTR Code)
+## A - Outgoing Conductor(Field - Lt Ckt Number)
+## Example : NEW CKT ID : SCE10-F01-001-A
+
+########################################################################
+#_block 
+#	write("+++ Start Time +++",date_time.now())
+#	
+#	 _local ev << gis_program_manager.databases[:electric]
+#	 _local l_con_pt_rec << ev.collections[:eo_connector_point_inst].at(973927)
+#	 _if l_con_pt_rec.network_type = "MV" _andif
+#	     l_con_pt_rec.nominal_voltage_pp =  unit_value(11.000,:Kv)
+#	 _then
+#		 _local l_sub_coll << ev.collections[:sub_substation]
+#		 _local l_cir << ev.collection(:eo_circuit)
+#		 _local l_cir_sou << ev.collection(:eo_circuit_source)
+#		 _local l_start_obj,l_st_node,l_start_node,b_nodes,b_state,a_follower
+#		 _local l_trace_results,l_cnt_pt_recs,l_pred,l_sub_rec,l_sub_ext
+#		 _local l_bounds,l_scanner,l_cond_rope,l_income_fed,l_node,l_pse_pt,l_cir_src_rec
+#		 _local l_pss_code,l_incom_feeder_code,l_ckt_num,l_dtr_code,l_ckt_id,l_cond,l_rt_insert_ckt_src
+#		 _local l_ckt_prop_list,l_rt_insert_ckt,l_cir_rec,l_ckt_src_prop_list,l_ckt_rope,k_stop_preds,l_geom,l_fd_pred
+#		 l_start_obj << l_con_pt_rec
+#		 l_st_node  << l_start_obj.perform(:location).node
+#		 l_start_node << l_st_node
+#		 b_nodes<< equality_set.new_with(l_start_node)
+#		 b_state << cs_network_trace_state.new()
+#		 b_state.manifold_names<< {:elec_trans,:elec_dist_primary,:elec_dist_secondary}
+#		 b_state.direction << :downstream
+#		 b_state.network_state << :future                           
+#		 b_state.obey_normal_status? << _false
+#		 a_follower << eo_trace_engine.new()
+#		 a_follower.parameters[:direction]<< :downstream
+#		 a_follower.parameters[:start_node] << b_nodes           
+#		 a_follower.parameters[:trace_type] << :trace_out
+#		 a_follower.parameters[:mounting] << :all
+#		 a_follower.parameters[:network_state] << :current
+#		 a_follower.parameters[:obey_normal_status?] <<_false            
+#		 a_follower.parameters[:manifolds] << {:elec_trans,:elec_dist_primary,:elec_dist_secondary}
+#		 a_follower.parameters[:max_cost] << _unset 
+#		 a_follower.parameters[:state] << b_state
+#		 a_follower.parameters[:cost_message] << :|direction_trace_cost()|                   
+#		 a_follower.parameters[:via_node_rwo?] << _true 
+#		 a_follower.parameters[:phasing] << "ABCN"
+#		 a_follower.parameters[:include_additional_results?] << _false
+#		 k_stop_preds << a_follower.get_stop_predicates()
+#		 a_follower.parameters[:stop_predicates] << k_stop_preds
+#		 a_follower.launch_trace()
+#		 l_trace_results << a_follower.result_rwo_set()
+#		##Check how many Connector Points exist in the trace
+#		 l_cnt_pt_recs << l_trace_results.select(predicate.eq(:source_table_name,"eo_connector_point_inst") _and
+#							 predicate.eq(:network_type,"LV") _and
+#							 (predicate.eq(:nominal_voltage_pp,unit_value(415.000,:V)) _or
+#							  predicate.eq(:nominal_voltage_pp,unit_value(240.000,:V))))
+#		 l_ckt_rope<< rope.new()
+#		 _for  a_each_con_pnt _over l_cnt_pt_recs.fast_elements()
+#		 _loop
+#			 
+#			 l_pred<< predicate.overlays(:extent,a_each_con_pnt.location)
+#			 l_sub_rec << l_sub_coll.select(l_pred).an_element()
+#			 
+#			 _if l_sub_rec _is _unset 
+#			 _then
+#				 write("+++ Connector Point Installation +++",a_each_con_pnt,%tab,"Not within Substation")
+#				 _continue 
+#			 _endif
+#			 l_sub_ext << l_sub_rec.extent
+#			 _if l_sub_ext _is _unset 
+#			 _then
+#				  write("+++ Substation with out Extent Found +++",l_sub_rec)
+#				 _continue 
+#			 _endif
+#			 l_bounds << l_sub_ext.bounds
+#			 l_scanner << ev.geometry_scanner(:general)
+#			 l_scanner.start_scan(l_bounds)
+#			 l_cond_rope << rope.new()
+#			 _loop
+#				 l_geom << l_scanner.get()
+#				 
+#				 _if l_geom _is _unset 
+#				 _then
+#					 _leave
+#				 _endif 
+#				 _if l_geom.rwo_type _is :eo_wire_segment_inst _orif
+#				     l_geom.rwo_type _is :eo_cable_segment_inst
+#				 _then
+#					 l_cond_rope.add_last(l_geom.rwo)
+#					 
+#				 _endif
+#			 _endloop
+#			 # Identifying Incomming Feeder
+#			 l_income_fed << ""
+#			 _for a_conductor _over l_cond_rope.fast_elements()
+#			 _loop
+#				 l_node<<a_conductor.route.last_node
+#				 l_pse_pt << pseudo_point.new(l_node)
+#				 l_pse_pt.world << ev.world
+#				 l_fd_pred << predicate.overlays(:extent,l_pse_pt)
+#				 _if l_sub_coll.select(l_fd_pred).an_element() _isnt _unset 
+#				 _then
+#					 l_income_fed << a_conductor
+#					 _leave 
+#				 _endif
+#				 
+#			 _endloop
+#			 _if l_income_fed = "" _or l_income_fed _is _unset 
+#			 _then
+#				 l_pss_code << "NA"
+#				 l_incom_feeder_code << "NA"
+#			 _else
+#				 l_pss_code << l_income_fed.tp_pss_code
+#				 l_incom_feeder_code << l_income_fed.tp_feeder_code
+#			 _endif
+#			 l_cond << a_each_con_pnt.all_connected_like({eo_cable_segment_inst,eo_wire_segment_inst}).an_element()
+#			 _if l_cond _is _unset 
+#			 _then
+#				 l_ckt_num << "NA"
+#				 l_dtr_code << "NA"
+#			 _else
+#				 l_ckt_num << l_cond.tp_lt_ckt_number
+#				 l_dtr_code << l_cond.tp_dtr_code
+#			 _endif
+#			 
+#			 l_ckt_id << write_string(l_pss_code,"-",l_incom_feeder_code,"-",l_dtr_code,"-",l_ckt_num)
+#			 l_ckt_prop_list << property_list.new_with(:circuit_id,l_ckt_id,
+#								   :tp_nominal_voltage,a_each_con_pnt.nominal_voltage_pp,
+#								   :tp_network_type,a_each_con_pnt.network_type,
+#								   :tp_status,a_each_con_pnt.status,
+#								   :extent_buffer,length_value(0.127,:m))
+#			 write("+++  11+++")
+#			 
+#			 l_rt_insert_ckt << record_transaction.new_insert(l_cir,l_ckt_prop_list)
+#			 l_cir_rec << l_rt_insert_ckt.run()
+#			 l_ckt_src_prop_list << property_list.new_with(:asset,a_each_con_pnt,
+#								       :eo_circuit,l_cir_rec)
+#			 write("+++ 22 +++")
+#			 
+#			 l_rt_insert_ckt_src << record_transaction.new_insert(l_cir_sou,l_ckt_src_prop_list)
+#			 l_cir_src_rec << l_rt_insert_ckt_src.run()
+#			 l_ckt_rope.add_last(l_cir_rec)
+#			 write("+++33  +++")
+#			 
+#		 _endloop
+#	 _else
+#		 write("+++This Block will Run Only with Input Connector Point Installation with Network Type MV and Voltage 11.000 Kv, Recheck Input and Run Block Again  +++")
+#		 
+#	 _endif
+#_endblock
+#$
+
+remex(:tp_circuit_builder_engine)
+# Note: pragma is compulsory for all the defined methods, slot access, properties and shared constant. 
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+def_slotted_exemplar(:tp_circuit_builder_engine,
+	## 
+	## 
+	## 
+	{
+		{:custom_args,_unset},
+		{:view,_unset}
+	},
+	:engine_model)
+$
+
+#--------------------------------------------------------------------------------
+#
+#   D E F I N E   L O C A L   M E T H O D S
+#
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.new()
+	## 
+	## 
+	_return _clone.init()
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.init()
+	## Description: Initialises self's slots and returns self
+	## 
+	## Parameters : As required by the super implemenation
+	## 
+	## Returns    : The instance of the plugin
+	
+        #--- CREATES INSTANCE FOR SLOTS ---
+	_super.init()
+	.custom_args << property_list.new()
+	
+	.view << gis_program_manager.cached_dataset(:electric)
+	_return _self
+	
+_endmethod
+$
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+##
+## To provide slot access to the slot 'custom_args'
+##
+tp_circuit_builder_engine.define_slot_access(:custom_args,:writable,:public)          
+	
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+##
+## To provide slot access to the slot 'view'
+##
+tp_circuit_builder_engine.define_slot_access(:view,:readable,:public)
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.build_feeder_network(circuit_sources,circuit_coll,circuit_list,circuit_handle,_optional p_circuit_dialog)
+	## 
+	##To build the circuit based on the network type's
+	_global ckt_list
+	.custom_args[:circuit_dialog] << p_circuit_dialog
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:started)+date_time.now().write_string)
+	#_self.install_missed_ckt_sources? << _false
+	##l_ori_sub_handle << circuit_handle.originating_substations.an_element() 
+	#write("+++l_ori_sub_handle  +++",l_ori_sub_handle)
+		
+	.custom_args[:circuit_handle] << circuit_handle
+	.custom_args[:circuit_list] << circuit_list
+	.custom_args[:cir_coll] << circuit_coll
+	.custom_args[:cir_sources] << circuit_sources
+	.custom_args[:start_time] << date_time.now()
+	_if (l_ckt_src << .custom_args[:cir_sources].an_element()) _is _unset 
+	_then	
+		.custom_args[:circuit_dialog].show_alert(_self.message(:no_circuit_source))
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:no_circuit_source))
+		write("+++innnn111  +++")
+		
+		_return _false 
+	_endif
+	_if (.custom_args[:cir_source_asset] << l_ckt_src.asset) _is _unset
+	_then	
+		.custom_args[:circuit_dialog].show_alert(_self.message(:no_asset_for_source))
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:no_asset_for_source))
+		write("+++innnnn2222  +++")
+		
+		_return _false 
+	_endif
+	l_ckt_src << .custom_args[:cir_source_asset].circuit_source_stopper
+	_if l_ckt_src _isnt  _unset 
+	_then
+		l_ckt << l_ckt_src.eo_circuit
+		
+	_endif
+	l_ckt_list << _self.int!build_circuit(.custom_args[:cir_source_asset])
+	write("+++ A4 +++")
+	
+	
+	l_ckt_list.add_last(l_ckt)
+	print(l_ckt_list)
+	ev<<gis_program_manager.databases[:electric]
+	l_ckt_engine << eo_circuit_builder_engine.new()
+	_for a_ckt  _over l_ckt_list.fast_elements()
+	_loop
+		write("+++ innnnnnnn +++",.custom_args[:circuit_dialog])
+		l_ckt_engine.run(a_ckt)
+		#.custom_args[:circuit_dialog].add_to_log(_self.message(:lv_build_start)+date_time.now().write_string)
+		#.custom_args[:circuit_dialog].run(a_ckt)
+		_endloop
+	ckt_list<<l_ckt_list
+_endmethod 
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.int!build_circuit(l_asset)
+	## 
+	## 
+	ev << gis_program_manager.databases[:electric]
+	l_con_pt_rec << l_asset
+	_local l_ckt_rope
+	_if l_con_pt_rec.network_type = "MV" _andif
+	     l_con_pt_rec.nominal_voltage_pp =  unit_value(11.000,:Kv)
+	 _then
+		 _local l_sub_coll << ev.collections[:sub_substation]
+		 _local l_cir << ev.collection(:eo_circuit)
+		 _local l_cir_sou << ev.collection(:eo_circuit_source)
+		 _local l_start_obj,l_st_node,l_start_node,b_nodes,b_state,a_follower
+		 _local l_trace_results,l_cnt_pt_recs,l_pred,l_sub_rec,l_sub_ext
+		 _local l_bounds,l_scanner,l_cond_rope,l_income_fed,l_node,l_pse_pt,l_cir_src_rec
+		 _local l_pss_code,l_incom_feeder_code,l_ckt_num,l_dtr_code,l_ckt_id,l_cond,l_rt_insert_ckt_src
+		 _local l_ckt_prop_list,l_rt_insert_ckt,l_cir_rec,l_ckt_src_prop_list,k_stop_preds,l_geom,l_fd_pred
+		 l_start_obj << l_con_pt_rec
+		 l_st_node  << l_start_obj.perform(:location).node
+		 l_start_node << l_st_node
+		 b_nodes<< equality_set.new_with(l_start_node)
+		 b_state << cs_network_trace_state.new()
+		 b_state.manifold_names<< {:elec_trans,:elec_dist_primary,:elec_dist_secondary}
+		 b_state.direction << :downstream
+		 b_state.network_state << :future                           
+		 b_state.obey_normal_status? << _false
+		 a_follower << eo_trace_engine.new()
+		 a_follower.parameters[:direction]<< :downstream
+		 a_follower.parameters[:start_node] << b_nodes           
+		 a_follower.parameters[:trace_type] << :trace_out
+		 a_follower.parameters[:mounting] << :all
+		 a_follower.parameters[:network_state] << :current
+		 a_follower.parameters[:obey_normal_status?] <<_false            
+		 a_follower.parameters[:manifolds] << {:elec_trans,:elec_dist_primary,:elec_dist_secondary}
+		 a_follower.parameters[:max_cost] << _unset 
+		 a_follower.parameters[:state] << b_state
+		 a_follower.parameters[:cost_message] << :|direction_trace_cost()|                   
+		 a_follower.parameters[:via_node_rwo?] << _true 
+		 a_follower.parameters[:phasing] << "ABCN"
+		 a_follower.parameters[:include_additional_results?] << _false
+		 k_stop_preds << a_follower.get_stop_predicates()
+		 a_follower.parameters[:stop_predicates] << k_stop_preds
+		 a_follower.launch_trace()
+		 l_trace_results << a_follower.result_rwo_set()
+		##Check how many Connector Points exist in the trace
+		 l_cnt_pt_recs << l_trace_results.select(predicate.eq(:source_table_name,"eo_connector_point_inst") _and
+							 predicate.eq(:network_type,"LV") _and
+							 (predicate.eq(:nominal_voltage_pp,unit_value(415.000,:V)) _or
+							  predicate.eq(:nominal_voltage_pp,unit_value(240.000,:V))))
+		 l_ckt_rope<< rope.new()
+		 write("+++ l_cnt_pt_recs----------------- +++",l_cnt_pt_recs)
+		 
+		 _for  a_each_con_pnt _over l_cnt_pt_recs.fast_elements()
+		 _loop
+			 _if a_each_con_pnt.circuit_source_stopper _isnt _unset 
+			 _then
+				 l_ckt_src << a_each_con_pnt.circuit_source_stopper
+				 _if l_ckt_src _isnt  _unset 
+				 _then
+					l_ckt << l_ckt_src.eo_circuit
+					l_ckt_rope.add_last(l_ckt)
+				 _endif
+				 write("+++ innn1111111111111 +++")
+				 
+				 _continue 
+			 _endif
+#			 l_pred<< predicate.overlays(:extent,a_each_con_pnt.location)
+#			 l_sub_rec << l_sub_coll.select(l_pred).an_element()
+#			 
+#			 _if l_sub_rec _is _unset 
+#			 _then
+#				 write("+++ Connector Point Installation +++",a_each_con_pnt,%tab,"Not within Substation")
+#				 _continue 
+#			 _endif
+#			 l_sub_ext << l_sub_rec.extent
+#			 _if l_sub_ext _is _unset 
+#			 _then
+#				  write("+++ Substation with out Extent Found +++",l_sub_rec)
+#				 _continue 
+#			 _endif
+#			 l_bounds << l_sub_ext.bounds
+#			 l_scanner << ev.geometry_scanner(:general)
+#			 l_scanner.start_scan(l_bounds)
+#			 l_cond_rope << rope.new()
+#			 _loop
+#				 l_geom << l_scanner.get()
+#				 
+#				 _if l_geom _is _unset 
+#				 _then
+#					 _leave
+#				 _endif 
+#				 _if l_geom.rwo_type _is :eo_wire_segment_inst _orif
+#				     l_geom.rwo_type _is :eo_cable_segment_inst
+#				 _then
+#					 l_cond_rope.add_last(l_geom.rwo)
+#					 
+#				 _endif
+#			 _endloop
+#			 # Identifying Incomming Feeder
+#			 l_income_fed << ""
+#			 write("+++ l_cond_rope +++",l_cond_rope)
+#			 
+#			 _for a_conductor _over l_cond_rope.fast_elements()
+#			 _loop
+#				 l_node<<a_conductor.route.last_node
+#				 l_pse_pt << pseudo_point.new(l_node)
+#				 l_pse_pt.world << ev.world
+#				 l_fd_pred << predicate.overlays(:extent,l_pse_pt)
+#				 _if l_sub_coll.select(l_fd_pred).an_element() _isnt _unset 
+#				 _then
+#					 l_income_fed << a_conductor
+#					 _leave 
+#				 _endif
+#				 
+#			 _endloop
+#			 _if l_income_fed = "" _or l_income_fed _is _unset 
+#			 _then
+#				 l_pss_code << "NA"
+#				 l_incom_feeder_code << "NA"
+#			 _else
+#				 l_pss_code << l_income_fed.tp_pss_code
+#				 l_incom_feeder_code << l_income_fed.tp_feeder_code
+#			 _endif
+#			 l_cond << a_each_con_pnt.all_connected_like({eo_cable_segment_inst,eo_wire_segment_inst}).an_element()
+#			 _if l_cond _is _unset 
+#			 _then
+#				 l_ckt_num << "NA"
+#				 l_dtr_code << "NA"
+#			 _else
+#				 l_ckt_num << l_cond.tp_lt_ckt_number
+#				 l_dtr_code << l_cond.tp_dtr_code
+#			 _endif
+#			 
+#			 l_ckt_id << write_string(l_pss_code,"-",l_incom_feeder_code,"-",l_dtr_code,"-",l_ckt_num)
+#			 l_ckt_prop_list << property_list.new_with(:circuit_id,l_ckt_id,
+#								   :tp_nominal_voltage,a_each_con_pnt.nominal_voltage_pp,
+#								   :tp_network_type,a_each_con_pnt.network_type,
+#								   :tp_status,a_each_con_pnt.status,
+#								   :extent_buffer,length_value(0.127,:m))
+#			 write("+++  11+++",l_ckt_id)
+#			 
+#			 l_rt_insert_ckt << record_transaction.new_insert(l_cir,l_ckt_prop_list)
+#			 l_cir_rec << l_rt_insert_ckt.run()
+#			 l_ckt_src_prop_list << property_list.new_with(:asset,a_each_con_pnt,
+#								       :eo_circuit,l_cir_rec)
+#			 write("+++ 22 +++",l_cir_rec)
+#			 
+#			 l_rt_insert_ckt_src << record_transaction.new_insert(l_cir_sou,l_ckt_src_prop_list)
+#			 l_cir_src_rec << l_rt_insert_ckt_src.run()
+#			 l_ckt_rope.add_last(l_cir_rec)
+#			 write("+++33  +++")
+#			 
+		 _endloop
+	 _else
+		 write("+++This Block will Run Only with Input Connector Point Installation with Network Type MV and Voltage 11.000 Kv, Recheck Input and Run Block Again  +++")
+		 
+	_endif
+	_return l_ckt_rope
+_endmethod
+$

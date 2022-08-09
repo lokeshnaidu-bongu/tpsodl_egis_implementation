@@ -1,0 +1,74 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "components/bootstrap/less/type.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+p {
+  line-height: @baseFontSize + 5; // 20px
+}
+
+// Blockquote
+blockquote p {
+  #voice > .human(@baseFontSize + 2, normal, @baseLineHeight);
+  margin-bottom: 5px;
+  padding: 0;
+}
+
+.voice-brand blockquote p,
+blockquote.voice-brand p {
+  #voice > #family > .brand;
+}
+blockquote small {
+  color: @gray;
+  font-style: normal;
+  padding: 0;
+}
+
+cite {
+  font-style: normal;
+}
+
+// Description/definition lists
+dl {
+  dd {
+    margin-bottom: @baseFontSize;
+    margin-left: 10px;
+  }
+}
+
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: @brandFontFamily;
+  font-weight: normal;
+  margin: 0;
+  line-height: 20px;
+}
+h1 {
+  font-size: 36px;
+  line-height: 40px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 40px;
+}
+h3 {
+  font-size: 18px;
+  line-height: 30px;
+}
+h4 {
+  font-size: 14px;
+}
+h5 {
+  font-size: 12px;
+}
+h6 {
+  color: @grayLight;
+  font-family: @sansFontFamily;
+  font-size: 11px;
+  text-transform: uppercase;
+}

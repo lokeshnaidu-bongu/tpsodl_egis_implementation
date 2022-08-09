@@ -1,0 +1,16 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Feeder Meter	1
+DT Meter	2
+Boundary Meter	3
+EHV Consumer	4
+HV Consumer	5
+LV Consumer	6
+MV Consumer	7
+Street Light	8
+Others	9
+Unknown	10

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<search_config>
+<query name="coordinate_query" class="coordinate_find_component" />
+<!-- Electric Objects -->
+<query name="ed_cabinet_query" class="fields_find_component">
+	<collection name="ed_cabinet" />
+	<field name="status" />
+	<field name="owner_type" />
+	<field name="type" />
+	<field name="rated_voltage" />
+	<field name="tp_network_type" />
+	<field name="tp_device_type" />
+	<field name="tp_nominal_voltage" />
+</query>
+<query name="eo_cable_segment_inst_query" class="fields_find_component">
+	<collection name="eo_cable_segment_inst" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+</query>
+<query name="eo_circuit_query" class="fields_find_component">
+	<collection name="eo_circuit" />
+	<field name="circuit_id" />
+	<field name="tp_status" />
+	<field name="tp_network_type" />
+	<field name="tp_device_type" />
+	<field name="tp_nominal_voltage" />
+</query>
+<query name="eo_comms_device_query" class="fields_find_component">
+	<collection name="eo_comms_device" />
+	<field name="status" />
+	<field name="device_type" />
+	<field name="network_type" />
+	<field name="phasing" />
+	<field name="owner_type" />
+	<field name="mounting" />
+	<field name="tp_number" />
+	<field name="tp_previous_installed_location" />
+</query>
+<query name="eo_conduit_query" class="fields_find_component">
+	<collection name="eo_conduit" />
+	<field name="status" />
+	<field name="owner_type" />
+	<field name="tp_city" />
+</query>
+<query name="eo_connector_point_inst_query" class="fields_find_component">
+	<collection name="eo_connector_point_inst" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+	<field name="tp_circle_code" />
+	<field name="tp_circle_name" />
+</query>
+<query name="eo_connector_segment_inst_query" class="fields_find_component">
+	<collection name="eo_connector_segment_inst" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+</query>
+<query name="ed_decorative_pole_query" class="fields_find_component">
+	<collection name="ed_decorative_pole" />
+	<field name="status" />
+	<field name="owner_type" />
+	<field name="pole_height" />
+	<field name="tp_name" />
+	<field name="tp_previous_installed_location" />
+	<field name="tp_network_type" />
+	<field name="tp_nominal_voltage" />
+</query>
+<query name="eo_energy_source_query" class="fields_find_component">
+	<collection name="eo_energy_source" />
+	<field name="device_type" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="phasing" />
+	<field name="owner_type" />
+	<field name="tp_previous_installed_location" />
+</query>
+<query name="eo_energy_storage_inst_query" class="fields_find_component">
+	<collection name="eo_energy_storage_inst" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+	<field name="tp_model_number" />
+	<field name="tp_previous_installed_location" />
+</query>
+<query name="eo_fiber_optic_query" class="fields_find_component">
+	<collection name="eo_fiber_optic" />
+	<field name="status" />
+	<field name="mounting" />
+	<field name="owner_type" />
+</query>
+<query name="eo_isolating_eqpt_inst_query" class="fields_find_component">
+	<collection name="eo_isolating_eqpt_inst" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+	<field name="tp_previous_installed_location" />
+</query>
+<query name="eo_measuring_eqpt_inst_query" class="fields_find_component">
+	<collection name="eo_measuring_eqpt_inst" />
+	<field name="status" />
+	<field name="source_network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+</query>
+<query name="eo_meter_query" class="fields_find_component">
+	<collection name="eo_meter" />
+	<field name="device_type" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+	<field name="tp_communication_type" />
+	<field name="tp_display_condition?" />
+	<field name="tp_function" />
+	<field name="tp_meter_location" />
+	<field name="tp_meter_height" />
+	<field name="tp_sub_division_code" />
+	<field name="tp_sub_division_name" />
+	<field name="tp_sub_type" />
+	<field name="tp_type" />
+	<field name="tp_ward_code" />
+</query>
+<query name="ed_pole_query" class="fields_find_component">
+	<collection name="ed_pole" />
+	<field name="status" />
+	<field name="owner_type" />
+	<field name="treatment" />
+	<field name="strength" />
+</query>
+<query name="eo_power_xfrmr_inst_query" class="fields_find_component">
+	<collection name="eo_power_xfrmr_inst" />
+	<field name="status" />
+	<field name="source_network_type" />
+	<field name="load_network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+</query>
+<query name="eo_protective_eqpt_inst_query" class="fields_find_component">
+	<collection name="eo_protective_eqpt_inst" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+</query>
+<query name="eo_service_connection_query" class="fields_find_component">
+	<collection name="eo_service_connection" />
+	<field name="service_point" />
+	<field name="tp_phase_connection" />
+	<field name="tp_phase_connection_in_fg" />
+</query>
+<query name="eo_service_point_query" class="fields_find_component">
+	<collection name="eo_service_point" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="phasing" />
+	<field name="owner_type" />
+	<field name="tp_tariff_category" />
+</query>
+<query name="sub_substation_query" class="fields_find_component">
+	<collection name="sub_substation" />
+	<field name="status" />
+	<field name="type" />
+	<field name="class" />
+	<field name="electric_fence_type" />
+	<field name="owner_type" />
+</query>
+<query name="ed_switchgear_query" class="fields_find_component">
+	<collection name="ed_switchgear" />
+	<field name="status" />
+	<field name="owner_type" />
+	<field name="type" />
+	<field name="rated_voltage" />
+	<field name="auto_throwover_ind" />
+	<field name="tp_network_type" />
+	<field name="tp_phasing" />
+	<field name="tp_mechanism" />
+	<field name="tp_nominal_voltage" />
+</query>
+<query name="et_tower_query" class="fields_find_component">
+	<collection name="et_tower" />
+	<field name="status" />
+	<field name="owner_type" />
+	<field name="configuration" />
+	<field name="class" />
+	<field name="use" />
+</query>
+<query name="eo_wire_segment_inst_query" class="fields_find_component">
+	<collection name="eo_wire_segment_inst" />
+	<field name="status" />
+	<field name="network_type" />
+	<field name="owner_type" />
+	<field name="mounting" />
+	<field name="tp_number" />
+	<field name="tp_material" />
+</query>
+
+<!-- Land Objects -->
+<query name="tp_tpsodl_building_query" class="fields_find_component">
+	<collection name="tp_tpsodl_building" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_circle_query" class="fields_find_component">
+	<collection name="tp_circle" />
+	<field name="id" />
+</query>
+<query name="tp_division_query" class="fields_find_component">
+	<collection name="tp_division" />
+	<field name="id" />
+</query>
+<query name="lnd_subdivision_query" class="fields_find_component">
+	<collection name="lnd_subdivision" />
+	<field name="name" />
+	<field name="type" />
+</query>
+<query name="lnd_section_query" class="fields_find_component">
+	<collection name="lnd_section" />
+	<field name="number" />
+	<field name="type" />
+</query>
+<query name="lnd_zip_query" class="fields_find_component">
+	<collection name="lnd_zip" />
+	<field name="zip" />
+</query>
+<query name="tp_locality_boundary_query" class="fields_find_component">
+	<collection name="tp_locality_boundary" />
+	<field name="id" />
+</query>
+<query name="tp_sub_locality_query" class="fields_find_component">
+	<collection name="tp_sub_locality" />
+	<field name="id" />
+</query>
+<query name="tp_municipal_ward_boundary_query" class="fields_find_component">
+	<collection name="tp_municipal_ward_boundary" />
+	<field name="id" />
+</query>
+<query name="tp_village_boundary_query" class="fields_find_component">
+	<collection name="tp_village_boundary" />
+	<field name="id" />
+</query>
+<query name="tp_slum_area_query" class="fields_find_component">
+	<collection name="tp_slum_area" />
+	<field name="id" />
+</query>
+<query name="tp_environment_query" class="fields_find_component">
+	<collection name="tp_environment" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_flood_map_query" class="fields_find_component">
+	<collection name="tp_flood_map" />
+	<field name="id" />
+</query>
+<query name="lnd_waterbody_query" class="fields_find_component">
+	<collection name="lnd_waterbody" />
+	<field name="name" />
+	<field name="type" />
+</query>
+<query name="lnd_wetland_query" class="fields_find_component">
+	<collection name="lnd_wetland" />
+	<field name="nwi_code" />
+</query>
+<query name="tp_estate_land_type_query" class="fields_find_component">
+	<collection name="tp_estate_land_type" />
+	<field name="id" />
+</query>
+<query name="tp_cluster_of_trees_query" class="fields_find_component">
+	<collection name="tp_cluster_of_trees" />
+	<field name="id" />
+</query>
+<query name="tp_tree_query" class="fields_find_component">
+	<collection name="tp_tree" />
+	<field name="id" />
+</query>
+<query name="tp_transit_area_query" class="fields_find_component">
+	<collection name="tp_transit_area" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_vehicle_demarcated_boundary_query" class="fields_find_component">
+	<collection name="tp_vehicle_demarcated_boundary" />
+	<field name="id" />
+</query>
+<query name="lnd_railroad_query" class="fields_find_component">
+	<collection name="lnd_railroad" />
+	<field name="name" />
+	<field name="length" />
+	<field name="type" />
+	<field name="status" />
+</query>
+<query name="lnd_street_query" class="fields_find_component">
+	<collection name="lnd_street" />
+	<field name="name" />
+	<field name="class" />
+	<field name="status" />
+	<field name="tp_type" />
+</query>
+<query name="lnd_street_segment_query" class="fields_find_component">
+	<collection name="lnd_street_segment" />
+	<field name="class" />
+	<field name="street_name" />
+	<field name="status" />
+	<field name="toll_ind" />
+	<field name="tp_type" />
+</query>
+<query name="tp_footpath_query" class="fields_find_component">
+	<collection name="tp_footpath" />
+	<field name="id" />
+</query>
+<query name="tp_right_of_way_query" class="fields_find_component">
+	<collection name="tp_right_of_way" />
+	<field name="id" />
+</query>
+<query name="tp_obstacle_query" class="fields_find_component">
+	<collection name="tp_obstacle" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_utility_points_query" class="fields_find_component">
+	<collection name="tp_utility_points" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_telecom_query" class="fields_find_component">
+	<collection name="tp_telecom" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="lnd_restricted_area_query" class="fields_find_component">
+	<collection name="lnd_restricted_area" />
+	<field name="name" />
+	<field name="type" />
+</query>
+<query name="lnd_landmark_query" class="fields_find_component">
+	<collection name="lnd_landmark" />
+	<field name="name" />
+	<field name="tp_type" />
+</query>
+<query name="tp_non_builtup_query" class="fields_find_component">
+	<collection name="tp_non_builtup" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_builtup_query" class="fields_find_component">
+	<collection name="tp_builtup" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_gate_query" class="fields_find_component">
+	<collection name="tp_gate" />
+	<field name="id" />
+</query>
+<query name="tp_green_query" class="fields_find_component">
+	<collection name="tp_green" />
+	<field name="id" />
+	<field name="tp_type" />
+</query>
+<query name="tp_shop_query" class="fields_find_component">
+	<collection name="tp_shop" />
+	<field name="id" />
+</query>
+<query name="tp_tpsodl_boundary_query" class="fields_find_component">
+	<collection name="tp_tpsodl_boundary" />
+	<field name="id" />
+</query>
+<query name="lnd_building_query" class="fields_find_component">
+	<collection name="lnd_building" />
+	<field name="status" />
+	<field name="type" />
+	<field name="dwelling_size" />
+</query>
+</search_config>
+

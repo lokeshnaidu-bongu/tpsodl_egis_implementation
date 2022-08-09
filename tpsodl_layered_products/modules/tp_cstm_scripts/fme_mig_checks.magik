@@ -1,0 +1,57 @@
+_package user
+$
+tp_fme_post_checks_proc << _proc@tp_fme_post_checks_proc(p_checkpoint)
+			     
+
+	l_ele_view << gis_program_manager.cached_dataset(:electric)
+
+	ds_rep<< l_ele_view.replicate()
+	
+	ds_rep.go_to_checkpoint(p_checkpoint, :readonly)
+
+	
+	el_imported_colls << hash_table.new()
+	l_imported_recs << equality_set.new()
+	
+	_for a_table _over l_ele_view.user_table_names()
+	_loop
+		
+		
+		l_coll << a_table.as_symbol()
+	
+		
+		l_imported_recs << equality_set.new()
+	
+		
+		l_stream << ds_difference_stream.new_on( l_ele_view.collections[l_coll],ds_rep.collections[l_coll])
+		
+		_loop
+			
+			
+			(l_res,l_record) << l_stream.get()
+			_if l_res _is _unset
+			_then
+				_leave
+			_endif
+			
+			l_imported_recs.add(l_record)
+		_endloop
+	
+	
+		_if l_imported_recs.empty?
+		_then
+			_continue   
+		_endif
+	
+		
+		l_col << l_ele_view.collections[l_coll]
+	
+		el_imported_colls[l_coll] << l_imported_recs
+	
+		
+		write(l_coll,%tab,l_col.external_name,%tab,l_imported_recs.size)	
+	_endloop
+	
+	
+_endproc
+$

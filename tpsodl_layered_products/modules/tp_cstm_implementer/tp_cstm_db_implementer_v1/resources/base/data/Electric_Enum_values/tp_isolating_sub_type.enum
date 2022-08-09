@@ -1,0 +1,30 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Air	1
+Vacuum	2
+Bulk Oil	3
+Minimum Oil	4
+SF6	5
+T52/2E	6
+MCB	7
+MCCB	8
+Air Blast	9
+Drop out	10
+Horn Gap	11
+Rewirable	12
+Cartridge	13
+HRC	14
+Kit Kat	15
+Wire fuse	16
+Pulled out	17
+Air Break Switch	18
+Isolator With Earth Switch	19
+Isolator Without Earth Switch	20
+Load Break Switch	21
+Roaster Switch	22
+Others	23
+Cutpoint	24

@@ -1,0 +1,313 @@
+// Basic buttons
+.btn {
+
+	&,
+	&.btn-default {
+
+		#gradient > .vertical(@btnBackground, darken(@btnBackground, 3.5%));
+		border-color: @grayDarker;
+
+		&:hover,
+		&.hover {
+			background: @btnHoverBackground;
+			border-color: @grayDark;
+			color: @grayLight;
+		}
+
+		&:active,
+		&.active {
+			color: @white;
+			background-color: @blue;
+			#gradient > .vertical(@blue, darken(@blue, 11.5%));
+			border-color: darken(@blue, 10%);
+		}
+
+		&.disabled {
+			&,
+			&:hover,
+			&.hover,
+			&:active,
+			&.active {
+				background-color: @grayDarkest;
+			}
+		}
+	}
+
+	&.btn {
+
+		&-primary {
+			background: @grayDark;
+			color: @black;
+			border-color: @grayDark;
+			text-shadow: none;
+
+			&:hover,
+			&.hover {
+				background: @grayLight;
+				border-color: @grayLight;
+			}
+
+			&:active,
+			&.active {
+				color: @white;
+				//background-color: @blue;
+				#gradient > .vertical(@blue, darken(@blue, 11.5%));
+				border-color: darken(@blue, 10%);
+				//border-color: @blue;
+			}
+
+			&.disabled {
+				&,
+				&:hover,
+				&.hover,
+				&:active,
+				&.active {
+					background: @grayDark;
+					color: @black;
+					border-color: @grayDark;
+				}
+			}
+		}
+		// &-primary
+
+		&-inverse {
+			color: @grayLight;
+			background: @grayDarker none;
+			border-color: @grayDarker;
+
+			&:hover,
+			&.hover {
+				color: @grayLight;
+				border-color: @grayDarkest;
+				background-color: @grayDarkest;
+			}
+
+			&:active,
+			&.active {
+				color: @white;
+				#gradient > .vertical(@blue, darken(@blue, 11.5%));
+				//  background-color: @blue;
+				border-color: darken(@blue, 10%);
+			}
+
+			&.disabled {
+				&,
+				&:hover,
+				&.hover,
+				&:active,
+				&.active {
+					color: @grayDark;
+					border-color: @grayDarkest;
+					background-color: @grayDarkest;
+				}
+			}
+		}
+		// &-inverse
+
+		&-info {
+			border: 1px solid @blue;
+			background-color: @grayDarkest;
+			color: @grayDark;
+
+			&:hover,
+			&.hover {
+				background-color: lighten(@black, 6.5%);
+				border-color: darken(@blue, 10%);
+			}
+
+			&:active,
+			&.active {
+				color: @white;
+
+				#gradient > .vertical(@blue, darken(@blue, 11.5%));
+				background-color: @blue;
+				border-color: darken(@blue, 10%);
+			}
+
+			&.disabled {
+				&,
+				&:hover,
+				&.hover,
+				&:active,
+				&.active {
+					color: @grayDark;
+					background: @grayDarkest none;
+					border-color: darken(@blue, 20%);
+				}
+			}
+		}
+		// &-info
+
+		&-success,
+		&-warning,
+		&-danger {
+			&, + .btn.dropdown-toggle {
+
+				background-color: @btnBackground;
+				border: 1px solid;
+				color: @grayDark;
+
+				&:hover,
+				&.hover {
+					color: @grayDark;
+					background-color: lighten(@black, 6.5%);
+				}
+
+				&:active,
+				&.active {
+					&,
+					&:before {
+						color: @white;
+					}
+				}
+
+				&.disabled {
+					&,
+					&:hover,
+					&.hover,
+					&:active,
+					&.active {
+						color: @grayDark;
+						background-color: @grayDarkest;
+					}
+				}
+
+			}
+		}
+
+		.colorvariant(@color) {
+			border-color: @color;
+
+			&:before {
+				color: @color;
+			}
+
+			&:hover,
+			&.hover {
+				border-color: @color;
+			}
+
+			&:active,
+			&.active {
+				background-color: @color;
+			}
+
+			&.disabled {
+				&,
+				&:hover,
+				&.hover,
+				&:active,
+				&.active {
+					border-color: darken(@color, 20%);
+				}
+			}
+		}
+
+		&-success {
+			&, + .btn.dropdown-toggle {
+				.colorvariant(@green);
+			}
+		}
+		// &-success
+
+		&-warning {
+			&, + .btn.dropdown-toggle {
+				.colorvariant(@orange);
+			}
+		}
+		// &-warning
+
+		&-danger {
+			&, + .btn.dropdown-toggle {
+				.colorvariant(@red);
+			}
+		}
+		// &-danger
+
+
+		// Mega buttons
+		&-mega {
+
+			border-color: @grayDarker;
+			#gradient > .vertical(@btnBackground, darken(@btnBackground, 3.5%));
+			background-color: @btnBackground;
+
+			&:hover,
+			&.hover {
+				color: @grayLighter;
+				border-color: lighten(@grayDarkest, 5%);
+				background-color: darken(@btnBackground, 3.5%);
+			}
+
+			&:active,
+			&.active {
+				color: @white; // Required to override gray hover color
+				border-color: darken(@blue, 10%);
+				#gradient > .vertical(@blue, darken(@blue, 11.5%));
+				background-color: @blue;
+			}
+
+			&.disabled {
+				&,
+				&:hover,
+				&.hover,
+				&:active,
+				&.active {
+					border-color: @grayDarkest;
+					background: @btnBackground none;
+				}
+			}
+
+			&.btn {
+
+				&-success,
+				&-warning,
+				&-danger {
+					background-color: @btnBackground;
+
+					&:hover,
+					&.hover {
+						background-color: @btnHoverBackground;
+					}
+
+					&.disabled {
+						&,
+						&:hover,
+						&.hover,
+						&:active,
+						&.active {
+							background-color: @btnBackground; // May be redundant or may be required for correct selection/override.
+						}
+					}
+
+				}
+
+				.colorvariantmega(@color) {
+					&:hover,
+					&.hover {
+						border-color: darken(@color, 10%);
+					}
+
+					&:active,
+					&.active {
+						background: darken(@color, 10%) none;
+					}
+				}
+
+				&-success {
+					.colorvariantmega(@green);
+				}
+
+				&-warning {
+					.colorvariantmega(@orange);
+				}
+
+				&-danger {
+					.colorvariantmega(@red);
+				}
+
+			}
+
+		}
+	} // &.btn
+}

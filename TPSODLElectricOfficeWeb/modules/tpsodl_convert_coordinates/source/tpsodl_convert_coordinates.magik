@@ -1,0 +1,88 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Implementation Project
+##
+## Created by: Triveni Damarla, TCS
+## Date: 04/03/2022
+##
+## Description:
+## Defined custom indexable_field_names and solr_position methods to
+## perform asset search after indexing.
+##
+########################################################################
+_package user
+$
+
+#---------------------------------------------------------------------------------
+# Class definition
+#---------------------------------------------------------------------------------
+remex(:tpsodl_convert_coordinates)
+$
+!print_float_precision! << 15
+
+_pragma(classify_level=basic)
+def_slotted_exemplar(:tpsodl_convert_coordinates,
+	## 
+	## Convert Coordintes
+	## 
+	{
+		{:epsg_mapping,_unset},
+		{:elec_ds,_unset}
+	},
+	{:service_provider,:gss_service_provider_mixin})
+$
+
+
+_pragma(classify_level=basic)
+_method tpsodl_convert_coordinates.init( a_session, properties )
+	## 
+	## Initialise the Slots
+	
+	_super.init( a_session, properties )
+	.epsg_mapping << equality_property_list.new_with( "EPSG:900913", "google_mercator",
+							  "EPSG:4326", "world_longlat_wgs84_degree",
+							  "EPSG:54003", "world_miller_wgs84_cm",
+							  "EPSG:7772", "orissa_lambert_mm" )
+	
+	.elec_ds << gis_program_manager.databases[:electric]
+
+	_return _self
+_endmethod
+$
+
+_pragma(classify_level=basic)
+_method tpsodl_convert_coordinates.transform_coordinate( service_call )
+	## 
+	## Transfrom the coordinate "coord" from "source_cs" to "target_cs"
+	##
+	
+	resp << service_call.response
+	l_src_cs << service_call.get_parameter(:source_cs)
+	l_trg_cs << service_call.get_parameter(:target_cs)
+	l_coords << service_call.get_parameter(:coord)
+
+	l_src << .elec_ds.coordinate_system(.epsg_mapping[l_src_cs])
+	l_trg << .elec_ds.coordinate_system(.epsg_mapping[l_trg_cs])
+	l_transform << transform.new_converting_cs_to_cs(l_src,l_trg)
+	
+	l_transformed_coords << rope.new()
+	
+	_for i_index _over range(1, l_coords.size, 2 )
+	_loop
+	
+		l_x << l_coords[i_index+1].as_number()
+		l_y << l_coords[i_index].as_number()
+		
+		l_coord << coordinate.new(l_x,l_y)
+		
+		l_coord << l_coord.transformed(l_transform)
+		l_transformed_coords.add({l_coord.x,l_coord.y})
+
+	_endloop
+	
+	resp.set_parameter(:transformed_coords, l_transformed_coords )
+	
+	_return resp
+_endmethod
+$

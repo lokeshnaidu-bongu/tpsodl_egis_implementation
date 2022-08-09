@@ -1,0 +1,203 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bifrost-service
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: bifrost
+    service: bifrost
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3001
+    protocol: TCP
+  selector:
+    app: predix
+    service-cluster: bifrost
+    service: bifrost
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bifrost-deployment
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: bifrost
+    service: bifrost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predix
+      service-cluster: bifrost
+      service: bifrost
+  template:
+    metadata:
+      labels:
+        app: predix
+        service-cluster: bifrost
+        service: bifrost
+    spec:
+      hostAliases:
+      - ip: "192.168.200.91"
+        hostnames:
+        - "dc-gisuat-webm1"
+      - ip: "192.168.200.86"
+        hostnames:
+        - "dc-gisuat-webw2"
+      - ip: "192.168.200.88"
+        hostnames:
+        - "dc-gisuat-webl2"
+      - ip: "192.168.200.43"
+        hostnames:
+        - "dc-gisdev-db02"
+        - "dc-gisdev-db02.tpsodlcorp.tpsodl.com"
+      containers:
+      - name: bifrost-pod
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/bifrost:SW528-PROD-1
+        securityContext:
+          runAsUser: 2000
+          runAsGroup: 2000
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: LOGGER_LEVEL_DIAG
+          value: verbose
+        - name: DEBUG
+          value: tpsodl-eo-web:*
+        - name: LB_PRODUCT_NAME
+          value: eo_web
+        - name: NODE_EXTRA_CA_CERTS
+          value: /usr/apps/bifrost/config/ca.cert.pem
+        - name: PGHOST
+          value: postgres-lb-service
+        - name: UAA_TOKEN_URL
+          value: https://dc-gisuat-webm1:30443/uaa/oauth/token
+        - name: UAA_AUTHORIZATION_URL
+          value: https://dc-gisuat-webm1:30443/uaa/oauth/authorize
+        - name: UAA_LOGOUT_URL
+          value: https://dc-gisuat-webm1:30443/uaa/logout.do
+        - name: GSS_CALLBACK_URL
+          value: https://dc-gisuat-webm1:30443/auth/uaa/callback
+        - name: GSS_LOGOUT_URL
+          value: https://dc-gisuat-webm1:30443/auth/logout
+        - name: GSS_UNAUTHENTICATED_URL
+          value: https://dc-gisuat-webm1:30443/auth/unauthenticated
+        - name: WEB_PRODUCT
+          value: tpsodl-eo-web
+        - name: SOLR_HOST_NAME
+          value: solr-service
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-postgres-secret
+              key: dbuser
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-postgres-secret
+              key: dbpass
+        - name: PGDATABASE
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-postgres-secret
+              key: dbname
+        - name: SW_SOLR_USER
+          valueFrom:
+            secretKeyRef:
+              name: solr-secret
+              key: user
+        - name: SW_SOLR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: solr-secret
+              key: password
+        - name: ANONYMOUS_ACCESS_USER
+          valueFrom:
+            secretKeyRef:
+              name: anonymous-access-secret
+              key: user
+        - name: ANONYMOUS_ACCESS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: anonymous-access-secret
+              key: password
+        - name: BIFROST_UAA_USER
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-uaa-secret
+              key: user
+        - name: BIFROST_UAA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-uaa-secret
+              key: password
+        - name: SW_RABBITMQ_AMQP_URL
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-rabbitmq-secret
+              key: url
+        - name: SW_EMAPS_SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: emaps-smtp-secret
+              key: user
+        - name: SW_EMAPS_SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: emaps-smtp-secret
+              key: password
+        - name: BIFROST_PKCE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-pkce-secret
+              key: key
+        - name: BIFROST_XSS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-xss-secret
+              key: key
+        - name: SSM_NOTIFICATION_ENDPOINT_HOST
+          value: 
+        - name: SSM_NOTIFICATION_ENDPOINT_PORT
+          value: ''
+        - name: SW_LOCALE
+          value: en-GB
+        - name: SW_TZ
+          value: Europe/London
+        - name: BIFROST_URL
+          value: https://dc-gisuat-webm1:30443
+        ports:
+        - containerPort: 3001
+        volumeMounts:
+        - name: lb-config-volume
+          mountPath: /usr/apps/bifrost/config
+        - name: lb-wsdl-volume
+          mountPath: /usr/apps/bifrost/wsdl
+      imagePullSecrets:
+      - name: regsecret
+      volumes:
+        - name: lb-config-volume
+          configMap:
+            name: cm-lb-config
+        - name: lb-wsdl-volume
+          configMap:
+            name: cm-lb-wsdl
+      initContainers:
+      - name: nslookup-postgres-svc
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nslookup postgres-lb-service; do echo waiting for postgres-lb-service; sleep 2; done;']
+      - name: init-postgres-svc
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/postgres:10.17.0-debian-10_0.1.0
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsUser: 0
+        command: ['sh', '-c', 'until pg_isready -h postgres-lb-service -d conn; do echo waiting for postgres-lb-service; sleep 2; done;']  
+      - name: init-rabbitmq-svc
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nslookup rabbitmq-service ; do echo waiting for rabbitmq-service; sleep 2; done;']

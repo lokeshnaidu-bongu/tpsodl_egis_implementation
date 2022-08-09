@@ -1,0 +1,236 @@
+
+fetch_object_from_oc << _proc @fetch_object_from_oc()
+				
+			#	app << smallworld_product.application(:sw_electric_office)
+				app << smallworld_product.application(:sweo_wm_user)
+
+				ace_con << app.get_ace_control_for(app.ace_name)
+				
+				display_list << app.plugin(:object_control).sys!slot(:embedded_object_control).plugin(:data_view).sys!slot(:ace_control_trees)[ace_con].sys!slot(:trees)
+
+				l_data << property_list.new()
+				
+				_for a_dataset_list _over display_list.fast_elements()
+				_loop 
+					_for a_list _over a_dataset_list.fast_elements()
+					_loop 
+						_if a_list.key.key.name _isnt :electric
+						_then 
+							_continue 
+						_endif 
+
+						_for a_heading_tree _over a_list.children.fast_elements()
+						_loop
+							a_heading << a_heading_tree.key.key
+
+							_if l_data[a_heading] _is _unset
+
+							_then
+								l_data[a_heading] << set.new()
+							_endif
+
+							_for a_coll_tree _over a_heading_tree.children.fast_elements()
+							_loop
+								a_coll << a_coll_tree.key.key
+
+								l_data[a_heading].add(a_coll.name)
+							_endloop
+
+						_endloop 
+					_endloop
+				_endloop
+
+			
+				_return l_data
+			_endproc
+$
+
+_block
+
+	gpm << gis_program_manager
+	
+	eo_v << gpm.databases[:electric]
+	
+        cv << gpm.databases[:electric_case]
+	
+	output_data << property_list.new()
+
+	#cnt << 0
+	l_data << fetch_object_from_oc()
+
+	_protect
+		
+	out_file << external_text_output_stream.new("D:\EO_528\electric_office\eo_implementers\tp_cstm_land_db_implementer\Scripts\TPSODL_LATEST_ELECTRIC_DM_02_02_2022.txt")
+	out_file.write("Catagery",%tab,
+		       "Object_int_name",%tab,
+		       "Object_Ext_name",%tab,
+		       "Field_int_name",%tab,
+		       "Field_ext_name",%tab,
+		       "Field_type",%tab,
+		       "Geom_type",%tab,
+		       "Join_type",%tab,
+		       "Relation",%tab,
+		       "Is_Enum",%tab,
+		       "Enum_values",%tab,
+		        "Data_type",%tab,
+		 "Mandatory",%tab,
+		 "Field Size")
+	out_file.newline()
+
+	write(" ----->",l_data.size)
+	
+	_for a_group_key, a_set _over l_data.fast_keys_and_elements()
+	_loop
+			
+		_for a_coll_key _over a_set.fast_elements()
+		_loop
+			#cnt + << 1
+			l_coll << eo_v.collections[a_coll_key]
+			
+			l_rope << rope.new()			
+			
+			_for a_field _over l_coll.all_field_names.fast_elements()
+			_loop
+				relation<< "No"
+				a_table << "No"
+				#l_is_geom_field << "No"
+				l_geom_type << "No"
+				l_is_enum << "No"
+				l_data_type << "NA"
+
+				l_vals << ""
+				
+				write("+++++",a_field,%tab,l_coll)
+				_if a_field _is :remarks _orif
+				    a_field.write_string.index_of_seq("!") _isnt _unset
+				_then 
+					_continue 
+				_endif
+				
+			
+				a_cs_obj << cv.get_case_object(a_coll_key)
+
+				_if a_cs_obj _is _unset
+				_then
+					write("No case Object:",a_coll_key)
+					_continue 
+				_endif 
+				
+				a_fld << a_cs_obj.get_field(a_field )
+
+				_if a_fld _is _unset
+				_then
+					write("No field in case ",a_coll_key,%tab,a_field)
+					
+					_continue
+				_endif 
+
+				_if l_coll.field(a_field).is_join?
+				_then
+					_if l_coll.field(a_field).a_result_table _isnt _unset
+					_then
+						
+						a_table << l_coll.field(a_field).a_result_table
+						a_table << a_table.external_name
+					_endif
+					
+					_if a_fld.join_relationship _is _unset
+					_then
+						write("No Join relationship ",a_coll_key,%tab,a_field)
+						_continue
+					_endif
+
+					relation << a_fld.join_relationship.type.write_string
+
+				_endif
+
+				_if l_coll.field(a_field).is_geometry?
+				_then
+					#l_is_geom_field << "Yes"
+					l_geom_type << l_coll.field(a_field).geom_type
+				
+					
+				_endif
+
+				_if l_coll.field(a_field).mandatory?
+				_then
+					l_is_mandatory << "Yes"
+					#l_geom_type << l_coll.field(a_field).geom_type
+				_else
+					
+					l_is_mandatory << "No"
+					
+				_endif
+				l_field_type<<l_coll.field(a_field).class_name
+				_if l_coll.field(a_field).type _isnt _unset _andif l_coll.field(a_field).type.enumerator _isnt _unset
+				_then
+					
+					l_is_enum << "Yes"
+					enum_vals << l_coll.field(a_field).type.enumerator.sorted_values
+			
+					
+					_for i _over enum_vals.fast_elements()
+					_loop
+						l_vals << l_vals + "," + i.write_string
+					_endloop
+					l_field_type<<l_coll.field(a_field).type.enumerator.name.write_string
+				_else
+					_if l_coll.field(a_field).type _isnt _unset 
+					_then
+					
+						l_data_type << l_coll.field(a_field).type.class.class_name.write_string
+					_endif
+				
+			
+				_endif
+				
+				
+				 l_print_length <<  l_coll.field(a_field).print_width       	
+				                   				
+				out_file.write(a_group_key,%tab,
+					       a_coll_key,%tab,
+					       l_coll.external_name.as_symbol(),%tab,
+					       a_field,%tab,
+					       l_coll.field(a_field).external_name,%tab,
+					       l_field_type,%tab,
+					       #l_coll.field(a_field).class_name,%tab,
+					       l_geom_type,%tab,
+					       a_table,%tab,
+					       relation,%tab,
+					       l_is_enum,%tab,
+					       l_vals,%tab,
+					        l_data_type,%tab,
+					 l_is_mandatory,%tab,
+					 l_print_length)
+				out_file.newline()
+				#l_rope.add({a_table.external_name,relation})
+#				_else
+#				_endif
+				
+			_endloop
+			
+			#excel_data[a_coll_key,l_coll.external_name.as_symbol()] << l_rope
+
+#			_if cnt = 2
+#			_then
+#				_leave
+#			_endif
+
+			
+		_endloop
+		
+	
+		#_leave
+	_endloop
+
+	#write_table_list(output_data)
+
+	#write_complete_datamodel(output_data)
+
+	_protection
+		out_file.close()
+	_endprotect
+	
+_endblock
+$
+

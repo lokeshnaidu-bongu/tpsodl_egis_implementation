@@ -1,0 +1,138 @@
+<config>
+  <type name="internal_substation">
+    <property name="page_template" value="internal_substation_plot_template"/>
+    <property name="index_template" value="index_page"/>
+    <property name="soc_name" value="electric_dm"/>
+    <property name="ace_name" value="EO"/>
+    <property name="frame_angle" value="0"/>
+    <property name="use_map_visibilities?" value="false"/>
+    <property name="details_template" value="internal_substation_plot_template"/>
+ 
+    <source class_name="sw_layout_series_service_geometry_source"/>
+  </type>  
+
+  <type name="circuits_1_5000">
+    <property name="page_template" value="circuit_plot_template"/>
+    <property name="index_template" value="index_page"/>
+    <property name="soc_name" value="electric_dm"/>
+    <property name="ace_name" value="EO"/>
+    <property name="view_scale"  value="5000"/>
+    <property name="frame_angle" value="0"/>
+    <property name="use_map_visibilities?" value="false"/>
+    <property name="display_style" value="Medium"/>
+
+    <source class_name="sw_layout_series_service_geometry_source"/>
+  </type>
+
+  <type name="circuits_1_10000">
+    <property name="page_template" value="circuit_plot_template"/>
+    <property name="index_template" value="index_page"/>
+    <property name="soc_name" value="electric_dm"/>
+    <property name="ace_name" value="EO"/>
+    <property name="view_scale"  value="10000"/>
+    <property name="frame_angle" value="0"/>
+    <property name="use_map_visibilities?" value="false"/>
+    <property name="display_style" value="Medium"/>
+
+    <source class_name="sw_layout_series_service_geometry_source"/>
+  </type>
+
+  <type name="originating_substation">
+    <property name="page_template" value="originating_substation_plot_template"/>
+    <property name="index_template" value="index_page"/>
+    <property name="soc_name" value="electric_dm"/>
+    <property name="ace_name" value="EO"/>
+    <property name="frame_angle" value="0"/>
+    <property name="use_map_visibilities?" value="false"/>
+
+    <source class_name="sw_layout_series_service_geometry_source"/>
+  </type>
+
+  <type name="map_view">
+    <property name="page_template" value="generic_template" />
+    <property name="ace_name" value="EO"/>
+
+    <source class_name="sw_layout_series_service_geometry_source"/>
+  </type>
+
+  <type name="map_grids">
+    <property name="ace_name" value="EO"/>
+    <property name="page_template" value="map_grid_template"/>
+    <property name="index_template" value="index_page"/>
+    <property name="one_frame_per_geometry?" value="true"/>
+    <property name="area_buffer" value="0m"/>
+
+    <source class_name="sw_layout_series_service_geometry_source"/>
+
+  </type>
+  
+	<type name="A1 Landscape">
+		<property name="page_template" value="A1_landscape_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+	<type name="A1 Portrait">
+		<property name="page_template" value="A1_portrait_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+
+
+	<type name="A1 Landscape">
+		<property name="page_template" value="A1_landscape_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+	<type name="A1 Portrait">
+		<property name="page_template" value="A1_portrait_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+
+	<type name="A2 Landscape">
+		<property name="page_template" value="A2_landscape_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+	<type name="A2 Portrait">
+		<property name="page_template" value="A2_portrait_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+
+
+	<type name="A3 Landscape">
+		<property name="page_template" value="A3_landscape_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+	<type name="A3 Portrait">
+		<property name="page_template" value="A3_portrait_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	</type>
+
+	<type name="A4 Landscape">
+		<property name="page_template" value="A4_landscape_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+	 </type>
+	<type name="A4 Portrait">
+		<property name="page_template" value="A4_portrait_plotting"/>
+		<property name="ace_name" value="EO"/>
+
+		<source class_name="sw_layout_series_service_geometry_source"/>
+  </type>
+
+  <template_module name="tpsodl_eo_web_vertx_server_application"/>
+
+</config>

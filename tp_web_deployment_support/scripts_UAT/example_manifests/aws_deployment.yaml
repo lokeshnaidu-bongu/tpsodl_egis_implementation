@@ -1,0 +1,95 @@
+id: 'bsf-ingress-controller'
+api_version: '5.3.0'
+targets:
+  - id: 'sw-gss'
+    products:
+      - id: 'pdi-ingress-controller'
+        # Configure local_dir_mount_path to point to directory to be mounted to PDI (must match that for GSS)
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local'
+        pdi:
+          # Change <REGISTRY_ADDRESS> to the address of your ECR
+          image: '<REGISTRY_ADDRESS>/pwr-smallworld/pdi-ingress-controller-eks'
+          tag: '1.0.1'
+        param_groups:
+          - id: 'environment'
+            params:
+              KUBECONFIG: '/data/local/kubeconfig/config'
+              NAMESPACE: 'ingress-controller'
+              ## Uncomment and set for aws deployment
+              # AWS_CA_BUNDLE: ''
+              # AWS_PROFILE: ''
+              # AWS_REGION: ''
+              # http_proxy: ''
+              # https_proxy: ''
+              # no_proxy: ''
+          - id: 'values-ingress'
+            params:
+              imagePullSecrets:
+              - name: regsecret
+              controller:
+                image:
+                  repository: '<REGISTRY_ADDRESS>/pwr-smallworld/nginx-ingress-controller'
+                  tag: '0.41.2'
+                ## Uncomment for deploy with nexus
+                # nodeSelector: 
+                #   node-role.kubernetes.io/nexus: "true"
+                service:
+                  enableHttp: false
+                  targetPorts:
+                    http: http
+                    https: http
+                  type: NodePort
+                  nodePorts:
+                    https: '30443'
+                  annotations:
+                    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-2:822584052713:certificate/d5eb506b-53c1-5c1f-8c12-2ae327cab382
+                    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+                    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+                    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+                config:
+                  use-proxy-protocol: "false"
+                  use-forwarded-headers: "true"
+                  proxy-real-ip-cidr: "0.0.0.0/0" # restrict this to the IP addresses of ELB
+                  proxy-body-size: '2m'
+                  # # Uncomment for GISA for ETerra deployments
+                  # ssl-ciphers: 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384'
+                  # ssl-protocols: 'TLSv1.2'
+              defaultBackend:
+                image:
+                  repository: '<REGISTRY_ADDRESS>/pwr-smallworld/defaultbackend'
+                  tag: '1.5'
+                # # Uncomment for deploy with nexus
+                # nodeSelector:
+                #   node-role.kubernetes.io/nexus: "true"
+      - id: 'gss'
+        # Configure local_dir_mount_path to point to directory to be mounted to PDI (must match that for ingress controller)
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local/'
+        pdi:
+          # Change <REGISTRY_ADDRESS> to the address of your ECR and update PDI image name
+          image: '<REGISTRY_ADDRESS>/pwr-smallworld/eks-<PRODUCT>-pdi'
+          # Update <IMAGE_TAG> to match your PDI image
+          tag: '<IMAGE_TAG>'
+        param_groups:
+          - id: 'environment'
+            params:
+              ######################## MANDATORY
+              K8SHOST: '<DNS name used to access the GSS application>'
+              DOCKER_REGISTRY: '<The address of your ECR>'
+              MESSAGES_DIR_PATH: '<The location of your messages directory>'
+              ACE_DIR_PATH: '<The location of your database>'
+              EIS_VERSION: '<The version of the EIS image that will be deployed>'
+              EIS_CLIENT_VERSION: '<The version of the EIS Client image that will be deployed>'
+              BIFROST_VERSION: '<The version of the Bifrost image that will be deployed>'
+              ########## MANDATORY FOR PNI BASED PRODUCTS
+              # MODELIT_DIR_PATH: ''
+              ######################## OPTIONAL
+              STORAGE_CLASS_NAME: 'efs'
+              ######################## AWS
+              AWS_CA_BUNDLE: '<Path to the certificate you use to make AWS CLI commands>'
+              # AWS_PROFILE: ''
+              # AWS_REGION: ''
+              DEPLOYMENT_TYPE: 'aws'
+              ######################## DEV ONLY
+              # http_proxy: ''
+              # https_proxy: ''
+              # no_proxy: ''

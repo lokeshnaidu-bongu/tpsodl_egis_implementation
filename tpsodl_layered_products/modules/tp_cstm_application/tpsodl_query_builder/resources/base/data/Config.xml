@@ -1,0 +1,7 @@
+<!-- this file configures the plugins that are available to the framework -->
+
+<config>
+  <plugins>
+    <plugin name="test" class_name="tpsodl_query_builder_gui_plugin"/>
+  </plugins>
+</config>

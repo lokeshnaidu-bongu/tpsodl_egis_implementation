@@ -1,0 +1,553 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+## Description:     : base engine class to hold all common engine
+##                    functionality for Tata Power Application
+##
+## Class Name       : tp!preset_query_engine
+##
+## Creation Date    : 18-02-2022
+##
+## Creator Name     : S. Haritha Rani, TCS
+##
+## Inheritance      : engine_model,tp!query_mixin
+##
+## Slots            : table_cnt
+##                  : table_name
+##                  : external_names
+##                  : items
+##
+## Dependencies     : tp!query_mixin
+##
+## Version No.      : 1.0
+## ======================================================================
+_package sw
+$
+
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+def_slotted_exemplar(:tp!preset_query_engine,
+	## 
+	## 
+	## 
+	{
+		{:table_cnt, _unset},
+		{:table_name, _unset },
+		{:external_names, _unset },
+		{:items  , _unset }
+	},
+	{:engine_model,:tp!query_mixin})
+$
+
+# 	SLOT ACCESS
+#	______________________
+#
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+tp!preset_query_engine.define_slot_access(:table_cnt,:writable,:public)
+	## Holds count of tables created
+	##
+
+$
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+tp!preset_query_engine.define_slot_access(:items, :writable, :public)
+	 
+	## Holds the database views.
+	##
+
+$
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+tp!preset_query_engine.define_slot_access(:table_name, :writable, :public)
+	 
+	## Holds the database views.
+	##
+
+$
+
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+tp!preset_query_engine.define_slot_access(:external_names, :writable, :public)
+	 
+	## Holds the database views.
+	##
+
+$
+
+#       S H A R E D  C O N S T A N T S
+#       ------------------------------
+#
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+tp!preset_query_engine.define_shared_constant(:field_names,
+						property_list.new_with(
+							:customer_no, :tp_customer_no,
+							:customer_building_no, :tp_building_id,
+							:meter_no, :meter_sr_no,
+							:meter_customer_no, :customer_no,
+							:building_no, :tp_bldg_ref_number,
+							:transformer_no, :number,
+							:feeder_no, :network_id,
+							:substation_no, :number,
+							:rs_no, :number),
+						:public
+		       )
+
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+tp!preset_query_engine.define_shared_constant(:table_field,
+						property_list.new_with(
+							:cis_customer, :tp_customer_no,					
+							:tp!meter, :meter_sr_no,					
+							:lnd_building, :tp_bldg_ref_number,
+							:ed_oh_transformer, :number,
+							:ed_circuit, :network_id,
+							:sub_substation, :number,
+							:tp!sub_receiving_station, :number,
+							:et_transmission_circuit, :network_id),
+						:public
+		       )
+
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+tp!preset_query_engine.define_shared_constant(:default_message, "Not Available",
+						:public
+						)
+
+#------------------------------------------------------------------------------
+# METHOD: new()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.new(_gather args)
+	## 
+	##  returns a new instance of self
+
+	>> _clone.init(_scatter args)
+	
+_endmethod
+$
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.init(_gather args)
+	#---------------------------------------------------
+	## <Req. #> : <Description>
+	## Initialisation of slots.
+	#
+	# Customization for Project : 
+	#
+
+	.items << hash_table.new()
+
+	_super.init(_scatter args)
+	
+_endmethod
+$
+
+
+
+#------------------------------------------------------------------------------
+# METHOD: create_table_name()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.create_table_name(table_name)
+
+	## 
+	##this function creates the table names.
+	
+	.table_cnt +<< 1
+	
+	l_cnt << .table_cnt
+	
+	>> l_tbl_name << symbol.concatenation(table_name, :| |, l_cnt.write_string.as_symbol())
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: interrupt()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.interrupt()
+	##
+	## Description: method to interrupt the process
+	##              currently running on the engine
+	## 
+	## Conditions : checks the running status of the
+	##              engine and interrupts if the 
+	##              running status is true
+	## 
+	## Returns    : <Nothing>
+
+	_if _self.run_status _is :running
+	_then
+		_self.interrupt_engine()
+		
+		_self.changed( :interrupted  )	
+	_endif
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_from_custid()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.get_rwo_from_number(p_rwo_numbers, p_rwo_coll)
+	## 
+	## Gets the query result based on the customer ids provided.
+	## Prameters : String of Numbers seperated by commas and the
+	## object type to which the numbers belong.
+	## Returns: Rwo objects based on query result.	
+
+	l_rwoset   << rwo_set.new()
+
+	l_no_rwos << equality_set.new()
+
+	l_msg << ""
+	
+	l_rwo_nos << p_rwo_numbers.split_by(",")
+	
+	_for a_rwo_no _over l_rwo_nos.elements()
+	_loop
+
+		l_pred << predicate.eq(_self.table_field[p_rwo_coll.name], a_rwo_no.write_string.trim_spaces())		
+		
+		l_rwo << p_rwo_coll.select(l_pred)
+
+		_if l_rwo.an_element() _is _unset 
+		_then
+			l_no_rwos.add(a_rwo_no)
+
+			_if l_msg = ""
+			_then
+				l_msg << l_msg.concatenation(l_msg,a_rwo_no.write_string)
+			_else 
+				l_msg << l_msg.concatenation(l_msg,",",a_rwo_no.write_string)
+			_endif
+
+		_endif
+	
+		_if l_rwo _isnt _unset _andif
+		    _not l_rwo.empty?
+		_then
+			_if p_rwo_coll.name _is :cis_customer
+			_then
+				_if l_rwoset.empty?
+				_then
+					l_rwoset << _self.get_meters(l_rwo)
+				_else
+					l_rwoset << l_rwoset.union(_self.get_meters(l_rwo))
+				_endif
+			_else
+				_for a_rwo _over l_rwo.elements()
+				_loop
+					l_rwoset.add(a_rwo)
+				_endloop
+			_endif			
+		
+		_endif		
+	_endloop
+	
+	>> (l_rwoset, l_no_rwos, l_msg)	
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_meters()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+
+_method tp!preset_query_engine.get_meters(p_customer)
+	##
+	## Parameters : Customer for which associated meter has to be found
+	## Returns the associated meter for the respective customer
+	##
+	
+	l_meters   << rwo_set.new()
+	
+	_for a_customer_rec _over p_customer.elements()
+	_loop		
+		_for a_meter _over a_customer_rec.meters.elements()
+		_loop
+			l_meters.add(a_meter)
+		_endloop	
+	_endloop
+	
+	>> l_meters
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_feeders()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.get_feeders(p_rs)
+	##
+	## Parameters : recieving station for which feeders has to be found
+	## Returns the feeders for the recieving station
+	##
+	
+	l_feeders   << rwo_set.new()
+	
+	_for a_rs_rec _over p_rs.elements()
+	_loop
+		_for a_feeder _over a_rs_rec.ed_circuits.elements()
+		_loop
+			l_feeders.add(a_feeder)
+		_endloop	
+	_endloop
+	
+	>> l_feeders
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_customer_types()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.get_customer_types()
+	## 
+	## Gets all the customer types.
+	##
+
+	l_types_set << equality_set.new()
+	
+	l_types << .items[:meter_coll].field(:customer_type).type.enumerator.sorted_values
+
+	_for a_type _over l_types.elements()
+	_loop
+		_if a_type.trim_spaces().size > 0
+		_then
+			l_types_set.add(a_type)
+		_endif
+	_endloop
+
+	l_types_set_rope << rope.new_from(l_types_set)
+	
+	>> l_types_set_rope
+
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_node_for_coord()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.get_node_for_coord(p_coord,p_chain,l_radius)
+	## 
+	## Find a node for the given coorinate point(p_coord) on p_chain
+	## Return a_node
+	##
+
+	l_coord << p_coord
+
+	a_node << _self.node_nearest(l_coord,l_radius,p_chain)
+	
+	_return  a_node
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: node_nearest()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.node_nearest(p_coord, p_hit_rad, p_candidate)
+	##
+	## Returns the nearest point, or if a link is nearest,
+	## generates a pseudo_node at the seg point and returns that. 
+	##
+	
+	l_distance << p_hit_rad
+	l_candidate << p_candidate
+
+	# Look for a node on the chain
+	(a_node, distance) << l_candidate.nearest_node( p_coord,l_distance)
+
+	_if distance _isnt _unset _andif 
+	distance < l_distance
+	_then
+		l_distance << distance
+	_endif 
+
+	_if a_node _isnt _unset
+	_then
+		_return a_node
+	_endif
+	
+	# If no point on chain found then try for a mid-segment point
+	_if a_node _is _unset _then
+	
+		(a_segpoint_coord,distance,index,a_link,t_val) << l_candidate.segpoint_near( p_coord, l_distance )
+		
+		_if a_segpoint_coord _isnt _unset _andif distance < l_distance _then
+			l_nearest_candidate << a_link
+			l_distance << distance
+		_endif
+	
+	_endif
+	
+	_if l_nearest_candidate _is _unset _then _return _endif
+	
+	l_ps << pseudo_link.new_splitting_at( l_nearest_candidate, p_coord)
+	_return  l_ps.last_node
+	
+_endmethod
+
+#--------------------------------------------------------------------------------
+# METHOD: create_scratch_fields()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.create_scratch_fields(p_fields_prop, p_defined_fields)
+	#---------------------------------------------------
+	## <Req. #> : <Description>
+	## Parameters: A property list with field names as key and
+	## their collections as values and a simple vector with fields
+	## along with their data types and sizes as simple vectrs.
+	## Returns: A simple vector with all the fields along with
+	## their data types and sizes as simple vectors.
+	#
+	# Customization for Project : 
+	#
+
+	.external_names << equality_property_list.new()
+
+	_for a_field, a_coll _over p_fields_prop.fast_keys_and_elements()
+	_loop		
+		l_field_vector << simple_vector.new(3)
+		
+		l_field_vector[1] << a_field
+		
+		l_field << a_coll.field(a_field)
+
+		_try
+			_if l_field _isnt _unset 
+			_then
+				.external_names[a_field] << a_coll.field(a_field).external_name
+				
+				_if l_field.type _isnt _unset 
+				_then
+					_if l_field.type.enumerator _is _unset 
+					_then
+						l_type << l_field.type.phys_type				
+
+						_try 
+							l_size << l_field.type.size
+
+							l_field_vector[3] << l_size
+						_when error
+							
+							l_field_vector[3] << 60
+						_endtry					
+						
+						_if l_type _is :ds_uint _orif
+						    l_type _is :sys_id
+						_then 
+							l_field_vector[2] << :ds_uint
+						_elif l_type _is :ds_float _orif
+						      l_type _is :ds_double
+						_then					
+							l_field_vector[2] << :ds_double
+						_elif l_type _is :ds_kleene					      
+						_then					
+							l_field_vector[2] << :ds_kleene
+						_elif l_type _is :ds_date					      
+						_then					
+							l_field_vector[2] << :ds_date
+						_elif l_type _is :ds_time					      
+						_then					
+							l_field_vector[2] << :ds_time
+						_elif l_type _is :ds_bool
+						_then					
+							l_field_vector[2] << :ds_bool
+						_elif l_type _is :ds_char16_vec _orif
+						      l_type _is :ds_char16canon _orif
+						      l_type _is :ds_char16
+						_then					
+							l_field_vector[2] << :ds_char16_vec
+						_else
+							l_field_vector[2] << :ds_char16_vec
+							
+							l_field_vector[3] << 60
+						_endif						
+					_else
+						l_field_vector[2] << :ds_char16_vec
+
+						l_field_vector[3] << 60
+					_endif
+				_else
+
+					_if l_field.is_join?
+					_then
+						_if l_field.join_type _is :text
+						_then
+							l_field_vector[2] << :ds_char16_vec
+
+							l_field_vector[3] << 128
+						_endif
+					_else
+						l_field_vector[2] << :ds_char16_vec
+
+						l_field_vector[3] << 60
+					_endif			
+					
+				_endif
+				
+			_else
+				l_field_vector[2] << :ds_char16_vec
+
+				l_field_vector[3] << 60
+			_endif
+
+		_when error
+			# When there is an unidentified field.
+			l_field_vector[2] << :ds_char16_vec
+
+			l_field_vector[3] << 60
+		_endtry
+
+		p_defined_fields << p_defined_fields.new_appending(l_field_vector)
+	_endloop
+
+	>> p_defined_fields
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tp_reporting}, usage={TPSODL})
+_method tp!preset_query_engine.get_voltages_in_order(p_voltages,_optional p_order)
+	#---------------------------------------------------
+	## <Req. #> : <Description>
+	## Parameters: List of Operating voltages. p_order can be :asc
+	## or :desc. By default it gives in an ascending order.
+	## Returns: The list of voltages in the order specified.
+	#
+	# Customization for Project : 
+	#
+
+	_if p_order _isnt _unset _andif
+	    p_order _is :desc
+	_then
+		_return p_voltages.as_sorted_collection(
+				_proc ( vol1,vol2 )			   
+					_if vol1.as_number() >= vol2.as_number()
+					_then						
+						_return _true 
+					_else						
+						_return _false
+					_endif
+				_endproc
+				   )
+	_else
+		_return p_voltages.as_sorted_collection(
+				_proc ( vol1,vol2 )			   
+					_if vol1.as_number() >= vol2.as_number()
+					_then						
+						_return _false 
+					_else						
+						_return _true
+					_endif
+				_endproc
+				   )
+	_endif		
+	
+_endmethod
+$
+

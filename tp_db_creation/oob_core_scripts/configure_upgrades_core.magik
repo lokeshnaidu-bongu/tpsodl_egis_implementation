@@ -1,0 +1,401 @@
+_package sw
+
+_global implementers_for_eo_upgrade <<
+	_proc@implementers_for_eo_upgrade()
+		# For EO upgrades, we recommend all available implementers from DM & EO
+		sw_module_manager.load_module(:dm_datamodel_implementers)
+		_local imps << rope.new()
+
+		_local dm_module << sw_module_manager.module(:dm_datamodel_implementers)
+		imps.add_all_last(dm_module.datamodel_implementers())
+
+		_local eo_implementer_module << sw_module_manager.module(:eo_implementer)
+		imps.add_all_last(eo_implementer_module.datamodel_implementers())
+
+		_local eo_optional_module << sw_module_manager.module(:eo_optional_implementers)
+		_local optional_imps << eo_optional_module.datamodel_implementers()
+		imps.add_all_last(optional_imps)
+
+		# We explicitly add the auth upgrade delivered in 525
+		_local auth_module << sw_module_manager.module(:authorisation)
+		_local auth_imps << auth_module.datamodel_implementers()
+		imps.add_all_last(auth_imps)
+
+		_return imps
+	_endproc
+$
+
+_global modules_for_eo_creation <<
+	_proc@modules_for_eo_creation(metric?)
+		_local modules << rope.new_with(
+			sw_module_manager.module(:eo_implementer),
+			sw_module_manager.module(:eo_optional_implementers)
+			)
+		_if metric? _is _true
+		_then
+			modules.add(sw_module_manager.module(:eo_stored_units_implementer))
+		_endif
+
+		_return modules
+	_endproc
+$
+
+_global dynamic_upgrade_implementers <<
+	_proc@dynamic_upgrade_implementers()
+		_local top_module_names << {"eo_implementer"}
+		_local dynamic_implementers_to_run << equality_set.new_with( "eo_table_code", "eo_foreign_key_indices", "adds style subcode enums" )
+
+		_local dynamic_implementers << rope.new()
+		_local target_module
+
+		_for mn _over top_module_names.elements()
+		_loop
+			_local top_module << sw_module_manager.module( mn )
+
+			_for implementer _over top_module.datamodel_implementers().fast_elements()
+			_loop
+
+				_if dynamic_implementers_to_run.includes?( implementer.sub_datamodel_name )
+				_then
+					_local implementers << top_module.datamodel_implementers(
+						implementer.datamodel_name,
+						implementer.sub_datamodel_name,
+						_unset,  # A new version may (or not) get generated.
+						_true)
+
+					dynamic_implementers.add_all_last( implementers )
+
+				_elif implementer.prerequisite? _andif
+					(target_module << implementer.target_module) _isnt _unset
+				_then
+					_for implementer_name _over dynamic_implementers_to_run.fast_elements()
+					_loop
+						_local implementers << target_module.datamodel_implementers(
+							_unset,
+							implementer_name,
+							_unset,  # A new version may (or not) get generated.
+							_true)
+						dynamic_implementers.add_all_last( implementers )
+					_endloop
+				_endif
+
+			_endloop
+		_endloop
+		_return dynamic_implementers
+	_endproc
+$
+
+_global open_eo_db_for_upgrade <<
+	_proc@open_eo_db_for_upgrade()
+
+		_local env_vals << scripted_upgrade_helper.parse_environment_variables(
+			{"SW_ACE_DB_DIR", :string, _true}
+		)
+
+    _local db_path << env_vals["SW_ACE_DB_DIR"]
+	_local av << gis_program_manager.ace_view
+        _if av _isnt _unset _andif
+            av.is_open?()
+        _then
+            _if av.searchpath[1] = db_path
+            _then
+                #We're good
+                write("DB already open at ", db_path)
+            _else
+                write("WRONG DB IS OPEN!    ....Aborting!")
+                write("Is ", av.searchpath[1])
+                write("should be ",db_path)
+                !abort!()
+            _endif
+        _else
+            write("Opening DB...", db_path )
+			open_database(db_path)
+			gis_program_manager.open_datasets(:design_config)
+			gis_program_manager.open_datasets(:cs_config)
+        _endif
+
+        _for iv _over ds_environment.views.elements()
+        _loop
+            iv.goto_top_alternative()
+        _endloop
+
+        smallworld_product.set_startup_option( :interactive?, _false )
+_endproc
+$
+
+_block
+	## Configure scripted_upgrade_helper to support EO DB creations, upgrades
+	## going back to 4309 coming soon. Currently back to 434
+
+
+	## At earlier releases of EO, the implementers
+	## with optional in the name were considered optional
+	## and placed in different modules.
+	## They are no longer viewed as optional and are recommended to be included.
+
+	_local eo5210_expected_installable_imps << rope.new_with(
+		"eo_extensible_db_implementer.eo_extensible_db.schematic_node_style_subcode.17",
+		"eo_style_implementer.eo_style.eo_style_v17.17"
+	)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 529, eo5210_expected_installable_imps)
+
+	_local eo529_expected_installable_imps << rope.new_with(
+		"eo_extensible_db_implementer.eo_extensible_db.v16_eo_status.16",
+		"eo_style_implementer.eo_style.eo_style_v16.16",
+		"co_datamodel_implementer.schematic_datamodel.remove_network_state.4",
+		"co_ace_implementer.co_ace.remove_network_state.6",
+		_scatter eo5210_expected_installable_imps
+	)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 528, eo529_expected_installable_imps)
+
+	_local eo528_expected_installable_imps << rope.new_with(
+		"co_datamodel_implementer.schematic_datamodel.schematic_datamodel_extension.3",
+		"co_extensible_db_implementer.co_extensible_db.schematic_datamodel_extension.4",
+		"co_ace_implementer.co_ace.schematic_datamodel_extension.5",
+		"eo_extensible_db_implementer.eo_extensible_db.eo_extensible_db_v15.15",
+		"eo_style_implementer.eo_style.eo_style_v15.15",
+		"eo_datamodel_implementer.eo_datamodel.v14_table_changes.14",
+		"eo_design_manager_implementer.eo_design_config.operation_status_values.6",
+		"eo_design_manager_implementer.eo_design_config.pole_height_values.7",
+		_scatter eo529_expected_installable_imps
+	)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 527, eo528_expected_installable_imps)
+
+	_local eo527_expected_installable_imps << rope.new_with(
+		#"eo_auth_implementer.eo_auth.eo_auth_v14.14",
+		#"eo_auth_implementer.eo_auth.eo_auth_v15.15",
+		_scatter eo528_expected_installable_imps
+	)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 526, eo527_expected_installable_imps)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 525, eo527_expected_installable_imps)
+
+
+	_local eo522_expected_installable_imps << rope.new_with(
+		"authorisation.authorisation.upgrade_password_field.4",
+		_scatter eo527_expected_installable_imps
+	)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 524, eo522_expected_installable_imps)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 523, eo522_expected_installable_imps)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 522, eo522_expected_installable_imps)
+
+	_local eo519_expected_installable_imps << rope.new_with(
+		"eo_style_implementer.eo_style.eo_style_v14_cse_draw_method.14",
+		_scatter eo522_expected_installable_imps
+	)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 521, eo519_expected_installable_imps)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 520, eo519_expected_installable_imps)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 519, eo519_expected_installable_imps)
+
+	_local eo517_expected_installable_imps << rope.new_with(
+		"eo_datamodel_implementer.eo_datamodel.v13_spec_changes.13",
+		"eo_datamodel_implementer.eo_datamodel.v13_table_changes.13",
+		"eo_extensible_db_implementer.eo_extensible_db.eo_extensible_db_v14.14",
+		"eo_ace_implementer.eo_ace.eo_ace_v14.14",
+		"eo_style_implementer.eo_style.eo_style_v13.13",
+		"eo_cs_config_implementer.eo_cs_config.eo_cs_config_v13.13",
+		"eo_auth_implementer.eo_auth.eo_auth_v13.13",
+		"eo_ace_optional_implementers.eo_ace.eo_ace_optional_v12.12",
+		_scatter eo519_expected_installable_imps
+		)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 518, eo517_expected_installable_imps)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 517, eo517_expected_installable_imps)
+
+	_local eo516_expected_installable_imps << rope.new_with(
+		"cs_audit_history.cs_audit_history_archive.change_driver_unset_value.3",
+		"cs_audit_history.cs_audit_history.change_driver_unset_value.7",
+		"eo_aha_extensible_db_implementer.eo_config.Install.1",
+		_scatter eo517_expected_installable_imps
+		)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 516, eo516_expected_installable_imps)
+
+	_local eo515_expected_installable_imps << rope.new_with(
+		"cs_audit_history.cs_audit_history_archive.change_driver.2",
+		"eo_extensible_db_implementer.eo_extensible_db.eo_extensible_db_v13.13",
+		"co_ace_implementer.co_ace.co_change_driver.4",
+		"eo_dm_extensible_db_implementer.eo_dm_extensible_db.Install.1",
+		_scatter eo516_expected_installable_imps
+		)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 515, eo515_expected_installable_imps)
+
+	_local eo514_expected_installable_imps << rope.new_with(
+		"cs_audit_history.cs_audit_history.change_driver.6",
+		"eo_datamodel_implementer.eo_datamodel.eo_schematics_datamodel.12",
+		"eo_extensible_db_implementer.eo_extensible_db.eo_extensible_db_v12.12",
+		"eo_ace_implementer.eo_ace.eo_ace_v12.12",
+		"eo_style_implementer.eo_style.eo_style_v12.12",
+		"eo_cs_config_implementer.eo_cs_config.eo_cs_config_v12.12",
+		"eo_auth_implementer.eo_auth.eo_auth_v12.12",
+		_scatter eo515_expected_installable_imps
+		)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 514, eo514_expected_installable_imps)
+
+	_local eo513_expected_installable_imps << rope.new_with(
+		"eo_datamodel_implementer.eo_datamodel.v11_table_changes.11",
+		"eo_ace_implementer.eo_ace.eo_ace_v11.11",
+		"eo_ace_optional_implementers.eo_ace.eo_ace_optional_v11.11"
+		_scatter eo514_expected_installable_imps
+		)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 513, eo513_expected_installable_imps)
+
+	_local eo512_expected_installable_imps << rope.new_with(
+		"co_datamodel_implementer.co_datamodel.co_note.4",
+		"eo_datamodel_implementer.eo_datamodel.v10_frozen_table_changes.10",
+		"eo_datamodel_implementer.eo_datamodel.v10_table_changes.10",
+		"eo_extensible_db_implementer.eo_extensible_db.eo_extensible_db_v10.10",
+		"eo_ace_implementer.eo_ace.eo_ace_v10.10",
+		"eo_style_implementer.eo_style.eo_style_v10.10",
+		"eo_cs_config_implementer.eo_cs_config.eo_cs_config_v10.10",
+		"co_cs_config_implementer.co_cs_config.co_note.4",
+		"eo_auth_implementer.eo_auth.eo_auth_v10.10",
+		"eo_ace_optional_implementers.eo_ace.eo_ace_optional_v10.10",
+		_scatter eo513_expected_installable_imps
+		)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 512, eo512_expected_installable_imps)
+
+	_local eo511_expected_installable_imps << rope.new_with(
+		"eo_datamodel_implementer.eo_datamodel.eo_datamodel_v9.9",
+        "eo_extensible_db_implementer.eo_extensible_db.eo_extensible_db_v9.9",
+        "eo_ace_implementer.eo_ace.eo_ace_v9.9",
+        "eo_style_implementer.eo_style.eo_style_v9.9",
+		"eo_cs_config_implementer.eo_cs_config.eo_cs_config_v9.9",
+		_scatter eo512_expected_installable_imps
+		)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 511, eo511_expected_installable_imps)
+
+
+	_local eo434_expected_installable_imps << rope.new_with(
+        "layout_area.layout_area.Install.1",
+        "layout_area.layout_area_table_code.Install.1",
+        "layout_area.layout_area.layout_area_type enum population.2",
+        "eo_datamodel_implementer.eo_spec_datamodel.Install.1",
+		"eo_datamodel_optional_implementers.eo_datamodel.substation_operational_gr_join.6",
+        "eo_datamodel_implementer.eo_datamodel.eo_datamodel.7",
+        "eo_datamodel_optional_implementers.eo_datamodel.eo_datamodel_optional.7",
+        "eo_datamodel_implementer.eo_datamodel.update et_status enumerator.8",
+        "eo_ace_optional_implementers.eo_ace.substation_operational_gr_vis.6",
+        "eo_cs_config_implementer.eo_cs_config.substation_operational_group_br.6",
+		_scatter eo511_expected_installable_imps
+		)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 434, eo434_expected_installable_imps)
+
+
+	_local expected_installed_implementers_for_new_database << rope.new_with(
+		# Implementers that will be INSTALLED for a new EO db
+		"co_datamodel_implementer.co_datamodel.Install.1",
+		"co_extensible_db_implementer.co_extensible_db.Install.1",
+		"co_style_implementer.co_style.Install.1",
+		"eo_extensible_db_implementer.eo_extensible_db.Install.1",
+		"co_ace_implementer.co_ace.Install.1",
+		"co_auth_implementer.co_auth.Install.1",
+		"information_flag.info_flag.Install.1",
+		"information_flag.info_flag.related_object joins.2",
+		"case_engines.case_engines.Install.2",
+		"case_engines.case_engines.Hetero Relationships.3",
+		"sw_job_engine.job_queue.Install.2",
+		"cs_config.cs_config.Install.2",
+		"cs_audit_history.cs_audit_history.Install.2",
+		"cs_audit_history.cs_audit_history_archive.Install.1",
+		"cs_audit_history.cs_audit_history_archive.change_driver.2",
+		"cs_audit_history.cs_audit_history.text_joins.3",
+		"cs_audit_history.cs_audit_history_archive.change_driver_unset_value.3",
+		"cs_audit_history.cs_audit_history.ah_alt_join.4",
+		"cs_audit_history.cs_audit_history.ah_alt_join.5",
+		"cs_audit_history.cs_audit_history.change_driver.6",
+		"cs_audit_history.cs_audit_history.change_driver_unset_value.7",
+		"gis_ds_install.ipa_common.Install.2",
+		"co_datamodel_implementer.co_datamodel.co_easement.3",
+		"co_datamodel_implementer.co_datamodel.co_note.4",	
+		"co_extensible_db_implementer.co_extensible_db.co_easement.3",
+		"co_style_implementer.co_style.co_easement.3",
+		"co_datamodel_implementer.schematic_datamodel.Install.2",
+		"co_datamodel_implementer.schematic_datamodel.remove_network_state.4",
+		"co_extensible_db_implementer.co_extensible_db.schematic_datamodel_extension.4",
+		"eo_datamodel_implementer.eo_spec_datamodel.Install.14",
+		"eo_datamodel_implementer.eo_datamodel.Install.14",
+		"layout_area.layout_area.Install.1",
+		"layout_area.layout_area_table_code.Install.1",
+		"layout_area.layout_area.layout_area_type enum population.2",
+		"eo_extensible_db_implementer.eo_extensible_db.Install.15",
+		"eo_extensible_db_implementer.eo_extensible_db.regulator.4",
+		"eo_extensible_db_implementer.eo_extensible_db.v16_eo_status.16",
+		"eo_ace_implementer.eo_ace.Install.13",
+		"eo_ace_implementer.eo_ace.eo_ace_v14.14",
+		"co_ace_implementer.co_ace.co_easement.3",
+		"co_ace_implementer.co_ace.co_change_driver.4",
+		"co_ace_implementer.co_ace.schematic_datamodel_extension.5",
+		"co_ace_implementer.co_ace.remove_network_state.6",
+		"eo_style_implementer.eo_style.Install.12",
+		"eo_style_implementer.eo_style.eo_style_v13.13",
+		"eo_cs_config_implementer.eo_cs_config.Install.12",
+		"eo_cs_config_implementer.eo_cs_config.eo_cs_config_v13.13",
+		"co_cs_config_implementer.co_cs_config.Install.2",
+		"co_cs_config_implementer.co_cs_config.co_easement.3",
+		"co_cs_config_implementer.co_cs_config.linear_rwo_child_reposition.3",
+		"co_cs_config_implementer.co_cs_config.co_orient.3",
+		"co_cs_config_implementer.co_cs_config.co_note.4",
+		"eo_design_manager_implementer.eo_design_manager_install.Install.2",
+		"eo_design_manager_implementer.eo_design_manager_config.Install.2",
+		"eo_design_manager_implementer.eo_design_config.Install.2",
+		"eo_design_manager_implementer.eo_design_config.eo_sample_dlts.5",
+		"eo_design_manager_implementer.eo_design_config.operation_status_values.6",
+		"eo_design_manager_implementer.eo_design_config.pole_height_values.7",
+		"eo_dm_extensible_db_implementer.eo_dm_extensible_db.Install.1",
+		"eo_aha_extensible_db_implementer.eo_config.Install.1",
+		"eo_auth_implementer.eo_auth.Install.2",
+		"eo_auth_implementer.eo_auth.cs_config.3",
+		"eo_auth_implementer.eo_auth.manual_structure_node_action.3",
+		"eo_auth_implementer.eo_auth.energy_storage.3",
+		"eo_auth_implementer.eo_auth.eo_equipment_assembly.3",
+		"eo_auth_implementer.eo_auth.controller_model.3",
+		"eo_auth_implementer.eo_auth.customer_network_link.4",
+		"eo_auth_implementer.eo_auth.dac_control_setting.5",
+		"eo_auth_implementer.eo_auth.eo_light_relay.5",
+		"eo_auth_implementer.eo_auth.eo_marker.5",
+		"eo_auth_implementer.eo_auth.various_upgrades.5",
+		"eo_auth_implementer.eo_auth.eo_treatment.5",
+		"eo_auth_implementer.eo_auth.eo_auth_v10.10",
+		"eo_auth_implementer.eo_auth.eo_auth_v12.12",
+		"eo_auth_implementer.eo_auth.eo_auth_v13.13",
+		"co_auth_implementer.co_auth.co_easement.3",
+		"eo_datamodel_optional_implementers.eo_datamodel.Install.1",
+		"eo_ace_optional_implementers.eo_ace.Install.1",
+		"eo_style_optional_implementers.eo_style.Install.1",
+		"eo_datamodel_optional_implementers.eo_datamodel.unused_enumerators.2",
+		"eo_datamodel_optional_implementers.eo_datamodel.wo_structure_manifold_changes_v4.4",
+		"eo_datamodel_optional_implementers.eo_datamodel.substation_operational_gr_join.6",
+		"eo_datamodel_optional_implementers.eo_datamodel.eo_datamodel_optional.7",
+		"eo_ace_optional_implementers.eo_ace.eo_ape.2",
+		"eo_ace_optional_implementers.eo_ace.eo_ape.3",
+		"eo_ace_optional_implementers.eo_ace.plotting.5",
+		"eo_ace_optional_implementers.eo_ace.substation_operational_gr_vis.6",
+		"eo_ace_optional_implementers.eo_ace.remove_structure_office.7",
+		"eo_ace_optional_implementers.eo_ace.eo_ace_optional_v10.10",
+		"eo_ace_optional_implementers.eo_ace.eo_ace_optional_v11.11",
+		"eo_ace_optional_implementers.eo_ace.eo_ace_optional_v12.12",
+		"eo_style_optional_implementers.eo_style.dm_styles.2",
+		"eo_style_optional_implementers.eo_style.remove_structure_office.7",
+		"eo_style_implementer.eo_style.eo_style_v14_cse_draw_method.14",
+		"eo_style_implementer.eo_style.eo_style_v15.15",
+		"eo_style_implementer.eo_style.eo_style_v16.16"
+		)
+
+	_local stored_units_expected_installed_implementers_for_new_database << rope.new_with(
+		"eo_stored_units_implementer.eo_stored_units.Install.1",
+		"eo_stored_units_implementer.eo_stored_units.stored_units_upgrade_v2.2"
+		)
+
+	scripted_upgrade_helper.configure_expected_implementers(:eo_implementer, 0, expected_installed_implementers_for_new_database)
+	scripted_upgrade_helper.configure_expected_implementers(:eo_stored_units_implementer, 0, stored_units_expected_installed_implementers_for_new_database)
+
+_endblock
+$

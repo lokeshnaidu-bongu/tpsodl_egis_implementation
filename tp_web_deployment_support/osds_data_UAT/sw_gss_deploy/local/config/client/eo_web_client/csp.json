@@ -1,0 +1,8 @@
+{
+  "defaultSrc": ["'self'","*:*", "dc-gisuat-webm1:*", "gis.tpsouthernodisha.com:*", "192.168.200.35:*"],
+  "scriptSrc": ["'self'","*:*", "dc-gisuat-webm1:*", "gis.tpsouthernodisha.com:*", "192.168.200.35:*", "'unsafe-eval'", "maps.googleapis.com", "fonts.googleapis.com", "nominatim.openstreetmap.org" ],
+  "scriptSrcElem": ["'self'","*:*", "dc-gisuat-webm1:*", "gis.tpsouthernodisha.com:*", "192.168.200.35:*", "'unsafe-eval'", "maps.googleapis.com", "fonts.googleapis.com", "nominatim.openstreetmap.org" ],
+  "styleSrc": ["'self'","*:*", "dc-gisuat-webm1:*", "gis.tpsouthernodisha.com:*", "192.168.200.35:*", "'unsafe-inline'", "maps.gstatic.com", "fonts.gstatic.com", "fonts.googleapis.com"],
+  "imgSrc": ["'self'","*:*","dc-gisuat-webm1:*", "gis.tpsouthernodisha.com:*", "192.168.200.35:*", "*.openstreetmap.org", "*.googleapis.com", "maps.gstatic.com", "*.ggpht.com", "data:", "blob:"],
+  "fontSrc": ["'self'","*:*","192.168.200.35:*", "gis.tpsouthernodisha.com:*", "fonts.googleapis.com", "fonts.gstatic.com"]
+}

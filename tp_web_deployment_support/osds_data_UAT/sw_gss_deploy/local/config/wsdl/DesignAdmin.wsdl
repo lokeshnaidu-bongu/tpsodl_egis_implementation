@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	The SOAP 1.2 stanzas have been commented out as the version of SAP PI 
+	currently used for SBI cannot import them.
+-->
+<wsdl:definitions name="DesignAdmin"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:ns="http://dm.gesmallworld.com"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  targetNamespace="http://dm.gesmallworld.com">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified"
+                   elementFormDefault="qualified"
+                   targetNamespace="http://util.dm.gesmallworld.com">
+            <xs:complexType name="Map">
+                <xs:sequence>
+					<xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+      					<xs:complexType>
+        					<xs:sequence>
+          						<xs:element name="key" type="xs:string" />
+          						<xs:element name="value" type="xs:string" />
+        					</xs:sequence>
+      					</xs:complexType>
+    				</xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax22="http://util.dm.gesmallworld.com"
+                   attributeFormDefault="qualified"
+                   elementFormDefault="qualified"
+                   targetNamespace="http://dm.gesmallworld.com">
+            <xs:import namespace="http://util.dm.gesmallworld.com"/>
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="createProject">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="database_name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="1" name="project_name" nillable="false" type="xs:string"/>
+                        <xs:element minOccurs="1" name="project_type" nillable="false" type="xs:string"/>
+                        <xs:element minOccurs="0" name="additional_fields" nillable="true" type="ax22:Map"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+			<xs:element name="createProjectResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="content">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element minOccurs="1" name="project_id"
+															nillable="false" type="xs:string" />
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+            <xs:element name="setProjectState">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="database_name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="1" name="project_name" nillable="false" type="xs:string"/>
+                        <xs:element minOccurs="1" name="state" nillable="false" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+			<xs:element name="setProjectStateResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="content">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element minOccurs="1" name="project_name" nillable="false" type="xs:string"/>
+												<xs:element minOccurs="1" name="state" nillable="false" type="xs:string"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+            <xs:element name="getProjectState">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="database_name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="1" name="project_name" nillable="false" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+			<xs:element name="getProjectStateResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="content">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element minOccurs="1" name="state" nillable="false" type="xs:string"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="setProjectStateRequest">
+        <wsdl:part name="parameters" element="ns:setProjectState"/>
+    </wsdl:message>
+	<wsdl:message name="setProjectStateResponse">
+        <wsdl:part name="parameters" element="ns:setProjectStateResponse"/>
+    </wsdl:message>
+    <wsdl:message name="createProjectRequest">
+        <wsdl:part name="parameters" element="ns:createProject"/>
+    </wsdl:message>
+    <wsdl:message name="createProjectResponse">
+        <wsdl:part name="parameters" element="ns:createProjectResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getProjectStateRequest">
+        <wsdl:part name="parameters" element="ns:getProjectState"/>
+    </wsdl:message>
+    <wsdl:message name="getProjectStateResponse">
+        <wsdl:part name="parameters" element="ns:getProjectStateResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="DesignAdminPortType">
+        <wsdl:operation name="setProjectState">
+            <wsdl:input message="ns:setProjectStateRequest" wsaw:Action="urn:setProjectState"/>
+			<wsdl:output message="ns:setProjectStateResponse" wsaw:Action="urn:setProjectStateResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createProject">
+            <wsdl:input message="ns:createProjectRequest" wsaw:Action="urn:createProject"/>
+            <wsdl:output message="ns:createProjectResponse" wsaw:Action="urn:createProjectResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getProjectState">
+            <wsdl:input message="ns:getProjectStateRequest" wsaw:Action="urn:getProjectState"/>
+            <wsdl:output message="ns:getProjectStateResponse" wsaw:Action="urn:getProjectStateResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="DesignAdminSoap11Binding" type="ns:DesignAdminPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="setProjectState">
+            <soap:operation soapAction="urn:setProjectState" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+			<wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createProject">
+            <soap:operation soapAction="urn:createProject" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getProjectState">
+            <soap:operation soapAction="urn:getProjectState" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <!-- 
+    <wsdl:binding name="DesignAdminSoap12Binding" type="ns:DesignAdminPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="setProjectState">
+            <soap12:operation soapAction="urn:setProjectState" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+			<wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createProject">
+            <soap12:operation soapAction="urn:createProject" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getProjectState">
+            <soap:operation soapAction="urn:getProjectState" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    -->
+    <wsdl:binding name="DesignAdminHttpBinding" type="ns:DesignAdminPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="setProjectState">
+            <http:operation location="DesignAdmin/setProjectState"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="setProjectState"/>
+            </wsdl:input>
+			<wsdl:output>
+                <mime:content type="text/xml" part="setProjectState"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createProject">
+            <http:operation location="DesignAdmin/createProject"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="createProject"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="createProject"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getProjectState">
+            <soap:operation soapAction="DesignAdmin/getProjectState" style="document"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getProjectState"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getProjectState"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="DesignAdmin">
+        <wsdl:port name="DesignAdminHttpSoap11Endpoint" binding="ns:DesignAdminSoap11Binding">
+            <soap:address location="http://localhost:3001/gss/web/services/DesignAdmin"/>
+        </wsdl:port>
+        <!-- 
+        <wsdl:port name="DesignAdminHttpSoap12Endpoint" binding="ns:DesignAdminSoap12Binding">
+            <soap12:address location="http://localhost:3001/gss/web/services/DesignAdmin"/>
+        </wsdl:port>
+        -->
+        <wsdl:port name="DesignAdminHttpEndpoint" binding="ns:DesignAdminHttpBinding">
+            <http:address location="http://localhost:3001/gss/web/services/DesignAdmin"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

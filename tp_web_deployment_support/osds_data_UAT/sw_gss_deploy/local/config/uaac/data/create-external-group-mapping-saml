@@ -1,0 +1,4 @@
+UAA_GROUP_NAME|EXTERNAL_GROUP_DN|ORIGIN|
+gss.user|GSS Users|samlProvider|
+gss.user|saml.user|samlProvider|
+gss.user|saml.admin|samlProvider|

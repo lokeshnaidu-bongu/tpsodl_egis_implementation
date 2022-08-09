@@ -1,0 +1,90 @@
+_package user
+$
+_pragma(classify_level=restricted, topic={database})
+_private _method fme_processor.insert_feature_transaction( target_collection, proposed_values )
+	## 
+	##
+	ele_dt << gis_program_manager.cached_dataset(:electric)
+	spec_val_col << rope.new_with(:eo_cable,:eo_wire,:eo_connector_point,:eo_regulating_eqpt,:eo_connector_segment,:eo_power_xfrmr,:eo_protective_eqpt,:eo_isolating_eqpt)
+	_if target_collection.name _is :eo_power_xfrmr_inst _and  proposed_values[:location] _isnt _unset 
+	_then
+		proposed_values[:source_location] << proposed_values[:location]
+		proposed_values[:load_location] << proposed_values[:location]
+	_elif target_collection.name _is :eo_measuring_eqpt_inst _and  proposed_values[:source_location] _isnt _unset 
+	_then
+		proposed_values[:load_location] << proposed_values[:source_location]
+	_elif target_collection.name _is :sub_substation
+	_then
+#		sub_ext << proposed_values[:extent]
+#		pnt << sub_ext.bounds.an_internal_point()
+#		ps_pnt << pseudo_point.new(pnt)
+#		ps_pnt.world << ele_dt.world
+#		proposed_values[:location] << ps_pnt 	
+	_endif
+
+	_if spec_val_col.includes?(target_collection.name)	
+	_then
+		_if  target_collection.name _is :eo_cable
+		_then
+			sp_name << proposed_values[:tp_mig_spec]
+			#proposed_values[:remarks] << ""
+			spec_view <<ele_dt.collections[:eo_cable_spec]
+		_elif target_collection.name _is :eo_connector_point
+		_then
+			sp_name << proposed_values[:remarks]
+			#proposed_values[:serial_number] << ""
+			spec_view <<ele_dt.collections[:eo_connector_point_spec]			
+		_elif target_collection.name _is :eo_wire
+		_then
+			sp_name << proposed_values[:tp_mig_spec]
+			#proposed_values[:remarks] << ""
+			spec_view <<ele_dt.collections[:eo_wire_spec]
+		_elif target_collection.name _is :eo_connector_segment
+		_then
+			sp_name<< proposed_values[:tp_mig_spec]
+			#proposed_values[:source_data] << ""
+			spec_view <<ele_dt.collections[:eo_connector_segment_spec]
+		_elif target_collection.name _is :eo_connector_point
+		_then
+			#sp_name<< proposed_values[:source_data]
+			spec_view <<ele_dt.collections[:eo_connector_point_spec]
+		_elif target_collection.name _is :eo_power_xfrmr
+		_then
+			_if proposed_values[:device_type] = "PowerTransformer"
+			_then
+				sp_name<< proposed_values[:tp_mig_spec]
+				#proposed_values[:source_data] << ""
+			_else sp_name << proposed_values[:tp_mig_spec]
+			_endif
+			spec_view <<ele_dt.collections[:eo_power_xfrmr_spec]
+		_elif target_collection.name _is :eo_protective_eqpt
+		_then
+			spec_view <<ele_dt.collections[:eo_protective_eqpt_spec]
+			sp_name << proposed_values[:tp_mig_spec]
+			#proposed_values[:remarks] << ""
+		_elif target_collection.name _is :eo_regulating_eqpt
+		_then
+			sp_name<< proposed_values[:tp_mig_spec]
+			spec_view <<ele_dt.collections[:eo_regulating_eqpt_spec]
+			#proposed_values[:source_data] << ""
+		_elif target_collection.name _is :eo_isolating_eqpt
+		_then
+			sp_name<< proposed_values[:tp_mig_spec]
+			#proposed_values[:source_data] << ""
+			spec_view <<ele_dt.collections[:eo_isolating_eqpt_spec]
+		_endif
+		cb_spec << spec_view.select(predicate.eq(:spec_name,sp_name))
+		
+		_if cb_spec.an_element() _isnt _unset
+		_then
+			proposed_values[:specification] << cb_spec.an_element()
+			
+		_else
+			write("Specification Not Available === ",sp_name)
+		_endif 
+		
+	_endif
+	
+	>> _self.record_transaction_class.new_insert( target_collection, proposed_values )
+_endmethod
+$

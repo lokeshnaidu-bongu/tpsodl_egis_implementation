@@ -1,0 +1,10 @@
+_block
+el_v << gis_program_manager.databases[:electric]
+el_v.file("rwo.ds").superfile_print()
+#If not Already Converted
+el_v.file("rwo.ds").superfile_convert()
+#
+el_v.file("rwo.ds").superfile_add_new_component("F:\gis_live_db\ds\ds_electric\rwo_01.ds",16000)
+el_v.file("rwo.ds").superfile_add_new_component("F:\gis_live_db\ds\ds_electric\rwo_02.ds",16000)
+el_v.file("rwo.ds").superfile_add_new_component("F:\gis_live_db\ds\ds_electric\rwo_03.ds",16000)
+_endblock

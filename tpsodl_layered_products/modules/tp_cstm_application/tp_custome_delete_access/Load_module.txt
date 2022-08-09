@@ -1,0 +1,2 @@
+sw_module_manager.load_standalone_module("D:\tp_cstm_product\modules\tp_custome_delete_access")
+

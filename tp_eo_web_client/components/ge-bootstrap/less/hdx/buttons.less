@@ -1,0 +1,499 @@
+.ge-group-button-variant-local(@color; @background) {
+	color:@color;
+	background-color: @background;
+	border-color: @background;
+	//background-position: 4px -186px;
+
+	&:hover,
+	&.hover,
+	.open > .dropdown-toggle& {
+		background-color: darken(@background, 10%);
+		border-color: darken(@background, 10%);
+	}
+
+	&:active,
+	&.active {
+		background: darken(@background, 20%) none;
+		border-color: darken(@background, 20%);
+	}
+
+	&.disabled {
+		&:hover,
+		&.hover,
+		&:active,
+		&.active {
+			color: @color;
+			opacity: 0.65;
+			background-color: @background;
+		}
+	}
+}
+
+// Default buttons
+.btn {
+
+	// Defaults...
+	font-size: @baseFontSize;
+	line-height: @buttonLineHeightStandard;
+	padding: @buttonPaddingStandard;
+	display: inline-block;
+	transition: none;
+	color: @grayDark;
+	background-color: @btnBackground;
+	//border-color: @btnBorder;
+	.border-radius(@baseBorderRadius);
+	cursor: pointer;
+
+	&:focus,
+	&.focus {
+		outline: none;
+		background-position: 0 0; // Fix to override bootstrap background color shift
+		color: @grayDark;
+	}
+
+	&:hover,
+	&.hover {
+		color: @grayDarkest;
+		// Fix to override bootstrap background color shift
+		background: @grayLightest none 0 0;
+	}
+
+
+	&.btn {
+
+		&-lg {
+			font-size: @baseFontSize ; //14px
+			//padding: @buttonPaddingLarge;
+		}
+		&-sm {
+			font-size: @baseFontSize - 2; //12px
+		}
+		&-xs {
+			font-size: @baseFontSize - 4; //10px
+		}
+
+
+		&-small {
+			[class^="icon-"],
+			[class*="icon-"] {
+				line-height: @buttonLineHeightSmall;
+				font-size: @buttonIconFontSizeMini;
+			}
+		}
+
+		// Keeping this separate from .btn retains button transitions.
+		&-default {
+			&:hover,
+			&.hover {
+				border-color: @grayLighter;
+			}
+		}
+
+
+		&-primary {
+			color: @white;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+			border: 1px solid @grayDarker;
+			// Required to override default blue gradient
+			background: @grayDarker none;
+
+			&:hover,
+			&.hover {
+				background-color: @grayDarkest;
+			}
+		}
+
+		&-inverse {
+			color: @grayDark;
+			background-color: @btnInverseBackground;
+			border-color: @grayLighter;
+
+			&:hover,
+			&.hover {
+				color: @grayDark;
+				background-color: @grayLightest;
+			}
+		}
+
+		&-success,
+		&-warning,
+		&-danger {
+
+			&:before {
+				display: inline-block;
+
+				font-family: @geicons;
+				font-size: @baseFontSize + 7;
+				font-weight: normal;
+				vertical-align: middle;
+
+				padding-right: 5px;
+				margin-bottom: -2px;
+			}
+
+			&,
+			&:hover,
+			+ .btn.dropdown-toggle {
+				text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+				color: @white;
+				background-color: @btnInverseBackground;
+			}
+		}
+
+
+	}
+
+	&,
+	&.btn-default,
+	&.btn-primary,
+	&.btn-inverse {
+		&:active,
+		&.active {
+			color: @white;
+			border-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+			// Fix to override bootstrap background color shift
+			background: @cyan none 0 0;
+			#gradient > .vertical(lighten(@cyan, 15%), @cyan);
+			.reset-filter(); // IE9 can't handle both rounded corners and gradients.
+		}
+	}
+
+	// Disabled definition should be last to ensure it overrides any other styles.
+	&.disabled {
+
+		&,
+		&:hover,
+		&.hover,
+		&:active,
+		&.active {
+
+			color: @grayDark;
+			background: @offWhite;
+			border-color: transparent;
+			text-shadow: none;
+
+			.btn-primary& {
+				color: @white;
+				background: darken(@grayLight, 7.5%);
+				border-color: darken(@grayLight, 7.5%);
+				text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+			}
+
+			.btn-inverse& {
+				color: @grayLight;
+				background-color: @white;
+				border-color: transparent;
+			}
+
+			.btn-info& {
+				color: @white;
+				opacity: 0.65;
+				background-color: @cyan;
+
+			}
+		}
+	}
+
+
+
+
+	&.btn {
+
+
+		&-info {
+			color: @white;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+			border-color: @cyan;
+			// Required to override default blue gradient
+			background: @cyan none;
+
+			&:hover,
+			&.hover {
+				border-color: darken(@cyan, 10%);;
+				background-color: darken(@cyan, 10%);
+			}
+
+			&:active,
+			&.active {
+				border-color: darken(@cyan, 20%);
+				background-color: darken(@cyan, 20%);
+			}
+		}
+
+		&-success {
+			&:before {
+				content: @icon-ico_ok_sm; //"\f402";
+				line-height: 0.9;
+			}
+
+			&.btn-mega {
+				&:before {
+					line-height: 0.7;
+				}
+			}
+
+			&,
+			+ .btn.dropdown-toggle {
+				.ge-group-button-variant-local(@white, @successBackground);
+				//This needs to be overridden for btn-success. Others darken 20%, this needs 15%
+				&:active,
+				&.active {
+					background-image: none;
+					background-color: darken(@successBackground, 15%);
+				}
+			}
+
+		}
+
+		&-warning {
+			&:before {
+				content: @icon-ico_alert_sm; //"\f109";
+				font-size: @baseFontSize;
+				line-height: 0.7;
+				margin-bottom: 0;
+			}
+
+			&.btn-mega {
+				&:before {
+					line-height: 1.15em;
+				}
+			}
+
+			&,
+			+ .btn.dropdown-toggle {
+				.ge-group-button-variant-local(@white, @warningBackground);
+			}
+		}
+
+		&-danger {
+			&:before {
+				content: @icon-ico_warning_sm; //"\f42c";
+				line-height: 0.8;
+			}
+
+			&.btn-mega {
+				&:before {
+					line-height: 0.65em;
+				}
+			}
+
+			&,
+			+ .btn.dropdown-toggle {
+				.ge-group-button-variant-local(@white, @errorBackground);
+			}
+		}
+
+
+		&-mega {
+			font-size: @baseFontSize + 2; // @baseFontSize is 14px;
+			font-family: @brandFontFamily;
+			padding: 20px;
+			border: 1px solid @grayLighter;
+			.border-radius(@borderRadiusLarge + 4);
+			background-color: @btnInverseBackground;
+			.transition(none);
+
+			&:hover,
+			&.hover {
+				color: @grayDarkest;
+				border-color: @cyan;
+			}
+
+			&:active,
+			&.active {
+				//	border-color: transparent;
+				background-color: @cyan;
+				color: @white;
+			}
+
+			&.disabled {
+				&,
+				&:hover,
+				&.hover,
+				&:active,
+				&.active {
+					background: @white none;
+					color: @grayDark;
+					border-color: @grayLighter;
+					.opacity(0.65);
+				}
+			}
+
+
+			&.btn-success,
+			&.btn-warning,
+			&.btn-danger,
+			.btn.btn-success + .btn.dropdown-toggle,
+			.btn.btn-warning + .btn.dropdown-toggle,
+			.btn.btn-danger + .btn.dropdown-toggle,
+			&.btn-success:active,
+			&.btn-warning:active,
+			&.btn-danger:active,
+			&.btn-success.disabled {
+				transition: none;
+				-webkit-transition: none;
+			}
+
+			&.btn-success,
+			.btn.btn-success + .btn.dropdown-toggle,
+			&.btn-success.disabled,
+			&.btn-success.disabled:hover,
+			&.btn-success.disabled:active {
+				color: @successText;
+				border-color: @successBorder;
+				background-color: @btnInverseBackground;
+			}
+
+			&.btn-success,
+			.btn.btn-success + .btn.dropdown-toggle  {
+				&:hover,
+				&.hover {
+					color: darken(@green, 10%);
+					border-color: darken(@green, 10%);
+				}
+
+				&:active,
+				&.active {
+					color: @white;
+					border-color: @successBorder;
+					background: @successBackground none;
+				}
+			} // &.btn-success
+
+			&.btn-warning,
+			.btn.btn-warning + .btn.dropdown-toggle,
+			&.btn-warning.disabled,
+			&.btn-warning.disabled:hover,
+			&.btn-warning.disabled:active {
+				color: @warningText;
+				border-color: @warningBorder;
+				background-color: @btnInverseBackground;
+			}
+
+			&.btn-warning, .btn.btn-warning + .btn.dropdown-toggle {
+				&:hover,
+				&.hover {
+					color: darken(@orange, 10%);
+					border-color: darken(@orange, 10%);
+				}
+
+				&:active,
+				&.active {
+					color: @white;
+					border-color: @warningBorder;
+					background: @warningBackground none;
+				}
+			} // &.btn-warning
+
+			&.btn-danger,
+			.btn.btn-danger + .btn.dropdown-toggle,
+			&.btn-danger.disabled,
+			&.btn-danger.disabled:hover,
+			&.btn-danger.disabled:active {
+				color: @errorText;
+				border-color: @errorBorder;
+				background-color: @btnInverseBackground;
+			}
+
+			&.btn-danger, .btn.btn-danger + .btn.dropdown-toggle {
+				&:hover,
+				&.hover {
+					color: darken(@red, 10%);
+					border-color: darken(@red, 10%);
+				}
+
+				&:active,
+				&.active {
+					color: @white;
+					border-color: @errorBorder;
+					background: @errorBackground none;
+				}
+			} // 	&.btn-danger
+		}
+
+
+
+	} // .btn.btn
+
+	&.fullwidth {
+		width: 100%;
+	}
+
+	[class*="icon-remove"] {
+		vertical-align: baseline;
+		opacity: 0.3;
+		filter: alpha(opacity=30);
+	}
+
+	&-remove {
+
+		&:hover [class^="icon-"],
+		&:hover [class*=" icon-"] {
+			opacity: 1;
+			filter: alpha(opacity=100);
+		}
+		i[class*="icon-remove"] {
+			font-size: @buttonIconFontSizeSpecial;
+
+			&:before {
+				margin-top:1px;
+			}
+		}
+	}
+
+	[class*="icon-"] {
+		vertical-align: middle;
+	}
+
+	[class^="icon-"],
+	[class*="icon-"] {
+		font-size: @buttonIconFontSizeStandard;
+	}
+
+	&.disabled,
+	&[disabled] {
+		opacity: 0.65;
+	}
+} // .btn
+
+
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+	/* Safari and Chrome */
+	.btn {
+
+		padding: 6px 10px;
+
+		&.btn {
+
+			&-mega {
+				padding: 20px; // restore
+			}
+
+			&-warning {
+				&:before {
+					margin-top: -2px;
+				}
+			}
+
+			&-success,
+			&-danger,
+			&-important,
+			&-error {
+				&:before {
+					margin-top: -4px;
+				}
+			}
+		}
+
+	}
+}
+
+// TODO HACK - we work around what may be a bug in bootstrap that makes background-repeat: repeat-x; when dropdown is open
+.btn-group.open .btn.dropdown-toggle {
+	background-repeat: no-repeat !important;
+}
+.touch{
+	-webkit-tap-highlight-color: transparent !important;
+}
+

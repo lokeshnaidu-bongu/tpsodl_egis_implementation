@@ -1,0 +1,484 @@
+
+#% text_encoding = iso8859_1 
+_package user 
+$
+
+_pragma(classify_level=basic, topic={Migration})
+def_slotted_exemplar(:tp_fme_datamigration,
+	## 
+	## 
+	## 
+	{
+	},
+	{})
+$
+
+# shared constant which holds the Shape files w.r.t
+# the Object information.
+_pragma(classify_level=basic, topic={Migration})
+tp_fme_datamigration.define_shared_constant(:shape_files,equality_property_list.new_with(
+	
+	:Substation,"Substation.shp",
+	:Cabinet,"Cabinet.shp",
+	:Pole,"Pole.shp",
+	:Tower,"Tower.shp",
+	:Busbar,"Busbar.shp",
+	:Cable,"Cable.shp",
+	:Wire,"Wire.shp",
+	:Jumper,"Jumper.shp",	
+	:Isolating_Equipment,"Isolating_Equipment.shp",
+	:Measuring_Equipment,"Measuring_Equipment.shp",	
+	:Protective_Equipment,"Protective_Equipment.shp",	
+	:Power_Transformer,"DT.shp",
+	:Meter,"Meter.shp",
+	:Connector_Point,"Connector_Point.shp",
+	:Consumer_Meter,"Consumer_Meter.shp",
+	:Service_Point,"Service_Point.shp",
+	:Consumer_Cable,"Consumer_Cable.shp",
+	:Circle,"Circle.shp",
+	:Division,"Division.shp",
+	:District,"District.shp",
+	:Sub_division,"Sub_Division_Boundary.shp",
+	:Section,"Section_Boundary.shp",	
+	:Locality_Boundary,"Locality_Boundary.shp",
+	:Sub_Locality,"Sub_Locality.shp",
+	:Municipal_Ward_Boundary,"Municipal_Ward_Boundary.shp",
+	:Village_Boundary,"Village_Boundary.shp",
+	:Slum_Area,"Slum_Area.shp",
+	:Environment,"Environment.shp",
+	:Flood_Map,"Flood_Map.shp",
+	:Water_Area,"Water_Area.shp",
+	:Waterbody,"Waterbody",
+	:Wetland,"Wetland.shp",
+	:Estate_Land_Type,"Estate_Land_Type.shp",
+	:Cluster_of_Trees,"Cluster_of_Trees.shp",
+	:Tree,"Tree.shp",
+	:Transit_Area,"Transit_Area.shp",
+	:Vehicle_Demarcated_Boundary,"Vehicle_Demarcated_Boundary.shp",
+	:Rails,"Rails.shp",
+	:Road,"Road.shp",
+	:Road_Centerline,"Road_Centerline.shp",
+	:Footpath,"Footpath.shp",
+	:Right_of_Way,"Right_of_Way.shp",
+	:Obstacle,"Obstacle.shp",
+	:Utility_Points,"Utility_Points.shp",
+	:Telecom,"Telecom.shp",
+	:Restricted_Area,"Restricted_Area.shp",
+	:Landmark,"Landmark.shp",
+	:Non_Builtup,"Non_Builtup.shp",
+	:Builtup,"Builtup.shp",
+	:Gate,"Gate.shp",
+	:Green,"Green.shp",
+	:Shop,"Shop.shp",
+	:TPSODL_Building,"TPSODL_Building.shp",
+	:Building,"Building.shp",
+	:TPSODL_Boundary,"TPSODL_Boundary.shp",
+	:Consumer_Building,"Consumer_Building.shp")
+					    ,:public)
+$
+
+
+# shared constant which holds the Workbench files w.r.t
+# the Object information.
+_pragma(classify_level=basic, topic={Migration})
+tp_fme_datamigration.define_shared_constant(:fme_workbenches_path,property_list.new_with(
+	:Substation,"\Substation.fmw",
+	:Cabinet,"\Cabinet.fmw",
+	:Pole,"\Pole.fmw",
+	:Tower,"\Tower.fmw",
+	:Busbar,"\Busbar.fmw",
+	:Cable,"\Cable.fmw",
+	:Wire,"\Wire.fmw",
+	:Jumper,"\Jumper.fmw",
+	:Connector_Point,"\Connector_Point.fmw",
+	:Isolating_Equipment,"\Isolating_Equipment.fmw",
+	:Measuring_Equipment,"\Measuring_Equipment.fmw",	
+	:Protective_Equipment,"\Protective_Equipment.fmw",	
+	:Power_Transformer,"\Power_Transformer.fmw",
+	:Meter,"\Meter.fmw",	
+	:Consumer_Meter,"\shape2sworldswaf_Consumer_Meter.fmw",
+	:Service_Point,"\shape2sworldswaf_Service_Point.fmw",
+	:Consumer_Cable,"\shape2sworldswaf_Consumer_Cable.fmw",
+	:Circle,"\shapefile2sworldswaf_Circle.fmw",
+	:Division,"\shapefile2sworldswaf_Division.fmw",
+	:District,"\shapefile2sworldswaf_District.fmw",
+	:Sub_division,"\shapefile2sworldswaf_Sub_Division_Boundary.fmw",
+	:Section,"\shapefile2sworldswaf_Section_Boundary.fmw",
+	:Locality_Boundary,"\shapefile2sworldswaf_Locality_Boundary.fmw",
+	:Sub_Locality,"\shapefile2sworldswaf_Sub_Locality.fmw",
+	:Municipal_Ward_Boundary,"\shapefile2sworldswaf_Municipal_Ward_Boundary.fmw",
+	:Village_Boundary,"\shapefile2sworldswaf_Village_Boundary.fmw",
+	:Slum_Area,"\shapefile2sworldswaf_Slum_Area.fmw",
+	:Environment,"\shapefile2sworldswaf_Environment.fmw",
+	:Flood_Map,"\shapefile2sworldswaf_Flood_Map.fmw",
+	:Water_Area,"\shapefile2sworldswaf_Water_Area.fmw",
+	:Waterbody,"\shapefile2sworldswaf_Waterbody",
+	:Wetland,"\shapefile2sworldswaf_Wetland.fmw",
+	:Estate_Land_Type,"\shapefile2sworldswaf_Estate_Land_Type.fmw",
+	:Cluster_of_Trees,"\shapefile2sworldswaf_Cluster_of_Trees.fmw",
+	:Tree,"\shapefile2sworldswaf_Tree.fmw",
+	:Transit_Area,"\shapefile2sworldswaf_Transit_Area.fmw",
+	:Vehicle_Demarcated_Boundary,"\shapefile2sworldswaf_Vehicle_Demarcated_Boundary.fmw",
+	:Rails,"\shapefile2sworldswaf_Rails.fmw",
+	:Road,"\shapefile2sworldswaf_Road.fmw",
+	:Road_Centerline,"\shapefile2sworldswaf_Road_Centerline.fmw",
+	:Footpath,"\shapefile2sworldswaf_Footpath.fmw",
+	:Right_of_Way,"\shapefile2sworldswaf_Right_of_Way.fmw",
+	:Obstacle,"\shapefile2sworldswaf_Obstacle.fmw",
+	:Utility_Points,"\shapefile2sworldswaf_Utility_Points.fmw",
+	:Telecom,"\shapefile2sworldswaf_Telecom.fmw",
+	:Restricted_Area,"\shapefile2sworldswaf_Restricted_Area.fmw",
+	:Landmark,"\shapefile2sworldswaf_Landmark.fmw",
+	:Non_Builtup,"\shapefile2sworldswaf_Non_Builtup.fmw",
+	:Builtup,"\shapefile2sworldswaf_Builtup.fmw",
+	:Gate,"\shapefile2sworldswaf_Gate.fmw",
+	:Green,"\shapefile2sworldswaf_Green.fmw",
+	:Shop,"\shapefile2sworldswaf_Shop.fmw",
+	:TPSODL_Building,"\shapefile2sworldswaf_TPSODL_Building.fmw",
+	:Building,"\shapefile2sworldswaf_Building.fmw",
+	:TPSODL_Boundary,"\shapefile2sworldswaf_TPSODL_Boundary.fmw",
+	:Consumer_Building,"\shapefile2sworldswaf_Consumer_Building.fmw")
+
+					    ,:public)
+$
+
+# For Land Dataset
+# Created shared constant to import data in sequential manner
+tp_fme_datamigration.define_shared_constant(:land_obj_to_import,rope.new_with(:Circle,
+	:Division,
+	:District,
+	:Sub_division,
+	:Section,
+	:Locality_Boundary,
+	:Sub_Locality,
+	:Municipal_Ward_Boundary,
+	:Village_Boundary,
+	:Slum_Area,
+	:Environment,
+	:Flood_Map,
+	:Water_Area,
+	:Waterbody,
+	:Wetland,
+	:Estate_Land_Type,
+	:Cluster_of_Trees,
+	:Tree,
+	:Transit_Area,
+	:Vehicle_Demarcated_Boundary,
+	:Rails,
+	:Road,
+	:Road_Centerline,
+	:Footpath,
+	:Right_of_Way,
+	:Obstacle,
+	:Utility_Points,
+	:Telecom,
+	:Restricted_Area,
+	:Landmark,
+	:Non_Builtup,
+	:Builtup,
+	:Gate,
+	:Green,
+	:Shop,
+	:TPSODL_Building,
+	:Building,
+	:TPSODL_Boundary,
+	:Consumer_Building
+								     )
+					    ,:public)
+$
+
+# For Electric Dataset
+# Created shared constant to import data in sequential manner
+tp_fme_datamigration.define_shared_constant(:ele_obj_to_import,rope.new_with(:Substation,
+	:Cabinet,
+	:Pole,
+	:Tower,
+	:Busbar,
+	:Cable,
+	:Wire,
+	:Jumper,
+	:Connector_Point,
+	:Isolating_Equipment,
+	:Measuring_Equipment,
+	:Protective_Equipment,	
+	:Power_Transformer,
+	:Meter,
+	:Consumer_Meter,
+	:Service_Point,
+	:Consumer_Cable
+								    )
+					    ,:public)
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.new()
+	## 
+	## 
+	_return  _clone.init()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.init()
+	## 
+	##
+	
+	_return _self 
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.run(obj_name,alt_name,data_set,_optional ch_flg)
+	## 
+	## Fetching the module directory path , worbench repository path
+	## and data file paths.
+	## Log file will be created for each object in the specified path.
+	
+	write("+++une  +++",_self,%tab,obj_name)
+	
+	module_path << sw_module_manager.module(_self.class_name).full_directory
+#	write("+++ module_path +++",module_path)
+
+
+							
+	wb << module_path+"/resources/base/data/fme_workbenches"
+	
+	wb_path << wb.substitute_string("/","\")
+	l_data_path << module_path+"/resources/base/data/datafiles"
+	data_path << l_data_path.substitute_string("/","\")
+	log_time << date_time.now().write_string.substitute_string(" ","_")
+	
+	#log_path << "C:\Temp\"
+	log_path << system.temp_directory_name
+	
+	write("+++ 1 +++")
+	
+	#getting access to the shapefile repository folder
+	dir_channel << directory_channel.new(data_path)
+	write("+++ dir_channel +++",dir_channel)
+	
+	_if dir_channel _isnt _unset
+	_then
+		_protect
+			
+			#looping on Feederwise folders
+			_loop
+				write("+++  2+++",dir_channel)
+				
+				next << dir_channel.get_status()
+				write("+++ next +++",next)
+				
+				_if next _is _unset 
+				_then
+					_leave 
+				_endif
+				
+				path_name << next.name
+				write("+++ path_name +++",path_name)
+				
+				#getting access to Feeder folders
+				sub_folders << directory_channel.new(path_name)
+#write("+++ sub_folders +++",sub_folders)
+
+				st_cut << path_name.split_by("\")
+				feeder_name << st_cut[st_cut.size]
+#write("+++  feeder_name+++",feeder_name.write_string,%tab,alt_name.write_string)
+
+				_if feeder_name.write_string = alt_name.write_string
+				_then
+					#write("+++ inside +++")
+					
+					_protect
+						twn_strm << external_text_output_stream.new(log_path.write_string+"\"+"FME_Migration_Log_"+obj_name+"_"+feeder_name+".txt")
+						twn_strm.write("*******************************************************")
+						twn_strm.newline()
+						_loop
+							db_folder << sub_folders.get_status()
+							write("+++ db_folderdb_folder +++",db_folder)
+							
+							_if db_folder _is _unset _then _leave _endif
+							folder_path << db_folder.name
+							#Accessing the dataset folders
+							#write("+++ folder_path +++",folder_path)
+						
+								
+							files_path_access << directory_channel.new(folder_path)
+						
+						#	files_path_access << directory_channel.new(folder_path)
+						write("+++files_path_access  +++",files_path_access)
+							
+							#Looping on files available in each dataset folder
+							#Fetching on .SHP files as remaning files can be ignored
+							
+							_loop
+								file_name << files_path_access.get_full()
+								_if file_name _is _unset _then _leave _endif
+
+								write("+++ file_name +++",file_name)
+								
+#								file_ex << file_name.split_by(".")
+#								_if file_ex.size = 2 _and file_ex[2] = "shp"
+								_if file_name.rindex_of_seq(".shp") _isnt _unset
+								_then
+									string_words << file_name.split_by("\")
+									
+									_if ch_flg _is _true 
+									_then
+										write("+++shp_file  +++",shp_file)
+										
+										shp_file << _self.shape_files[obj_name.lowercase]
+										wrk_name << _self.fme_workbenches_path[obj_name.lowercase.as_symbol()]
+									_else
+										shp_file << _self.shape_files[obj_name]
+										wrk_name << _self.fme_workbenches_path[obj_name]
+										write("+++wrk_name  +++",wrk_name)
+										
+									_endif
+									
+									_if string_words.eq_includes?(shp_file)
+									_then
+										twn_strm.write("Processing ",obj_name," Object")
+										twn_strm.newline()
+										t1 << date_time.now()
+										twn_strm.write("Started Time ",t1.write_string)
+										twn_strm.newline()
+										fme_wb << wb_path+wrk_name
+										write("+++ Workbench Name +++",fme_wb)
+										
+										_if fme_wb _isnt _unset 
+										_then
+											twn_strm.write("Running ",fme_wb," Workbench")
+											twn_strm.newline()
+											wb_name << fme_wb.split_by("\")
+											log_file_name << write_string(wb_path,"\",wb_name[wb_name.size].split_by(".")[1],"_",feeder_name,".log")
+											
+											_if cmd_strng <> "" _andif fme_wb _isnt unset
+											_then
+#ele_dt.checkpoint("b4_"+obj_name.write_string)											
+												cmd_strng << write_string("cmd /c ","fme.exe ",fme_wb," --SourceDataset_SHAPE ",file_name," LOG_FILENAME ",log_file_name)
+												system.do_command("cmd /c cd C:\Program Files (x86)\FME")
+												(process,result)<< system.do_command(cmd_strng)
+												_if result = 0
+												_then
+													twn_strm.write("Importing Process Completed Succesfully")
+												_else
+													twn_strm.write("Issue in Importing the data....")
+													twn_strm.write("Please check the related FME Log file")
+												_endif
+												
+											_endif
+											t2 << (date_time.now()-t1)
+											twn_strm.newline()
+											twn_strm.write("End Time ",t2.write_string)
+											twn_strm.newline()
+											twn_strm.write("*******************************************************")
+											
+										_else
+											twn_strm.write("ERROR ",fme_wb," Workbench not Available")
+										_endif	
+									_endif 	
+								_endif
+								
+							_endloop
+							
+						_endloop
+					_protection
+						twn_strm.close()
+					_endprotect
+			#	_else
+
+					#					data_set.go_to_alternative("|DM Top")
+					#					_if (alt << data_set.alternative_details(alt_name)) _isnt _unset 
+					#					_then	
+					#						data_set.remove_alternative(alt_name)
+					#						write("feeder Folder Not Available")
+					#					_endif
+					_endif
+				
+			_endloop
+		_protection
+			dir_channel.close()
+			sub_folders.close()
+			_if files_path_access _isnt _unset 
+			_then
+				files_path_access.close()
+			_endif				
+			
+		_endprotect
+		
+	_else
+		write("Repository Not Accssible")	
+	_endif
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.start_fme_eo_importing(alt_nm)
+	## 
+	## 
+	## For Ordered importing of objects fetching the objects from
+	## shared constant and running the appropriate FME workbench
+	## By calling run method
+
+	write("Electric data importing Process started ",(t1 <<date_time.now()))
+
+	ele_dt << gis_program_manager.cached_dataset(:electric)
+	ele_dt.go_to_alternative("|DM Top")
+	alt_st_name << ele_dt.alternative_details(alt_nm)
+	_if alt_st_name _is _unset 
+	_then
+		ele_dt.create_alternative(alt_nm)
+	_endif
+	ele_dt.go_to_alternative(alt_nm)
+	write("Data importing in ",alt_nm," alternative")
+	#ele_dt.checkpoint("b4_fme_imprt_"+date_time.now().write_String)
+	ele_dt.checkpoint("b4_migration")
+	_for e_obj _over _self.ele_obj_to_import.fast_elements()
+	_loop
+		#write("+++ ddd +++",%tab,e_obj)
+		write("************************Processing Object*******************************",%tab,e_obj)
+		ele_dt.checkpoint("b4_"+e_obj.write_string)	
+		_self.run(e_obj,alt_nm,ele_dt)
+		write("**********************Finished Processing Object*********************************",%tab,e_obj)
+	_endloop
+	write("Electric data importing process completed...")
+	write("Total Time Taken :- ",date_time.now()-t1)
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.start_fme_land_importing(alt_nm)
+	## 
+	##
+	## For Ordered importing of objects fetching the objects from
+	## shared constant and running the appropriate FME workbench
+	## By calling run method
+
+	write("Land Importing Process started ",(t1 <<date_time.now()))
+	
+	lnd_dt << gis_program_manager.cached_dataset(:land)
+	lnd_dt.go_to_alternative("|Ambapua_Land_UTM_Final")
+	alt_st_name << lnd_dt.alternative_details(alt_nm)
+	_if alt_st_name _is _unset 
+	_then
+		lnd_dt.create_alternative(alt_nm)
+	_endif
+	lnd_dt.go_to_alternative(alt_nm)
+	write("Data importing in ",alt_nm," alternative")
+	write("+++  sdsds+++")
+	
+	lnd_dt.checkpoint("b4_fme_imprt_"+date_time.now().write_String)
+	write("+++ asasa +++")
+	
+	_for e_obj _over _self.land_obj_to_import.fast_elements()
+	_loop
+		write("+++ e_obj,alt_nm,lnd_dt +++",e_obj,alt_nm,lnd_dt)
+		
+		_self.run(e_obj,alt_nm,lnd_dt)
+	_endloop
+	write("Land data importing process completed...")
+	write("Total Time Taken :- ",date_time.now()-t1)
+	
+_endmethod
+$

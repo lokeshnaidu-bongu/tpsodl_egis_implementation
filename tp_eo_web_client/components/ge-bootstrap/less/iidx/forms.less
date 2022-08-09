@@ -1,0 +1,37 @@
+form {
+  margin-bottom: 20px;
+  &[class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+.form-actions {
+  background-color: @offWhite;
+}
+
+input[type="file"] {
+	height: auto; }
+
+.input-sm {
+	height: 24px; }
+
+// Twitter typeahead input box overrides
+
+.twitter-typeahead {
+	display: block!important; }
+
+.tt-input {
+	background-color: @formsBackgroundColor!important; }
+
+.tt-dropdown-menu {
+  margin-top: 2em;
+  padding-top: 0;
+}
+
+@media (min-width: 768px) {
+// Bootstrap Overrides
+// --------------------------------------------------
+	.form-inline .input-group .input-group-btn {
+		width: 1%; }
+}

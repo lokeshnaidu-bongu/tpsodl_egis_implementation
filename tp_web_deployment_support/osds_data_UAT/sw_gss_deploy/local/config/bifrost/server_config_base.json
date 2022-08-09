@@ -1,0 +1,131 @@
+{
+  "eisHost": {
+    "host": "${WEB_PRODUCT}-service",
+    "port": 7771,
+    "secure": false,
+    "timeout": 120
+  },
+  "certificateAuthorities": [],
+  "port": 3001,
+  "schema": "webapps",
+  "dbtype": "postgres",
+  "useSSL": false,
+  "noCSP": true,
+  "requestBodyLengthLimit": "2mb",
+  "schedulerEnabled": true,
+  "sslDetails": {
+    "key": "./config/ssl.key.pem",
+    "cert": "./config/ssl.cert.pem",
+    "port": 443
+  },
+  "rabbitmq": {
+    "host": "${SW_RABBITMQ_AMQP_URL}",
+    "queues": {
+      "requestQueue": "ssm vertx request queue",
+      "readRequestQueue": "ssm vertx read request queue"
+    },
+    "responseQueue": "ssm vertx response queue",
+    "disableForwarding": false
+  },
+  "tableSweep": [
+    {
+      "tableName": "deltas",
+      "age": 20160
+    },
+    {
+      "tableName": "rabbit_requests",
+      "age": 10
+    }
+  ],
+  "externalEndpoints": {
+    "async_rollforward_completed":{
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 8123,
+        "path": "/async_rollforward_completed_endpoint"
+      },
+      "methods": ["post"]
+    },
+    "outbound_echo_rest": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 15040,
+        "path": "/rest/echo"
+      },
+      "methods": ["post", "get"]
+    }
+  },
+  "extensions": {
+    "tileCache": {
+      "enabled": true,
+      "useTileCache": true,
+      "rollforward": {
+        "invalidateDesigns": false
+      }
+    }
+  },
+  "default_security_roles": ["gss.admin"],
+  "paths": {
+    "/resource": {
+      "security_roles": ["gss.user", "gss.admin"]
+    },
+    "/maps": {
+      "security_roles": ["gss.user", "gss.admin"]
+    },
+    "/gss": {
+      "security_roles": ["gss.user"],
+      "async_request": [
+        "readRequestQueue",
+        "requestParamIsOneOf",
+        "method",
+        ["web_pdf_plot"]
+      ]
+    },
+    "/async": {
+      "security_roles": ["gss.user", "gss.admin"],
+      "async_request": [
+        "readRequestQueue",
+        "requestUlrMatchesOneOf",
+        ["async"]
+      ]
+    },
+    "/wms": {
+      "security_roles": ["gss.guest"],
+      "auto_authenticate_client": "client_guest"
+    },
+    "/wfs": {
+      "security_roles": ["gss.guest"],
+      "auto_authenticate_client": "client_guest"
+    },
+    "/wcs": {
+      "security_roles": ["gss.guest"],
+      "auto_authenticate_client": "client_guest"
+    },
+    "/inspire": {
+      "security_roles": ["gss.guest"],
+      "auto_authenticate_client": "client_guest"
+    },
+    "/rollforward": {
+      "security_roles": ["gss.admin"],
+      "async_request": {
+        "request": ["requestQueue", "requestMethodIs", "POST"],
+        "completionEndpoint": "async_rollforward_completed"
+      }
+    },
+    "/api-docs": {
+      "security_roles": ["gss.guest", "gss.user", "gss.admin"],
+      "auto_authenticate_client": "client_guest"
+    },
+    "/designcheck" : {
+      "security_roles": ["gss.admin"]
+    },
+    "/admin": {
+      "security_roles": ["gss.admin"]
+    },
+    "/outbound": {
+      "security_roles": ["gss.user"]
+    }
+  }
+}

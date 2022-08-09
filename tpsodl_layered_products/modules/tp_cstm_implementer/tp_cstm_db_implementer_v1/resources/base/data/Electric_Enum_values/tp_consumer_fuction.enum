@@ -1,0 +1,11 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+LV Consumer	1
+HV Consumer	2
+EHV Consumer	3
+Street Light	4
+Others	5

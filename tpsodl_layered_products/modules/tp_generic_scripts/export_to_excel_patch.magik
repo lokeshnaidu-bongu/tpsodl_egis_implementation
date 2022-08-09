@@ -1,0 +1,63 @@
+_pragma(classify_level=restricted, topic={explorer_view_plugin})
+_method explorer_export_plugin.export_to_excel()
+	##
+	## Export to Excel.
+	##
+
+	# Set up the collection_export_engine that we use to perform
+	# the export.
+
+_if system.file_exists?("C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE")
+_then
+	write("+++  +++")
+	
+	collection_export_engine.max_rows_in_excel << 2000000
+_else
+	_self.show_alert("Unable to find a version of excel that support more than 65000 rows.")
+_endif
+write("+++abc  +++")
+
+	
+	_if _self.export_available?( :export_to_excel )
+	_then		
+		_local known_size? << _self.setup_collection_export_engine( :exporting_to_excel )
+		
+		_if known_size? _andif .total_to_export _is 0
+		_then
+			# Size is known, but is 0. Do not export
+			condition.raise(:user_error,
+					:string, _self.message(:nothing_to_export))
+		_else
+			_self.action( :export_to_excel ).enabled? << _false
+			
+			_if _self.always_use_save_as?
+			_then
+				_try _with cond				
+					_self.export_filename(:excel,
+							      :select_excel_file,
+							      "*.xls",
+							      :int!export_to_excel_save_as|()|,
+							      :exporting_to_excel)
+				_when user_interrupt
+				      _self.action( :export_to_excel ).enabled? << _true
+				_when error, warning
+				      cond.report_on(!error_output!)
+				_endtry
+				write("+++ def +++")
+				
+			_else 				
+				.engine.export_to_excel( :run_in_background?, _true)
+			_endif
+			write("+++ ghi +++")
+			
+		_endif
+		write("+++jkl  +++")
+		
+	_else
+		_self.action( :export_to_excel ).enabled? << _false 
+	_endif
+	write("+++ mno +++")
+	
+	
+_endmethod
+$

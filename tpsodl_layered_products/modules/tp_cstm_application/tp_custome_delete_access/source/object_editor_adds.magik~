@@ -1,0 +1,41 @@
+
+
+_pragma(classify_level=restricted)
+_method object_editor.get_data_from_xml_file()
+	##
+	##
+ 
+	l_config_file << smallworld_product.get_data_file("users_for_delete.xml",:tp_cstm_electric_adds,_true)
+	
+	a_xml_file << simple_xml.read_element_file(l_config_file)
+	
+	#a_xml_file << simple_xml.read_element_file(s_file_path)
+	p_xml_values << equality_property_list.new()
+	p_allowed_layers << equality_property_list.new()
+	
+	_for i _over a_xml_file.xml_elements()
+	_loop
+		_for j _over i.xml_elements()
+		_loop
+			_for k _over j.xml_elements()
+			_loop 
+				s_key << k.attribute(:key).write_string
+				s_allowed_user << k.attribute(:allowed_user)
+				s_allowed_oper << k.attribute(:allowed_operation)
+				
+				_if s_key _is _unset _then _continue _endif
+
+				s_composite_key << write_string(s_key,s_allowed_user)
+				
+				_if p_xml_values[s_composite_key] _is _unset _then
+					p_xml_values[s_composite_key] << s_allowed_oper
+				_endif
+				_if p_allowed_layers[s_key] _is _unset _then
+					p_allowed_layers[s_key] << s_key
+				_endif 
+			_endloop 
+		_endloop 
+	_endloop
+	_return p_xml_values, p_allowed_layers
+_endmethod
+$

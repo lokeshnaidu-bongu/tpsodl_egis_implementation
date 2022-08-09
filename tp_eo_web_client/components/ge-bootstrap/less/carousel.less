@@ -1,0 +1,81 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/carousel.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+.carousel-caption {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px;
+  background: @grayDark;
+  background: rgba(0,0,0,.75);
+  text-align: left;
+}
+
+.carousel-caption h4,
+.carousel-caption p {
+  color: @white;
+  line-height: @baseLineHeight;
+}
+.carousel-caption h4 {
+  margin: 0 0 5px;
+}
+.carousel-caption p {
+  margin-bottom: 0;
+}
+
+// Left/right controls for nav
+// ---------------------------
+
+.carousel-control {
+  top: 40%;
+  left: 15px;
+  width: 43px;
+  height: 43px;
+  margin-top: -26px;
+	font-weight: 100;
+	font-size: 30px;
+	line-height: 40px;
+  color: @white;
+  text-align: center;
+  background: @grayDarker;
+  border: 3px solid @white;
+  .border-radius(23px);
+  .opacity(.5);
+
+  // we can't have this transition here
+  // because webkit cancels the carousel
+  // animation if you trip this while
+  // in the middle of another animation
+  // ;_;
+  // .transition(opacity .2s linear);
+
+  &.left,
+  &.right {
+    background-image: none;
+	  .reset-filter(); // For IE the filter creates a strange gradient effect which appears to have been introduced in BS3.
+
+	[class*="icon-"] {
+ 		vertical-align: middle;
+ 	}
+  }
+
+  // Reposition the right one
+  &.right {
+    left: auto;
+    right: 15px;
+  }
+
+  // Hover/focus state
+  &:hover,
+  &:focus {
+    color: @white;
+    text-decoration: none;
+    .opacity(.9);
+  }
+}

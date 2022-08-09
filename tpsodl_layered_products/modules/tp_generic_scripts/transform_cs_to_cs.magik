@@ -1,0 +1,45 @@
+
+_block
+	       #tranforming Coordinates from lat-long to utm45
+
+	       l_ev<< gis_program_manager.databases[:electric]
+	       coord_x << 84.414083
+	       coord_y << 19.648194
+	       
+	       src_coord << coordinate.new(coord_x,coord_y)
+#	       src_coord << app.plugin(:maps).current_map.trail.a_coord()
+	       src_view << gis_program_manager.databases[:config]
+	       src << src_view.world.coordinate_system
+	       dest << l_ev.world.coordinate_system
+	       write("+++ dest +++ ",dest)
+	       write("+++ src +++ ",src)
+
+	       tr << transform.new_converting_cs_to_cs( src,dest )
+	       trfd << src_coord.transformed(tr)
+	       write("+++ trfd +++ ",trfd)
+	       
+	       l_pole_location << pseudo_point.new_with(trfd)
+	       l_pole_location.world << l_ev.world
+	       write("+++ l_pole_location +++ ",l_pole_location)
+	       
+	       write("Transformed Coordinates - ",trfd)
+	       pole_coll << l_ev.collections[:ed_pole]
+	       prop_list << property_list.new()
+	       prop_list[:status] << "Existing"
+	       #prop_list[:owner_type] << "Company Owned"
+	       prop_list[:strength] << "7500 lbf"
+	       prop_list[:treatment] << "ACA"
+	       prop_list[:location] << l_pole_location
+	       write("+++ 111 +++")
+	       
+	       rt << record_transaction.new_insert(pole_coll,prop_list)
+	       write("+++ 222 +++")
+	       
+	       l_pole_rec << rt.run()
+	       
+       _endblock
+
+
+
+
+#app.plugin(:maps).current_map.trail.add_coordinate(l_sector.an_element())

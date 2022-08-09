@@ -1,0 +1,154 @@
+@media (max-width: @navbarCollapseWidth) {
+
+  .navbar {
+    .brand {
+      max-width: 25%;
+    }
+  }
+
+  .navbar .brand small {
+    display: none;
+  }
+
+  .navbar-collapse .nav > li {
+    margin-top: 5px;
+    font-size: @baseFontSize;
+  }
+
+  .navbar-collapse .nav > li:first-child {
+    margin-top: 0;
+  }
+
+  .navbar-collapse .nav > li > a:hover {
+    background-color: @navbarLinkBackgroundActive;
+  }
+
+  .navbar-collapse .dropdown-menu li {
+    margin-top: 5px;
+  }
+
+  .navbar-collapse .dropdown-menu a:hover,
+  .navbar-collapse .dropdown-menu .active a {
+    background: transparent !important;
+    // #gradient > .vertical(@navbarBackground, @navbarBackground);
+  }
+
+  .navbar-collapse .btn-group,
+  .navbar-collapse.in .btn-group {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .navbar-collapse .btn-toolbar .btn {
+    .border-radius(@baseBorderRadius);
+  }
+  .navbar-collapse .btn-toolbar,
+  .navbar-collapse .navbar-search {
+    margin: 0;
+  }
+  .navbar-collapse .navbar-search {
+    margin: 0;
+    float: left;
+  }
+  .navbar-collapse .btn {
+    .border-radius(inherit);
+    padding: 2px 10px;
+  }
+
+  .navbar-collapse .dropdown {
+    .clearfix;
+    &.open {
+      border-bottom: 1px solid @grayDarkest;
+    }
+  }
+  .navbar-collapse .dropdown-menu .nav {
+    // float: none;
+    > li > a {
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+  }
+
+  .navbar-collapse .dropdown-menu .nav-header a:hover,
+  .navbar-collapse .dropdown-menu .nav-header a:focus {
+    background: transparent;
+  }
+
+  // Caret to indicate there is a submenu
+  .nav-header > a:before {
+    display: block;
+    content: " ";
+    float: left;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: @navbarText;
+    margin-top: 4px;
+    margin-right: 10px;
+  }
+  .nav-header > a:hover:before {
+    border-left-color: @dropdownLinkColorHover;
+  }
+  // Open state
+  .nav-header.open > a:before{
+    border-width: 6px 5px 5px;
+    border-color: transparent;
+    border-top-color: @navbarText;
+    margin-right: 6px;
+    margin-top: 7px;
+  }
+  .nav-header.open > a:hover:before {
+    border-top-color: @dropdownLinkColorHover;
+  }
+
+  .navbar-collapse .mega-dropdown {
+    border-top: none;
+  }
+
+  .navbar-collapse .mega-dropdown .nav .mega-list a {
+    padding-left: 27px;
+    font-size: @megaDropDownMegaListFontSize;
+    color: @megaDropDownMegaListLinkColor;
+  }
+
+  .navbar-collapse .navbar-form,
+  .navbar-collapse .navbar-search {
+    border: 0;
+    padding: 0;
+  }
+
+  .primary-navbar .nav {
+    margin-bottom: 0;
+  }
+
+  .workspace-navbar .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .workspace-navbar.collapse:not(.in) {
+    border-width: 0;
+  }
+  .workspace-navbar .nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .workspace-navbar .nav > li {
+    float: left;
+    margin-bottom: 7px;
+  }
+  .workspace-navbar .nav > li:first-child {
+    margin-top: 5px;
+  }
+
+  .navbar .btn-toolbar,
+  .navbar-search {
+    margin-bottom: 0;
+  }
+
+  .responsive-elements {
+    .clearfix();
+    margin: 10px 20px 10px;
+    // display: none;
+  }
+}

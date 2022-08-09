@@ -1,0 +1,79 @@
+// headings
+
+h1, h2 {
+	font-family: @brandFontFamily;
+}
+
+.voice-human {
+	h1, h2 {
+		font-family: @serifFontFamily;
+	}
+}
+
+//commented as it is overriding bootstrap colors and making it not legible
+.muted {
+	color: @textColorMuted;
+}
+
+a[rel=tooltip], a.tooltip-target {
+	cursor:pointer;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+	// TODO this could use @headingsFontWeight
+	font-weight: normal;
+	line-height: 2em;
+	color: @textColor;
+}
+
+h1 {
+	font-size: @baseFontSize + 22; // 36px
+}
+h2 {
+	font-size: @baseFontSize + 10; // 24px
+}
+h3 {
+	font-size: @baseFontSize + 2; // 16px
+	line-height: @baseLineHeight * 1.5;
+}
+h4 {
+	font-size: @baseFontSize; // 14px
+}
+h5 {
+	font-size: @baseFontSize - 2; // 12px
+}
+h6 {
+	font-size: @baseFontSize - 4; // 10px
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+// Blockquotes
+blockquote p
+{
+	font-size: @baseFontSize + 2; // 16px
+	line-height: @baseLineHeight + 4;
+}
+
+
+blockquote small
+{
+	font-size: @baseFontSize - 2; // 12px
+	line-height: @baseLineHeight + 4;
+	color: @gray;
+}
+
+time {
+	color: @textColorMuted;
+}
+
+.navbar a, .masthead a{
+	text-decoration: none;
+}
+
+dl {
+  dd {
+    margin-left: 0px;
+  }
+}

@@ -1,0 +1,347 @@
+// Dependencies
+// --------------------------------------------------
+
+//@import "bootstrap/less/buttons.less";
+// There's no reason to import this if we're going to just override everything anyway
+
+// Bootstrap Overrides
+// --------------------------------------------------
+.btn {
+
+	color: @btnText;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid @buttonBorderColor;
+	white-space: nowrap;
+	.button-size(@padding-base-vertical; @padding-base-horizontal; @buttonFontSizeStandard; @line-height-base; @border-radius-base);
+	-webkit-font-smoothing: @fontSmoothing;
+	font-smoothing: @fontSmoothing;
+	background: @buttonBackgroundColorStandard none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+	#voice > .ui(@buttonFontSizeStandard);
+	padding: @buttonPaddingStandard;
+	font-weight: @buttonFontWeightStandard;
+	text-decoration: none;
+	.transition(~"background-color .1s linear, border-color .1s linear, color .1s linear");
+
+	&:hover {
+		background-color: darken(@buttonBackgroundColorStandard, 10%);
+		.transition(~"background-color .1s linear, border-color .1s linear, color .1s linear");
+	}
+
+	&.btn-lg {
+		.border-radius(@baseBorderRadius);
+		font-size: @fontSizeLarge;
+		padding: @buttonPaddingLarge;
+		[class*="icon-"]:not([class*="icon-chevron-"]):not([class*="icon-remove"]) {
+			font-size: @buttonIconFontSizeLarge;
+		}
+		&.btn-icon {
+			padding: 3px 10px 6px;
+		}
+	}
+
+	&.btn-sm {
+		font-size: @fontSizeSmall;
+		line-height: @buttonLineHeightSmall;
+		padding: @buttonPaddingSmall;
+		[class*="icon-"]:not([class*="icon-chevron-"]):not([class*="icon-remove"]) {
+			font-size: @buttonIconFontSizeSmall;
+		}
+	}
+	&.btn-xs {
+		font-size: @fontSizeMini;
+		line-height: @buttonLineHeightSmall;
+		padding: @buttonPaddingMini;
+		[class*="icon-"]:not([class*="icon-chevron-"]):not([class*="icon-remove"]) {
+			font-size: @buttonIconFontSizeMini;
+		}
+		&.btn-icon {
+			margin-top: 0; // Fix a bug on mini split button dropdowns with icon.
+		}
+	}
+
+	&,
+	&:active,
+	&.active {
+		&:focus {
+			outline: none; // BS3 change, used to be: .tab-focus();
+		}
+	}
+
+	&:hover,
+	&:focus {
+		color: @btn-default-color;
+		text-decoration: none;
+	}
+
+	&:active,
+	&.active {
+		outline: 0;
+		background: @grayLightest none;
+		//.box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+	}
+
+	&.disabled,
+	&[disabled],
+	fieldset[disabled] & {
+		cursor: not-allowed;
+		pointer-events: none; // Future-proof disabling of clicks
+		color: @gray;
+		background-color: @grayLightest;
+		.opacity(.65);
+		.box-shadow(none);
+
+		&:hover {
+			background-color: @grayLightest;
+		}
+	}
+
+	.selected {
+		background-color: @blue;
+		border-color: @blue;
+		color: @white;
+	}
+
+	// Icons within buttons appear larger by default,
+	// except chevrons and remove icons. These rules
+	// adjust those elements along with margins when
+	// they are first or last elements in a button.
+	[class*="icon-"] {
+		font-size: @buttonIconFontSizeStandard;
+		vertical-align: middle;
+		&:first-child:not(:last-child) {
+			margin-right: 5px;
+		}
+		&:last-child:not(:first-child) {
+			margin-left: 5px;
+		}
+		&:first-child + [class*="icon-"]:last-child {
+			margin-left: 0;
+		}
+	}
+	[class*="icon-chevron-"],
+	[class*="icon-remove"] {
+		font-size: @buttonIconFontSizeSpecial;
+		vertical-align: baseline;
+	}
+	// If only font-awesome was designed on a grid...
+	// THAT would be awesome.
+	[class*="icon-search"] {
+		vertical-align: -5%;
+	}
+}
+
+.btn-large {
+	.border-radius(@baseBorderRadius);
+	font-size: @fontSizeLarge;
+	padding: @buttonPaddingLarge;
+	[class*="icon-"]:not([class*="icon-chevron-"]):not([class*="icon-remove"]) {
+		font-size: @buttonIconFontSizeLarge;
+	}
+	&.btn-icon {
+		padding: 3px 10px 6px;
+	}
+}
+
+.btn-small {
+	font-size: @fontSizeSmall;
+	line-height: @buttonLineHeightSmall;
+	padding: @buttonPaddingSmall;
+	[class*="icon-"]:not([class*="icon-chevron-"]):not([class*="icon-remove"]) {
+		font-size: @buttonIconFontSizeSmall;
+	}
+}
+
+.btn-mini {
+	font-size: @fontSizeMini;
+	line-height: @buttonLineHeightSmall;
+	padding: @buttonPaddingMini;
+	[class*="icon-"]:not([class*="icon-chevron-"]):not([class*="icon-remove"]) {
+		font-size: @buttonIconFontSizeMini;
+	}
+	&.btn-icon {
+		margin-top: 0; // Fix a bug on mini split button dropdowns with icon.
+	}
+}
+
+.btn-fade > * {
+	.opacity(.3);
+	.transition(opacity .1s linear);
+}
+
+.btn-fade:hover > * {
+	.opacity(1);
+}
+
+.btn-inverse {
+	color: @gray;
+}
+
+.btn-primary,
+.btn-warning,
+.btn-danger,
+.btn-success,
+.btn-info,
+.btn-inverse {
+	border-color: transparent;
+	&:hover,
+	&:focus {
+		color: @white;
+	}
+}
+
+// Alternate buttons
+// --------------------------------------------------
+.disabled-mixin(@fontColor: @buttonFontColorDisabled, @backgroundColor: @buttonBackgroundColorDisabled) {
+	color: @fontColor;
+	border: inherit;
+	background-color: @backgroundColor;
+	&:hover {
+		background-color: @backgroundColor;
+	}
+}
+
+.btn-default {
+	.ge-button-variant(@buttonFontColorDefault; @buttonBackgroundColorStandard; @buttonBorderColor);
+	&.disabled, &[disabled] {
+		.disabled-mixin();
+	}
+}
+
+.btn-primary {
+	.ge-button-variant(@buttonFontColorPrimary; @buttonBackgroundColorPrimary; @buttonBorderColor);
+	&.disabled, &[disabled] {
+		.disabled-mixin();
+	}
+}
+
+.btn-inverse {
+	.ge-button-variant(@gray; @grayDarker; @btnBorder);
+	&.disabled, &[disabled] {
+		.disabled-mixin();
+	}
+}
+
+// Success appears as green
+.btn-success {
+	.ge-button-variant(@white; @green; @green);
+	&.disabled, &[disabled] {
+		.disabled-mixin();
+	}
+}
+
+// Info appears as blue-green
+.btn-info {
+	.ge-button-variant(@white; @blue; @blue);
+	&.disabled, &[disabled] {
+		.disabled-mixin();
+	}
+}
+
+// Warning appears as orange
+.btn-warning {
+	.ge-button-variant(@white; @orange; @orange);
+	&.disabled, &[disabled] {
+		.disabled-mixin();
+	}
+}
+
+// Danger and error appear as red
+.btn-danger {
+	.ge-button-variant(@white; @red; @red);
+	&.disabled, &[disabled] {
+		.disabled-mixin();
+	}
+}
+
+// Button Sizes
+// --------------------------------------------------
+
+.btn-lg {
+	// line-height: ensure even-numbered height of button next to large input
+	.button-size(@padding-large-vertical; @padding-large-horizontal; @buttonFontSizeLarge; @buttonLineHeightLarge; @border-radius-large);
+}
+
+.btn-sm {
+	// line-height: ensure proper height of button next to small input
+	.button-size(@padding-small-vertical; @padding-small-horizontal; @buttonFontSizeSmall; @buttonLineHeightSmall; @border-radius-small);
+}
+
+.btn-xs {
+	.button-size(@padding-xs-vertical; @padding-xs-horizontal; @buttonFontSizeXSmall; @buttonLineHeightXSmall; @border-radius-small);
+}
+
+// Link buttons
+// -------------------------
+
+// Make a button look and behave like a link
+.btn-link {
+	color: @link-color;
+	font-weight: bold;
+	cursor: pointer;
+	border-radius: 0;
+	padding: 0;
+
+	&,
+	&:active,
+	&[disabled],
+	fieldset[disabled] & {
+		background-color: transparent;
+		.box-shadow(none);
+	}
+	&,
+	&:hover,
+	&:focus,
+	&:active {
+		border-color: transparent;
+	}
+	&:hover,
+	&:focus {
+		color: @link-hover-color;
+		text-decoration: underline;
+		background-color: transparent;
+	}
+	&[disabled],
+	fieldset[disabled] & {
+		&:hover,
+		&:focus {
+			color: @btn-link-disabled-color;
+			text-decoration: none;
+		}
+	}
+}
+
+// Icon Rules
+.btn-ratings i[class*='icon-'] {
+	color: @blue;
+}
+
+.btn i[class*="icon-ico_chevron_down"],
+.btn i[class*="icon-ico_remove_lg"],
+.btn i[class*="icon-ico_chevron_up_lg"] {
+	font-size: 10px;
+}
+
+// Block button
+// --------------------------------------------------
+
+.btn-block {
+	display: block;
+	width: 100%;
+}
+
+// Vertically space out multiple block buttons
+.btn-block + .btn-block {
+	margin-top: 5px;
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	&.btn-block {
+		width: 100%;
+	}
+}

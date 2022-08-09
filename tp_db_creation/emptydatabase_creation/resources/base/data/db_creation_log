@@ -1,0 +1,457 @@
+
+
+
+Sat Feb  5 14:39:09 2022
+[C:\Program Files\Notepad++/] E:\EO_52_10\core\bin\x86\runalias.exe -a E:\EO_52_10\core\..\electric_office\config\gis_aliases eo -cli
+
+
+
+
+---- Magik version 5.2.10.0-309 ----
+---- Running on Java version 17.0.1 ----
+
+Starting
+Bootstrapping: class com.gesmallworld.magik.runtime.Bootstrap
+.......................................................................
+Bootstrapping: class com.gesmallworld.magik.geometry.GeometryBootstrap
+...............................
+Bootstrapping: class com.gesmallworld.magik.datastore.DatastoreBootstrap
+......................................
+Bootstrapping: class com.gesmallworld.magik.datastore.geometry.GeoDatastoreBootstrap
+...................................
+Bootstrapping: class com.gesmallworld.magik.drawingsurface.GraphicsBootStrap
+...................................
+Bootstrapping: class com.gesmallworld.magik.acpt.AcptBootstrap
+...
+Bootstrapping: class com.gesmallworld.magik.application.AppBootstrap
+..............................................................................
+..............................................................................
+..............................................................................
+.........................................................................
+
+
+
+Smallworld Core Spatial Technology Version Information:
+
+Core Product:
+	Release No.	5.2.10.0
+	Release Spin No 309 (06/01/2022 14:01:00)
+	Gis C Utils	5.5.9 
+	Datastore C	7.8.3 
+	Datastore Magik	10.1.2 
+
+Layered Products:
+	sw_core	5.2.10.0	Core product with engine and generic GUI classes
+	sw_addon_google_maps	5.2.10.0	Smallworld Addon for Google Maps(TM)
+	sw_kernel	5.2.10.0	Low-level kernel classes
+
+
+Loading E:/EO_52_10/electric_office/config/magik_sessions\source\register.magik
+Loading E:/EO_52_10/sw_common_office/config/magik_sessions\source\register.magik
+Loading E:/EO_52_10/core/sw_core/config/magik_sessions\source\register.magik
+Found smallworld_registry: E:\EO_52_10\smallworld_registry (using environment variable SMALLWORLD_GIS)
+..............................................................................
+..............................................................................
+..............................................................................
+..............................................................................
+............................................Installing tm_dataset_manager.set_tm_view() as Startup-Action
+..................................
+..............................................................................
+..............................................................................
+..............................................................................
+..............................................................................
+..............................................................................
+..............................................................................
+........................Magik> Loading C:\Users\LOKESH~1\AppData\Local\Temp\TLokeshBongu2956q0
+**** Emacs: buffer=construction_rwo_mods.magik file=e:/EO_52_10/tpsodl_eo/tp_db_creation/emptydatabase_creation/source/construction_rwo_mods.magik position=1
+Global construction_editor does not exist: create it? (Y) 
+Defining global construction_editor
+a sw:method_finder loading class information
+method_finder: loaded
+Magik> 
+Magik> Loading C:\Users\LOKESH~1\AppData\Local\Temp\TLokeshBongu2956q0
+**** Emacs: buffer=db_coordinate_creation.magik file=e:/EO_52_10/tpsodl_eo/tp_db_creation/emptydatabase_creation/source/db_coordinate_creation.magik position=1
+Magik> 
+Magik> *** ipc error (mdbListDirectory): 12 for directory F:\gis_db\tp_gis_db_mm\utm\ds_admin
+Creating: ace.ds
+Creating history model
+creating sw!text
+creating sw_gis!user_data_text
+creating uva xml_configuration
+creating xml_configuration_text
+no name for view dd_table(style_construction)
+no name for view dd_table(symbol_definition)
+Defining style_construction
+Defining symbol_definition
+Creating: style.ds
+creating history model
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=style_ds_view({"style.ds"}))
+Defining table for symbol_definition in file style.ds
+Defining symbol_definition
+Defining table for style_construction in file style.ds
+Defining style_construction
+creating history model
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=auth_view(Auth))
+creating uva predicate_text
+creating predicate_text
+creating uva xml_configuration
+creating xml_configuration_text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=auth_view(Auth))
+creating scrapbook!ds_uint
+Scrapbook tables created OK
+Creating: dd.ds
+creating history model
+Creating: gdb.ds
+Creating: rwo.ds
+Creating: raster.ds
+creating uva sw_gis!text_id
+creating sw_gis!text_id
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=gis_ds_view({"dd.ds", "gdb.ds", "rwo.ds", "raster.ds"}))
+Defining table for construction in file rwo.ds
+Defining construction
+Defining table for drawing_template in file rwo.ds
+Defining drawing_template
+Defining drawing_template
+Defining table for drawing in file rwo.ds
+Defining drawing
+Defining drawing
+**** Warning: Record exemplar drawing is shared by tables drawing_template and drawing!
+     shared_record_exemplar(exemplar_name=:drawing, table_name1=:drawing_template, table_name2=:drawing)
+Defining table for function_geometry in file rwo.ds
+Defining function_geometry
+Defining function_geometry
+Defining table for drafting_lines in file rwo.ds
+Defining drafting_lines
+Defining table for drafting_texts in file rwo.ds
+Defining drafting_texts
+Defining table for drafting_areas in file rwo.ds
+Defining drafting_areas
+Defining table for drafting_points in file rwo.ds
+Defining drafting_points
+Defining table for dimensioning in file rwo.ds
+Defining dimensioning
+Creating dd extension file
+creating uva ex_dd!predicate
+creating ex_dd!predicate
+creating uva ex_dd!text
+creating ex_dd!text
+Creating: case_dd.ds
+creating history model
+Creating: case.ds
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=case_ds_view({"case_dd.ds", "case.ds"}))
+Defining table for sw_gis!case_object in file case.ds
+Defining sw_gis!case_object
+Defining sw_gis!case_object
+Defining table for sw_gis!case_relationship in file case.ds
+Defining sw_gis!case_relationship
+Defining sw_gis!case_relationship
+Defining table for sw_gis!case_hetero_relationship in file case.ds
+Defining sw_gis!case_hetero_relationship
+Defining sw_gis!case_hetero_relationship
+creating uva sw_gis!case_text
+creating sw_gis!case_text
+Defining table for drafting_lines in file case.ds
+Defining drafting_lines
+Defining table for drafting_texts in file case.ds
+Defining drafting_texts
+Defining table for drafting_areas in file case.ds
+Defining drafting_areas
+Defining table for drafting_points in file case.ds
+Defining drafting_points
+Defining table for dimensioning in file case.ds
+Defining dimensioning
+Defining table for construction in file case.ds
+Defining construction
+Creating: dd.ds
+creating history model
+Creating: gdb.ds
+Creating: rwo.ds
+Creating: raster.ds
+creating uva sw_gis!text_id
+creating sw_gis!text_id
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=gis_ds_view({"dd.ds", "gdb.ds", "rwo.ds", "raster.ds"}))
+Defining table for construction in file rwo.ds
+Defining construction
+Defining table for drawing_template in file rwo.ds
+Defining drawing_template
+Defining drawing_template
+Defining table for drawing in file rwo.ds
+Defining drawing
+Defining drawing
+Defining table for function_geometry in file rwo.ds
+Defining function_geometry
+Defining function_geometry
+Defining table for drafting_lines in file rwo.ds
+Defining drafting_lines
+Defining table for drafting_texts in file rwo.ds
+Defining drafting_texts
+Defining table for drafting_areas in file rwo.ds
+Defining drafting_areas
+Defining table for drafting_points in file rwo.ds
+Defining drafting_points
+Defining table for dimensioning in file rwo.ds
+Defining dimensioning
+Creating dd extension file
+creating uva ex_dd!predicate
+creating ex_dd!predicate
+creating uva ex_dd!text
+creating ex_dd!text
+Creating: case_dd.ds
+creating history model
+Creating: case.ds
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=case_ds_view({"case_dd.ds", "case.ds"}))
+Defining table for sw_gis!case_object in file case.ds
+Defining sw_gis!case_object
+Defining sw_gis!case_object
+Defining table for sw_gis!case_relationship in file case.ds
+Defining sw_gis!case_relationship
+Defining sw_gis!case_relationship
+Defining table for sw_gis!case_hetero_relationship in file case.ds
+Defining sw_gis!case_hetero_relationship
+Defining sw_gis!case_hetero_relationship
+creating uva sw_gis!case_text
+creating sw_gis!case_text
+Defining table for drafting_lines in file case.ds
+Defining drafting_lines
+Defining table for drafting_texts in file case.ds
+Defining drafting_texts
+Defining table for drafting_areas in file case.ds
+Defining drafting_areas
+Defining table for drafting_points in file case.ds
+Defining drafting_points
+Defining table for dimensioning in file case.ds
+Defining dimensioning
+Defining table for construction in file case.ds
+Defining construction
+Creating: dd.ds
+creating history model
+Creating: gdb.ds
+Creating: rwo.ds
+Creating: raster.ds
+creating uva sw_gis!text_id
+creating sw_gis!text_id
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=gis_ds_view({"dd.ds", "gdb.ds", "rwo.ds", "raster.ds"}))
+Defining table for construction in file rwo.ds
+Defining construction
+Defining table for drawing_template in file rwo.ds
+Defining drawing_template
+Defining drawing_template
+Defining table for drawing in file rwo.ds
+Defining drawing
+Defining drawing
+Defining table for function_geometry in file rwo.ds
+Defining function_geometry
+Defining function_geometry
+Defining table for drafting_lines in file rwo.ds
+Defining drafting_lines
+Defining table for drafting_texts in file rwo.ds
+Defining drafting_texts
+Defining table for drafting_areas in file rwo.ds
+Defining drafting_areas
+Defining table for drafting_points in file rwo.ds
+Defining drafting_points
+Defining table for dimensioning in file rwo.ds
+Defining dimensioning
+Creating dd extension file
+creating uva ex_dd!predicate
+creating ex_dd!predicate
+creating uva ex_dd!text
+creating ex_dd!text
+Creating: case_dd.ds
+creating history model
+Creating: case.ds
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=case_ds_view({"case_dd.ds", "case.ds"}))
+Defining table for sw_gis!case_object in file case.ds
+Defining sw_gis!case_object
+Defining sw_gis!case_object
+Defining table for sw_gis!case_relationship in file case.ds
+Defining sw_gis!case_relationship
+Defining sw_gis!case_relationship
+Defining table for sw_gis!case_hetero_relationship in file case.ds
+Defining sw_gis!case_hetero_relationship
+Defining sw_gis!case_hetero_relationship
+creating uva sw_gis!case_text
+creating sw_gis!case_text
+Defining table for drafting_lines in file case.ds
+Defining drafting_lines
+Defining table for drafting_texts in file case.ds
+Defining drafting_texts
+Defining table for drafting_areas in file case.ds
+Defining drafting_areas
+Defining table for drafting_points in file case.ds
+Defining drafting_points
+Defining table for dimensioning in file case.ds
+Defining dimensioning
+Defining table for construction in file case.ds
+Defining construction
+Creating: dd.ds
+creating history model
+Creating: gdb.ds
+Creating: rwo.ds
+Creating: raster.ds
+creating uva sw_gis!text_id
+creating sw_gis!text_id
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=gis_ds_view({"dd.ds", "gdb.ds", "rwo.ds", "raster.ds"}))
+Defining table for construction in file rwo.ds
+Defining construction
+Defining table for drawing_template in file rwo.ds
+Defining drawing_template
+Defining drawing_template
+Defining table for drawing in file rwo.ds
+Defining drawing
+Defining drawing
+Defining table for function_geometry in file rwo.ds
+Defining function_geometry
+Defining function_geometry
+Defining table for drafting_lines in file rwo.ds
+Defining drafting_lines
+Defining table for drafting_texts in file rwo.ds
+Defining drafting_texts
+Defining table for drafting_areas in file rwo.ds
+Defining drafting_areas
+Defining table for drafting_points in file rwo.ds
+Defining drafting_points
+Defining table for dimensioning in file rwo.ds
+Defining dimensioning
+Creating dd extension file
+creating uva ex_dd!predicate
+creating ex_dd!predicate
+creating uva ex_dd!text
+creating ex_dd!text
+Creating: case_dd.ds
+creating history model
+Creating: case.ds
+creating uva sw_gis!sql_predicate
+creating sw_gis!sql_predicate
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=case_ds_view({"case_dd.ds", "case.ds"}))
+Defining table for sw_gis!case_object in file case.ds
+Defining sw_gis!case_object
+Defining sw_gis!case_object
+Defining table for sw_gis!case_relationship in file case.ds
+Defining sw_gis!case_relationship
+Defining sw_gis!case_relationship
+Defining table for sw_gis!case_hetero_relationship in file case.ds
+Defining sw_gis!case_hetero_relationship
+Defining sw_gis!case_hetero_relationship
+creating uva sw_gis!case_text
+creating sw_gis!case_text
+Defining table for drafting_lines in file case.ds
+Defining drafting_lines
+Defining table for drafting_texts in file case.ds
+Defining drafting_texts
+Defining table for drafting_areas in file case.ds
+Defining drafting_areas
+Defining table for drafting_points in file case.ds
+Defining drafting_points
+Defining table for dimensioning in file case.ds
+Defining dimensioning
+Defining table for construction in file case.ds
+Defining construction
+creating sw_gis!text_id
+creating uva dd!predicate
+creating dd!predicate
+creating uva dd!text
+creating dd!text
+**** Warning: The data model version is currently undefined
+     db_version_not_set(view=database_view({"job_queue.ds"}))
+Loading E:/EO_52_10/core/sw_core/modules/sw_core/sw_job_engine\resources\base\datamodel\job_queue_implementer.magik
+Loading E:/EO_52_10/core/sw_core/modules/sw_core/sw_job_engine\resources\base\data\job_queue_creation.case
+Loading file "job_queue.ds".
+
+compiling sw_job_argument.join_aspects
+========================================================================
+Database creation report
+========================================================================
+Created ACE dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_admin'
+Created Style dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_admin'
+Created Authorization dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_admin'
+Created Scratch dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_admin'
+Created Scrapbook dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_admin'
+Created Geometric (gis) dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_gis'
+Created Geometric (land) dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_land'
+Created Geometric (raster) dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_raster'
+Created Geometric (electric) dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_electric'
+Created Job dataset in 'f:\gis_db\tp_gis_db_mm\utm\ds_admin'
+
+Succeeded  : 10
+Start Time : 05/02/2022 14:45:29
+End Time   : 05/02/2022 14:47:40
+========================================================================
+
+Database created and committed successfully.
+
+SW_ACE_DB_DIR has been set to f:\gis_db\tp_gis_db_mm\utm\ds_admin
+
+You may now read in your exemplar definitions (if any) and test the
+database using open_database() to open the database or startup() to
+start an application.
+
+========================================================================
+

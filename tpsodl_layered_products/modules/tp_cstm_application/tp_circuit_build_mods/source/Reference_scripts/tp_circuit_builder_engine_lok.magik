@@ -1,0 +1,1116 @@
+#% text_encoding = iso8859_1
+_package user
+#################################################################################
+#
+#           I N F O T E C H    E N T E R P R I S E S    L I M I T E D
+#
+#           Product: CSEB
+#
+#           Copyright (c) 2011 IEL, all rights reserved.
+#
+#--------------------------------------------------------------------------------
+#
+# Name of the object : Feeder_configuration_tool Engine
+# Version No.        : 
+# Creation Date      : 
+# Creator Name       : 
+# Version No.        : 
+#
+#
+#
+# Major changes
+# =============
+# Date          Name                       Change description
+# 
+#
+#Modified Date : 24-09-2014
+#################################################################################
+
+#================================================================================
+#
+#   E X E M P L A R
+#
+remex(:tp_circuit_builder_engine)
+# Note: pragma is compulsory for all the defined methods, slot access, properties and shared constant. 
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+def_slotted_exemplar(:tp_circuit_builder_engine,
+	## 
+	## 
+	## 
+	{
+		{:custom_args,_unset},
+		{:view,_unset}
+	},
+	:engine_model)
+$
+
+#--------------------------------------------------------------------------------
+#
+#   D E F I N E   L O C A L   M E T H O D S
+#
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.new()
+	## 
+	## 
+	_return _clone.init()
+	
+_endmethod
+$
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.init()
+	## Description: Initialises self's slots and returns self
+	## 
+	## Parameters : As required by the super implemenation
+	## 
+	## Returns    : The instance of the plugin
+	
+        #--- CREATES INSTANCE FOR SLOTS ---
+	_super.init()
+	
+	.custom_args << property_list.new()
+	
+	.view << gis_program_manager.cached_dataset(:electric)
+	_return _self
+	
+_endmethod
+$
+_pragma(classify_level=basic, usage={tp_circuit_builder_engine})
+##
+## To provide slot access to the slot 'custom_args'
+##
+tp_circuit_builder_engine.define_slot_access(:custom_args,:writable,:public)          
+	
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+##
+## To provide slot access to the slot 'view'
+##
+tp_circuit_builder_engine.define_slot_access(:view,:readable,:public)
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.build_feeder_network(circuit_sources,circuit_coll,circuit_list,circuit_handle,_optional p_circuit_dialog)
+	## 
+	##To build the circuit based on the network type's
+	##
+	#! ST: Added to include creation of circuit sources and
+	#!     stoppers with selected network type of the circuit for
+	#!     the initial build.  
+
+	#!-->ST: To populate the log data
+	#!       The handle on the Text window item to populate the log data
+	write("+++ build_feeder_network +++")
+	
+	.custom_args[:circuit_dialog] << p_circuit_dialog
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:started)+date_time.now().write_string)
+	_self.install_missed_ckt_sources? << _false 
+	#!<--ST
+
+	## added line on 120914 to take the handle of existing originating substations## 
+	l_ori_sub_handle << circuit_handle.originating_substations.an_element() 
+	write("+++l_ori_sub_handle  +++",l_ori_sub_handle)
+		
+	.custom_args[:circuit_handle] << circuit_handle
+	.custom_args[:circuit_list] << circuit_list
+	.custom_args[:cir_coll] << circuit_coll
+	.custom_args[:cir_sources] << circuit_sources
+	.custom_args[:start_time] << date_time.now()
+
+	_if (l_ckt_src << .custom_args[:cir_sources].an_element()) _is _unset 
+	_then	
+		.custom_args[:circuit_dialog].show_alert(_self.message(:no_circuit_source))
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:no_circuit_source))
+		write("+++innnn111  +++")
+		
+		_return _false 
+	_endif
+	
+	_if (.custom_args[:cir_source_asset] << l_ckt_src.asset) _is _unset
+	_then	
+		.custom_args[:circuit_dialog].show_alert(_self.message(:no_asset_for_source))
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:no_asset_for_source))
+		write("+++innnnn2222  +++")
+		
+		_return _false 
+	_endif
+	
+	#!-->ST: Modified to validate whether the circuit is ST,HT,LV
+	#!       based on this,circuit building will be performed.
+	write("+++ .custom_args[:cir_source_asset].source.name   +++", .custom_args[:cir_source_asset].source.name)
+	write("+++ .custom_args[:cir_source_asset].network_type +++",.custom_args[:cir_source_asset].network_type)
+	
+	_local l_success?	
+	_if .custom_args[:cir_source_asset].source.name _is :eo_connector_point_inst _andif
+	    .custom_args[:cir_source_asset].network_type = "HV-33Kv"
+	_then
+		.custom_args[:circuit_dialog].add_to_log("Processing:Building ST Circuit for"+.custom_args[:circuit_handle].circuit_id)
+		l_success? << _self.trace_downstream_for_stop_object()
+		_if l_success? _isnt _unset _andif
+		    _not l_success?
+		_then
+			_return _false 
+		_endif
+		.custom_args[:circuit_dialog].run(.custom_args[:circuit_handle])
+		
+	_elif .custom_args[:cir_source_asset].source.name _is :eo_connector_point_inst _andif
+	      .custom_args[:cir_source_asset].network_type = "HV-11Kv"
+	_then
+		write("+++innnnnnn  +++")
+		
+		l_success? << _self.trace_downstream_for_stop_object()
+		_if l_success? _isnt _unset _andif
+		    _not l_success?
+		_then	
+			_return _false 
+		_endif
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:upstream_start)+date_time.now().write_string)
+		write("+++B4 Upstream Trace  +++")
+		
+		_self.upstream_trace()
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:upstream_end)+date_time.now().write_string)	
+	_else
+		write("+++ LV +++")
+		
+		_self.lv_circuit_individual_build(.custom_args[:circuit_handle])
+	_endif
+	#!<--ST
+	
+	# Added line on 120914 to reset the substation relation.
+	_if l_ori_sub_handle _isnt _unset _then 
+		circuit_handle.originating_substations.add(l_ori_sub_handle)
+	_endif
+
+	# end to reset the substation relation
+	#_self.write_log_file()
+
+	#!-->ST: To populate the log data
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:ended)+date_time.now().write_string)
+	_return _true
+	#!<--ST
+_endmethod
+$
+
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.trace_downstream_for_stop_object()
+	## 
+	##This method trace the downstream network for the network stop objects
+	##
+	#! ST: Modified to log the results in the Circuit Builder
+	#!     dialog as well as to identify the Hypernodes in the network.
+	write("+++trace_downstream_for_stop_object  +++")
+	
+	#!-->ST: To populate the log data
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:down_trace_start)+date_time.now().write_string)
+	#!<--ST
+	
+	l_coll << .custom_args[:cir_source_asset].source_collection.name
+	.custom_args[:cir_stopper_coll] << .view.collections[:eo_circuit_stopper]
+	l_req_coll << .view.collections[l_coll.as_symbol()]
+	
+	_for l_fld _over l_req_coll.visible_geometry_fields.fast_elements()
+	_loop
+		_if (l_type << l_fld.geom_type) = :point _orif l_type = :chain _orif l_type = :area
+		_then
+			l_fld_name << l_fld.name			
+		_endif 		
+	_endloop
+	
+	l_source << .custom_args[:cir_source_asset].perform(l_fld_name)
+	write("+++l_source  +++",l_source)
+	
+	_if l_source.geom_type _is :chain
+	_then 
+		.custom_args[:start_nodes] << l_source.first_node
+		.custom_args[:end_nodes] << l_source.last_node
+	_elif l_source.geom_type _is :point
+	_then
+ 		.custom_args[:start_nodes] << l_source.node
+		.custom_args[:end_nodes] << l_source.node      
+		
+	_elif l_source.geom_type _is :simple_point
+	_then
+		_if l_source.rwo.responds_to?(:location)
+		_then                                    
+			.custom_args[:start_nodes] << l_source.rwo.location.node
+			
+		_elif l_source.rwo.responds_to?(:connector)
+		_then                                    
+			.custom_args[:start_nodes] << l_source.rwo.connector.last_node
+		_endif 
+	_endif
+	
+	_if .custom_args[:start_nodes] _is _unset 
+	_then
+		#!-->ST: To populate the log data and as well,To return the status
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:no_proper_start_node))
+		.custom_args[:circuit_dialog].show_alert(_self.message(:no_proper_start_node))		
+		_return _false
+		#!<--ST
+	_endif
+	
+	start_node << .custom_args[:start_nodes]
+	b_nodes<< equality_set.new_with(start_node)
+	b_state << cs_network_trace_state.new()
+#	b_state.manifold_names<< {:elec_trans,:elec_dist_primary}
+	b_state.manifold_names<< {:elec_trans,:elec_dist_secondary}
+	b_state.direction << :downstream
+	b_state.network_state << :future                           
+	b_state.obey_normal_status? << _false 
+	.a_follower.parameters[:direction]<< :downstream
+	.a_follower.parameters[:start_node] << b_nodes           
+	.a_follower.parameters[:end_nodes] << .custom_args[:end_nodes]
+	.a_follower.parameters[:trace_type] << :trace_out
+	.a_follower.parameters[:mounting] << :all
+	.a_follower.parameters[:network_state] << :current
+	.a_follower.parameters[:obey_normal_status?] <<_false            
+	.a_follower.parameters[:work_order_number] << :all 
+	#.a_follower.parameters[:manifolds] << {:elec_trans,:elec_dist_primary}
+	.a_follower.parameters[:manifolds] << {:elec_trans,:elec_dist_secondary}
+	.a_follower.parameters[:max_cost] << _unset 
+	.a_follower.parameters[:state] << b_state
+	.a_follower.parameters[:cost_message] << :|direction_trace_cost()|                   
+	.a_follower.parameters[:via_node_rwo?] << _true 
+	.a_follower.parameters[:phasing] << "ABCN"     
+	.a_follower.parameters[:include_additional_results?] << _false
+	k_stop_preds << .a_follower.get_stop_predicates()
+	.a_follower.parameters[:stop_predicates] << k_stop_preds
+	.a_follower.launch_trace()
+	.trace_results[:down_geom_setter]<<.a_follower.result_rwo_set()	
+	#!-->ST: To identifiy the Hypernodes in the trace path based on
+	#!       the network type
+	show(.custom_args[:circuit_handle])
+	_if .custom_args[:circuit_handle].network_type = "HV-11Kv"
+	_then
+		_local l_count << 0
+		#pred_tr << predicate.eq(:source_table_name,"eo_power_xfrmr_inst") _and predicate.eq(:is_csp_dt?,_true)		
+		#pred_hp << predicate.eq(:source_table_name,"eo_network_hypernode")
+		pred_cp << predicate.eq(:source_table_name,"eo_connector_point_inst") _and predicate.eq(:network_type,"LV")
+		pred_all << pred_cp#pred_hp _or pred_tr	
+		downstream_stop_object << .trace_results[:down_geom_setter].all_elements_satisfying(pred_all)
+		.lv_ckt_list << rope.new()
+		.down_ckts << rope.new()
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:down_trace_end)+date_time.now().write_string)
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:lv_circuit_insert_start)+date_time.now().write_string)
+		print(downstream_stop_object)
+		_for  dt_down_obj _over downstream_stop_object.fast_elements()
+		_loop
+#			_if dt_down_obj.source.name _is :eo_network_hypernode
+#			_then
+#
+#				_if _self.create_ckt_src_at_secondary_hypernode? _is _true _andif
+#				    dt_down_obj.pin1 _isnt _unset _andif
+#				    dt_down_obj.pin2 _isnt _unset
+#				_then
+#					l_count+<<1
+#					_self.create_ckt_src_at_secondary_hypernode(dt_down_obj,l_count)
+#				_endif
+#				
+#			_else
+			write("+++dt_down_obj  +++",dt_down_obj)
+			
+				.custom_args[:downstream_stop_object] << dt_down_obj		
+				_self.lv_circuit_insert(dt_down_obj)
+#			_endif 
+		_endloop
+
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:lv_circuit_insert_end)+date_time.now().write_string)
+	_else
+		_local l_count << 0
+		pred_hp << predicate.eq(:source_table_name,"eo_network_hypernode")
+		downstream_stop_object << .trace_results[:down_geom_setter].all_elements_satisfying(pred_hp)
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:down_trace_end)+date_time.now().write_string)
+
+		_for  dt_down_obj _over downstream_stop_object.fast_elements()
+		_loop
+		
+			_if dt_down_obj.source.name _is :eo_network_hypernode
+			_then
+				_if _self.create_ckt_src_at_secondary_hypernode? _is _true _andif
+				    dt_down_obj.pin1 _isnt _unset _andif
+				    dt_down_obj.pin2 _isnt _unset
+				_then
+					l_count+<<1
+					_self.create_ckt_src_at_secondary_hypernode(dt_down_obj,l_count)
+				_endif
+
+			_endif 
+		_endloop
+		
+	_endif
+	#!<--ST	
+
+_endmethod
+$
+
+#
+##!-->ST: Added new method.
+#_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+#_method tp_circuit_builder_engine.check_connector_point_inst_remarks()
+#	#! ST: Added to find the LV connector point installations
+#	#!     without remarks field data.  
+#	_local l_res << .trace_results[:down_geom_setter].all_elements_satisfying(predicate.eq(:source_table_name,"eo_connector_point_inst") _and
+#										  predicate.eq(:network_type,"LV"))
+#	_local l_result << rope.new()	
+#	_for i_conn_point  _over l_res.fast_elements()
+#	_loop
+#		_if i_conn_point.remarks _is _unset _orif i_conn_point.remarks =""
+#		_then
+#			l_result.add(i_conn_point)	
+#		_endif
+#	_endloop
+#	>> l_result
+#_endmethod
+#$
+
+
+
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.create_ckt_src_at_secondary_hypernode(p_down_obj,p_count)
+	## 
+	##
+	#! ST :This method is added to place the circuit source for a
+	#!    circuit when the hypernode found.
+
+	_local l_ds_view << gis_program_manager.cached_dataset(:electric)
+	_local l_cable << p_down_obj.pin2.all_connected_geometry()[1].rwo
+	_if p_down_obj.all_connected_like({eo_cable_segment_inst}).size = 2 _andif
+	    p_down_obj.all_connected_like({eo_cable_segment_inst}).includes?(l_cable)
+	_then
+		_local l_network_type,l_voltage
+
+		_if .custom_args[:circuit_handle].network_type = "HT"
+		_then
+			l_network_type << "HT"
+			l_voltage << unit_value.new(11.000,:kV)
+		_else
+			l_network_type << "ST"
+			l_voltage << unit_value.new(33.000,:kV)
+			
+		_endif
+
+		_local l_con_rec << l_cable.all_connected_like({eo_connector_point_inst}).an_element()
+		_if l_con_rec _is _unset 
+		_then	
+			_local  l_pl << property_list.new_with(:status,"Existing",
+							       :network_type,l_network_type,
+							       :nominal_voltage_pp,l_voltage,
+							       :owner_type,"Company Owned",
+							       :mounting,"Overhead",
+							       :remarks,write_string(l_network_type,"-","C",p_count),
+							       :location,l_cable.route.location_for_length(_self.sc_offset_distance).as_coord())
+			 l_con_rec << record_transaction.new_insert(l_ds_view.collections[:eo_connector_point_inst],l_pl).run()
+			 
+			 l_con_rec.create_new_assets({"RYB"},property_list.new_with(:device_type,"Service",:status,"Existing"))
+		_else
+			
+			_if l_con_rec.get_relevant_assets().size = 0
+			_then
+				l_con_rec.create_new_assets({"RYB"},property_list.new_with(:device_type,"Service",:status,"Existing"))
+
+			_endif
+			
+		_endif
+		
+		_local l_cir_rec,l_source_rec,l_circuit_id
+		l_circuit_id << write_string(.custom_args[:circuit_handle].circuit_id,"-",l_con_rec.remarks)
+		_if _not l_con_rec.is_circuit_source?
+		_then
+			_local l_cir << property_list.new_with(:circuit_id,l_circuit_id,
+							       :cseb_voltage,l_con_rec.nominal_voltage_pp,
+							       :extent_buffer,unit_value.new(5,:inch))		
+			l_cir_rec << record_transaction.new_insert(l_ds_view.collections[:eo_circuit],l_cir).run()
+			
+			_local l_source  << property_list.new_with(:asset,l_con_rec,
+								   :eo_circuit,l_cir_rec)
+			l_source_rec  << record_transaction.new_insert(l_ds_view.collections[:eo_circuit_source],l_source).run()
+			#sel << rope.new()
+			#sel.add(:circuit_source_section)
+			#sel.add(:isolatable_section
+		_else
+			l_cir_rec << l_con_rec.circuit_source_stopper.eo_circuit
+		_endif
+		.custom_args[:circuit_dialog].run(l_cir_rec)
+	_endif
+	
+	
+_endmethod
+$
+
+
+
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.upstream_trace()
+	## 
+	##This method is to perform the upstream trace and to place the
+	## circuit stoppers in the upstream network and to call the LV
+	## circuit build and HT circuit build and it's required paramter
+	## is eo_circuit_builder_dialog instance
+	##
+	#! ST: Modified to populate the log data in circuit build
+	#!     dialog. 
+	
+	#!-->ST: To populate the log data
+	write("+++ upstream_trace +++")
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:upstream_start)+date_time.now().write_string)
+	#!<--ST
+	.custom_args[:cir_stopper_coll] << .view.collections[:eo_circuit_stopper]
+	
+	
+	start_node << .custom_args[:start_nodes]
+	l_nodes<< equality_set.new_with(start_node)
+	a_state << cs_network_trace_state.new()          
+	#a_state.manifold_names<<{:elec_trans,:elec_dist_primary,:elec_dist_secondary}
+	a_state.manifold_names<<{:elec_trans,:elec_dist_primary}
+	a_state.direction << :upstream
+	a_state.network_state << :future                           
+	a_state.obey_normal_status? << _false
+	
+	.a_follower.parameters[:direction]<< :upstream
+	.a_follower.parameters[:start_node] << l_nodes             
+	.a_follower.parameters[:end_nodes] << .custom_args[:end_nodes]
+	.a_follower.parameters[:trace_type] << :trace_out
+	.a_follower.parameters[:mounting] << :all
+	.a_follower.parameters[:network_state] << :current
+	.a_follower.parameters[:obey_normal_status?] <<_false            
+	.a_follower.parameters[:work_order_number] << :all 
+	#.a_follower.parameters[:manifolds] << {:elec_trans,:elec_dist_primary,:elec_dist_secondary,:elec_sub}
+	.a_follower.parameters[:manifolds] << {:elec_trans,:elec_dist_primary}
+	.a_follower.parameters[:state] << a_state
+	.a_follower.parameters[:cost_message] << :|direction_trace_cost()|                   
+	.a_follower.parameters[:via_node_rwo?] << _true 
+	.a_follower.parameters[:phasing] << "ABCN"
+	.a_follower.parameters[:max_cost] << 106.7
+	.a_follower.parameters[:include_additional_results?] << _false               
+	stop_preds << .a_follower.get_stop_predicates()
+	.a_follower.parameters[:stop_predicates] << stop_preds           
+	.a_follower.launch_trace() 	
+	.trace_results[:geom_setter]<<.a_follower.result_rwo_set()
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:upstream_end)+date_time.now().write_string)
+	print(.trace_results[:geom_setter])
+	_for  upstream_stop_object _over .trace_results[:geom_setter].fast_elements()
+	_loop
+                #_if upstream_stop_object.source_collection.name _is :eo_connector_segment_inst
+		_if upstream_stop_object.source_collection.name _is :eo_wire_segment_inst
+		_then
+			write("+++ ifffffffffffffffffff +++")
+			
+			.custom_args[:upstream_stop_object] << upstream_stop_object
+			
+			_try _with cond
+
+				write("+++  +++",.custom_args[:upstream_stop_object].is_circuit_stopper?)
+				
+				_if _not .custom_args[:upstream_stop_object].is_circuit_stopper?
+				_then
+					write("+++ :upstream_stop_object +++")
+					
+					prop_stopper << property_list.new_with(:asset,.custom_args[:upstream_stop_object])
+					rt << record_transaction.new_insert( .custom_args[:cir_stopper_coll],prop_stopper)
+					.custom_args[:circuit_stopper] << rt.run()
+					.custom_args[:circuit_stopper].eo_circuits.add(.custom_args[:circuit_handle])
+				_endif 				
+			_when error
+			_endtry 
+		_endif 
+	_endloop
+	
+	pred << predicate.eq(:circuit_id,.custom_args[:circuit_list])
+	.custom_args[:pred_cir_coll] << .custom_args[:cir_coll].select(pred)	
+	.custom_args[:circuit_build_object] << .custom_args[:pred_cir_coll].an_element()
+	
+	#_try _with a_cond
+		##Building LV circuits##################
+		_self.lv_circuit_build(.custom_args[:circuit_dialog])
+		##Building HV circuit##################
+		#!-->ST: To populate the log data
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:ht_build_start)+date_time.now().write_string)
+		#!<--ST
+
+		sel << rope.new()
+		sel.add(:circuit_source_section)			
+		.custom_args[:circuit_dialog].run(.custom_args[:circuit_build_object],sel)
+
+		#!-->ST: To populate the log data
+		.custom_args[:circuit_dialog].add_to_log(_self.message(:ht_build_end)+date_time.now().write_string)
+		#!<--ST
+		#	_when error	
+		#  .log_summary.add("Building process failed")
+#	_endtry
+	
+_endmethod
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.lv_circuit_build()
+	## 
+	##This method builds the LV circuit and requires circuit dialog
+	##as the parameter
+	##
+	#! ST: Modified to populate the log data in circuit builder
+	#!     dialog. 
+	#!-->ST: To populate the log data
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:lv_build_start)+date_time.now().write_string)
+	#!<--ST
+	_for i _over .lv_ckt_list.fast_elements()
+	_loop
+		
+		id_spl << i.circuit_id.split_by("-")
+		
+		_if id_spl.size >=2
+		_then 
+			lv_id << id_spl[1]+"-"+id_spl[2]
+			
+			_if i.circuit_sources.an_element() _is _unset 
+			_then		
+				.log_summary.add("Following LV circuit ID has no circuit source "+i.write_string)
+			
+			_elif  (lv_asset << i.circuit_sources.an_element().asset) _isnt _unset _andif
+			        lv_asset.network_type = "LV" _andif
+			       lv_id = .custom_args[:circuit_handle].circuit_id
+			_then
+				
+				#_try _with cond 				
+					#!-->ST: To populate the log data,and as well to call the
+					#! circuit builder engine
+				write("+++  +++",i.circuit_id,%tab,i.circuit_id.size)
+				
+					.custom_args[:circuit_dialog].add_to_log(_self.message(:lv_processing)+i.circuit_id.split_by('-')[3])
+					.custom_args[:circuit_dialog].run(i)
+					#!<--ST
+					#.down_ckts.add(i)				
+			#	_when error
+			#	.log_summary.add("Error while building Lv circuit at "+i.circuit_id.split_by('-')[6]+"because of removed status of "+lv_asset.write_string)
+			#	i.delete()
+			#	_endtry 
+			_endif		
+		_endif 
+	_endloop
+	
+	#!-->ST: To populate the log data
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:lv_build_end)+date_time.now().write_string)
+	#!<--ST
+	
+	_self.add_downstream_objects()
+	
+_endmethod
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.lv_circuit_individual_build(list)
+	##
+	##This methos to build the individual LV circuit's and the
+	## parmeters for this method are eo_circuit_builder_dialog
+	## handle and circuit handle
+	##
+	#! ST: Modified to populate the log data in circuit builder
+	#!     dialog. 
+
+	lv_id << list.circuit_id.split_by("-")
+	_if lv_id.size < 6
+	_then
+		.log_summary.add(write_string("Circuit with circuit id "+list.circuit_id.write_string + "does not have proper format"))
+	_endif
+	
+	lv_ckt_src << list.circuit_sources.an_element()
+	
+	#	_if (lv_ckt_src << list.circuit_sources.an_element()) _is _unset 
+	#	_then
+	#		write("+++ i +++",list,%tab,list.circuit_id)
+	#		_self.show_alert("For the selected Lv circuit update circuit source")
+	#		_return
+	
+	_if  (l_lv_asset << lv_ckt_src.asset) _isnt _unset _andif
+	     l_lv_asset.network_type = "LV" _andif
+	     list.circuit_id = .custom_args[:circuit_handle].circuit_id
+	_then
+
+		_try _with cond
+
+			#!-->ST: To populate the log data,and as well to call the
+			#! circuit builder engine
+			.custom_args[:circuit_dialog].add_to_log(_self.message(:lv_processing)+list.circuit_id.split_by('-')[6])	
+			.custom_args[:circuit_dialog].run(list)
+			#<--ST
+
+		_when error	
+			.log_summary.add(write_string("Error while building Lv circuit"+cond.report_contents_string))
+			#list.delete()
+		_endtry
+	_endif
+	
+	
+_endmethod
+$
+
+
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.lv_circuit_insert(dt_down_obj)
+	## 
+	##This methos inserts the new LV circuits and the parameter for
+	##this method is DTC's
+	##
+	write("+++ lv_circuit_insert +++")
+	
+	#_local dtc_coll << .view.collections[:cseb_dtc]
+	_local dtc_coll << .view.collections[:sub_substation]
+	pred_dtc << predicate.overlays(:extent,dt_down_obj.location)
+	req_pred << dtc_coll.select(pred_dtc)
+	
+	_if  (dtc_new << req_pred.an_element()) _is _unset 
+	_then
+		.dt_list.add(dt_down_obj)
+		_return 
+	_endif 
+	write("+++  22+++")
+	show(req_pred.an_element())
+	_local l_cir << .view.collections[:eo_circuit]
+	_local l_cir_sou << .view.collections[:eo_circuit_source]
+	
+	cs << _self.down_trace(dtc_new,.custom_args[:circuit_handle].circuit_id)
+	write("+++ cs---------- +++",cs)
+	print(cs)
+	_for id,l_rec _over cs.fast_keys_and_elements()
+	_loop
+		write("+++  in ckt insertion+++",id,%tab,rec)
+		
+		_if id = ""
+		_then		
+		 	_continue
+		_endif
+		
+		_try _with cond 			
+			new_id << id.substitute_string(id.split_by("-")[1].write_string+"-"+id.split_by("-")[2].write_string,
+						       .custom_args[:circuit_handle].circuit_id.write_string)
+		_when error				
+			new_id << "circuit_not_found"
+		_endtry				
+		write("+++ new_id +++",new_id)
+		
+		#_try
+		#	_with b_cond
+			coll << .view.collections[:eo_connector_point_inst]
+			asset_coll << .view.collections[:eo_connector_point]
+			exi_phase_coll << .view.collections[:eo_connector_point_exi_phase]		
+			
+			##inserting the connector point at the lt level inorder to
+			## establish the network connectivity where only one cable is
+			## connected to a point object
+			##				
+			conn_point << l_rec.all_connected_like({eo_connector_point_inst})
+			
+#			_if conn_point.an_element() _is _unset 
+#			_then
+#				val_status << l_rec.status
+#				val_nominal << l_rec.nominal_voltage_pp
+#				val_net << l_rec.network_type
+#				val_mou << l_rec.mounting
+#				val_loc << l_rec.route.coord_1
+#				val_phase << l_rec.existing_phasing
+#				wrld << .view.world
+#				obj_scale << property_list.new_with(:scale,0.005)
+#				pnt << pseudo_point.new_for_world(val_loc,wrld,obj_scale)
+#				
+#				prop << property_list.new_with(:status,val_status,:nominal_voltage_pp,val_nominal,
+#								       :mounting,val_mou,:network_type,val_net,:location,pnt)	
+#					
+#				asset_prop << property_list.new_with(:device_type,"Service")
+#				rt_1 << record_transaction.new_insert(asset_coll,asset_prop)
+#				.custom_args[:asset_conn] << rt_1.run()
+#					
+#				rt << record_transaction.new_insert(coll,prop)				
+#				.custom_args[:conn_inst] << rt.run()				
+#					
+#				prop_conne << property_list.new_with(:phase,val_phase,
+#									     :installation,.custom_args[:conn_inst],
+#									     :abandoned,_false ,
+#									     :asset,.custom_args[:asset_conn])
+#				rt_connec << record_transaction.new_insert(exi_phase_coll,prop_conne)
+#				.custom_args[:connector_pnt] << rt_connec.run() 			
+#			_else
+#				.custom_args[:conn_inst] << conn_point.an_element()									
+#			_endif
+
+			.custom_args[:conn_inst] << l_rec
+			
+			_if _not .custom_args[:conn_inst].is_circuit_source?
+			_then
+				write("+++innnnnn  +++")
+				
+				pp << property_list.new_with(:circuit_id,new_id,
+							     :tp_nominal_voltage,l_rec.nominal_voltage_pp,
+							     :tp_network_type,l_rec.network_type,
+							     :tp_status,l_rec.status,
+							     :extent_buffer,length_value(0.127,:m))		
+				rt_insert << record_transaction.new_insert(l_cir,pp)
+				l_cir_rec << rt_insert.run()
+				
+				pp1 << property_list.new_with(:asset,.custom_args[:conn_inst],:eo_circuit,l_cir_rec)
+				rt2 << record_transaction.new_insert(l_cir_sou,pp1)
+				cir_sou << rt2.run()
+				write("+++NEW CIRCUIT ID  +++",l_cir_rec.circuit_id)
+				
+			_else				
+				l_old_ckt << .custom_args[:conn_inst].get_circuit_source_stopper().eo_circuit
+
+				_if l_old_ckt _isnt  _unset
+				_then					
+					_if (l_old_id << l_old_ckt.circuit_id)= new_id				
+					_then		
+						l_cir_rec << l_old_ckt
+					_else
+
+						
+                                    #######  Added on 08042014#############################################
+						l_old_ckt.circuit_id << new_id					
+						l_cir_rec << l_old_ckt
+					_endif
+				_else				 	
+					pp << property_list.new_with(:circuit_id,new_id,:cseb_voltage,
+					l_rec.nominal_voltage_pp,:extent_buffer,length_value(0.127,:m))		
+					rt_insert << record_transaction.new_insert(l_cir,pp)
+					l_cir_rec << rt_insert.run()
+					
+                                     .custom_args[:conn_inst].get_circuit_source_stopper().eo_circuit << l_cir_rec
+				     #################################################################################
+				     
+				_endif								
+			_endif
+			.lv_ckt_list.add(l_cir_rec)		
+		#_when error
+		#	write(b_cond.report_contents_string)
+		#_endtry			
+	_endloop	
+_endmethod
+$
+
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.down_trace(p_dtc,l_hv_id)
+	##
+	##This method is to generate the new circuit id's for the LV
+	##circuits based on there connectivity and it require's parameter's
+	##
+	#! ST: Modified to place new connector point installations and
+	#!      assign remarks field value.
+	write("+++ down_trace +++")
+	
+	final << equality_property_list.new()
+	connector_point << .view.collections[:eo_connector_point_inst] ##change added
+        n_dtc_sec << p_dtc.extent.sectors	
+	_local l_wrld << .view.world
+	_local l_bou << pseudo_area.new_for_world(n_dtc_sec,l_wrld)
+	#!-->ST: To find and install the connector point installations
+	#!        and assign the value for the remarks field
+	_local l_pred_conn << predicate.overlays(:location,l_bou)
+	write("+++ l_pred_conn +++",l_pred_conn)
+	
+	_local l_dt_cables << _self.get_connected_dt_cables_and_wires(p_dtc)
+	_local l_install_cs?
+	
+	_for i_dt_cable _over l_dt_cables.fast_keys()
+	_loop
+		_local l_cnp_coll << l_dt_cables[i_dt_cable].an_element().all_connected_like({eo_connector_point_inst})
+		
+		_if l_cnp_coll.empty?
+		_then
+			_if _not _self.install_missed_ckt_sources?
+			_then 
+				l_install_cs? << .custom_args[:circuit_dialog].show_alert(_self.message(:install_connector_point), "Yes","Cancel")
+				_self.install_missed_ckt_sources? << l_install_cs?
+			_endif 
+		_else
+			_continue
+		_endif
+		
+		_if _not l_install_cs?
+		_then
+			.custom_args[:circuit_dialog].add_to_log(_self.message(:build_process_failed)+date_time.now().write_string)
+			condition.raise(:build_process_cancelled,
+					:a_circuit,.custom_args[:circuit_handle].circuit_id)
+		_else
+			_local l_coord << i_dt_cable.route.last_node.as_coord()
+			_local l_prop << property_list.new_with(:status,"Existing",
+								:network_type,"LV",
+								:owner_type,"Company Owned",
+								:nominal_voltage_pp,i_dt_cable.nominal_voltage_pp,
+								:location,l_coord,
+								:mounting,"Overhead",
+								:device_type,"Service")
+			_local l_trans << record_transaction.new_insert(.view.collections[:eo_connector_point_inst],
+									l_prop)
+			l_trans.run()
+		_endif
+	_endloop
+	
+	_local l_conn_pnts  << connector_point.select(l_pred_conn)
+	_for i_cnpt  _over l_conn_pnts.fast_elements()
+	_loop
+		_if i_cnpt.remarks _is _unset _orif
+		    i_cnpt.remarks = ""
+		_then
+			_local l_remarks << _self.get_highest_connector_point_remarks(p_dtc)
+			_if l_remarks _isnt _unset 
+			_then
+				write("+++ innnn Remarks-------------------- +++")
+ 				
+				i_cnpt.remarks << write_string("c",l_remarks+1)	
+			_endif
+		_endif
+	_endloop
+	#<--ST
+	#dtc_fl_code << p_dtc.csp_fl_code.write_string
+	write("+++ p_dtc---------------------------------------------------------- +++",p_dtc)
+	
+	dtc_fl_code << p_dtc.tp_code
+	_for i_conn _over l_conn_pnts.fast_elements()
+	_loop
+		l_ckt_id << ""
+		_if (connector_remarks << i_conn.remarks.write_string)<> "unset" 
+		_then
+			_if connector_remarks.trim_spaces() <> ""
+			_then 
+				l_ckt_id << .custom_args[:circuit_list].write_string + "-" + dtc_fl_code + "-" + connector_remarks
+			_else
+				.log_summary.add(write_string("Remarks field is unset for the connector point installation object ",i_conn.write_string))
+				
+			_endif 
+		_else
+			.log_summary.add(write_string("Remarks field is unset for the connector point installation object ",i_conn.write_string))
+		_endif
+		
+		final[l_ckt_id] << i_conn
+	_endloop	
+	print(final)
+	>> final 
+	
+_endmethod
+$
+#!-->ST: Added new method.
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.get_highest_connector_point_remarks(p_dtc)
+	## 
+	## Description: This method returns the highest connector point
+	## installation remarks that was present in the DTC.
+	## 
+	## parameters: p_dtc.
+	##
+	## Returns: l_temp_2.
+	##
+	_if p_dtc _isnt _unset 
+	_then
+		_local l_temp_1
+		_local l_temp_2 << 0
+		_local l_dtc_sec << p_dtc.extent.sectors
+		_local l_bou << pseudo_area.new_for_world(l_dtc_sec,.view.world)
+		_local l_pred_conn << predicate.within(:location,l_bou)
+		_local l_pred_nt << predicate.eq(:network_type,"LV")
+		_local l_pred_st << predicate.eq(:status,"Existing")
+		_local l_conn << .view.collections[:eo_connector_point_inst].select(l_pred_conn _and
+											l_pred_nt _and
+											l_pred_st)
+		_for i_conn_dtc _over l_conn.fast_elements()
+		_loop	
+			_if i_conn_dtc.remarks _isnt _unset  _andif
+			    i_conn_dtc.remarks <> ""
+			_then
+				_local l_remarks << i_conn_dtc.remarks.numbers_and_strings
+				l_temp_1 << l_remarks[2]
+				_if l_temp_1 > l_temp_2
+				_then
+					l_temp_2 << l_temp_1
+				_endif
+			_endif
+		_endloop
+		_return l_temp_2
+	_endif
+	
+_endmethod
+$
+
+#!-->ST: Added new method.
+_method tp_circuit_builder_engine.get_connected_dt_cables_and_wires(p_dtc)
+	##
+	## Description: This method returns the outgoing mainlines for
+	## a particuar DT cable as the property_list.
+	##
+	## parameters: p_dtc.
+	##
+	## Returns: l_prop.
+	##	
+	write("+++ get_connected_dt_cables_and_wires +++",p_dtc)
+
+	_local l_ds_view << gis_program_manager.cached_dataset(:electric)
+	_local l_dtc_sec << p_dtc.extent.sectors
+	_local l_bou << pseudo_area.new_for_world(l_dtc_sec,l_ds_view.world)
+	_local l_pred_seg << predicate.within(:route,l_bou)
+	_local l_pred_nt << predicate.eq(:network_type,"LV")
+	_local l_pred_usage << predicate.eq(:usage,"LV Feeder")
+	_local l_pred_st << predicate.eq(:status,"Existing")
+	_local l_cable_han << l_ds_view.collections[:eo_cable_segment_inst].select(l_pred_seg _and
+										   l_pred_nt _and
+										   l_pred_usage _and
+										   l_pred_st)
+	_local l_prop << property_list.new()
+	write("+++ l_cable_han +++",l_cable_han.size)
+	
+	_for i_cable _over l_cable_han.fast_elements()
+	_loop
+		write("+++i_cable  +++",i_cable)
+		
+		_if i_cable.all_connected_like({eo_cable_segment_inst,eo_wire_segment_inst}).size <> 0
+		_then
+			_for j_cable _over i_cable.all_connected_like({eo_cable_segment_inst,eo_wire_segment_inst}).fast_elements()
+			_loop
+				_if j_cable.usage = "ServiceLine" _orif
+				    j_cable.usage = "Mainline" _orif
+				    j_cable.usage = "LV Feeder"
+				_then
+					_if l_prop[i_cable] _is _unset 
+					_then
+						l_prop[i_cable] << rope.new()
+ 					_endif
+					l_prop[i_cable].add(j_cable)
+				_endif 
+			_endloop 
+		_endif
+	_endloop
+	print(l_prop)
+	_return l_prop
+_endmethod
+$
+
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.add_downstream_objects()
+	##
+	##This method is to add the downstream objects to the
+	##particular circuit
+	##
+	#! ST: Modified to populate the log data in the circuit builder
+	#!     dialog. 
+
+	#!-->ST: To populate the log data
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:adding_downstream_objects_start)+date_time.now().write_string)
+	#!<--ST
+	
+	.custom_args[:summary] << property_list.new()	
+#	_for l_ckt_dwn_rec  _over .custom_args[:circuit_handle].downstream_circuits.fast_elements()
+#	_loop
+#		write("+++ l_ckt_dwn_rec +++",l_ckt_dwn_rec)
+#		
+#		_if _not .down_ckts.includes_by_equality?(l_ckt_dwn_rec)
+#		_then
+#			write("+++ l_ckt_dwn_rec enter +++",l_ckt_dwn_rec)
+#			
+#			l_ckt_dwn_rec.delete()			
+#		_endif		
+#	_endloop
+	
+	.custom_args[:circuit_handle].downstream_circuits.empty()
+	
+	_for dwn_cir _over .down_ckts.fast_elements()
+	_loop		
+		.custom_args[:circuit_handle].downstream_circuits.add(dwn_cir)	
+	_endloop
+
+	.custom_args[:circu_cnt] << .custom_args[:circuit_handle].downstream_circuits
+	.custom_args[:summary] <<  .custom_args[:circu_cnt]
+
+	#!-->ST: To populate the log data
+	.custom_args[:circuit_dialog].add_to_log(_self.message(:adding_downstream_objects_start)+date_time.now().write_string)
+	#!<--ST
+	
+_endmethod
+$
+_pragma(classify_level=basic,  usage={tp_circuit_builder_engine})
+_method tp_circuit_builder_engine.write_log_file()
+	## 
+	##This method is to create the log file
+	##
+	_protect
+
+		_if  system.file_exists?("d:\temp") _is _false
+		_then
+			system.mkdir("d:\temp")
+		_endif			
+		
+		l_name << write_string("d:\temp" ,"\",.custom_args[:circuit_handle].circuit_id,"_log_report.txt")
+		
+		log_file_path << system.canonicalise(l_name)
+			
+		a_stream << external_text_output_stream.new(log_file_path)
+		#-------------- WRITE MAIN HEADING -------------------------------
+		a_stream.write("----------------------------------------------------------------------------")
+		a_stream.newline()
+		a_stream.write(%tab,%tab,"CircuitID",%tab,.custom_args[:circuit_handle].circuit_id)
+		a_stream.newline()
+		a_stream.write("----------------------------------------------------------------------------")
+		a_stream.newline()
+               #------------ WRITE DATE AND TIME ---------------------------
+		a_stream.write("Start Time",.custom_args[:start_time])
+		a_stream.newline()
+		a_stream.write("End Time",date_time.now())
+		a_stream.newline()
+		a_stream.newline()
+		#---------- WRITE REPORT HEADING ----------------------------------
+		a_stream.write("S.NO",%tab,"DTC CODE",%tab,%tab,"LT CIRCUIT ID")
+		a_stream.newline()
+		a_stream.write("----------------------------------------------------------------------------")
+		a_stream.newline()
+		#-----------Write DT  information without DTC----------------------------------------
+		_if .dt_list.size > 0
+		_then
+			a_stream.write(%newline," List of DT's not having DTC")
+			_for dt_rec _over .dt_list.fast_elements()
+			_loop		
+				a_stream.write(%newline,dt_rec)				
+			_endloop			
+		_endif 
+		a_stream.write("----------------------------------------------------------------------------")
+		
+		#---------- WRITE SUMMARY INFORMATION ----------------------------
+		_if (summary_values << .custom_args[:summary]) _isnt _unset
+		_then
+		#	a_stream.write(_self.message(:summary))
+			a_stream.newline()
+			cnt << 1
+			
+			_for value _over summary_values.fast_elements()
+			_loop
+			     
+			      a_stream.write(cnt,%tab,value.circuit_id.split_by('-')[6],%tab,value.circuit_id)
+			     a_stream.newline()
+			     cnt << cnt+1
+			_endloop
+		_endif
+
+		#------------Write circuit misformat information-------------------------------
+		_if (l_log  << .log_summary.an_element()) _isnt _unset
+		_then
+			_for val _over .log_summary.fast_elements()
+			_loop
+				a_stream.write(%newline,val)			    
+			_endloop
+		_endif 
+	_protection
+		_if a_stream _isnt _unset
+		_then
+			a_stream.close()
+		_endif 
+	_endprotect	
+_endmethod
+$
+#% text_encoding = iso8859_1
+########################################################################
+##
+## CSPDCL Project
+## 
+## Description:
+## Modified to get associated records.
+##
+########################################################################
+
+_package user
+$
+
+_method eo_power_xfrmr_inst.get_more_circuit_id_records()
+    ##Returns the associated records.
+  
+  _return _super.get_more_circuit_id_records()
+
+_endmethod

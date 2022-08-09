@@ -1,0 +1,20 @@
+// Dependencies
+// --------------------------------------------------
+@import "hdx-variables.less";
+@import "ge-bootstrap/less/hdx-responsive.less";
+@import "responsive.less";
+
+// Styles
+// --------------------------------------------------
+
+// overide button hover states in collapsed menu
+@media (max-width: @navbarCollapseWidth) {
+  .navbar-collapse .nav > li > a:hover {
+    #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+    color: @white;
+  }
+  // get rid of bottom border on secondary nav menus
+  .navbar-collapse .dropdown.open {
+    border-bottom: none;
+  }
+}

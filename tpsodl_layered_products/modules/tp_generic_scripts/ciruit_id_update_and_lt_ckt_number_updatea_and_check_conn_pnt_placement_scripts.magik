@@ -1,0 +1,171 @@
+_global circuit_id_update << _proc@circuit_id_update()
+				     
+				     _local ev << gis_program_manager.databases[:electric]
+				     _local conn_pnt << ev.collections[:eo_connector_point_inst]
+				     _local req_conn_pnt_coll << conn_pnt.select(predicate.eq(:network_type,"LV") _and
+										 (predicate.eq(:nominal_voltage_pp,unit_value(415.000,:V)) _or
+										  predicate.eq(:nominal_voltage_pp,unit_value(240.000,:V))))
+				     _local conn_pnt_src_stp,ckt
+				     _local fdr_code,dt_code,lt_ckt_num,ckt_id
+				     
+				     
+				     _local cnt << 0
+				     _for a_cp _over req_conn_pnt_coll.fast_elements()
+				     _loop
+					     fdr_code << "NA"
+					     dt_code << "NA"
+					     lt_ckt_num << "NA"
+					     ckt_id << ""
+					     
+					     conn_pnt_src_stp << a_cp.circuit_source_stopper
+					     _if conn_pnt_src_stp _is _unset
+					     _then
+						     _continue
+					     _endif
+					     
+					     ckt << conn_pnt_src_stp.eo_circuit
+					     
+					     _if ckt _is _unset
+					     _then
+						     _continue
+					     _endif
+					     
+					     _if a_cp.tp_feeder_code _isnt _unset _andif
+						 a_cp.tp_feeder_code <> ""
+					     _then
+						     fdr_code << a_cp.tp_feeder_code
+					     _endif
+					     
+					     _if a_cp.tp_dss_code _isnt _unset _andif
+						 a_cp.tp_dss_code <> ""
+					     _then
+						     dt_code << a_cp.tp_dss_code
+					     _endif
+					     
+					     _if a_cp.tp_lt_ckt_number _isnt _unset _andif
+						 a_cp.tp_lt_ckt_number <> ""
+					     _then
+						     lt_ckt_num << a_cp.tp_lt_ckt_number
+					     _endif
+					     
+					     ckt_id << fdr_code + "-" + dt_code + "-" + lt_ckt_num
+					     
+					     ckt.circuit_id << ckt_id
+					     
+				     _endloop
+				     
+				     ev.commit()
+			  _endproc
+
+#connector point having tp_lt_ckt_number or not check.
+
+#_global check_conn_pnt_lt_ckt_num <<  _proc@check_conn_pnt_lt_ckt_num()
+#    _local ev << gis_program_manager.databases[:electric]
+#    _local conn_pnt << ev.collections[:eo_connector_point_inst]
+#    _protect
+#
+#
+#        _for a_cp _over conn_pnt.fast_elements()
+#        _loop
+#
+#
+#            _if a_cp.tp_lt_ckt_number = "" _or a_cp.tp_lt_ckt_number _is _unset
+#            _then
+#                write("+++  +++",a_cp.tp_lt_ckt_number)
+#
+#            _endif
+#
+#
+#        _endloop
+#    _protection
+#
+#    _endprotect
+#
+#_endproc
+
+
+##check Lv feeders interacts with connecotor point or not
+##If no connector point found, it will insert one point
+##If point exist, Lv feeder lt_ckt_number is updated to connector point.
+#usage----> Lv feeder or Sevice Line
+
+_global check_and_update_lt_ckt_num << _proc@check_and_update_lt_ckt_num()
+					       
+					       
+					       _local ev << gis_program_manager.databases[:electric]
+					       _local conn_pnt << ev.collections[:eo_connector_point_inst]
+					       _local con_seg << ev.collections[:eo_connector_segment_inst].select(predicate.eq(:network_type,"LV"))
+					       _local cw_coll << rwo_set.new()
+					       _local csi_coll << rwo_set.new()
+					      
+					        !current_application! << smallworld_product.application(:tp_eo_application)
+						
+					       
+					       _for a_cs _over con_seg.fast_elements()
+					       _loop
+						       conn_cw_coll << a_cs.all_connected_like({eo_cable_segment_inst,eo_wire_segment_inst})
+
+						       conn_cw_coll << conn_cw_coll.select(predicate.eq(:usage,"LV Feeder") _or predicate.eq(:usage,"Service Line"))
+						       
+						       write("+++  +++",conn_cw_coll.size)
+						       
+						       _if _not conn_cw_coll.empty?
+						       _then
+							       write("+++ inside ifff +++")
+							       
+							       cw_coll.add(conn_cw_coll.an_element())
+							       csi_coll.add(a_cs)
+							       write("+++ after ifff +++")
+						       _endif
+					       _endloop
+					       
+					       _global t
+					       t << cw_coll
+					       
+					       _local lv_fdr << cw_coll
+					       
+					       _for a_lvfdr _over lv_fdr.fast_elements()
+					       _loop
+						       ckt_no << a_lvfdr.tp_lt_ckt_number 
+						       cp_coll << conn_pnt.select(predicate.touches(:location,a_lvfdr.route))
+						       
+						       _if cp_coll.size = 0
+						       _then
+							       write("+++  +++",a_lvfdr.id,tab_char,a_lvfdr.source_table_name)
+							       ### Insert Connector point inst.
+
+							       ##get intersected busbar/internal link with lv feeder.
+							       a_csi << csi_coll.select(predicate.interacts(:route,a_lvfdr.route))
+
+							       _if _not a_csi.empty?
+							       _then
+								       loc <<  pseudo_point.new(a_csi.an_element().route.last_coord)
+								       loc.world << conn_pnt.source_view.world
+								       proposed_values << property_list.new_with(:network_type, "LV",
+													         :status, "Existing",
+													         :mounting, "Overhead",
+													         :owner_type, "Company Owned",
+														 :owner_name, "Electric Utility-TPSODL",
+													         :tp_dss_code, a_lvfdr.tp_dss_code,
+													         :tp_lt_ckt_number,a_lvfdr.tp_lt_ckt_number,
+														 :tp_feeder_code,a_lvfdr.tp_feeder_code
+													)
+
+								       proposed_values[:location] << loc
+
+								       rt << record_transaction.new_insert(conn_pnt,proposed_values)
+								       cpt << rt.run()
+
+								       write("+++ inserted  +++",cpt)     
+							       _else
+								       write("+++Lv Feedr not interacts with any busbar +++")
+								       
+							       _endif
+							       
+						       _else
+							       cp_coll.an_element().tp_lt_ckt_number << ckt_no
+						       _endif 
+					       _endloop
+					       
+				       _endproc
+

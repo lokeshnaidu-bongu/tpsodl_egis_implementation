@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<gui>
+  <!-- The menu bar to be displayed -->
+  <menu name="menubar" type="menubar"> 
+    <!-- NOTE: The messages for these menu names should be defined on the gui framework class -->
+    
+    <!-- start with File menu -->
+    <submenu name="file" mnemonic_id="file_m"> 
+      <action name="quit" /> 
+    </submenu>
+    
+    <!-- Actions Menu -->
+    <submenu name="actions" mnemonic_id="edit_m">
+      <action name="spatial_pred_tool.interrupt"/>
+      <separator/>
+    </submenu> 
+    
+    <!-- Help menu -->
+    <submenu name="help" mnemonic_id="help_m" >
+      <action name="help" />
+    </submenu>
+  </menu>
+  
+  <!-- The following actions are offered by the Framework itself -->
+  <!--<toolbar name="general">
+    <action name="help" />
+    <action name="quit" />
+  </toolbar>-->
+  
+  <!--<toolbar name="actions">
+   <action name="spatial_pred_tool.interrupt"/>
+  </toolbar>-->
+  
+  <!--<dock name="top">
+    <toolbar name="actions"/>
+    <toolbar name="general"/>
+  </dock>-->
+  
+  <work_area>
+    <paned_window side_by_side="yes">
+      <plugin plugin_name="spatial_pred_tool"/>
+    </paned_window>
+  </work_area>
+  <statusbar name="default">
+    <pane id="status_info"
+	  style="innie"
+	  width="150"
+	  springy="true"/>
+  </statusbar>
+  
+</gui>

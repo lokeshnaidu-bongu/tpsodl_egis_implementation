@@ -1,0 +1,32 @@
+#% text_encoding = iso8859_1
+########################################################################
+## Description: Redefining the minimum length of the conductors on
+##              which the switching devices has to be placed. 
+##
+########################################################################
+_package user
+$
+_pragma(classify_level=basic, usage={redefinable, subclassable})
+_method eo_multipin_device_mixin.get_connector_length_spec(_optional a_world)
+	## Returns the length for the connector.  This should be
+	## subclassed as necessary.
+	## This class has a subclassable method called
+	## get_params_for_length_spec().  This method can be subclassed
+	## and called by get_connector_length_spec() to obtain extra
+	## information that may be useful in determining a length, such
+	## as the world we're in.
+	##
+	## @param a_world INT!WORLD -- the world that zhe connector
+	##     will be in
+	## @return UNIT_VALUE -- the length that the connector should
+	##     be
+	#! CGI-I208 RR(24\03\2020): Modified the method in order to
+	#! change the minimum length of the conductors on which the
+	#! switching device has to be placed. The minimum length was
+	#! not defined in 43 whereas it is raising condition in 522.
+
+	#!-->ST: Modified the length
+	_return unit_value.new(0.3280839895, :feet)
+	#!<--ST
+_endmethod
+$

@@ -1,0 +1,17 @@
+{
+  "name": "map-popovers",
+  "author": "General Electric",
+  "description": "Map Popover component for maps in the GE Design System",
+  "version": "0.2.0",
+  "private": true,
+  "homepage": "http://gesdh.com/",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-less": "^0.11.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-shell": "^0.7.0",
+    "karma-support": "git+https://github.sw.ge.com/DT/karma-support.git#v1.0.1"
+  }
+}

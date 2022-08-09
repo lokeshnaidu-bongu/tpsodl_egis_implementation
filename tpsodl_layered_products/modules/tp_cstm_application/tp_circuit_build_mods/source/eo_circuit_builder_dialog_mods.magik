@@ -1,0 +1,378 @@
+#% text_encoding = iso8859_1
+########################################################################
+## Description:
+## Modified to add new checkbox "Initial Build" in the Circuit
+## Builder dialog UI. This checkbox would create circuit
+## sources and stoppers in the network for the initial build
+## process. 
+##
+########################################################################
+_package user
+$
+
+_pragma(classify_level=restricted)
+eo_circuit_builder_dialog.define_shared_constant(:initial_build_qm_routine_config_name,
+	## b
+	## name of qm_routine_config xml file defining what qm routines
+	## are run by this dialog
+	##
+	"circuit_builder_qm_routine_config.xml",
+	_true )
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.activate_in(a_frame)
+	## Create the GUI controls used by _self.
+	#! ST: Modified to add a new check item in the Circuit builder
+	#!     dialog. 
+	
+	# Create a container rowcol to lay out the children
+	a_frame.top_frame.resizable? << _false 
+	a_frame.top_frame.width << 300
+	a_frame.top_frame.height << 500
+	a_frame.allow_resize? << _false
+        a_frame.maximizable? << _false
+        a_frame.minimizable? << _false
+	a_frame.resize_x? << _false  
+	a_frame.resize_y? << _false 
+	
+	rc << rowcol.new(a_frame,_unset, 1, :pixel,
+			 :style, :top_level,
+			 :resize_x?,_true ,
+		     :resize_y?,_true )
+	rc.style << :top_level
+	rc.row_resize_values << { 0, 0, 0, 1, 0 }
+
+	# Create the actual Components
+
+	#main label item
+	.items[:name] << label_item.new(rc,_self.message(:circuit, _unset, .circuit.circuit_id()))
+	#!-->ST: Add new variable to store the group box.
+	.items[:group_box] << group_box.new( rc, _self.message(:circuit_sectioning),
+		       :col_alignment,:fill,
+		       :row_alignment,:fill)
+	rc_build << rowcol.new(.items[:group_box],2,1)
+	#!<--ST
+
+	#source sectioning checkbox
+	.items[:build_circuit_source_sections] << toggle_item.new(rc_build,
+						  _self.message(:build_circuit_source_sections),
+						  :row,1,:col,1,
+						  :model, _self,
+						  :value,_true,
+						  :change_selector, :|manage_actions()| )
+	#isolatable sectioning checkbox
+	.items[:build_isolatable_sections] << toggle_item.new(rc_build,
+							      _self.message(:build_isolatable_sections),
+							      :row,2,:col,1,
+							      :model, _self,
+							      :value,_true,
+							      :change_selector, :|manage_actions()|)
+	
+	label_item.new(rc,_self.message(:build_log))
+	#build log text window
+	.items[:build_log] << text_window.new(rc, 20, 60, _unset,
+                                :horizontal_scrollbar?, _false,
+				:editable?, _false,
+				:col_alignment,:fill,
+				:row_alignment,:fill,
+                                :model, _self )
+	
+	# Create a "button box"
+	bottom_rc << rowcol.new(rc, 1, _unset, :pixel,
+				:row_alignment,:fill,
+				:col_alignment, :fill ,
+				:resize_y?,_false)
+	
+	#!-->ST: Add new toggle item.
+	.items[:initial_build] << toggle_item.new(bottom_rc,
+						  "Initial Build",
+						  :model, _self,
+						  :change_selector,:change_identifier|()|,
+						  :value,_true)
+	.items[:initial_build].value << _false
+	#!<--ST
+
+	#help button
+	the_image << smallworld_product.get_raster_image( :help, :ui_resources )
+	
+        .items[:help] << image_button_item.new( bottom_rc, the_image,
+						_self, :|html_help()|,
+						:col_alignment, :left,
+						:balloon_help_text, _self.message(:help),
+						:help_id, _self.help_id )
+
+	#start cancel buttons
+	bb << rowcol.new(bottom_rc,1, _unset , :pixel,
+			 :left_spacing,80,
+			  :col_alignment,:right,
+			  :resize_y?,_false)
+	bb.style << :button_box
+	.items[:apply] << button_item.new(bb,_self.message(:start),_self,:|apply()|, :min_width, 75)
+	.items[:close] << button_item.new(bb,_self.message(:close),_self,:|quit()|, :min_width , 75)
+
+	>> rc
+_endmethod
+$
+
+#!-->ST: Added new method.
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.change_identifier(p_args)
+	#! ST: Added to disable the sectionalizing group box during the
+	#!      initail proccess.
+	_if p_args
+	_then
+		.items[:group_box].enabled? << _false 
+	_else
+		.items[:group_box].enabled? << _true  
+	_endif	
+	
+_endmethod
+$
+
+
+_method eo_circuit_builder_dialog.apply()
+	##
+	##This method is to validate whether it is initial build or not
+	##based on that it will run the method as engine
+	##
+	_if _self.run_status _is :ready
+	_then
+		#Start Changes Haritha 22/06/2022
+#		_if _self.run_build_process?
+#		_then
+#			#start the thread
+#			.items[:build_log].value << ""
+#			_self.perform_safely( :|run_engine()|,
+#					      light_thread.background_priority,
+#					      :|run()|,
+#					      .circuit)
+#		_endif
+		
+		_if .items[:initial_build].value _is _true
+		_then
+			#_self.set_builder_engine()
+			.items[:build_log].value << ""
+			_self.perform_safely( :|run_engine()|,
+					      light_thread.background_priority,
+					      :|tp_run_builder_engine()|,
+					      .circuit,_self)
+		_else
+		#End Changes Haritha 22/06/2022
+			_if _self.run_build_process?
+			_then
+				# Commeneted to stop calling custom Quality checkes
+				# calling method
+				#_self.set_builder_engine()
+				#start the thread
+				.items[:build_log].value << ""
+				_self.perform_safely( :|run_engine()|,
+						      light_thread.background_priority,
+						      :|run()|,
+						      .circuit)
+				
+			_endif
+		#Start Changes Haritha 22/06/2022
+		_endif
+		#End Changes Haritha 22/06/2022
+	_else
+		#interrupt the thread
+		.items[:apply].enabled? << _false
+		_self.interrupt_engine()
+		_self.add_to_log(_self.message(:build_process_interrupted,_unset,write_string(date_time_now())))
+	_endif
+	
+_endmethod
+$
+
+#!-->ST: Added new method.
+#_pragma(classify_level=restricted)
+#_method eo_circuit_builder_dialog.set_builder_engine()
+#	#! ST: Added to initialize the ipa_qm_engine based on the
+#	#!      initail build or normal build.
+#	
+#	_local l_config_file << _if .items[:initial_build].value _is _true
+#				_then
+#					>> smallworld_product.get_resource_file(_self.initial_build_qm_routine_config_name, "data", _self.module_name)
+#
+#				_else
+#					
+#					>> smallworld_product.get_resource_file(_self.qm_routine_config_name, "data", _self.module_name)
+#					
+#				_endif
+#	_local l_build_config << qm_configuration.new(l_config_file)
+#	_local l_database << .application.database
+#	bc << l_build_config
+#	.builder_engine << ipa_qm_engine.new(l_database, l_build_config, :monitor?, _true)
+#	.builder_engine.add_dependent( _self, :progress_info )
+#	
+#_endmethod
+#$
+
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.tp_run_builder_engine(p_circuit, p_builder_dialog)
+	## 
+	##This method is to call the sw_eo_feeder_configuration_engine
+	##engine and it requires circcuit handle,self as parameters 
+	##
+	## Added to include creation of circuit sources and
+	## stoppers in the network for the initial build process. 
+
+	_local l_engine << tp_circuit_builder_engine.new()
+	l_engine.build_feeder_network(p_circuit.circuit_sources, p_circuit.source, p_circuit.circuit_id, p_circuit, p_builder_dialog)
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.build_circuit(p_circuit, _optional section_types)
+	## 
+	## Builds the circuit
+	#! ST: Method is modified to pass additional parameter to the
+	#!     circuit_build and post_circuit_build method.
+
+	_local status<< set.new(), dialog<< _self 
+	_protect
+		_handling eo_circuit_information _with
+		_proc(cond)
+			_import dialog, status
+			_if cond.name _is :eo_circuit_success_information
+			_then status.add(:success)
+			_elif cond.name _is :eo_circuit_updated_information
+			_then status.add(:update)
+			_endif 
+			dialog.add_to_log(cond.report_contents_string)
+		_endproc
+
+		.last_routine<< _unset
+		flag_pred << _self.flag_check_predicate()
+		pre_flag_count<< .builder_engine.count_flags(flag_pred)
+		#Start Changes Haritha 22/06/2022
+		_if .items[:initial_build].value _is _true 
+		_then
+		
+			_self.circuit_build(p_circuit, section_types )
+			_if status.includes?(:success)
+			_then
+				_self.post_circuit_build(p_circuit)
+			_endif 
+		_else
+		#End Changes Haritha 22/06/2022
+			_self.circuit_build(section_types)
+			_if status.includes?(:success)
+			_then
+				
+				_self.post_circuit_build()
+			
+			_endif
+		#Start Changes Haritha 22/06/2022
+		_endif
+		#End Changes Haritha 22/06/2022
+		post_flag_count<< .builder_engine.count_flags(flag_pred)
+		new_flags?<< ( post_flag_count - pre_flag_count ) > 0
+
+		# Commit any flags that may have been created
+		#FIXME - Should this really do a commit if there is no design??
+		_if swg_dsn_admin_engine.active_design _isnt _unset
+		_then
+			swg_dsn_admin_engine.save_design_changes()
+		_else
+			.circuit.source_view.commit()
+		_endif
+
+		cid << .circuit.circuit_id()
+		_if _not status.includes?(:success)
+		_then 
+			_if new_flags?
+			_then
+				_self.add_to_log(_self.message(:circuit_build_fail_new_flags, _unset, cid))
+			_else
+				_self.add_to_log(_self.message(:circuit_build_failed, _unset, cid))
+			_endif
+		_elif _not status.includes?(:update)
+		_then
+			_self.add_to_log(_self.message(:circuit_not_updated, _unset, cid))
+		_else
+			_self.refresh_maps()
+		_endif
+		_if status.includes?(:success) _andif
+		    new_flags?
+		_then
+			_if _not status.includes?(:update)
+			_then
+				_self.add_to_log(_self.message(:circuit_not_updated_new_flags, _unset, cid))
+			_else
+				_self.add_to_log(_self.message(:circuit_build_ok_new_flags, _unset, cid))
+			_endif 
+		_endif 
+	_protection
+		_self.terminate()
+	_endprotect
+_endmethod
+$
+
+
+
+_pragma(classify_level=restricted)
+#!-->ST: Added parameter p_circuit.
+#!_method eo_circuit_builder_dialog.circuit_build(_optional section_types )
+_method eo_circuit_builder_dialog.circuit_build( p_circuit,_optional section_types )
+#!<--ST
+	## 
+	## Run QA circuit build routines registered in a group
+	## circuit_build to build circuit.
+	## SECTION_TYPES is a rope that can contain the values:
+	##  :circuit_source_section
+	##  :build_isolatable_sections
+	## SECTION_TYPES is optional, so if it is unset, then both
+	## sections are generated.
+	##
+	#Start Changes Haritha 22/06/2022
+	_if p_circuit _is _unset 
+	_then
+	#End Changes Haritha 22/06/2022
+		source_data << property_list.new_with(:circuit, .circuit,
+						      :section_types, section_types)
+		
+		.builder_engine.run_checks(:circuit_build,
+					   eo_circuit_builder_dialog_source,
+					   :application, .application,
+					   :source_data, source_data)
+	#Start Changes Haritha 22/06/2022
+	_else
+		source_data << property_list.new_with(:circuit, p_circuit,
+						      :section_types, section_types)
+	_endif 
+	#End Changes Haritha 22/06/2022
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method eo_circuit_builder_dialog.post_circuit_build(p_circuit)
+	## 
+	## Run QA circuit build routines registered in a group
+	## post_circuit_build to run further checks after circuit was built.
+	##
+	#Start Changes Haritha 22/06/2022
+	_if p_circuit _is _unset 
+	_then
+	#End Changes Haritha 22/06/2022
+		.builder_engine.run_checks(:post_circuit_build,
+					   eo_qm_circuit_source,
+					   :application, .application,
+					   :source_data, .circuit)
+	#Start Changes Haritha 22/06/2022
+	_else
+		.builder_engine.run_checks(:post_circuit_build,
+					   eo_qm_circuit_source,
+					   :application, .application,
+					   :source_data, p_circuit)
+	_endif
+	#End Changes Haritha 22/06/2022
+
+_endmethod
+$
+
+ 
+

@@ -1,0 +1,153 @@
+
+_global get_xfmr << _proc @get_xfmr()
+			    _local l_view                    << gis_program_manager.databases[:electric]
+			    #_local l_coll                    << l_view.collection(:eo_power_xfrmr_inst)
+			    _local l_coll                    << l_view.collection(:ed_pole)
+			    _local l_system_coord            << l_view.world.coordinate_system
+			    _local l_latlong_coord           << l_view.coordinate_system("world_longlat_wgs84_degree")
+			    _local l_vis_field               << l_coll.visible_field_names
+			    _dynamic !print_float_precision! << 8
+			    _local l_vis_fld_size            << l_vis_field.size
+			    _local l_pl                      << property_list.new()
+			    _local l_alpha_rope              << {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP","AQ","AR","AS","AT","AU","AV","AW","AX","AY","AZ","BA","BB","BC","BD","BE","BF","BG","BH","BI","BJ","BK","BL","BM","BN","BO","BP","BQ","BR","BS","BT","BU","BV","BW","BX","BY","BZ","CA","CB","CC","CD","CE","CF","CG","CH","CI","CJ","CK","CL","CM","CN","CO","CP","CQ","CR","CS","CT","CU","CV","CW","CX","CY","CZ","DA","DB","DC","DD","DE","DF","DG","DH","DI","DI","DJ","DK","DL","DM","DN","DO","DP","DQ","DR","DS","DT","DU","DV","DW","DX","DY","DZ","EA","EB","EC","ED","EE","EF","EG","EH","EI","EJ","EK","EL","EM","EN","EO","EP","EQ","ER","ES","ET","EU","EV","EW","EX","EY","EZ","FA","FB","FC","FD","FE","FF","FG","FH","FI","FJ","FK","FL","FM","FN","FO"}
+			    # Adding invisible fields to report
+			           l_pl[:ed_pole]            << rope.new_with(:bays,:installation_groups,:location_description_id,:remarks_id,:source_data,:source_id,:tp_surveyor_remark_id,:tp_uq_pole_photo,:tp_no_of_stay_wires)
+				   l_pl[:eo_power_xfrmr_inst]<< rope.new_with(:alias_description,:bay,:feeding_section,:installation_group,:location_description_id,:phase_context,:remarks_id,:scada_monitor_id,:source_data,:tp_neutral_earthing_type,:source_id,:style_subcode)
+			    _protect					 
+				    write("Total Record Count: ",l_coll.size)					  
+				    l_excel          << ole_client.createobject("Excel.Application")
+				    l_workbooks      << l_excel.workbooks()				    
+				    l_workbook       << l_workbooks.add()
+				    l_sheet          << l_workbook.sheets.an_element()
+				    l_sheet.activate()
+				    l_col            << property_list.new_with(:|A|,"GIS ID")
+				    ## Coordinate Ttransformation
+				    l_transform      << transform.new_converting_cs_to_cs(l_system_coord,l_latlong_coord)
+				    ## Printing the Column				   			    
+				    _for l_col_elt _over range(1,l_vis_fld_size)
+				    _loop					   
+					    l_key                    << l_alpha_rope[(l_col_elt+1)]					    
+					    l_fld_val                << l_vis_field[l_col_elt]					   
+					    l_value                  << l_coll.field(l_fld_val).external_name					    
+					    l_col[l_key.as_symbol()] << l_value
+				    _endloop
+				    p_cnt << 1
+				    _for p_col_elt _over range(l_vis_fld_size,(l_pl[l_coll.name].size)+l_vis_fld_size-1)
+				    _loop				  
+					    l_key                    << l_alpha_rope[p_col_elt]					    
+					    l_fld_val                << l_pl[l_coll.name][p_cnt]					   
+					    l_value                  << l_coll.field(l_fld_val).external_name					    
+					    l_col[l_key.as_symbol()] << l_value
+					    p_cnt                    << p_cnt+1
+				    _endloop
+				    
+				    # _try with a_cond
+				    k_cnt << 1			    
+				    _for i_col, j_col _over l_col.fast_keys_and_elements()
+				    _loop
+					    l_row1                      << l_sheet.rows().Range(write_string(i_col, k_cnt))
+					    l_row1.merge()
+					    l_row1.Interior().colorindex << 10
+					    l_row1.value                 << j_col
+					    l_row1.ColumnWidth           << 30
+					    l_row1.Horizontalalignment   << :xlcenter
+					    l_row1.borders.Linestyle     << :xlcontinuous
+					    
+				    _endloop
+				    # Preparing Field Value
+				    i_fld    <<  property_list.new_with(:id,"A")				    
+				    _for l_col_elt _over range(1,l_vis_field.size)
+				    _loop
+					    
+					    l_key         << l_vis_field[l_col_elt]
+					    l_value       << l_alpha_rope[(l_col_elt+1)]
+					    i_fld[l_key]  << l_value
+				    _endloop
+				    q_cnt << 1
+				    _for p_col_elt _over range(l_vis_fld_size,(l_pl[l_coll.name].size)+l_vis_fld_size-1)
+				    _loop
+					    l_key         << l_pl[l_coll.name][q_cnt]
+					    l_value       << l_alpha_rope[p_col_elt]
+					    i_fld[l_key]  << l_value
+					    q_cnt         << q_cnt + 1					    
+				    _endloop
+				    l_cnt << 2				    
+				    _for i _over  l_coll.fast_elements()
+				    _loop				    
+					    _for l_key,j_key _over i_fld.fast_keys_and_elements()
+					    _loop						   
+						    _if (l_key.write_string.lowercase).index_of_seq("location") _isnt _unset _andif i.field(l_key).class_name _is :dd_geom_field
+						    _then							   
+							    l_range      << l_sheet.range( write_string( j_key, l_cnt ))
+							    system_coord << i.perform(l_key)
+							    _if system_coord _isnt _unset 
+							    _then								    
+								    l_result_cs     << l_transform.convert(system_coord.coord)		    
+								    lat_str         << (l_result_cs.y).write_string
+								    long_str        << (l_result_cs.x).write_string
+								    l_ll_coord      << lat_str+","+long_str
+								    l_range.value   << l_ll_coord.write_string
+							    _endif
+						    _elif l_key = :specification
+						    _then						    
+							    l_range << l_sheet.range( write_string( j_key, l_cnt ))				    
+							    _if  i.perform(l_key).responds_to?(:spec_name)
+							    _then								   
+								    l_fld << i.perform(:specification).spec_name				    
+							    _else 
+								    l_fld << i.perform(l_key)								   
+							    _endif 							    
+							    _if l_fld _isnt _unset 
+							    _then 
+								    l_range.value << l_fld.write_string	 
+							    _else	 
+								    l_range.value  << ""
+							    _endif							    
+						    _elif i.field(l_key).class_name _is :dd_join_field _andif i.perform(l_key).responds_to?(:an_element|()|) _andif (l_key.write_string.lowercase).index_of_seq("remark") _is _unset _andif (l_key.write_string.lowercase).index_of_seq("location") _is _unset 
+						    _then							   
+							    l_temp_str   <<  "" 
+							    l_range      << l_sheet.range( write_string( j_key, l_cnt ))
+							    
+							    _for l_sub_elt  _over i.perform(l_key).fast_elements()
+							    _loop
+								    _if l_temp_str =  "" _then
+									    l_temp_str << l_sub_elt.perform(:id).write_string
+								    _else									    
+									    l_temp_str << l_temp_str + ";"+l_sub_elt.perform(:id).write_string
+								    _endif						    
+							    _endloop
+							    _if   l_temp_str <>  ""
+							    _then
+								    l_range.value  << l_temp_str.write_string			    	    
+							    _else	 
+								    l_range.value  << ""
+							    _endif						    
+						    _else							    
+							    l_range  << l_sheet.range( write_string( j_key, l_cnt ))			    
+							    l_fld    << i.perform(l_key)
+							    _if l_fld _isnt _unset 
+							    _then 
+								    l_range.value  << l_fld.write_string	 
+							    _else	 
+								    l_range.value  << ""
+							    _endif							    
+						    _endif						    
+						    l_range.release_object()					    
+					    _endloop
+					    
+					    l_cnt  +<< 1
+					    ## Error Handling Block
+					    # _when error
+					    #	  write("error in fetching",a_cond)
+					    # _endtry
+				    
+				    _endloop				   
+				    l_excel.visible << _true 
+
+			    _protection
+				    _if l_sheet _isnt _unset _then l_sheet.release_object() _endif 
+				    _if l_workbook _isnt _unset _then l_workbook.release_object() _endif 
+				    _if l_workbooks _isnt _unset _then l_workbooks.release_object() _endif 
+				    _if l_excel _isnt _unset _then l_excel.release_object() _endif 
+			    _endprotect
+		 _endproc

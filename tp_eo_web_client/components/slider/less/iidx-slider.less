@@ -1,0 +1,33 @@
+
+@import "ge-bootstrap/less/iidx-bootstrap.less";
+@import (reference) "iidx-variables.less";
+@import "slider.less";
+
+.slider {
+
+  .track-and-thumb .thumb.pointy {
+    height: 33px;
+    top: 0;
+  }
+  
+  //Should have a gray brackground.
+  .slider-ui {
+    border: 1px solid @innerBackgroundColor;
+    height: 35px;
+  }
+  
+  //Gray border for + / - button
+  .slider-button button {
+    border: 1px solid @grayLighter;
+    i {
+      position: static;
+      width: auto;
+      height: auto;
+      font-weight: bold;
+      font-style: normal;
+      line-height: .95;
+      vertical-align: top;
+    }
+  }
+
+}

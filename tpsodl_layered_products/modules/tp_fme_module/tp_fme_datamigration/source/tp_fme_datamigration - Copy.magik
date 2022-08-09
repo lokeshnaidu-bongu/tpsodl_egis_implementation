@@ -1,0 +1,330 @@
+#% text_encoding = iso8859_1 
+_package user 
+$
+
+_pragma(classify_level=basic, topic={Migration})
+def_slotted_exemplar(:tp_fme_datamigration,
+	## 
+	## 
+	## 
+	{
+	},
+	{})
+$
+
+# shared constant which holds the Shape files w.r.t
+# the Object information.
+_pragma(classify_level=basic, topic={Migration})
+tp_fme_datamigration.define_shared_constant(:shape_files,equality_property_list.new_with(
+	
+	:Substation,"DSS.shp",
+	:SupportStructure,"Support_Structure.shp",
+	:Tower,"Tower.shp",
+	:Busbar,"Busbar.shp",
+	:Cable,"Cable.shp",
+	:Conductor,"Cunductor.shp",
+	:Jumper,"Jumper.shp",	
+	:Switch,"Switch.shp",
+	:Fuse,"Fuse.shp",	
+	:CurrentTransformer,"Current Transformer.shp",	
+	:DistributionTransformer,"DistributionTransformer.shp",	
+	:LightningArrestor,"LA.shp",
+	:Meter,"Meter.shp"
+					)
+
+					     ,:public)
+$
+
+
+# shared constant which holds the Workbench files w.r.t
+# the Object information.
+_pragma(classify_level=basic, topic={Migration})
+tp_fme_datamigration.define_shared_constant(:fme_workbenches_path,property_list.new_with(
+	:Substation,"\shape2sworldswaf_Substation.fmw",
+	:SupportStructure,"\shape2sworldswaf_Supportstructure.fmw",
+	:Tower,"\shape2sworldswaf_Tower.fmw",
+	:Busbar,"\shape2sworldswaf_Busbar.fmw",
+	:Cable,"\shape2sworldswaf_Cable.fmw",
+	:Conductor,"\shape2sworldswaf_Conductor.fmw",
+	:Jumper,"\shape2sworldswaf_Jumper.fmw",	
+	:Switch,"\shape2sworldswaf_IsolatingEqup-Switch.fmw",
+	:Fuse,"\shape2sworldswaf_IsolatingEqup-Fuse.fmw",	
+	:CurrentTransformer,"\shape2sworldswaf_CurrentTransformer.fmw",	
+	:DistributionTransformer,"\shape2sworldswaf_DistributionTransformer.fmw",	
+	:LightningArrestor,"\shape2sworldswaf_Lightning_Arrestor.fmw",
+	:Meter,"\shape2sworldswaf_Meter.fmw")
+
+					     ,:public)
+$
+
+
+
+# For Electric Dataset
+# Created shared constant to import data in sequential manner
+tp_fme_datamigration.define_shared_constant(:ele_obj_to_import,rope.new_with(:substation,
+	:SupportStructure,
+	:Busbar,
+	:Cable,
+	:Conductor,
+	:Jumper,
+	:Switch,
+	:Fuse,
+	:CurrentTransformer,
+	:DistributionTransformer,
+	:LightningArrestor,
+	:Meter
+	)
+					     ,:public)
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.new()
+	## 
+	## 
+	_return  _clone.init()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.init()
+	## 
+	##
+	
+	_return _self 
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.run(obj_name,alt_name,nw_type,data_set,_optional ch_flg)
+	## 
+	## Fetching the module directory path , worbench repository path
+	## and data file paths.
+	## Log file will be created for each object in the specified path.
+	
+	write("+++une  +++",_self)
+	
+	module_path << sw_module_manager.module(_self.class_name).full_directory
+	write("+++ module_path +++",module_path)
+
+	_if nw_type = "11kv"
+	_then		
+		wb << module_path+"/resources/base/data/fme_workbenches/11kv"		
+		
+	_elif nw_type = "33kv"
+	_then
+		wb << module_path+"/resources/base/data/fme_workbenches/33kv"
+	_endif
+							
+#	wb << module_path+"/resources/base/data/fme_workbenches"
+	
+	wb_path << wb.substitute_string("/","\")
+	l_data_path << module_path+"/resources/base/data/datafiles"
+	data_path << l_data_path.substitute_string("/","\")
+	log_time << date_time.now().write_string.substitute_string(" ","_")
+	
+	#log_path << "C:\Temp\"
+	log_path << system.temp_directory_name
+	
+	write("+++ 1 +++")
+	
+	#getting access to the shapefile repository folder
+	dir_channel << directory_channel.new(data_path)
+	write("+++ dir_channel +++",dir_channel)
+	
+	_if dir_channel _isnt _unset
+	_then
+		_protect
+			
+			#looping on Feederwise folders
+			_loop
+				write("+++  2+++",dir_channel)
+				
+				next << dir_channel.get_status()
+				write("+++ next +++",next)
+				
+				_if next _is _unset 
+				_then
+					_leave 
+				_endif
+				
+				path_name << next.name
+				write("+++ path_name +++",path_name)
+				
+				#getting access to Feeder folders
+				sub_folders << directory_channel.new(path_name)
+write("+++ sub_folders +++",sub_folders)
+
+				st_cut << path_name.split_by("\")
+				feeder_name << st_cut[st_cut.size]
+write("+++  feeder_name+++",feeder_name.write_string,%tab,alt_name.write_string)
+
+				_if feeder_name.write_string = alt_name.write_string
+				_then
+					write("+++ inside +++")
+					
+					_protect
+						twn_strm << external_text_output_stream.new(log_path.write_string+"\"+"FME_Migration_Log_"+obj_name+"_"+feeder_name+".txt")
+						twn_strm.write("*******************************************************")
+						twn_strm.newline()
+						_loop
+							db_folder << sub_folders.get_status()
+							write("+++ db_folderdb_folder +++",db_folder)
+							
+							_if db_folder _is _unset _then _leave _endif
+							folder_path << db_folder.name
+							#Accessing the dataset folders
+							write("+++ folder_path +++",folder_path)
+							_if nw_type = "11kv"
+							_then
+								write("+++ 11 +++")
+								
+								files_path_access << directory_channel.new(folder_path+"\"+nw_type)
+								write("+++files_path_accessfiles_path_access  +++",files_path_access)
+								
+								
+							_elif nw_type = "33kv"
+						        _then
+								      write("+++ 33 +++")
+								      
+									      
+									files_path_access << directory_channel.new(folder_path+"\"+nw_type)
+							_endif
+							
+						#	files_path_access << directory_channel.new(folder_path)
+							write("+++files_path_access  +++",files_path_access)
+							
+							#Looping on files available in each dataset folder
+							#Fetching on .SHP files as remaning files can be ignored
+							
+							_loop
+								file_name << files_path_access.get_full()
+								_if file_name _is _unset _then _leave _endif
+
+								write("+++ file_name +++",file_name)
+								
+#								file_ex << file_name.split_by(".")
+#								_if file_ex.size = 2 _and file_ex[2] = "shp"
+								_if file_name.rindex_of_seq(".shp") _isnt _unset
+								_then
+									string_words << file_name.split_by("\")
+									
+									_if ch_flg _is _true 
+									_then
+										write("+++shp_file  +++",shp_file)
+										
+										shp_file << _self.shape_files[obj_name.lowercase]
+										wrk_name << _self.fme_workbenches_path[obj_name.lowercase.as_symbol()]
+									_else
+										shp_file << _self.shape_files[obj_name]
+										wrk_name << _self.fme_workbenches_path[obj_name]
+										write("+++wrk_name  +++",wrk_name)
+										
+									_endif
+									
+									_if string_words.eq_includes?(shp_file)
+									_then
+										twn_strm.write("Processing ",obj_name," Object")
+										twn_strm.newline()
+										t1 << date_time.now()
+										twn_strm.write("Started Time ",t1.write_string)
+										twn_strm.newline()
+										fme_wb << wb_path+wrk_name
+										write("+++ Workbench Name +++",fme_wb)
+										
+										_if fme_wb _isnt _unset 
+										_then
+											twn_strm.write("Running ",fme_wb," Workbench")
+											twn_strm.newline()
+											wb_name << fme_wb.split_by("\")
+											log_file_name << write_string(wb_path,"\",wb_name[wb_name.size].split_by(".")[1],"_",feeder_name,".log")
+											
+											_if cmd_strng <> "" _andif fme_wb _isnt unset
+											_then	
+												cmd_strng << write_string("cmd /c ","fme.exe ",fme_wb," --SourceDataset_SHAPE ",file_name," LOG_FILENAME ",log_file_name)
+												system.do_command("cmd /c cd C:\Program Files (x86)\FME")
+												(process,result)<< system.do_command(cmd_strng)
+												_if result = 0
+												_then
+													twn_strm.write("Importing Process Completed Succesfully")
+												_else
+													twn_strm.write("Issue in Importing the data....")
+													twn_strm.write("Please check the related FME Log file")
+												_endif
+												
+											_endif
+											t2 << (date_time.now()-t1)
+											twn_strm.newline()
+											twn_strm.write("End Time ",t2.write_string)
+											twn_strm.newline()
+											twn_strm.write("*******************************************************")
+											
+										_else
+											twn_strm.write("ERROR ",fme_wb," Workbench not Available")
+										_endif	
+									_endif 	
+								_endif
+								
+							_endloop
+							
+						_endloop
+					_protection
+						twn_strm.close()
+					_endprotect
+				_else
+
+					#					data_set.go_to_alternative("|DM Top")
+					#					_if (alt << data_set.alternative_details(alt_name)) _isnt _unset 
+					#					_then	
+					#						data_set.remove_alternative(alt_name)
+					#						write("feeder Folder Not Available")
+					#					_endif
+				_endif
+				
+			_endloop
+		_protection
+			dir_channel.close()
+			sub_folders.close()
+			_if files_path_access _isnt _unset 
+			_then
+				files_path_access.close()
+			_endif				
+			
+		_endprotect
+		
+	_else
+		write("Repository Not Accssible")	
+	_endif
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={Migration})
+_method tp_fme_datamigration.start_fme_eo_importing(alt_nm,nw_type)
+	## 
+	## 
+	## For Ordered importing of objects fetching the objects from
+	## shared constant and running the appropriate FME workbench
+	## By calling run method
+
+	write("Electric data importing Process started ",(t1 <<date_time.now()))
+
+	ele_dt << gis_program_manager.cached_dataset(:electric)
+	ele_dt.go_to_alternative("|Nilachalnagar")
+	alt_st_name << ele_dt.alternative_details(alt_nm)
+	_if alt_st_name _is _unset 
+	_then
+		ele_dt.create_alternative(alt_nm)
+	_endif
+	ele_dt.go_to_alternative(alt_nm)
+	write("Data importing in ",alt_nm," alternative")
+	ele_dt.checkpoint("b4_fme_imprt_"+date_time.now().write_String)
+	_for e_obj _over _self.ele_obj_to_import.fast_elements()
+	_loop
+		write("+++ ddd +++")
+		
+		_self.run(e_obj,alt_nm,nw_type,ele_dt)	
+	_endloop
+	write("Electric data importing process completed...")
+	write("Total Time Taken :- ",date_time.now()-t1)
+_endmethod
+$

@@ -1,0 +1,63 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Bank	1
+ATM	2
+Insurance Company	3
+Loan	4
+Hospital	5
+Nursing Homes	6
+Clinic	7
+Chemists	8
+Pathology Labs	9
+Trauma Centre	10
+Blood Banks	11
+Fire Station	12
+Police Station/Chowki	13
+Embassies	14
+Government Buildings	15
+Municipal Ward Offices	16
+Post Offices	17
+Traffic Chowki	18
+Telephone Exchange	19
+Court	20
+Jail	21
+NGO/UN/World Bank	22
+Cinema Theatre	23
+Club/Pub	24
+Halls & Auditorium	25
+Parks	26
+Ashrams	27
+Church	28
+Gurudwara	29
+Jain Mandir	30
+Mosque	31
+Temple	32
+Buddha Vihar	33
+College	34
+Hostels and Messes	35
+Library	36
+Museums	37
+Research Institute	38
+School	39
+University	40
+Other Institutes	41
+Shopping Mall	42
+Super Bazaar	43
+Restaurants	44
+Hotel	45
+Petrol Pump	46
+Courier-Logistics	47
+Tourist Office	48
+Auditorium	49
+Forts	50
+Gymnasium	51
+Health Centre	52
+Historical Places	53
+Sanctuary	54
+Stadium	55
+Tombs	56
+Zoological Park	57

@@ -1,0 +1,405 @@
+@import "variables.less";
+
+// Monochrome Palette
+// -------------------------
+@trueBlack:       #000000;
+@black:           #141414;
+@gray:            #868686;
+@grayDark:        #575757;
+@gray-dark:       @grayDark;  // bs3
+@grayDarker:      #414141;
+@gray-darker:     @grayDarker;  // bs3
+@grayDarkest:     #2b2b2b;
+@grayLight:       #bcbcbc;
+@gray-light:      @grayLight;  // bs3
+@grayLighter:     #d4d4d4;
+@gray-lighter:    @grayLighter;  // bs3
+@grayLightest:    #e9e9e9;
+@gray-lightest:   @grayLightest;  // bs3
+@offWhite:        #f5f5f5;
+@white:           #ffffff;
+
+
+
+// Accent Palette
+// -------------------------
+
+// no more cyan - just map to blue colors
+@cyan:            #005CB9;
+@cyanLight:       #3693f8;
+@cyanDark:        #00366e;
+
+@green:           #46ad00;
+@greenLight:      #75d835;
+@greenDark:       #1d5f11;
+@red:             #de2533;
+@redLight:        #ff5c5c;
+@redDark:         #b61225;
+@orange:          #ff9821;
+@orangeLight:     #ffbb66;
+@orangeDark:      #e55c00;
+@purple:          #8669ff;
+@purpleLight:     #9c97ff;
+@purpleDark:      #595194;
+@blue:            #005CB9;
+@blueLight:       #3693f8;
+@blueDark:        #00366e;
+@yellow:          #ffed45;
+@yellowLight:     #fff98d;
+@yellowDark:      #ffcf45;
+
+@blueDarker:      darken(@blue, 10%);
+@grayBorder:      #cccccc;
+
+// Scaffolding
+// -------------------------
+
+//** Background color for `<body>`.
+@bodyBackground:        @white;
+@body-bg:               @bodyBackground; // bs3
+
+//** Global text color on `<body>`.
+@textColor:             @grayDarkest;
+@text-color:            @textColor; // bs3
+
+// Links
+// -------------------------
+
+// Global textual link color.
+@linkColor:             @blue;
+//@link-color:            @linkColor; // bs3 BF Moved this to GE-Bootstrap/variables.less, since we aren't loading Bootstrap yet it will be redefined
+@linkColorHover:        @blueDark;
+//@link-hover-color:      @linkColorHover; // bs3 BF Moved this to GE-Bootstrap/variables.less, since we aren't loading Bootstrap yet it will be redefined
+
+// Typography
+// -------------------------
+@sansFontFamily:          "GE Sans", "ge-sans", "GE Inspira", "ge-inspira", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:  @sansFontFamily; // bs3
+@serifFontFamily:         "GE Serif", "ge-serif", Georgia, serif;
+@font-family-serif:       @serifFontFamily; // bs3
+@monoFontFamily:          Inconsolata, Consolas, monospace;
+@font-family-monospace:   @monoFontFamily; // bs3
+@brandFontFamily:         "GE Inspira", "ge-inspira", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+@baseFontSize:            15px;
+@font-size-base:          @baseFontSize; // bs3
+@baseFontFamily:          @sansFontFamily;
+@baseLineHeight:          19px;
+@line-height-base:        @baseLineHeight; // bs3
+@line-height-computed:    @baseLineHeight; // bs3 = if let bs3 calculate it ends up with 285px. No bueno.
+@altFontFamily:           @serifFontFamily;
+@componentFontSize:       12px; // NEW
+
+@headingsColor:           @grayDarkest; // empty to use BS default, @textColor
+@headings-color:          @headingsColor; // bs3
+
+// Component sizing
+// -------------------------
+// Based on 14px font-size and 20px line-height
+
+@fontSizeLarge:           @baseFontSize * 1.0; // ~18px
+@font-size-large:         @fontSizeLarge; // bs3
+@fontSizeSmall:           @baseFontSize * 0.8; // ~11px
+@font-size-small:         @fontSizeSmall; // bs3
+@fontSizeMini:            @baseFontSize * 0.70; // ~10px
+
+@baseBorderRadius:        3px;
+@border-radius-base:      @baseBorderRadius; // bs3
+
+
+//Tables
+//-----------------------
+
+@tableBackground:         transparent; // overall background-color
+@table-bg:                @tableBackground; // bs3
+@tableBackgroundAccent:   @grayLightest; // for striping
+@table-bg-accent:         @tableBackgroundAccent; // bs3
+@tableBackgroundHover:    #B7CBE5; // for hover
+@table-bg-hover:          @tableBackgroundHover; // bs3
+@table-bg-active:         @white; // bs3 - is run through a darken() method in tables.less and can't be "none"
+@tableBorder:             @grayLight; // table and cell border
+@table-border-color:      @tableBorder; // bs3
+@tableBackgroundSelected: #749BCD;
+
+
+// Buttons
+//-------------------
+@btnBackground:                     @offWhite;
+@btn-default-bg:                    @btnBackground; // bs3
+@btnBackgroundHighlight:            @grayLighter;
+@btnBorder:                         @grayLighter;
+@buttonBorderColor:                 @btnBorder;
+@btn-default-border:                @btnBorder; // bs3
+@btnBorderRadius:                   3px;
+
+@fontSizeLarge:                     15px;
+@buttonPaddingLarge:                8px 12px;
+
+@buttonBackgroundColorDisabled:     @grayDarker;
+@buttonFontColorDisabled:           #fff;
+
+@btnPrimaryBackground:              @grayDarkest;
+@btn-primary-bg:                    @btnPrimaryBackground; // bs3
+@btnPrimaryBackgroundHighlight:     darken(@btnPrimaryBackground, 10%);
+@btn-primary-border:                transparent;
+
+@btnInfoBackground:                 @cyan;
+@btn-info-bg:                       @btnInfoBackground; // bs3
+@btnInfoBackgroundHighlight:        darken(@btnInfoBackground, 10%);
+@btn-info-border:                   transparent; // bs3
+
+@btnSuccessBackground:              @green;
+@btn-success-bg:                    @btnSuccessBackground; // bs3
+@btnSuccessBackgroundHighlight:     darken(@btnSuccessBackground, 10%);
+@btn-success-border:                transparent; // bs3
+
+@btnWarningBackground:              @orange;
+@btn-warning-bg:                    @btnWarningBackground; // bs3
+@btnWarningBackgroundHighlight:     darken(@btnWarningBackground, 10%);
+@btn-warning-border:                transparent; // bs3
+
+@btnDangerBackground:               @red;
+@btn-danger-bg:                     @btnDangerBackground; // bs3
+@btnDangerBackgroundHighlight:      darken(@btnDangerBackground, 10%);
+@btn-danger-border:                 transparent; // bs3
+
+@btnInverseBackground:              @grayDarker;
+@btnInverseBackgroundHighlight:     @grayDarkest;
+
+@btnText:                           @grayDark; // NEW
+
+
+// Forms
+// -------------------------
+@inputBackground:               @offWhite;
+@input-bg:                      @inputBackground; // bs3
+@formsBackgroundColor:          @inputBackground; // compatibility?
+@inputBorder:                   @grayLighter;
+@input-border:                  @inputBorder; // bs3
+@inputBorderRadius:             0;
+@input-border-radius:           @inputBorderRadius; // bs3
+@inputDisabledBackground:       @grayLighter;
+@input-bg-disabled:             @inputDisabledBackground; // bs3
+@inputDisabledText:             @grayDark;
+@formActionsBackground:         @grayLightest;
+@inputHeight:                   @baseLineHeight + 10px; // base line-height + 8px vertical padding + 2px top/bottom border
+@input-height-base:             @inputHeight; // bs3
+@webkitBaseBorder:              #4C4C4C; //
+@inputHoverBorder:              @grayDark;
+@inputFocusBorder:              @blue;
+@inpurFocusBorder:              @inputFocusBorder; // fallback support for typo
+@input-border-focus:            @inputFocusBorder; // bs3
+@input-color:                   @textColor; // bs3
+@btnIconColor:                  @black; // NEW
+
+// Input Addons
+@input-group-addon-bg:            @offWhite;
+@input-group-addon-border-color:  @grayLighter;
+
+
+// Dropdowns
+// -------------------------
+@dropdownBackground:            @white;
+@dropdownBorder:                @grayLight;
+@dropdownDividerTop:            @grayLighter;
+@dropdownDividerBottom:         @white;
+
+@dropdownLinkColor:             @grayDark;
+@dropdownLinkColorHover:        @white;
+@dropdownLinkColorActive:       @white;
+
+@dropdownLinkBackgroundHover:   @blue;
+@dropdownLinkBackgroundActive:  @blue;
+
+
+// Input placeholder text color
+// -------------------------
+@placeholderText:         @gray;
+
+
+// Hr border color
+// -------------------------
+@hrBorder:                @grayLighter;
+
+
+// Horizontal forms & lists
+// -------------------------
+@horizontalComponentOffset:       180px;
+
+
+// Wells
+// -------------------------
+@wellBackground:                  @grayLightest;
+
+
+// Navbar
+// -------------------------
+@navbarCollapseWidth:               979px;
+@navbarCollapseDesktopWidth:        980px;
+
+@navbarHeight:                      60px;
+@navbarBackgroundHighlight:         @black;
+@navbarBackground:                  @black;
+@navbarBorder:                      @black;
+
+@navbarText:                        @gray;
+@navbarLinkColor:                   @gray;
+@navbar-default-link-color:         @navbarLinkColor;  // bs3
+@navbarLinkColorHover:              @white;
+@navbar-default-link-hover-color:		@navbarLinkColorHover; // bs3
+@navbarLinkColorActive:             @white;
+@navbar-default-link-active-color:  @navbarLinkColorActive; // bs3
+@navbarLinkBackgroundHover:         transparent;
+@navbarLinkBackgroundActive:        @blue;
+@navbar-default-link-active-bg:     @navbarLinkBackgroundActive; // bs3
+
+@navbarSearchBackground:            @grayDarker;
+@navbarSearchBackgroundFocus:       @white;
+@navbarSearchBorder:                @navbarSearchBackground;
+@navbarSearchPlaceholderColor:      @gray;
+
+@navbarBrandColor:                  @white;
+
+// Inverted navbar
+@navbarInverseBackground:                @grayLightest;
+@navbarInverseBackgroundHighlight:       @navbarInverseBackground;
+@navbarInverseBorder:                    @navbarInverseBackground;
+
+@navbarInverseText:                      @grayDarkest;
+@navbarInverseLinkColor:                 @grayDarkest;
+@navbarInverseLinkColorHover:            @blue;
+@navbarInverseLinkColorActive:           @blueDark;
+@navbarInverseLinkBackgroundHover:       transparent;
+@navbarInverseLinkBackgroundActive:      transparent;
+
+@navbarInverseSearchBackground:          lighten(@navbarInverseBackground, 25%);
+@navbarInverseSearchBackgroundFocus:     @white;
+@navbarInverseSearchBorder:              @navbarInverseBackground;
+@navbarInverseSearchPlaceholderColor:    #ccc;
+
+@navbarInverseBrandColor:                @grayDarkest;
+
+// selected
+@btnSelectedText:                   @white; // NEW
+//@btnSelectedBackground:             @blue;
+
+// disabled button
+@btnDisabledText:                   @gray; // NEW
+@btnDisabledBackground:             @grayLightest; // NEW
+
+// Pills
+// -------------------------
+@navPillItemBackgroundColor: #fff;
+@nav-pills-active-link-hover-bg:		@blue;
+
+// Multi-Step Navigation
+// -------------------------
+@multistep-button-margin: 0 1px 0 0;
+
+
+//Pagination
+// -------------------------
+@paginationBackground:                @white; // No longer in use BS3
+@paginationBorder:                    @grayLighter; // No longer in use BS3
+@paginationActiveBackground:          @blue; // No longer in use BS3
+
+
+// Hero unit
+// -------------------------
+@heroUnitBackground:              @grayLighter;
+@heroUnitHeadingColor:            inherit;
+@heroUnitLeadColor:               inherit;
+
+
+
+// Tooltips and popovers
+// -------------------------
+@tooltipColor:            #fff;
+@tooltipBackground:       #000;
+@tooltipArrowWidth:       5px;
+@tooltipArrowColor:       @tooltipBackground;
+
+@popoverBackground:       @white;
+@popoverArrowWidth:       10px;
+@popoverArrowColor:       @white;
+@popoverTitleBackground:  @grayLightest;
+@tooltip-opacity:         1;
+
+// Special enhancement for popovers
+@popoverArrowOuterWidth:  @popoverArrowWidth + 1;
+@popoverArrowOuterColor:  rgba(0,0,0,.25);
+
+
+// Tags (New, used mainly in GE Bootstrap: labels-badges.less)
+// -------------------------
+@tagPadding:                    8px 15px 7px 15px; // NEW
+@tagBorderRadius:               3em;
+@tagBackground:                 @grayLightest;
+@tagBackgroundHighlight:        @grayLighter;
+@tagText:                       @textColor;
+
+
+// Labels
+@labelTagFontSize:       11px;
+@labelTagTextTransform:  uppercase;
+@labelTagFontWeight:     bold;
+
+
+// Datagrids
+//-------------
+@dataTableRowGray: #c9cccf;
+@rowGroupingHyperlink:  #396eb1;
+@dataTableBodyRow: #f1f1f2;
+@DTCR_pointer_bkgnd: #0259C4;
+
+
+/*
+
+Where did these come from? CDX new stuff?
+
+@btnBorderForRealzy:                @grayLightest;
+
+@btnPrimaryText:                    @white;
+
+@btnPrimaryToggle:                  darken(@blue,50%);
+@btnIconColorPrimary:               @white;
+
+@btnInverseText:                    @btnPrimaryText;
+@btnInverseBackground:              @btnPrimaryBackground;
+@btnInverseBackgroundHighlight:     @btnPrimaryBackgroundHighlight;
+@btnInverseIconColor:               @btnIconColorPrimary;
+
+
+// toggle
+
+@btnToggleText:                     @white;
+@btnToggleBackground:               @blue;
+
+
+// faceted / type ahead
+@dropdownFacetedFacetBackground: @grayLightest;sx
+
+
+
+//Declarative-visualizations
+//gradient colors for each severity type
+//-----------------------------------------
+@blue1:           #1483B2;
+@blue2:           #25AAE1;
+@yellow1:         #D8BB27;
+@yellow2:         #FBDA06;
+@orange1:         #D07931;
+@orange2:         #F58624;
+@red1:            #C62F27;
+@red2:            #EE3D2C;
+@BarLightsOnGray: #e7e6e7;
+@meterBgGray:     #e7e5e7;
+
+
+// Datagrids
+//-------------
+
+//@dataTableRowEvenBgrnd:   #749BCD;
+//@dataTableRowHover:       #B7CBE5;
+//@dataGridbackgroundColor: #EEEEEE;
+*/

@@ -1,0 +1,23 @@
+ _block
+_for a_ele  _over gis_program_manager.spatial_object_controller(:electric_dm).dataset_caches(:dd_enumerators).nth(2).value.elements.fast_elements()
+_loop
+	deleted_values << equality_set.new_from(a_ele.sorted_values)
+	_if a_ele.name.write_string = "eo_emei_style_subcode"
+	_then
+		write("+++  +++",a_ele.sorted_values)
+		
+		
+		a_ele.remove_extended_values_from(deleted_values)
+		write("+++  +++",a_ele.sorted_values)
+		
+	_endif
+_endloop
+
+ _endblock
+
+ 
+
+ 
+
+
+ 

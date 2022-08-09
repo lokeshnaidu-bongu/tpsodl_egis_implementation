@@ -1,0 +1,23 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By:  S. Haritha Rani, TCS
+## Date: 18/11/2021
+##
+## Description:
+
+########################################################################
+_package sw
+$
+_pragma(classify_level=restricted)
+##
+## EO load CASE  implementer class
+##
+def_slotted_exemplar(:ed_switchgear,
+	{
+	},
+	{:cs_rwo_record})
+
+$

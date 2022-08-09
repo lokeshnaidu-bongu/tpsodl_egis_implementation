@@ -1,0 +1,519 @@
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Exemplar Name    : tp!length_of_service_line_engine
+#
+# Description      : Main class for application which will allow the user to
+#                   find the length of the service line to be
+#                  placed for a new prospective customer
+# Inheritance      : tp!preset_query_engine
+#
+# Slots            : -
+#                    
+# Constants        : -                    
+#
+# Methods          : new()
+#                    init()
+#                    get_total_length()
+#                    calculate_length()
+#                    get_nearest_road_centerline()
+#                    get_coordinates_on_road()
+#                    get_building_floor_info()
+#                    get_nearest_road_centerline_for_build()
+#                    create_pseudo_chain()
+#                    add_pseudo_text()
+#                   create_pseudo_chain_from_links()
+#                   
+# Dependencies     : -
+# Creation Date    : 18-02-2022
+# Creator Name     : S. Haritha Rani, TCS
+# Version No.      : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+_package user
+$
+remex(:tp!length_of_service_line_engine)
+#--------------------------------------------------------------------------------
+#                                EXEMPLAR DEFINITION
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+def_slotted_exemplar(:tp!length_of_service_line_engine,
+	##
+	## Main class for application which will allow the user to
+	## find the length of the service line to be
+	## placed for a new prospective customer
+	##
+	{
+	
+	},	
+	{:tp!preset_query_engine})
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: new()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.new(_optional get_length)
+	## 
+	## Returns new instance of self
+
+	_return  _clone.init(get_length)
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: init()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.init(_optional p_get_length)
+	## 
+	## Initialisation of self's slots.
+	##
+	_local l_get_length << p_get_length
+	_super.init()
+	.items[:land_view] << gis_program_manager.cached_dataset(:land)
+	.items[:rd_coll] << .items[:land_view].collections[:lnd_street_segment]
+	.items[:building] << .items[:land_view].collections[:lnd_building]
+	
+	.items[:app] << smallworld_product.applications.an_element()
+	_if l_get_length _isnt _unset
+	_then 
+		_self.add_dependent( l_get_length,:calculated_length )
+	_endif 
+	
+	>> _self 
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_total_length
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.get_total_length(p_pole_obj,
+							  p_build_obj,
+							  p_floor_no,
+							  _optional p_floor_height,
+							  p_add_length)
+	##
+	## Method used to run the process in thread
+	## Run the actual method to find the total length in a thread
+	## Input: pole/fp,building,floor number,height of
+	##        floor,addtional horizontal length
+	## Return: nothing
+	##
+
+	_self.run_engine(_thisthread.background_priority,
+			 :calculate_length|()|,
+			 p_pole_obj,p_build_obj,
+			 p_floor_no,
+			 p_floor_height,
+			 p_add_length)
+
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: calculate_length
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.calculate_length(p_pole_obj,
+							  p_build_obj,
+							  p_floor_no,
+							  _optional p_floor_height,
+							  p_add_length)
+	## 
+	## Calculate the total length of service line which is to be
+	## placed for a new prospective customer.
+	##
+
+	_dynamic !print_float_precision! << 10
+	
+	l_nf << network_follower.new()
+
+	_if p_add_length.as_number() _isnt _unset _andif
+	    p_add_length ~= ""
+	_then 
+		l_total_length << p_add_length.as_number()
+	_else 
+		l_total_length << 0
+	_endif
+
+
+	_if p_floor_height= ""
+	_then 
+		p_floor_height << 3
+	_endif
+	
+	#Find nearest road to a POLE/FP
+	l_rd_for_pole_fp << _self.get_nearest_road_centerline(p_pole_obj)
+
+
+	_if l_rd_for_pole_fp _is _unset _orif 
+	    p_build_obj _is _unset _orif
+	    p_build_obj.lnd_street _is _unset _orif
+	    p_build_obj.lnd_street.lnd_street_segments.empty?
+	_then
+		_self.changed(:calculated_length,_unset)
+		_return _unset 
+	_endif
+	
+	l_bnd << _unset
+	l_ref_coord << _unset
+	
+	_if p_pole_obj.rwo_type _is :ed_switchgear
+	_then 
+		l_bnd << p_pole_obj.extent.bounds
+		l_ref_coord << coordinate.new( ( l_bnd.xmax + l_bnd.xmin ) / 2,
+					       ( l_bnd.ymax + l_bnd.ymin ) / 2 )
+	_else
+		l_ref_coord << p_pole_obj.location.coord
+	_endif 
+
+	l_coord_on_road_fp << _self.get_coordinates_on_road(l_rd_for_pole_fp,l_ref_coord)
+	l_start_point << _self.get_node_for_coord(l_coord_on_road_fp,l_rd_for_pole_fp.route,780)
+
+	l_bnd << p_build_obj.extent.bounds
+	l_ref_coord << l_bnd.centre
+	
+	l_rd_for_build << _self.get_nearest_road_centerline_for_build(p_build_obj,
+								      p_build_obj.lnd_street.lnd_street_segments)
+	l_coord_on_road << _self.get_coordinates_on_road(l_rd_for_build,l_ref_coord)
+
+	l_end_point << _self.get_node_for_coord(l_coord_on_road,l_rd_for_build.route,780)
+
+	_if l_start_point _is _unset _orif
+	    l_end_point _is _unset
+	_then
+		_self.changed(:calculated_length,_unset)
+		_return _unset 	
+	_endif 
+	
+
+	( l_link, l_length ) << l_nf.shortest_path( l_start_point, l_end_point )
+
+	
+	l_length << l_length.integral_and_fraction()
+
+	# Create pseudo chain from links
+	l_line << _self.create_pseudo_chain_from_links(l_link)
+
+	# Add text at center of l_line
+	_if l_length _isnt _unset _andif
+	    l_line _isnt _unset 
+	_then
+		l_dist_to_add_info << l_length _div 2
+		l_point_to_add_info << l_line.segpoint_for_length(l_dist_to_add_info)
+		l_text << _self.add_pseudo_text(l_point_to_add_info,l_length)
+		
+		_if l_text _isnt _unset 
+		_then
+			l_link.add(l_text)
+		_endif	
+	_endif
+
+	# Calculate the length from l_end_point to nearest point on
+	# boundary of  building
+	# This length will be added to total length
+	(l_pt,l_dist) << p_build_obj.extent.segpoint_location_near(l_coord_on_road)
+	
+	_if l_dist _isnt _unset 
+	_then
+		l_dist << l_dist.integral_and_fraction()
+	_else
+		l_dist << 0
+	_endif
+
+	# Calculate the length from l_start_point to nearest point on
+	# boundary of  feeder pillar/pole
+	# This length will be added to total length
+	_if p_pole_obj.rwo_type _is :ed_switchgear
+	_then
+		(l_pt_on_fp,l_dist_from_fp) << p_pole_obj.extent.segpoint_location_near(l_coord_on_road_fp)
+	_else
+		l_pt_on_fp << p_pole_obj.location
+		l_dist_from_fp << p_pole_obj.location.coord.distance_to(l_coord_on_road_fp)
+	_endif
+
+	
+	_if l_dist_from_fp _isnt _unset 
+	_then
+		l_dist_from_fp << l_dist_from_fp.integral_and_fraction()
+	_else
+		l_dist_from_fp << 0
+	_endif
+	
+				  
+	l_total_length << l_total_length +
+			  (l_dist _div 1000)+
+			  (l_length _div 1000) +
+			  (l_dist_from_fp _div 1000)+
+			  (p_floor_no.as_number().floor * p_floor_height.as_number())
+
+	# Create a chain to highlight distance from end
+	# point to boundary of the building
+
+	_if l_pt _isnt _unset 
+	_then
+
+		l_pseudo_chain << _self.create_pseudo_chain(l_coord_on_road,l_pt.coord)
+		
+		_if l_pseudo_chain _isnt _unset _andif
+		    l_link _isnt _unset 
+		_then
+			l_link.add(l_pseudo_chain)
+
+			# To add text on center of l_pseudo_chain
+			_if l_dist > 0
+			_then
+				l_dist_to_add_info << l_dist _div 2
+				l_point_to_add_info << l_pseudo_chain.segpoint_for_length(l_dist_to_add_info)
+				l_text << _self.add_pseudo_text(l_point_to_add_info,l_dist )
+
+				_if l_text _isnt _unset 
+				_then
+					l_link.add(l_text)
+				_endif
+					
+			_endif
+		_endif
+		
+	_endif
+
+	# Create a chain to highlight distance from start
+	# point to boundary of the fp/pole
+	
+	_if l_pt_on_fp _isnt _unset 
+	_then
+	
+		l_pseudo_chain << _self.create_pseudo_chain(l_pt_on_fp.coord,l_coord_on_road_fp)
+		
+		_if l_pseudo_chain _isnt _unset _andif
+		    l_link _isnt _unset 
+		_then
+			l_link.add(l_pseudo_chain)
+
+			# To add text on center of l_pseudo_chain
+			_if l_dist_from_fp > 0
+			_then
+				l_dist_to_add_info << l_dist_from_fp _div 2
+				l_point_to_add_info << l_pseudo_chain.segpoint_for_length(l_dist_to_add_info)
+				l_text << _self.add_pseudo_text(l_point_to_add_info,l_dist_from_fp )
+
+				_if l_text _isnt _unset 
+				_then
+					l_link.add(l_text)
+				_endif
+					
+			_endif
+		_endif
+		
+	_endif
+
+	_self.changed(:calculated_length,{l_total_length.as_float.write_with_decimals(2),l_link})
+	
+	_return {l_total_length.as_float.write_with_decimals(2),l_link}
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_nearest_road_centerline()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.get_nearest_road_centerline(p_pole_obj)
+	##
+	## return a road centerline nearest to given pole/fp
+	##
+
+	_for a_range _over range(1,1000)
+	_loop @ buffer
+	     
+	      # Create buffer around pole/fp
+	      _if p_pole_obj.rwo_type _is :ed_pole
+	      _then
+		      l_pseudo_buffer << p_pole_obj.location.buffer(a_range*1000)
+	      _else
+		      l_pseudo_buffer << p_pole_obj.extent.buffer(a_range*1000)
+	      _endif
+	     
+	      l_pseudo_buffer.world << .items[:land_view].world
+	      
+	      l_rd << .items[:rd_coll].select(predicate.interacts(:route,l_pseudo_buffer))
+	      
+	      _if _not l_rd.empty?
+	      _then
+		    _return l_rd.an_element()
+	      _endif
+	     
+	_endloop 
+	
+	_return _unset 
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_coordinates_on_road()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.get_coordinates_on_road(p_road,p_coord)
+	##
+	## return a coordinate on road_centerline(p_road) nearest to p_coord
+	##
+	l_ref_road << p_road.route.segpoint_location_near(p_coord)
+	
+	_return  l_ref_road.coord
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_building_floor_info
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.get_building_floor_info(p_id)
+	##
+	## To get the floor information for the building
+	## Input: Building id
+	## Return: Floor info of building 
+	##
+	l_build_obj << .items[:building].at(p_id)
+	_if l_build_obj _is _unset 
+	_then
+		_return l_build_obj	
+	_endif
+	
+	_if l_build_obj.number_of_floors _is _unset _orif
+	    l_build_obj.number_of_floors = ""
+	_then
+		_return _unset
+	_else 	
+		_return l_build_obj.number_of_floors
+	_endif
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: get_nearest_road_centerline_for_build()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.get_nearest_road_centerline_for_build(p_building,p_rd_cl_coll)
+	##
+	## return a road centerline nearest to given building from the
+	## p_rd_cl_coll collection
+	##
+
+	l_min_cost << 9999e10
+	l_road << _unset
+	
+	_for a_rd _over p_rd_cl_coll.elements()
+	_loop		
+		l_ref_build << p_building.extent.bounds.centre
+		l_ref_road << a_rd.route.segpoint_location_near(l_ref_build)		
+		l_dist << l_ref_build.distance_to(l_ref_road)
+		_if l_dist < l_min_cost
+		_then			
+			l_min_cost << l_dist
+			l_road << a_rd
+		_endif
+			
+	_endloop	
+	
+	_return l_road
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: create_pseudo_chain()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.create_pseudo_chain(p_st_pt,p_end_pt)
+	##
+	##Create a psuedo chain between two points
+	##
+	_try
+		l_sec << sector.new_with(p_st_pt,p_end_pt)
+		l_line << pseudo_chain.new_for_world(l_sec,.items[:land_view].world)
+		_return l_line 
+		
+	_when error 
+		_return _unset 	
+	_endtry
+	
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: add_pseudo_text()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.add_pseudo_text(p_pt,p_text)
+	##
+	## Add p_text at p_point and return it
+	##
+	##
+	_try
+		l_text << pseudo_text.new(p_pt ,
+					  (p_text _div 1000).write_string+ "m",
+					  0.0,33,:left_right,600 )
+		
+	_when error 
+		_return _unset 
+	_endtry
+	
+	_return l_text
+
+_endmethod
+$
+
+#--------------------------------------------------------------------------------
+# METHOD: create_pseudo_chain_from_links()
+#--------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={map_and_editor}, usage={TPSODL})
+_method tp!length_of_service_line_engine.create_pseudo_chain_from_links(p_links)
+	##
+	## Create a psuedo chain from links.
+	## Return pseudo chain
+	##
+	
+	l_coord_rope << rope.new()
+
+	_for a_link _over p_links.elements() 
+	_loop
+		_if a_link.class_name _is :link _orif 
+		    a_link.class_name _is :nf_link 
+		_then
+			_if a_link.first_node _isnt _unset _andif
+			     a_link.first_node.coord _isnt _unset 
+			_then
+				l_coord_rope.add(a_link.first_node.coord)
+			_endif
+
+			_if a_link.last_node _isnt _unset _andif
+			     a_link.last_node.coord _isnt _unset 
+			_then
+				l_coord_rope.add(a_link.last_node.coord)
+			_endif
+		
+		_endif
+		
+	_endloop
+
+	l_sector << sector.new_with(_scatter l_coord_rope)
+	l_line << pseudo_chain.new_for_world(l_sector,.items[:land_view].world)
+	
+	_return l_line
+_endmethod
+$
+

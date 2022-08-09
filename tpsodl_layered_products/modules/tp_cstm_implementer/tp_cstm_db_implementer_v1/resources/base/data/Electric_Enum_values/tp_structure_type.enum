@@ -1,0 +1,22 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Single Pole	1
+Double Pole	2
+Triple Pole	3
+Four Pole	4
+Five Pole	5
+Six Pole	6
+Seven Pole	7
+Eight Pole	8
+Nine Pole	9
+Ten Pole	11
+H Type-Tower	12
+M Type-Tower	13
+Lattice-Tower	14
+Wall Bracket	15
+Gantry	16
+Others	17

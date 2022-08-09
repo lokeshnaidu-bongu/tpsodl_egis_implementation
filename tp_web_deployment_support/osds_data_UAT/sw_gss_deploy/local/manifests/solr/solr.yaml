@@ -1,0 +1,79 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr-service
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: solr
+    service: solr
+spec:
+  type: NodePort
+  ports:
+  - port: 8983
+    protocol: TCP
+  selector:
+    app: predix
+    service-cluster: solr
+    service: solr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solr-deployment
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: solr
+    service: solr
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+      app: predix
+      service-cluster: solr
+      service: solr
+  template:
+    metadata:
+      labels:
+        app: predix
+        service-cluster: solr
+        service: solr
+    spec:
+      containers:
+      - name: solr-pod
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/sw-solr:8.8.2-slim_0.3.1
+        ports:
+        - containerPort: 8983
+        env:
+        - name: SW_SOLR_USER
+          valueFrom:
+            secretKeyRef:
+              name: solr-secret
+              key: user
+        - name: SW_SOLR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: solr-secret
+              key: password
+        volumeMounts:
+          - name: solr-storage
+            mountPath: /var/solr/data/gis_index/data/index
+      volumes:
+      - name: solr-storage
+        persistentVolumeClaim:
+          claimName: nfs-storage-class-solr-gss-prod-pvc
+      initContainers:
+      - name: init-solr-storage
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        command:
+        - chown
+        - -R  
+        - 8983:8983
+        - /solr
+        volumeMounts:
+          - name: solr-storage
+            mountPath: /solr
+      imagePullSecrets:
+      - name: regsecret

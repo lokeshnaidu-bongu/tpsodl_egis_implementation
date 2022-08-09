@@ -1,0 +1,6 @@
+#% text_encoding = iso8859_1
+enumerator	eo_network_type		unset	LV	LV
+enumerator	eo_network_type		unset	MV	HV-11Kv
+enumerator	eo_network_type		unset	HV	HV-33Kv
+enumerator	eo_network_type	unset	EHV	EHV
+enumerator	eo_network_type	unset	Substation	Substation

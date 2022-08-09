@@ -1,0 +1,68 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Physical & Enumerator Fields for the object eo_power_xfrmr_ctrl_spec
+## 
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_db_implementer.register(:datamodel_name, "tp_cstm_db_implementer_v56", 
+				:version, 56,
+				:implementer_comment,        "Add New Fields to eo_power_xfrmr_ctrl_spec",
+				:upgrade?, _false,
+				:case_change_method,         :|v56_adding_new_field_to_power_xfrmr_ctrl_spec()|,
+				:case_change_results_method, :|v56_power_xfrmr_ctrl_spec_case_change_results()|,
+				:dataset_names, {{:electric_case, :electric}})
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.v56_adding_new_field_to_power_xfrmr_ctrl_spec(p_target_case_view)
+	## 
+	##
+
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_if (l_coll << p_target_case_view.get_case_object(:eo_power_xfrmr_ctrl_spec)) _is _unset
+	_then		
+		write("eo_power_xfrmr_ctrl_spec does not exist in the case")
+		_return 
+	_endif
+		
+	l_coll.e_name <<"Transformer Controller Spec"
+
+
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.v56_power_xfrmr_ctrl_spec_case_change_results()
+	## 
+	## 
+	_local ccr_for_dd_extension << case_change_result.new()
+    	ccr_for_dd_extension.add_new(:eo_power_xfrmr_ctrl_spec)
+	>> {ccr_for_dd_extension}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

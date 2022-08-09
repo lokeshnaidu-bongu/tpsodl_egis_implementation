@@ -1,0 +1,60 @@
+<section class="module sidebar-module">
+  <div id="findMain" class="module-body">
+    <form id="traceOptions" class="form-horizontal">
+      <fieldset>
+        <div class="control-group">
+          <div class="controls" style="margin-left:0px;margin-bottom:5px;width:100%" rel="tooltip" title="{{messages.trace.selectTraceType}}">
+            <select class="form-control" id="traceType" style="width:100%;margin-bottom:0px;">
+              {{#traces}}
+              <option value="{{name}}">
+                {{tooltip}}{{^tooltip}} {{name}} {{/tooltip}}
+              </option>
+              {{/traces}}
+            </select>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <div class="node-controls traceButton">
+      <button id="startNode" class="btn" rel="tooltip" title="{{messages.trace.startNodeButton}}">
+        <i class="icon-ico_play_rnd_lg start" style="background:transparent;"></i>
+      </button>
+      <button id="finishNode" class="btn" rel="tooltip" title="{{messages.trace.finishNodeButton}}">
+        <i class="icon-ico_stop_rnd_lg finish" style="background:transparent;"></i>
+      </button>
+      <button id="blockNode" class="btn" rel="tooltip" title="{{messages.trace.blockNodeButton}}">
+        <i class="icon-ico_ban1_lg block" style="background:transparent;"></i>
+      </button>
+    </div>
+    <br />
+    <div id="trace-nodes-list">
+    </div>
+    <br />
+    <div class="form-group">
+      <label id="distance-label", class="col-sm-3 control-label" for="distance">{{messages.trace.distance}}:</label>
+      <div class="col-sm-3" style="padding-right: 0px;">
+        <input type="text" class="form-control" id="distance">
+      </div>
+      <div class="col-sm-6">
+        <select id="trace-direction" class="form-control">
+          <option value="both">{{messages.trace.bothways}}</option>
+          <option value="downstream">{{messages.trace.downstream}}</option>
+          <option value="upstream">{{messages.trace.upstream}}</option>
+        </select>
+      </div>
+    </div>
+    <br />
+    <div class="pull-right" id='traceFinalize'>
+      <span id="trace_spinner" rel="trace_spinner" style="display: inline-block;margin-right: 20px;margin-bottom:4px"></span>
+      <button id="cancel" class="btn">{{messages.trace.clearButton}}</button>
+      <button id="submit" class="btn btn-primary">{{messages.trace.submitButton}}</button>
+    </div>
+  </div>
+  <div id="results-page-controls"></div>
+  <footer class="module-footer"></footer>
+</section>
+<br />
+<section class="module sidebar-module">
+  <div id="find-results"></div>
+  <footer class="module-footer"></footer>
+</section>

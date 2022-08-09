@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="windows-1252" standalone="yes"?>
+<serial_xml_thing format="1">
+	<keyed class="sw:property_list" size="1">
+		<entry key="user_collections_ds">
+			<elements class="sw:equality_set" size="1">
+				<string>Building(land)</string>
+				<string>Transformer(electric)</string>
+				<string>Pole(electric)</string>
+				<string>Meter(electric)</string>
+				<string>Slum Area(land)</string>
+				<string>Service Point(electric)</string>
+				<string>Substation(electric)</string>
+				<string>Receiving Station(electric)</string>
+				<string>Feeder(electric)</string>
+				<string>Primary Meter(electric)</string>
+				<string>Isolating Equipment Installation(electric)</string>
+				<string>Connector Segment Installation(electric)</string>
+			</elements>
+		</entry>
+	</keyed>
+</serial_xml_thing>

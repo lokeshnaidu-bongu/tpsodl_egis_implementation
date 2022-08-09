@@ -1,0 +1,32 @@
+
+_pragma(classify_level=basic, topic={EO, APE})
+_private _method eo_accurate_point_mixin.check_not_inside_other_accurate_point ( geom )
+	## 
+	## Raise a condition if GEOM is inside another accurate point.
+	##
+	## E.g. an accurate point is inside the extent of a
+	## substation.
+	##
+
+	accurate_point << geom.rwo
+
+	accurate_points << eo_ape_structure_manager.accurate_points_interacting_with ( geom, geom.source_view )
+	_for other_accurate_point _over accurate_points.fast_elements()
+	_loop
+		_if other_accurate_point ~= accurate_point
+		_then
+			_if (accurate_point.source_collection.name _is :sub_substation _andif other_accurate_point.source_collection.name _is :sub_substation)
+			_then
+			
+			_elif _not (accurate_point.source_collection.name _is :sub_substation _andif other_accurate_point.source_collection.name _is :ed_cabinet) _orif (accurate_point.source_collection.name _is :ed_cabinet _andif other_accurate_point.source_collection.name _is :sub_substation)
+			_then
+				
+#				condition.raise ( :eo_accurate_point_interacts_with_other_accurate_point,
+#						  :accurate_point1, accurate_point.external_name, :accurate_point2, other_accurate_point.external_name )
+#				
+
+			_endif 
+		_endif 
+	_endloop 	
+_endmethod
+$

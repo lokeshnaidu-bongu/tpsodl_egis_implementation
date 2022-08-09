@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="LinkAssetsService" targetNamespace="http://services.sbi.gesmallworld.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://services.sbi.gesmallworld.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://services.sbi.gesmallworld.com/" version="1.0" xmlns:ns1="http://www.opengis.net/gml" xmlns:tns="http://services.sbi.gesmallworld.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.opengis.net/gml"/>
+      <xs:element name="linkAssetsDTO" type="tns:linkAssetsDTO"/>
+      <xs:element name="readLinkAssetsDTO" type="tns:readLinkAssetsDTO"/>
+      <xs:complexType name="linkAssetsDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="filename" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="readLinkAssetsDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="timestamp" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="filename" type="xs:string"/>
+          <xs:element minOccurs="0" name="content" type="xs:string"/>
+          <xs:element minOccurs="0" name="error" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="linkAssetsResponse">
+    <wsdl:part name="return" type="tns:linkAssetsDTO">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="read">
+    <wsdl:part name="filename" type="xsd:string">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="linkAssets">
+    <wsdl:part name="assets" type="xsd:anyType">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="readResponse">
+    <wsdl:part name="return" type="tns:readLinkAssetsDTO">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="LinkAssets">
+    <wsdl:operation name="linkAssets">
+      <wsdl:input message="tns:linkAssets" name="linkAssets">
+      </wsdl:input>
+      <wsdl:output message="tns:linkAssetsResponse" name="linkAssetsResponse">
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="read">
+      <wsdl:input message="tns:read" name="read">
+      </wsdl:input>
+      <wsdl:output message="tns:readResponse" name="readResponse">
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LinkAssetsServiceSoapBinding" type="tns:LinkAssets">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="linkAssets">
+      <soap:operation soapAction="" style="rpc"/>
+      <wsdl:input name="linkAssets">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="linkAssetsResponse">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="read">
+      <soap:operation soapAction="" style="rpc"/>
+      <wsdl:input name="read">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="readResponse">
+        <soap:body namespace="http://services.sbi.gesmallworld.com/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LinkAssetsService">
+    <wsdl:port binding="tns:LinkAssetsServiceSoapBinding" name="LinkAssetsDAOImplPort">
+      <soap:address location="http://localhost:8181/cxf/LinkAssets"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,84 @@
+<gui>
+    <menu name="menubar" type="menubar">
+        <submenu name="file" mnemonic_id="file_m">
+            <action name="exit" mnemonic_id="exit_m"/>
+        </submenu>
+        <submenu name="action" mnemonic_id="action_m">
+            <action name="authorisation_tab.new" mnemonic_id="new_m"/>
+	    <separator/>
+            <action name="authorisation_tab.refresh" mnemonic_id="refresh_m"/>
+	    <separator/>
+            <action name="authorisation_tab.delete" mnemonic_id="delete_m"/>
+	    <separator/>
+            <action name="authorisation_tab.properties" mnemonic_id="properties_m"/>
+<!-- BEGIN CEF ADDITIONS -->
+		<separator/>
+			<action name="authorisation_groups.clone" mnemonic_id="clone_m"/>
+<!-- END -->
+	    <separator/>
+            <action name="help" mnemonic_id="help_m"/>
+        </submenu>
+		<submenu name="ldap" mnemonic_id="ldap_m">
+            <action name="authorisation_ldap.activate_configuration_dialog" mnemonic_id="conf_m"/>
+        </submenu>
+    </menu>
+
+    <menu name="users_popup" type="popup">
+	<action name="authorisation_users.new" mnemonic_id="new_m"/>
+	<separator />
+	<action name="authorisation_users.refresh" mnemonic_id="refresh_m"/>
+	<separator />
+	<action name="authorisation_users.delete" mnemonic_id="delete_m"/>
+	<separator />
+	<action name="authorisation_users.properties" mnemonic_id="properties_m"/>
+    </menu>
+
+    <menu name="groups_popup" type="popup">
+	<action name="authorisation_groups.new" mnemonic_id="new_m"/>
+	<separator />
+	<action name="authorisation_groups.refresh" mnemonic_id="refresh_m"/>
+	<separator />
+	<action name="authorisation_groups.delete" mnemonic_id="delete_m"/>
+	<separator />
+	<action name="authorisation_groups.properties" mnemonic_id="properties_m"/>
+<!-- BEGIN CEF ADDITIONS -->
+	<separator />
+	<action name="authorisation_groups.clone" mnemonic_id="clone_m"/>
+<!-- END -->
+    </menu>
+
+    <menu name="rights_popup" type="popup">
+	<action name="authorisation_rights.new" mnemonic_id="new_m"/>
+	<separator />
+	<action name="authorisation_rights.refresh" mnemonic_id="refresh_m"/>
+	<separator />
+	<action name="authorisation_rights.delete" mnemonic_id="delete_m"/>
+	<separator />
+	<action name="authorisation_rights.properties" mnemonic_id="properties_m"/>
+    </menu>
+
+    <toolbar name="actions">
+        <action name="authorisation_tab.refresh"/>
+        <action name="authorisation_tab.new"/>
+        <action name="authorisation_tab.delete"/>
+        <action name="authorisation_tab.properties"/>
+    </toolbar>
+
+    <toolbar name="help">
+        <action name="help"/>
+    </toolbar>
+
+    <dock name="top">
+        <toolbar name="actions"/>
+        <toolbar name="help"/>
+    </dock>
+
+    <work_area>
+        <plugin plugin_name="authorisation_tab" width="425" height="400"/>
+    </work_area>
+
+    <statusbar>
+        <pane id="status_info" style="innie" springy="true" /> 
+    </statusbar>
+
+</gui>

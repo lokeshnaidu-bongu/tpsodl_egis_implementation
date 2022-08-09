@@ -1,0 +1,209 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add New Joins to objects by reading from
+## tp_electric_joins.xml 
+## xml path : tp_cstm_db_implementer\resources\base\data
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 2
+
+tp_cstm_db_implementer.register(:datamodel_name, "tp_cstm_db_implementer_v2", 
+				:version, 2,
+				:implementer_comment,        "Add New Joins to Objects",
+				:upgrade?, _false,
+				:case_change_method,         :|v2_adding_new_joins()|,
+				:case_change_results_method, :|v2_case_change_results()|,
+				:dataset_names, {{:electric_case, :electric}})
+$
+
+tp_cstm_db_implementer.define_shared_constant(:target_collections,
+	##
+	##Target Collections
+	##
+	{:ed_cabinet,
+	 :sub_substation,
+	 :eo_cable_segment_inst,
+	 :eo_comms_device,
+	 :eo_energy_storage_inst,
+	 :eo_isolating_eqpt_inst,
+	 :eo_measuring_eqpt_inst,
+	 :eo_meter,
+	 :eo_power_xfrmr_inst,
+	 :eo_protective_eqpt_inst,
+	 :eo_conduit,
+	 :eo_connector_point_inst,
+	 :eo_service_connection,
+	 :eo_service_point,
+	 :ed_switchgear,
+	 :eo_circuit,
+	 :et_pole
+	},:public)
+$
+
+_pragma(classify_level=restricted, topic={csp_datamodel})
+_method tp_cstm_db_implementer.v2_adding_new_joins(p_case_view)
+	##
+	## Adds joins to the object
+	##
+
+	_local l_case_model  << case_model.new(p_case_view)
+	_local l_case_manager << case_model.new(p_case_view)
+	_local p_new_joins << _self.tp_read_join_flds_from_xml()
+	_for i_new_join _over  p_new_joins.fast_elements()
+	_loop
+		_local l_child_object_name      << i_new_join[5]
+		_local l_child_object_ename << i_new_join[6]
+		_local l_parent_object_name     << i_new_join[3]
+		_local l_parent_object_ename << i_new_join[4]
+		_local l_join_name << i_new_join[2]
+		_local l_join_type              << i_new_join[1]
+		_local l_child_join_field_name  << i_new_join[8]
+		_local l_parent_join_field_name << i_new_join[7]
+		_local l_parent_object          << p_case_view.get_case_object(l_parent_object_name)
+		
+		_local l_child_object           << p_case_view.get_case_object(l_child_object_name)
+		
+		l_ok? << ( l_parent_object _isnt _unset )
+		l_ok? << l_ok? _andif ( l_child_object _isnt _unset )
+		l_ok? << l_ok? _andif ( l_case_model.get_case_relationship(l_child_object_name, l_child_join_field_name) _is _unset )
+		_local l_join_handle
+		_if l_ok?
+		_then
+			_if l_join_type = "1:0" _orif l_join_type = "m:n" _orif l_join_type = "1:n"
+			_then
+				l_parent_position<< l_parent_object.position.coordinate
+				l_child_position<< l_child_object.position.coordinate
+				l_sector << sector.new_with(l_parent_position,l_child_position)
+				l_line << pseudo_chain.new_with(l_sector)
+				l_line.world<< l_parent_object.source_view.world
+				l_prop << property_list.new_with(:description,"Tpsodl Electric Joins",:centreline,l_line )
+				l_join_handle << l_case_model.new_case_relationship(l_parent_object,
+										    l_child_object,
+										    l_join_type,
+										    l_parent_join_field_name,
+										    l_child_join_field_name,
+										    l_prop)
+			_else
+				
+				#heterogenous Relationship
+				l_join_handle << l_case_model.new_case_heterogeneous_relationship( l_join_type, 
+												   l_join_name,
+												   _true, _true,
+												   {l_parent_object},
+												   {l_child_object},
+												   l_parent_join_field_name,
+												   l_child_join_field_name )
+			_endif
+			l_parent_fld << l_parent_object.get_field(l_parent_join_field_name)
+			l_parent_fld.e_name << l_parent_object_ename
+			l_child_fld << l_child_object.get_field(l_child_join_field_name)
+			l_child_fld.e_name  << l_child_object_ename
+			_self.check_mandatory_sysid_fields(l_parent_object,l_child_object)
+		_else
+			write("Cannot create join between " + l_parent_object_name + " and " + l_child_object_name+" Parent Fields " +l_parent_join_field_name +" Child Fields "+l_child_join_field_name)
+		_endif
+		
+	_endloop
+	
+_endmethod
+$
+_pragma(classify_level=restricted, topic={csp_datamodel})
+_method tp_cstm_db_implementer.check_mandatory_sysid_fields(p_parent_object,p_child_object)
+	## 
+	## 
+	_local l_parent_object << p_parent_object
+	_local l_child_object << p_child_object
+	_for a_each_obj _over {l_parent_object,l_child_object}.elements()
+	_loop
+		_for a_each_fld _over a_each_obj.fields.elements()
+		_loop
+			l_field_type << a_each_fld.field_type()
+			_if l_field_type _isnt _unset _andif
+			    l_field_type.name.as_symbol() _is :sys_id
+			_then
+				_if a_each_fld.key_field? _isnt _true  _andif
+				    a_each_fld.mandatory? _is _true 
+				_then
+					a_each_fld.mandatory?<< _false 
+				_endif
+			_endif
+		_endloop
+		
+	_endloop
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.tp_read_join_flds_from_xml()
+	## 
+	##
+	_local l_xml_file_name << "tp_electric_joins"+".xml"
+	tp_colls << sw_module_manager.module(:tp_cstm_db_implementer).get_resource_file(l_xml_file_name,"data")
+	
+	l_path  <<  system.canonicalise(tp_colls)
+	str << external_text_input_stream.new(l_path)
+	
+	xml_def << simple_xml.read_element_from( str, sw:editable_xml_thing.new(:tp_collections))			
+	
+	l_tp_join_flds << rope.new()
+	
+	
+	_for a_tp_Coll _over xml_def.xml_elements()
+	_loop
+		
+		l_join_flds << rope.new()
+		_for a_fld_def,a_fld_val _over a_tp_Coll.attributes.fast_keys_and_elements()
+		_loop
+			
+			l_join_flds.add_last(a_fld_val)
+			
+		_endloop
+		l_tp_join_flds.add_last(l_join_flds)
+		
+	_endloop
+	#print(l_tp_join_flds)
+	_return l_tp_join_flds
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.v2_case_change_results()
+	## 
+	## 
+
+	_local l_ccr << case_change_result.new()
+
+	_for i_coll_name _over _self.target_collections.fast_elements()
+	_loop
+		l_ccr.add(i_coll_name)
+	_endloop
+
+	>> {l_ccr}
+       
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

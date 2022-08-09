@@ -1,0 +1,19 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Implementation Project
+##
+## Created By:  Sai Kumar Veturi, TCS
+## Date: 2/1/2021
+##
+## Description:
+## Defining Custom TPSODL EO WEB Vetx application exemplar
+########################################################################
+_package sw
+$
+
+_pragma(classify_level=advanced, topic={tpsodl_server_application})
+## Description: 
+##
+def_slotted_exemplar(:tpsodl_server_application, {})
+$

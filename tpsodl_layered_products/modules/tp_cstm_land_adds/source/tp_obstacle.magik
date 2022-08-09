@@ -1,0 +1,23 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By:  S. Haritha Rani, TCS
+## Date: 18/11/2021
+##
+## Description:
+
+########################################################################
+_package sw
+$
+_pragma(classify_level=restricted)
+##
+## 
+##
+def_slotted_exemplar(:tp_obstacle,
+	{
+	},
+	{:cs_rwo_record})
+
+$

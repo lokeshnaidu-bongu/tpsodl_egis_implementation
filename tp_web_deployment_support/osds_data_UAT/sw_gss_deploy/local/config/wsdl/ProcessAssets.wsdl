@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	The SOAP 1.2 stanzas have been commented out as the version of SAP PI 
+	currently used for SBI cannot import them.
+-->
+<wsdl:definitions targetNamespace="http://services.sbi.gesmallworld.com" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns0="http://services.sbi.gesmallworld.com" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:documentation>ProcessAssets</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://services.sbi.gesmallworld.com" xmlns:ns="http://services.sbi.gesmallworld.com">
+	
+			<xs:complexType name="propertyType">
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="name" type="xs:string" use="required"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+
+			<xs:complexType name="assetInfoType">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="property" type="ns0:propertyType"/>
+				</xs:sequence>
+				<xs:attribute name="type" type="xs:string"/>
+				<xs:attribute name="urn" type="xs:string"/>
+			</xs:complexType>
+			
+			<xs:complexType name="resultType">
+				<xs:sequence>
+					<xs:element name="result" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+
+			<xs:complexType name="urnType">
+				<xs:sequence>
+					<xs:element name="urn" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>			
+
+			<xs:element name="createAsset">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="assetInfo" type="ns0:assetInfoType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="createAssetResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return" type="ns0:urnType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="updateAsset">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="assetInfo" type="ns0:assetInfoType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="updateAssetResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return" type="ns0:resultType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			
+			<xs:element name="deleteAsset">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="assetInfo" type="ns0:assetInfoType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>					
+
+			<xs:element name="deleteAssetResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="return" type="ns0:resultType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>			
+           
+        </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="createAssetResponse">
+    <wsdl:part name="parameters" element="ns0:createAssetResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateAssetResponse">
+    <wsdl:part name="parameters" element="ns0:updateAssetResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateAssetRequest">
+    <wsdl:part name="parameters" element="ns0:updateAsset">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteAssetResponse">
+    <wsdl:part name="parameters" element="ns0:deleteAssetResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createAssetRequest">
+    <wsdl:part name="parameters" element="ns0:createAsset">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteAssetRequest">
+    <wsdl:part name="parameters" element="ns0:deleteAsset">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ProcessAssetsPortType">
+    <wsdl:operation name="createAsset">
+      <wsdl:input message="ns0:createAssetRequest" wsaw:Action="urn:createAsset">
+    </wsdl:input>
+      <wsdl:output message="ns0:createAssetResponse" wsaw:Action="urn:createAssetResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateAsset">
+      <wsdl:input message="ns0:updateAssetRequest" wsaw:Action="urn:updateAsset">
+    </wsdl:input>
+      <wsdl:output message="ns0:updateAssetResponse" wsaw:Action="urn:updateAssetResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAsset">
+      <wsdl:input message="ns0:deleteAssetRequest" wsaw:Action="urn:deleteAsset">
+    </wsdl:input>
+      <wsdl:output message="ns0:deleteAssetResponse" wsaw:Action="urn:deleteAssetResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ProcessAssetsSOAP11Binding" type="ns0:ProcessAssetsPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createAsset">
+      <soap:operation soapAction="urn:createAsset" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateAsset">
+      <soap:operation soapAction="urn:updateAsset" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAsset">
+      <soap:operation soapAction="urn:deleteAsset" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <!--
+  <wsdl:binding name="ProcessAssetsSOAP12Binding" type="ns0:ProcessAssetsPortType">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createAsset">
+      <soap12:operation soapAction="urn:createAsset" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateAsset">
+      <soap12:operation soapAction="urn:updateAsset" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAsset">
+      <soap12:operation soapAction="urn:deleteAsset" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  -->
+  <wsdl:binding name="ProcessAssetsHttpBinding" type="ns0:ProcessAssetsPortType">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="createAsset">
+      <http:operation location="ProcessAssets/createAsset"/>
+      <wsdl:input>
+        <mime:content part="createAsset" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="createAsset" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateAsset">
+      <http:operation location="ProcessAssets/updateAsset"/>
+      <wsdl:input>
+        <mime:content part="updateAsset" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="deleteAsset" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAsset">
+      <http:operation location="ProcessAssets/deleteAsset"/>
+      <wsdl:input>
+        <mime:content part="deleteAsset" type="text/xml"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="deleteAsset" type="text/xml"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ProcessAssets">
+    <wsdl:port name="ProcessAssetsHttpport" binding="ns0:ProcessAssetsHttpBinding">
+      <http:address location="http://localhost:8080/gss/web/services/ProcessAssets"/>
+    </wsdl:port>
+    <!--
+	<wsdl:port name="ProcessAssetsSOAP12port_http" binding="ns0:ProcessAssetsSOAP12Binding">
+      <soap12:address location="http://localhost:8080/gss/web/services/ProcessAssets"/>
+    </wsdl:port>
+	-->
+    <wsdl:port name="ProcessAssetsSOAP11port_http" binding="ns0:ProcessAssetsSOAP11Binding">
+      <soap:address location="http://localhost:8080/gss/web/services/ProcessAssets"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

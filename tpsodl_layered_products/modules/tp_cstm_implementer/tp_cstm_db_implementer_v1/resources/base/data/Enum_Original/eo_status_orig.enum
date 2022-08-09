@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Abandoned	1
+Existing	2
+Inactive	3
+Proposed Abandon	4
+Proposed Install	5
+Proposed Relocate	6
+Proposed Remove	7
+Proposed Replace	8
+Removed	9
+Temporary	10
+

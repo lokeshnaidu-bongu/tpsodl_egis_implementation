@@ -1,0 +1,78 @@
+#% text_encoding = iso8859_1
+########################################################################
+
+## This is one time script.
+## The distribution transformer,meter,isolating switch that are
+## present in the DTC will be assigned to the join fields of DTC
+##
+########################################################################
+_package user
+$
+
+_block
+	l_ds_view << gis_program_manager.cached_dataset(:electric)
+	l_ss_coll << l_ds_view.collections[:sub_substation]
+	result << rwo_set.new()
+	_global k
+		_for a_ss _over l_ss_coll.fast_elements()
+		_loop
+	k << a_ss
+	_if a_ss.extent _isnt _unset 
+	_then
+		l_sub_sec << a_ss.extent.sectors
+		l_sub_bounds << pseudo_area.new_for_world(l_sub_sec,l_ds_view.world)
+		l_xmr_coll << l_ds_view.collections[:eo_power_xfrmr_inst]
+		l_mtr_coll << l_ds_view.collections[:eo_meter]
+		l_iso_coll << l_ds_view.collections[:eo_isolating_eqpt_inst]
+		l_cbn_coll << l_ds_view.collections[:ed_cabinet]		
+		l_mea_coll << l_ds_view.collections[:eo_measuring_eqpt_inst]	
+		l_pred1 << predicate.within(:location,l_sub_bounds)
+		l_pred2 << predicate.within(:connector,l_sub_bounds)
+		l_pred3 << predicate.within(:extent,l_sub_bounds)
+		l_pred4 << predicate.within(:source_location,l_sub_bounds)			 
+		l_req_xmr << l_xmr_coll.select(l_pred1)
+		l_req_iso << l_iso_coll.select(l_pred2)			
+		l_req_mtr << l_mtr_coll.select(l_pred1)
+		l_req_cbn << l_cbn_coll.select(l_pred3)
+		l_req_mea << l_mea_coll.select(l_pred4)			
+	
+		_for i _over l_req_xmr.fast_elements()
+		_loop
+			_if i _isnt _unset
+			_then
+				i.tp_connected_substations << a_ss
+			_endif
+		_endloop
+		_for j _over l_req_mtr.fast_elements()
+		_loop
+			_if j _isnt _unset
+			_then
+				j.tp_connected_substations << a_ss
+				
+			_endif
+		_endloop
+		_for k _over l_req_cbn.fast_elements()
+		_loop
+			_if k _isnt _unset
+			_then
+				k.tp_connected_substations << a_ss
+			_endif
+		_endloop
+		_for l _over l_req_mea.fast_elements()
+		_loop
+			_if l _isnt _unset
+			_then
+				l.tp_connected_substations << a_ss
+				
+			_endif
+		_endloop
+#		_for m _over l_req_iso.fast_elements()
+#		_loop
+#			_if m _isnt _unset
+#			_then
+#				m.tp_connected_substations << a_ss
+#			_endif
+#		_endloop		
+	_endif
+	_endloop 
+_endblock 

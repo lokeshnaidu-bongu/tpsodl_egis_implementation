@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+  <!-- Define the xml files for specific collections -->
+  <collection collection_name = "eo_power_xfrmr" >
+	<fields field_name = "tp_load_tap_chng_indicator" external_name = "Load Tap Changer Indicator?" mandatory = "false" field_type="eo_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_maximum_step" external_name = "Maximum Step" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_mig_phase" external_name = "Mig Phase" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_mig_spec" external_name = "Mig Spec" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	<fields field_name = "tp_minimum_step" external_name = "Minimum Step" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+	<fields field_name = "tp_neutral_grounding_type" external_name = "Neutral Grounding Type" mandatory = "false" field_type="tp_grounding_type" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_adopted_tap" external_name = "Adopted Tap" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />    
+    <fields field_name = "tp_cooling_type" external_name = "Cooling Type" mandatory = "false" field_type="tp_xfrmr_cooling" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_core" external_name = "Core" mandatory = "false" field_type="tp_xfrmr_winding" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_date_of_last_maintenance" external_name = "Date of Last Maintenance" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_ea_equipment_id" external_name = "EA Equipment ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_maximum_demand" external_name = "Maximum Demand" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Mega Volt Ampere" mode = "insert" />
+    <fields field_name = "tp_maximum_tap" external_name = "Maximum Tap" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_minimum_tap" external_name = "Minimum Tap" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_ngt_no" external_name = "NGT No" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_number_of_fans" external_name = "Number of Fans" mandatory = "false" field_type="tp_number" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_number_of_steps" external_name = "Number of Steps" mandatory = "false" field_type="tp_number" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_number_of_taps" external_name = "Number of Taps" mandatory = "false" field_type="tp_number" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_oil_quantity" external_name = "Oil Quantity" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Liter" mode = "insert" />
+    <fields field_name = "tp_operating_rating_in_kva" external_name = "Operating KVA" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Kilo Volt Ampere" mode = "insert" />
+    <fields field_name = "tp_percentage_loading" external_name = "Percentage Loading" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="percent" mode = "insert" />
+    <fields field_name = "tp_rated_capacity" external_name = "Rated Capacity" mandatory = "false" field_type="tp_xfrmr_capacity" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="farad" mode = "insert" />
+    <fields field_name = "tp_rated_magnetizing_current" external_name = "Rated Magnetizing Current" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Ampere" mode = "insert" />
+    <fields field_name = "tp_rated_primary_current" external_name = "Rated Primary Current" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Ampere" mode = "insert" />
+    <fields field_name = "tp_star_rating" external_name = "Star Rating" mandatory = "false" field_type="tp_star_rating" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_sub_type" external_name = "Sub Type" mandatory = "false" field_type="tp_xfrmr_sub_type" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_tap_changer_id" external_name = "Tap Changer ID" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_tap_changer_make" external_name = "Tap Changer Make" mandatory = "false" field_type="eo_manufacturer" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_tap_changer_serial_number" external_name = "Tap Changer Serial Number" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_tap_changer_type" external_name = "Tap Changer Type" mandatory = "false" field_type="tp_tapchanger_type" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_tap_chng_nor_pos" external_name = "Tap Changer Normal Position" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_tap_chng_prst_position" external_name = "Tap Changer Present Position" mandatory = "false" field_type="ds_charci_vec" field_size ="64" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+    <fields field_name = "tp_total_weight" external_name = "Total Weight" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Kilogram" mode = "insert" />
+    <fields field_name = "tp_transport_weight" external_name = "Transport weight" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Kilogram" mode = "insert" />
+    <fields field_name = "tp_warranty_end_date" external_name = "Warranty End Date" mandatory = "false" field_type="ds_date" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_weight_core_and_winding" external_name = "Weight Core and Winding" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Kilogram" mode = "insert" />
+    <fields field_name = "tp_weight_of_oil" external_name = "Weight of Oil" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Kilogram" mode = "insert" />
+    <fields field_name = "tp_xfrmr_temp_rising_oil" external_name = "Max Temperature Rising Oil" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="celsius" mode = "insert" />
+    <fields field_name = "tp_xfrmr_temp_rising_wdg" external_name = "Max Temperature Rising Winding" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="celsius" mode = "insert" />
+    <fields field_name = "tp_migration_unique_id" external_name = "Migration Unique Id" mandatory = "false" field_type="ds_charci_vec" field_size ="32" unset_value="" default_value ="" field_index="No" mode = "insert" />
+  	<fields field_name = "tp_manufacturer" external_name = "Manufacturer Name" mandatory = "false" field_type="ds_char16_vec" field_size ="128" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_total_losses_at_50_per_load" external_name = "Total Losses at 50% Load" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="percent" mode = "insert" />
+    <fields field_name = "tp_winding_material" external_name = "Winding Material" mandatory = "false" field_type="ds_charci_vec" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />	
+    <fields field_name = "tp_no_load_loss" external_name = "No Load Loss" mandatory = "false" field_type="ds_int" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+    <fields field_name = "tp_rated_sec_current" external_name = "Rated Secondary Current" mandatory = "false" field_type="ds_double" field_size ="12" unset_value="" default_value ="" field_index="No" stored_unit="Ampere" mode = "insert" />
+	<fields field_name = "tp_oil_preserving_system" external_name = "Oil Preserving System?" mandatory = "false" field_type="eo_yes_no" field_size ="12" unset_value="" default_value ="" field_index="No" mode = "insert" />
+	
+  </collection>
+  
+</tp_collections>

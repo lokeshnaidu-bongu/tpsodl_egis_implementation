@@ -1,0 +1,160 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 25/11/2021
+##
+## Description:
+##      This implemeneter is used to add Physical & Enumerator Fields for the object lnd_street
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 1
+
+tp_cstm_land_db_implementer.register(:datamodel_name, "tp_cstm_land_db_imp_v5", 
+				:version, 5,
+				:implementer_comment,        "Add new fields to Street",
+				:upgrade?, _false,
+				:case_change_method,         :|v5_adding_new_field_to_street()|,
+				:case_change_results_method, :|v5_street_case_change_results()|,
+				:dataset_names, {{:land_case, :land}})
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v5_adding_new_field_to_street(p_target_case_view)
+	## 
+	##
+
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_if (l_coll << p_target_case_view.get_case_object(:lnd_street)) _is _unset
+	_then		
+		write("lnd_street does not exist in the case")
+		_return 
+	_endif
+
+	l_fld_map_val << _self.tp_fld_mandatory_mapping_val
+	l_fld_su_map_val << _self.tp_fld_stored_unit_mapping_val
+
+	l_coll_name << :lnd_street
+	l_street_fields <<_self.tp_read_flds_from_xml(l_coll_name)
+	_for  a_prop_val_key , l_prop_fields _over l_street_fields.fast_keys_and_elements() 
+	_loop
+		l_mode << l_prop_fields[:mode].as_symbol()
+		l_fld_name << l_prop_fields[:field_name].as_symbol()
+		l_stored_unit << l_prop_fields[:stored_unit]
+		l_mandatory <<  l_prop_fields[:mandatory].lowercase.as_symbol()
+		l_fld_ext_name << l_prop_fields[:external_name]
+		l_fld_mand << l_fld_map_val[l_mandatory]
+		l_fld_type << l_prop_fields[:field_type].as_symbol()
+		l_fld_size << l_prop_fields[:field_size].as_number()
+		l_fld_unset_val << l_prop_fields[:unset_value]
+		l_fld_def_val << l_prop_fields[:default_value]
+		l_fld_def_su <<  l_fld_su_map_val[l_stored_unit]
+		_if l_fld_map_val[l_fld_type] _isnt _unset 
+		_then
+			l_fld_unset_val<< l_fld_map_val[l_fld_type ]
+			l_fld_def_val<< l_fld_map_val[l_fld_type ]
+		_endif
+		l_props << property_list.new_with(:mandatory?,l_fld_mand,
+						  :field_type,l_fld_type,
+						  :external_name,l_fld_ext_name,
+						  :field_size,l_fld_size,
+						  :unset_value,l_fld_unset_val,
+						  :default_value,l_fld_def_val,
+						  :stored_unit,l_fld_def_su)
+			                          
+		
+		_if l_fld_def_su _is _unset _orif
+		    l_fld_def_su = "NA"
+		_then
+			l_props.remove_key(:stored_unit)
+		_endif
+		write("+++ l_fld_name +++",l_fld_name)
+		print(l_props)
+		
+		_if l_fld_type _is :area
+		_then
+			_self.add_geom_fld_to_street(l_coll,l_fld_name,l_fld_type,l_props)
+		_else
+			_if l_mode _is :update
+			_then
+				l_fld << l_coll.get_field(l_fld_name)
+				l_fld.set_property( :field_type, l_fld_type )
+				write("+++ 11 +++")
+				l_fld.set_property( :field_size, l_fld_size )
+				l_fld.set_property( :default_value, "" )
+				write("+++  122+++")
+				
+				l_fld.set_property( :mandatory?, _false  )
+				write("+++333  +++")
+				
+				l_fld.set_property( :unset_value,   ""  )
+				write("+++ 444 +++")
+				
+			
+			_else
+				l_coll.add_physical_field( l_fld_name, l_props)	
+			_endif
+		
+		_endif
+		l_coll.e_name <<"Road"
+		
+	_endloop
+
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.add_geom_fld_to_street(p_case_obj,p_fld_name,p_fld_type,p_props)
+	## 
+	## 
+	_local l_props << p_props
+	_local l_case_obj << p_case_obj
+	_local l_fld_name << p_fld_name
+	_local l_fld_type << p_fld_type
+#
+	l_props.remove_key(:default_value)
+	l_props.remove_key(:unset_value)
+	l_props.remove_key(:field_size)
+	l_props.remove_key(:stored_unit)
+	l_case_obj.add_geometry_field( l_fld_name,l_fld_type ,l_props)
+	l_geom_fld << l_case_obj.get_field(l_fld_name)
+	l_geom_fld.set_trigger(:attach, "geometry_trigger()")
+	l_geom_fld.set_trigger(:detach, "geometry_trigger()")
+	l_geom_fld.set_trigger(:update, "geometry_trigger()")
+	l_geom_fld.priority << 1
+	l_geom_fld.set_geometry_type(:simple_area)
+	#l_geom_fld.archive_manifold << "land"
+	#l_map_rec << l_geom_fld.archive_mapping({1335, "extent_geometry_mapping", False,0 })
+	#l_map_rec.archive_fields({:tp_extent})
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v5_street_case_change_results()
+	## 
+	## 
+	_local ccr_for_dd_extension << case_change_result.new()
+    	ccr_for_dd_extension.add_new(:lnd_street)
+	>> {ccr_for_dd_extension}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$

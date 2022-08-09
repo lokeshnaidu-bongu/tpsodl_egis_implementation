@@ -1,0 +1,95 @@
+<section class="module sidebar-module">
+  <div id="findMain" class="module-body">
+    <form id="findOptions" class="form-horizontal" onsubmit="return function(evt){ evt.preventDefault(); return false; }">
+      <fieldset>
+        <div class="control-group">
+          <div class="controls" style="margin-left:0px;margin-bottom:20px;width:100%" rel="tooltip" title="{{messages.find.selectQueryType}}">
+            <select class="form-control" id="queryType" style="width:100%;margin-bottom:0px;">
+              {{#queries}}
+              <option value="{{name}}">
+                {{#tooltip}} {{tooltip}} {{/tooltip}} {{^tooltip}} {{name}} {{/tooltip}}
+              </option>
+              {{/queries}}
+            </select>
+          </div>
+        </div>
+        {{#queries}}
+        <div class="query-options" id="{{name}}-query">
+          {{#fields}}
+          <div class="control-group">
+            <div class="controls" style="margin-left:0px;margin-bottom:5px;width:100%">
+              <div class="input-group {{name}}_div" style='width:100%;'>
+                {{#enumerated}}
+                <select class="form-control {{name}}_select" style="width:100%;margin-bottom:0px" rel="tooltip" data-name="{{name}}" title="{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}}">
+                  {{^setDefault}}
+                  <option value="" selected disabled>{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}}</option>
+                  {{/setDefault}}
+                  {{#values}}
+                  <option value="{{value}}">{{value}}</option>
+                  {{/values}}
+                </select>
+                {{/enumerated}} 
+                {{#textField}}
+                <input type="text" class="form-control search-query" data-name="{{name}}" placeholder="{{#placeholder}}{{placeholder}}{{/placeholder}}{{^placeholder}}{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}}{{/placeholder}}" title="{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}}" style="width:100%;" rel="tooltip" />
+                {{/textField}}
+                {{#dateField}}
+                <input type="text" class="datepicker" data-name="{{name}}" placeholder="{{#placeholder}}{{placeholder}}{{/placeholder}}{{^placeholder}}{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}}{{/placeholder}} ({{#dateFormat}}{{dateFormat}}{{/dateFormat}})" title="{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}} ({{#dateFormat}}{{dateFormat}}{{/dateFormat}})" style="width:100%;" rel="tooltip" />
+                {{/dateField}}
+                {{#dateRangeField}}
+                <div class="input-append" data-name="{{name}}_date" style="margin-bottom:0px;display:flex">
+                  <input type="text" class="datepicker datepicker-from" data-name="{{name}}" style="flex: 1 0 auto;margin-right:5px;" placeholder="{{#placeholder}}{{placeholder}}{{/placeholder}}{{^placeholder}}{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}}{{/placeholder}} {{#fromStr}}{{fromStr}}{{/fromStr}} ({{#dateFormat}}{{dateFormat}}{{/dateFormat}})" title="{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}} {{#fromStr}}{{fromStr}}{{/fromStr}} ({{#dateFormat}}{{dateFormat}}{{/dateFormat}})" rel="tooltip" />
+                  <input type="text" class="datepicker datepicker-to" data-name="{{name}}" style="flex: 1 0 auto;margin-left:5px;" placeholder="{{#placeholder}}{{placeholder}}{{/placeholder}}{{^placeholder}}{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}}{{/placeholder}} {{#toStr}}{{toStr}}{{/toStr}} ({{#dateFormat}}{{dateFormat}}{{/dateFormat}})" title="{{#tooltip}}{{tooltip}}{{/tooltip}}{{^tooltip}}{{name}}{{/tooltip}} {{#toStr}}{{toStr}}{{/toStr}} ({{#dateFormat}}{{dateFormat}}{{/dateFormat}})" rel="tooltip" />
+                </div>
+                {{/dateRangeField}}
+                {{^setDefault}}{{^dateField}}{{^dateRangeField}}
+                <div class="input-group-btn">
+                  <button class="btn btn-icon query-clear-btn"><i class="icon-ico_cross_rnd_sm"></i>
+                  </button>
+                </div>
+                {{/dateRangeField}}{{/dateField}}{{/setDefault}}
+              </div>
+            </div>
+          </div>
+          {{/fields}}
+        </div>
+        {{/queries}}
+      </fieldset>
+    </form>
+  </div>
+	<div id="coordinate" style="display: none">
+      <select class="form-control" id="coord_type" style="width:100%;margin-top:-7%;margin-bottom:7%;" rel="tooltip">
+      </select>
+      <input onkeydown="return event.keyCode !== 69" class="form-control coord_lat_long"  placeholder="Enter Comma seperated Lat-Long Values" title="Comma seperated Lat-Long Values" style="width: 100%;margin-bottom: 5%;margin-top: -2%;" rel="tooltip" step=any />
+      <!-- <input type="number" onkeydown="return event.keyCode !== 69" class="form-control coord_long"  placeholder="Longitude" title="Longitude" style="width:100%;margin-bottom: 4%;" rel="tooltip" step=any /> -->
+       <!-- <br> -->
+       <!-- <button id="find_add_button" class="btn btn-primary">{{messages.find.AddButton}}</button> -->
+	   <br>
+       <br>
+	</div>
+	
+	<!-- <div style="display: none" id="coordinates_list"> -->
+	<!-- </div> -->
+
+  <div class="buttons">
+    <div class="pull-right">
+      <span id="find_spinner" rel="find_spinner" style="display: inline-block;margin-right: 20px;margin-bottom:4px"></span>
+      <button id="cancel" class="btn">{{messages.find.clearButton}}</button>
+      <button id="submit" class="btn btn-primary">{{messages.find.submitButton}}</button>
+    </div>
+  </div>
+  <br />
+
+  <footer style="display:none;" class="module-footer ">
+    <div class='hr-tip'>
+      <hr> {{{TipSvg}}}
+    </div>
+    <div class="controlDescriptions" style="font-style:italic;">
+      {{{footerMessage}}}
+    </div>
+  </footer>
+</section>
+<br />
+<section class="module sidebar-module">
+  <div id="find-results"></div>
+  <footer class="module-footer"></footer>
+</section>

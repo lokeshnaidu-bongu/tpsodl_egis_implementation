@@ -1,0 +1,13 @@
+.breadcrumb {
+  > li {
+      .divider {
+        padding: 0 5px;
+      }
+
+      + li:before {
+        padding: 0 0px;
+        display: inline-block;
+        content: ""; // remove unicode slash since CDX uses icons inline on the HTML
+      }
+  }
+}

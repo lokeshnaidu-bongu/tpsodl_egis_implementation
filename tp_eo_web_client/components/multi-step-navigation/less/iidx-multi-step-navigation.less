@@ -1,0 +1,17 @@
+@import "ge-bootstrap/less/iidx-bootstrap.less";
+@import "iidx-variables.less";
+@import "multi-step-navigation.less";
+.multi-step-nav{
+	.nav-pills{
+			li{
+				&.completed{
+					a,
+					a [class^="icon-"]{
+						color:darken(@multistep-navbar-text-color, 50%);
+					}
+				}
+			 }
+	}
+}
+
+

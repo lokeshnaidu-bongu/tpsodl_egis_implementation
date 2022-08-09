@@ -1,0 +1,106 @@
+
+#####################################################################
+# Spring Profile section
+#####################################################################
+spring_profiles: postgresql
+
+#####################################################################
+# Session timeout - since UAA version 4.8.0 (FT-613)
+# The servlet.idle-timeout is in seconds, and defaults
+# to 1800 seconds if not defined.
+#####################################################################
+servlet:
+  idle-timeout: 60
+  session-cookie:
+    max-age: 5
+
+#####################################################################
+# Disable the `Change Email` and `Change Password` endpoints
+#####################################################################
+disableInternalUserManagement: true
+
+#####################################################################
+# OAuth Section
+#####################################################################
+oauth:
+  user:
+    # These authorities are added as default groups to a new user.
+    authorities:
+      - openid
+      - uaa.none
+  #
+  # See also: uaa/src/main/webapp/WEB-INF/spring/oauth-clients.xml and search
+  #           for org.cloudfoundry.identity.uaa.client.ClientAdminBootstrap
+  clients:
+    admin:
+      id: admin
+      secret: adminsecret
+      authorized-grant-types: client_credentials
+      authorities: clients.read,clients.secret,clients.write,uaa.admin,clients.admin,scim.write,scim.read,scim.userids
+
+#####################################################################
+# Login Server section
+# 
+# selfServiceLinksEnabled: false  =  Disables `Create account` and
+#     `Reset Password` links on login page
+# navEnabled: false  =  Disables nav menu after successful login
+#####################################################################
+login:
+  selfServiceLinksEnabled: false
+  navEnabled: false
+  branding:
+    companyName: GE, Inc.
+  prompt:
+    username:
+      text: Name
+    password:
+      text: Password
+  appTitle: "GE Power"
+  disclosureTitle: "ATTENTION"
+  disclosureIntro: |
+    This computer system including all related equipment, 
+    network devices (specifically including Internet access),
+    are provided only for authorized use.
+  disclosureText: |
+    All computer systems may be monitored for all lawful 
+    purposes, including to ensure that their use is authorized,
+    for management of the system, to facilitate protection against 
+    unauthorized access, and to verify security procedures, 
+    survivability and operational security.  Monitoring includes 
+    active attacks by authorized personnel and their entities to 
+    test or verify the security of the system. During monitoring,
+    information may be examined, recorded, copied and used for 
+    authorized purposes. All information including personal 
+    information, placed on or sent over this system may be monitored. 
+    Uses of this system, authorized or unauthorized, constitutes 
+    consent to monitoring of this system.  Unauthorized use may 
+    subject you to criminal prosecution. Evidence of any such 
+    unauthorized use collected during monitoring may be used for 
+    administrative, criminal or other adverse action. Use of this 
+    system constitutes consent to monitoring for these purposes.
+
+#####################################################################
+# JWT (JSON Web Token) section
+#
+# Steps to generate the key-pair are at:
+#  https://github.com/cloudfoundry/uaa/blob/master/docs/Sysadmin-Guide.rst#token-signing
+#
+#####################################################################
+jwt:
+  token:
+    policy:
+      # Default validity is 12-hr (43,200 seconds) for access/refresh tokens
+      # accessTokenValiditySeconds: 10
+      # refreshTokenValiditySeconds: 3600
+
+#####################################################################
+# PostgreSQL section
+#####################################################################
+database:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://uaa-postgresql-svc:5432/uaadb
+
+#####################################################################
+# UAA dumps out details of request
+#####################################################################
+#dump_requests: true

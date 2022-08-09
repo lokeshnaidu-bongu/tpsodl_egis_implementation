@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-storage-class-tpsodl-eo-web-gss-prod-pvc
+  namespace: gss-prod
+  labels:
+    app: predix
+    storage: smallworld
+    type: local
+spec:
+  storageClassName: nfs-storage-class
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

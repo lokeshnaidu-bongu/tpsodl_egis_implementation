@@ -1,0 +1,18 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Over Current	2
+Differential Protection	2
+Distance Protection	3
+Earth Fault	4
+Under Voltage	5
+Under Frequency	6
+Master Trip	7
+Buckholtz	8
+WTI	9
+OTI	11
+Surge Protection	12
+Fault Indication	13

@@ -1,0 +1,4 @@
+tpsodl_query_builder_engine
+tpsodl_query_builder_gui_plugin
+tpsodl_query_builder_framework
+tpsodl_query_builder_activation_plugin

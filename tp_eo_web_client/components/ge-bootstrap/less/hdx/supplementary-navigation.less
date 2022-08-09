@@ -1,0 +1,269 @@
+// Tabs
+ul.nav-tabs {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+  text-indent: 0;
+  border-color: lighten(@cyan, 15%);
+
+  > li:before {
+    content: none;
+    margin-right: 0;
+  }
+
+  > li {
+    > a,
+    .dropdown-menu,
+    .dropdown-menu a {
+      font-size: @baseFontSize; //13px
+      outline: none;
+    }
+
+    > a {
+      color: @grayDark;
+    }
+
+    &:hover > a {
+      border-bottom: 1px solid @cyan;
+    }
+
+    &.active > a,
+    &.active > a:focus,
+    &.active:hover > a,
+    &.dropdown.active > a,
+    &.dropdown.active:hover > a:hover,
+    &.dropdown.open.active > a,
+    &.dropdown.open.active > a:hover,
+    &.dropdown.open.active > a:focus {
+      color: @white;
+      #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+      background-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+    }
+
+    &.dropdown {
+      > a > i,
+      &:hover > a > i {
+        color: @grayDark;
+      }
+
+      &.active {
+        > a > i,
+        &:hover > a > i {
+          color: @white;
+        }
+      }
+    } // &.dropdown
+  } // > li
+} // ul.nav-tabs
+
+
+// Pills
+ul.nav-pills {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+  text-indent: 0;
+
+  > li:before {
+    content: none;
+    margin-right: 0;
+  }
+
+  > li {
+    > a {
+      font-size: @baseFontSize; //13px
+      border: 1px solid transparent;
+      color: @grayDark;
+      outline: none;
+      .border-radius(@baseBorderRadius - 2);
+    }
+
+    > a:hover {
+      border-color: @grayLightest;
+    }
+
+    &.active > a {
+    &,
+      &:hover,
+      &:focus {
+	      color: @white;
+	      border-color: transparent;
+	      #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+	      background-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+	   }
+    }
+
+    &.open > a,
+    &.open:hover > a {
+      #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+      color: @white;
+    }
+
+    &.active > a > i[class^="icon-"]{
+      color: @white;
+    }
+
+    &.open > a > i[class^="icon-"],
+    &.open:hover > a:hover > i[class^="icon-"] {
+      color: @white;
+    }
+  } // > li
+} // ul.nav-pills
+
+
+// Tabbables
+.tabbable.tabs-right,
+.tabbable.tabs-left,
+.tabbable.tabs-below {
+  ul.nav-tabs {
+    border-color: @cyan;
+  }
+
+  ul.nav-tabs > li {
+    &.active > a,
+    &.active:hover > a {
+      border-color: transparent;
+    }
+  }
+}
+
+.tabbable.tabs-right ul.nav-tabs > li {
+  > a,
+  &:hover > a {
+    border-left: none;
+    margin: 0 0 2px 0;
+  }
+}
+
+.tabbable.tabs-left ul.nav-tabs > li {
+  > a,
+  &:hover > a {
+    border-right: none;
+    margin: 0 0 2px 0;
+  }
+}
+
+.tabbable.tabs-below ul.nav-tabs > li {
+  > a,
+  &:hover > a {
+    margin: 1px 2px 0 0;
+    border-top: none;
+  }
+}
+
+
+// Navigation list menu
+ul.nav-list {
+  background-color: @offWhite;
+  list-style: none;
+  margin-left: 0;
+	text-indent: 0;
+	padding: 10px 16px 10px 0;
+
+	> li:before {
+    content: none;
+    margin-right: 0;
+  }
+
+  li a {
+    color: @grayDark;
+    margin: 0;
+    padding-left: 23px;
+    font-size: @baseFontSize;
+    .border-radius(0 @baseBorderRadius @baseBorderRadius 0);
+  }
+
+  li.active a {
+    border-color: transparent;
+    #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+  }
+
+  li.nav-header {
+    color: @grayDark;
+    font-size: @baseFontSize + 11; //24px
+    font-family: @brandFontFamily;
+    font-weight: 300;
+    text-transform: none;
+    padding-left: 12px;
+	  line-height: @baseLineHeight + 11;
+	  margin: 12px 0 0;
+  }
+
+  li.nav-header:first-child {
+    margin-top: 0;
+  }
+
+  li.divider {
+    margin-left: 0;
+  }
+} // ul.nav-list
+
+
+// Pagination
+.pagination {
+  > li > a {
+    font-size: @baseFontSize;
+    color: @grayDark;
+    outline: none;
+    > i[class^="icon-"] {
+      line-height: 1;
+    }
+  }
+
+  > li.active a,
+  > li.active a:hover
+  > li.active a:focus {
+    #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+    background-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+    border-color: transparent;
+    color: @white;
+  }
+
+  > li:first-child a {
+    .border-radius(@baseBorderRadius 0 0 @baseBorderRadius);
+  }
+  > li.disabled > a,
+  li.disabled > a:hover,
+	li.disabled > a:active{
+  		color: @btnDisabledText;
+		cursor: default;
+		background-color: @btnDisabledBackground;
+		.opacity(.65);
+  }
+
+  > li:last-child a {
+    .border-radius(0 @baseBorderRadius @baseBorderRadius 0);
+  }
+} // .pagination
+
+
+// Paging buttons
+ul.pager {
+  li a {
+    font-size: @baseFontSize;
+    .border-radius(@baseBorderRadius);
+    color: @grayDark;
+    outline: none;
+  }
+} // ul.pager
+
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span {
+  color: @btnDisabledText;
+  background-color: @btnDisabledBackground;
+  .opacity(.65);
+}
+.pager {
+  > li.active a,
+  > li.active a:hover
+  > li.active a:focus {
+    
+	     #gradient > .vertical(lighten(@cyan, 15%), @cyan);
+		 background-color: mix(lighten(@cyan, 15%), @cyan, 60%);
+		 border-color: transparent;
+		 color: @white;
+ 
+  	}
+ }

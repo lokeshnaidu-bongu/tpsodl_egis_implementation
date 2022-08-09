@@ -1,0 +1,66 @@
+<ul class="dropdown-menu pull-right">
+  {{#layerDefs}}
+    <li class="
+      {{#visibility}} enabled {{/visibility}}
+      {{^visibility}} disabled {{/visibility}}
+      {{#isGroup}} parent-node {{/isGroup}}
+      {{#layersExpanded}} node-group-expanded {{/layersExpanded}}
+      {{^layersExpanded}} node-group-collapsed {{/layersExpanded}}"
+      data-item-id="{{itemId}}">
+      <div>
+        <span class="layer-visibility"></span>
+        <label>{{name}}</label>
+      </div>
+      <div>
+        <span class="toggle-collapse"></span>
+      </div>
+    </li>
+    {{#isGroup}}
+      <li class="node-group">
+        <ul>
+          {{#layers}}
+            <li class="
+              {{#visibility}} enabled {{/visibility}}
+              {{^visibility}} disabled {{/visibility}}
+              {{#isGroup}} parent-node {{/isGroup}}
+              {{#layersExpanded}} node-group-expanded {{/layersExpanded}}
+              {{^layersExpanded}} node-group-collapsed {{/layersExpanded}}"
+              data-item-id="{{itemId}}">
+              <div>
+                <span class="layer-visibility"></span>
+                <label>{{name}}</label>
+              </div>
+              <div>
+                <span class="toggle-collapse"></span>
+              </div>
+            </li>
+            {{#isGroup}}
+              <li class="node-group">
+                <ul>
+                  {{#layers}}
+                    <li class="
+                      {{#visibility}} enabled {{/visibility}}
+                      {{^visibility}} disabled {{/visibility}}
+                      {{#isGroup}} parent-node {{/isGroup}}
+                      {{#layersExpanded}} node-group-expanded {{/layersExpanded}}
+                      {{^layersExpanded}} node-group-collapsed {{/layersExpanded}}"
+                      data-item-id="{{itemId}}">
+                      <div>
+                        <span class="layer-visibility"></span>
+                        <label>{{name}}</label>
+                      </div>
+                      <div>
+                        <span class="toggle-collapse"></span>
+                      </div>
+                    </li>
+                  {{/layers}}
+                </ul>
+              </li>
+            {{/isGroup}}
+          {{/layers}}
+        </ul>
+      </li>
+    {{/isGroup}}
+    <li class="divider"></li>
+  {{/layerDefs}}
+</ul>

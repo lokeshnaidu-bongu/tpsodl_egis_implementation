@@ -1,0 +1,39 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Apartment/Condominium	1
+Arena/Public Assembly	2
+Church	3
+Commercial	4
+Day Care Center	5
+Duplex	6
+Educational	7
+Entertainment	8
+Fire Brigade	9
+Golf Course Clubhouse	10
+Government	11
+Govt. Buildings	12
+Health Care Center	13
+Industrial	14
+Light Industry/Office	15
+Manufacturing	16
+Mixed	17
+Motel/Hotel	18
+Multi Family	19
+Other	20
+Park	21
+Parking Lot/Structure	22
+Prison	23
+Public service	24
+Residential	25
+School	26
+Shopping Center/Retail	27
+Single Family	28
+Sports	29
+Transport	30
+Warehouse	31
+Worship	32
+Hospital	33

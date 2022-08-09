@@ -1,0 +1,18 @@
+
+_pragma(classify_level=basic, topic={tp_business_rule}, usage={TPSODL})
+_method ed_cabinet.tp_add_location()
+	## 
+	##
+	
+	_local l_cur_rec << _self
+	_local l_center,l_point 
+
+	_if l_cur_rec.location _is _unset
+	_then
+		l_center << l_cur_rec.extent.bounds.centre
+		l_point << pseudo_point.new(l_center)
+		l_cur_rec.make_geometry(:location,l_point)
+	_endif
+	
+_endmethod
+$

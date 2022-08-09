@@ -1,0 +1,338 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By: Ashok kumar, TCS
+## Date: 28/03/2021
+##
+## Description:
+
+########################################################################
+_package sw
+
+
+_pragma(classify_level=restricted)
+##
+## 
+##
+def_slotted_exemplar(:tp_check_mig_record_count,
+	{
+		{:data_vals,_unset }
+	},
+	{:engine_model})
+
+$
+
+
+tp_check_mig_record_count.define_slot_access(:data_vals, :write, :public )
+$
+
+_pragma(classify_level=restricted)
+_method tp_check_mig_record_count.new()
+	## 
+	## 
+	_return _self.init()
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_check_mig_record_count.init()
+	## 
+	##
+	.data_vals << property_list.new()
+	
+	.data_vals[:electric] << gis_program_manager.cached_dataset(:electric)
+	.data_vals[:app] << smallworld_product.application(:tp_eo_application)
+	_return _self
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_check_mig_record_count.run(p_input_file_path,p_output_file_path)
+	## 
+	## 
+	##Reads a Text file which contains all .dbf file paths. 
+	##Before running this,point to the alternative which contain all migrated data.
+	##
+	##
+	
+	_try _with a_cond
+		
+
+		_local l_ev << .data_vals[:electric]
+		_local l_ipt_fl_path,a_stream,a_line,l_opt_fl_path,a_opt_stream
+		_local l_path,l_excel_app,l_workbooks,l_workbook,l_sheets,l_sheets_count,a_sheet,sheet_name,l_row_count
+		_local l_tot_pole,l_tot_con_pnt,l_tot_cable,l_tot_cabinet,l_tot_busbar,l_tot_wire,l_tot_subst,l_tot_prt_eqpt
+		_local l_tot_mtr,l_tot_msr_eqpt,l_tot_jumper,l_tot_isoltg_eqpt,l_tot_dt,l_tot_tower
+
+		_local l_ev_coll << property_list.new_with(:eo_connector_point_inst,0,
+						  :eo_cable_segment_inst,0,
+						  :ed_cabinet,0,
+						  :eo_connector_segment_inst,0,
+						  :eo_wire_segment_inst,0,
+						  :sub_substation,0,
+						  :eo_protective_eqpt_inst,0,
+						  :ed_pole,0,
+						  :eo_meter,0,
+						  :eo_measuring_eqpt_inst,0,
+						  :eo_isolating_eqpt_inst,0,
+						  :eo_power_xfrmr_inst,0,
+						  :et_tower,0,
+						  :eo_service_point,0)
+		
+		_protect
+			l_tot_pole << 0
+			l_tot_con_pnt << 0
+			l_tot_cable << 0
+			l_tot_cabinet << 0
+			l_tot_busbar << 0
+			l_tot_wire << 0
+			l_tot_subst << 0
+			l_tot_prt_eqpt << 0
+			l_tot_mtr << 0
+			l_tot_msr_eqpt << 0
+			l_tot_jumper << 0
+			l_tot_isoltg_eqpt << 0
+			l_tot_dt << 0
+			l_tot_tower << 0
+			l_tot_service_point << 0
+			
+			l_ipt_fl_path << p_input_file_path
+			#l_opt_fl_path << p_output_file_path
+
+			##Reading Input file
+			
+			a_stream << external_text_input_stream.new(l_ipt_fl_path)
+			l_opt_fl_path << _self.get_output_file_name(p_output_file_path)
+			a_opt_stream << external_text_output_stream.new(l_opt_fl_path)
+			
+			_loop
+				a_line << a_stream.get_line()
+
+				
+				_if a_line _is _unset
+				_then
+					_leave
+				_endif
+				
+				l_path << a_line
+				l_excel_app << ole_client.openobject("Excel.application")
+				l_workbooks << l_excel_app.Workbooks()
+				l_workbook << l_workbooks.add(l_path)	
+				l_sheets << l_workbook.Sheets
+				l_sheets_count << l_sheets.count()
+				
+				a_sheet << l_sheets.Item(1)
+				sheet_name << a_sheet.name()
+				
+				#write(sheet_name)
+				
+				l_row_count << 0
+				
+
+				_for row _over 2.upto(a_sheet.Rows().count())
+				_loop @total_rows
+					
+					_local l_cell_value << a_sheet.cells(row,1).value
+					_local l_cell_value2 << a_sheet.cells(row,2).value
+					
+					_if l_cell_value _is _unset _andif l_cell_value2 _is _unset
+					_then
+						_leave
+					_else
+						l_row_count << l_row_count+1
+					_endif
+					
+				_endloop
+				
+					
+				_if sheet_name = "Pole"
+				_then
+					l_tot_pole + << l_row_count
+			
+
+				_elif sheet_name = "Connector Point" _orif
+				      sheet_name = "Connector point" _orif
+				      sheet_name = "Connector_Point" _orif
+				      sheet_name = "Connectorpoint" _orif
+				      sheet_name = "ConnectorPoint"
+				_then
+					
+					
+					l_tot_con_pnt + << l_row_count
+					
+
+				_elif sheet_name = "Cable"
+				_then
+					l_tot_cable + << l_row_count
+				
+
+				_elif sheet_name = "Cabinet"
+				_then
+					l_tot_cabinet + << l_row_count
+				
+
+				_elif sheet_name = "Busbar"
+				_then
+					l_tot_busbar + << l_row_count
+				
+
+				_elif sheet_name = "Wire"
+				_then
+					l_tot_wire + << l_row_count
+				
+
+				_elif sheet_name = "Substation" _orif
+				      sheet_name = "Substration"
+				_then
+					l_tot_subst + << l_row_count
+			
+
+				_elif sheet_name = "Protective Equipment" _orif
+				      sheet_name = "Protective_Equipment" _orif
+				      sheet_name = "Protectove Equipment" _orif
+				      sheet_name = "ProtectiveEquipment" _orif
+				      sheet_name = "Protective Equipmentshp"
+				_then
+					l_tot_prt_eqpt + << l_row_count
+				
+
+				_elif sheet_name = "Meter" _or sheet_name = "Consumer_Meter"
+				_then
+					l_tot_mtr + << l_row_count
+				
+
+				_elif sheet_name = "Measuring Equipment" _orif
+				      sheet_name = "Measuring_Equipment" _orif
+				      sheet_name = "MeasuringEquipment"
+				_then
+					l_tot_msr_eqpt + << l_row_count
+				
+
+				_elif sheet_name = "Jumper"
+				_then
+					l_tot_jumper + << l_row_count
+				
+
+				_elif sheet_name = "Isolating Equipment" _orif
+				      sheet_name = "Isolating_Equipment" _orif
+				      sheet_name = "IsolatingEquipment"
+				_then
+					l_tot_isoltg_eqpt + << l_row_count
+				
+
+				_elif sheet_name = "DT"
+				_then
+					l_tot_dt + << l_row_count
+				
+
+				_elif sheet_name = "Tower"
+				_then
+					l_tot_tower + << l_row_count
+				
+
+				_elif sheet_name = "Service_Point"
+				_then
+					l_tot_service_point + << l_row_count
+
+				_else
+
+					write("+++ not matching       +++",sheet_name,%tab,l_path)
+					
+					
+				_endif
+				
+				
+				l_sheets.Release_object()
+				l_workbook.Release_object()
+				l_workbooks.Release_object()
+				l_excel_app.quit()
+				l_excel_app.Release_object()
+
+			_endloop
+
+			##Assigning count
+	
+			l_ev_coll[:eo_connector_point_inst] << l_tot_con_pnt
+			l_ev_coll[:eo_cable_segment_inst] << l_tot_cable
+			l_ev_coll[:ed_cabinet] << l_tot_cabinet
+			l_ev_coll[:eo_connector_segment_inst] << l_tot_busbar
+			l_ev_coll[:eo_wire_segment_inst] << l_tot_wire + l_tot_jumper
+			l_ev_coll[:sub_substation] << l_tot_subst
+			l_ev_coll[:eo_protective_eqpt_inst] << l_tot_prt_eqpt
+			l_ev_coll[:ed_pole] << l_tot_pole
+			l_ev_coll[:eo_meter] << l_tot_mtr
+			l_ev_coll[:eo_measuring_eqpt_inst] << l_tot_msr_eqpt
+			l_ev_coll[:eo_isolating_eqpt_inst] << l_tot_isoltg_eqpt
+			l_ev_coll[:eo_power_xfrmr_inst] << l_tot_dt
+			l_ev_coll[:et_tower] << l_tot_tower
+			l_ev_coll[:eo_service_point] << l_tot_service_point
+							
+
+			##Writing Summary
+			       a_opt_stream.write("External Name",%tab,"Internal Name",%tab,"Total Count(SW)",%tab,"Total Count(.shape)")
+			       a_opt_stream.newline()
+			       
+			       _for a_col_name _over l_ev_coll.fast_keys()
+			       _loop
+				       a_sw_coll << l_ev.collections[a_col_name]
+
+				       a_opt_stream.write(a_sw_coll.external_name,%tab,a_sw_coll.name.write_string,%tab,a_sw_coll.size,%tab,l_ev_coll[a_col_name])
+				       a_opt_stream.newline()
+			       _endloop
+			       
+				
+		_protection
+			
+			
+			_if a_stream _isnt _unset
+			_then
+				a_stream.close()
+			_endif
+
+			_if a_opt_stream _isnt _unset
+			_then
+				a_opt_stream.close()
+			_endif
+
+
+		_endprotect
+		
+	_when error,warning
+
+		
+	_endtry 
+	
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_check_mig_record_count.get_output_file_name(p_output_file_folder)
+	##
+	##
+	##
+	write("+++  +++",p_output_file_folder)
+	_local l_dt << date_time.now()
+	_local l_df1 << date_time_format.new_with_properties(:date_format_string, "#d_#m_#Y_#H_#M_#S") 
+	_local l_date_time << l_df1.format(l_dt)
+	
+	l_file_name  << write_string("Summary","_",
+				     system.user_name,"_",
+				     l_date_time,".csv")
+
+	_return p_output_file_folder+"\"+l_file_name
+
+	
+	
+_endmethod
+
+
+
+
+_block
+	_local  l_input_file_path  << "E:\Shape_files_data\Production_migrated_data\all_dbf_file_paths.txt"
+	_local  l_output_file_folder_path << "E:\Shape_files_data\Production_migrated_data"
+	_local l_tp_check_count << tp_check_mig_record_count.new()
+	l_tp_check_count.run(l_input_file_path,l_output_file_folder_path)
+_endblock

@@ -1,0 +1,116 @@
+<div id="sketchFinalise" class="form-inline controls">
+  <button id="submit" class="btn btn-primary"><i class="icon-ok" ></i> {{messages.sketching.submitButton}}</button>
+  <button id="cancel" class="btn"><i class="icon-remove" ></i> {{messages.sketching.clearButton}}</button>
+</div>
+<br/>
+
+<br/>
+<section class="module sidebar-module" id="sketchingTools">
+  <header class="module-header">
+    <h3 class="voice voice-brand">{{messages.sketching.toolsTitle}}</h3>
+  </header>
+
+  <div id="sketchCollapse" class="module-body">
+    <div id="sketchControl">
+      <div class="sketchButton">
+        <button id="point_control" data-descrip="pointDescription" data-options="symbolButtons" class="btn btn-icon" rel="tooltip" title="{{messages.sketching.point}}">
+          <img src="lib/sketching/icons/icon-point2.svg" />
+        </button>
+      </div>
+      <div class="sketchButton">
+        <button id="arrow_control" data-descrip="arrowDescription" data-options="arrowButtons" class="btn btn-icon" rel="tooltip" title="{{messages.sketching.arrow}}">
+          <img src="lib/sketching/icons/icon-arrow2.svg" />
+        </button>
+      </div>
+      <div class="sketchButton">
+        <button id="text_control" data-descrip="textDescription" data-options="textButtons" class="btn btn-icon" rel="tooltip" title="{{messages.sketching.text}}">
+          <img src="lib/sketching/icons/icon-textarea.svg" />
+        </button>
+      </div>
+      <div class="sketchButton">
+        <button id="line_control" data-descrip="lineDescription" data-options="lineButtons" class="btn btn-icon" rel="tooltip" title="{{messages.sketching.line}}">
+          <img src="lib/sketching/icons/icon-line2.svg" />
+        </button>
+      </div>
+      <div class="sketchButton">
+        <button id="area_control" data-descrip="areaDescription" data-options="areaButtons" class="btn btn-icon" rel="tooltip" title="{{messages.sketching.area}}">
+          <img src="lib/sketching/icons/icon-area3.svg" />
+        </button>
+      </div>
+      <br />
+      <div class="controlOptions">
+        <div id="symbolButtons" class="sketchControlOptions">
+          <h3>{{messages.sketching.symbols}}</h3>
+        </div>
+        <div id="lineButtons" class="sketchControlOptions">
+          <h3>{{messages.sketching.lines}}</h3>
+        </div>
+        <div id="areaButtons" class="sketchControlOptions">
+          <h3>{{messages.sketching.areas}}</h3>
+        </div>
+        <div id="textButtons" class="sketchControlOptions">
+          <h3>{{messages.sketching.texts}}</h3>
+        </div>
+        <div id="arrowButtons" class="sketchControlOptions">
+          <h3>{{messages.sketching.arrows}}</h3>
+        </div>
+      </div>
+    </div>
+    <br />
+
+    <div class="controlDescriptions">
+      <div class='hr-tip' style='display:none;'>
+        <hr> {{{TipSvg}}}
+      </div>
+      <div id="pointDescription" class="sketchControlDescription">
+        <p>{{messages.sketching.pointDescription}}</p>
+      </div>
+      <div id="areaDescription" class="sketchControlDescription">
+        <p>{{messages.sketching.areaDescription}}</p>
+      </div>
+      <div id="lineDescription" class="sketchControlDescription">
+        <p>{{messages.sketching.lineDescription}}</p>
+      </div>
+      <div id="arrowDescription" class="sketchControlDescription">
+        <p>{{messages.sketching.arrowDescription}}</p>
+      </div>
+      <div id="textDescription" class="sketchControlDescription">
+        <p>{{messages.sketching.textDescription}}</p>
+      </div>
+    </div>
+  </div>
+  <footer class="module-footer "></footer>
+</section>
+
+<br />
+
+<section class="module sidebar-module" id="sketchingDetails">
+  <header class="module-header">
+    <h3 class="voice voice-brand">{{messages.sketching.detailsTitle}}</h3>
+  </header>
+  <div class="module-body">
+    <form id="taskManagement" class="form-horizontal">
+      <fieldset>
+        <div class="control-group" style="margin-left:0px;margin-bottom:5px">
+          <select class="form-control" id="taskManagementTaskType" style="width:100%;"></select>
+        </div>
+        <div class="control-group" style="margin-left:0px;margin-bottom:5px;">
+          <select class="form-control" id="taskManagementTaskRecipient" style="width:100%;"></select>
+        </div>
+        <div class="control-group" style="margin-left:0px;margin-bottom:5px;">
+          <input class="form-control" type="text" id='taskManagementTaskSubject' title="{{messages.sketching.subjectLabel}}" placeholder="{{messages.sketching.subjectLabel}}"></input>
+        </div>
+        <div class="control-group" style="margin-left:0px;margin-bottom:5px;">
+            <input class="form-control" type="text" id='taskManagementTaskId' placeholder="{{messages.sketching.idLabel}}" title="{{messages.sketching.idLabel}}"></input>
+        </div>
+        <div class="control-group" style="margin-left:0px;margin-bottom:5px">
+          <textarea class="form-control" id="taskManagementTaskNotes" style="resize:none;" rows='10' placeholder="{{messages.sketching.notesLabel}}" title="{{messages.sketching.notesLabel}}"></textarea>
+        </div>
+        <div class="helper-text">
+          {{messages.sketching.requiredFieldLabel}}
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <footer class="module-footer "></footer>
+</section>

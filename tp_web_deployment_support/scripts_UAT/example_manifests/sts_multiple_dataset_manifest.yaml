@@ -1,0 +1,57 @@
+id: 'sw_sts_deploy'
+api_version: '5.3.0'
+targets:
+  - id: 'sw-sts-design-admin'
+    products:
+      - id: 'sts'
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local/'
+        pdi:
+          image: 'pull.<GSS master>.mycompanyname.com:30443/pwr-smallworld/sts-pdi'
+          tag: 'SW528-PROD-1'
+        param_groups:
+          - id: 'environment'
+            params:
+              ######################## MANDATORY
+              DATASET_NAME: 'design_admin'
+              STS_PORT: '30401'
+              DOCKER_REGISTRY: 'pull.<GSS master>.mycompanyname.com:30443'
+              ACE_DIR_PATH: 'myserver:/share-name/path/to/datastore'
+              MESSAGES_DIR_PATH: 'myserver:/share-name/path/to/datastore'
+              ######################## MANDATORY for PNI DB
+              MODELIT_DIR_PATH: 'myserver:/share-name/path/to/datastore'
+              ######################## OPTIONAL
+              # CONTEXT_DIR_PATH: ''
+              # STS_NAMESPACE: ''
+              # STS_VERSION: ''
+              ######################## Cloud Deployment
+              # DEPLOYMENT_TYPE: ''
+              ######################## DEV ONLY
+              # KUBECONFIG: ''
+              # DOCKER_REPOSITORY: ''
+  - id: 'sw-sts-job-queue'
+    products:
+      - id: 'sts'
+        local_dir_mount_path: '/osds_data/sw_gss_deploy/local/'
+        pdi:
+          image: 'pull.<GSS master>.mycompanyname.com:30443/pwr-smallworld/sts-pdi'
+          tag: 'SW528-PROD-1'
+        param_groups:
+          - id: 'environment'
+            params:
+              ######################## MANDATORY
+              DATASET_NAME: 'job_queue'
+              STS_PORT: '30402'
+              DOCKER_REGISTRY: 'pull.<GSS master>.mycompanyname.com:30443'
+              ACE_DIR_PATH: 'myserver:/share-name/path/to/datastore'
+              MESSAGES_DIR_PATH: 'myserver:/share-name/path/to/datastore'
+              ######################## MANDATORY for PNI DB
+              MODELIT_DIR_PATH: 'myserver:/share-name/path/to/datastore'
+              ######################## OPTIONAL
+              # CONTEXT_DIR_PATH: ''
+              # STS_NAMESPACE: ''
+              # STS_VERSION: ''
+              ######################## Cloud Deployment
+              # DEPLOYMENT_TYPE: ''
+              ######################## DEV ONLY
+              # KUBECONFIG: ''
+              # DOCKER_REPOSITORY: ''

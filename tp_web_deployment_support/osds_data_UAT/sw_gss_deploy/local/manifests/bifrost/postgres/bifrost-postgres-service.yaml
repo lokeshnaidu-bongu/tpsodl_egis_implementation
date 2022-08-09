@@ -1,0 +1,99 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-lb-service
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: bifrost
+    service: postgres
+spec:
+  type: NodePort
+  ports:
+  - port: 5432
+    protocol: TCP
+    nodePort: 30022
+  selector:
+    app: predix
+    service-cluster: bifrost
+    service: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-lb-deployment
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: bifrost
+    service: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predix
+      service-cluster: bifrost
+      service: postgres
+  template:
+    metadata:
+      labels:
+        app: predix
+        service-cluster: bifrost
+        service: postgres
+    spec:
+      securityContext:
+        fsGroup: 1001
+      containers:
+      - name: postgres-lb-pod
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/postgres:10.17.0-debian-10_0.1.0
+        securityContext:
+          runAsUser: 1001
+        ports:
+        - containerPort: 5432
+        env:
+        - name: NEW_DB
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-postgres-secret
+              key: dbname
+        - name: NEW_DB_OWNER
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-postgres-secret
+              key: dbuser
+        - name: NEW_DB_OWNER_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-postgres-secret
+              key: dbpass
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bifrost-postgres-secret
+              key: adminpass
+        volumeMounts:
+        - name: bifrost-postgres-lb-volume
+          mountPath: /bitnami/postgresql
+      initContainers:
+      - name: init-postgres-permissions
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        command:
+        - /bin/sh
+        - -c
+        - |
+          mkdir -p /bitnami/postgresql/data
+          chmod 700 /bitnami/postgresql/data
+          find /bitnami/postgresql/data  -mindepth 0 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+          xargs chown -R 1001:1001
+          chown 1001:1001 /bitnami/postgresql/
+          chmod -R 777 /dev/shm
+        volumeMounts:
+        - name: bifrost-postgres-lb-volume
+          mountPath: /bitnami/postgresql/
+      imagePullSecrets:
+      - name: regsecret
+      volumes:
+      - name: bifrost-postgres-lb-volume
+        persistentVolumeClaim:
+          claimName: nfs-storage-class-bifrost-postgres-gss-prod-pvc

@@ -1,0 +1,570 @@
+
+################################################################################
+#
+#           Product: TPSODL EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 15-02-2022
+# Creator Name       :G Ashok kumar, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+
+_package user
+$
+remex(:tpsodl_db_compression_gui_plugin)
+$
+#===============================================================
+#
+#   E X E M P L A R
+#================================================================
+def_slotted_exemplar( :tpsodl_db_compression_gui_plugin,
+	{
+		{ :top_container, _unset },
+		#To hold the GUI containers and controls
+		{ :menu_items, _unset },
+		#To hold the engine instance
+		{:engine,_unset}
+		
+		
+	},
+	:plugin )
+$
+
+
+#===================================================
+#
+#   S L O T   A C C E S S 
+#
+#===================================================
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+tpsodl_db_compression_gui_plugin.define_slot_access( :menu_items, :readable, :public )
+$
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+tpsodl_db_compression_gui_plugin.define_slot_access( :top_container, :readable, :public )
+$
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+tpsodl_db_compression_gui_plugin.define_slot_access( :engine, :readable, :public )
+$
+
+
+#-------------------------------------------------------------------
+#
+#     L O C A L   M E T H O D S
+#
+#-------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.init(name, framework)
+	## 
+	##
+	
+	_super.init(name,framework)
+	.menu_items << property_list.new()
+
+	#---------- HANDLE OF THE ENGINE ----------------
+	.engine << tpsodl_db_compression_engine.new()
+	.engine.add_dependent(_self)
+
+	
+	>> _self 
+_endmethod
+$
+
+_pragma(classify_level=basic,  topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.init_actions()
+	## 
+	## Defines actions in this plugin.
+	##
+	
+	_self.add_action(sw_action.new(:source_folder_browse,
+				       :action_message, :source_folder_browse|()|,
+				       :engine, _self ,
+				       :image,{:open,:ui_resources}))
+
+	_self.add_action(sw_action.new(	:destination_folder_browse,
+					:action_message, :destination_folder_browse|()|,
+					:engine, _self ,
+					:image,{:open,:ui_resources}))
+	
+_endmethod
+$
+
+
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.build_gui( a_frame )
+	## 
+	##
+	a_frame.top_frame.title << _self.message(:tool_name)
+	a_frame.top_frame.resizable? << _true
+	a_frame.top_frame.maximizable? << _true
+	a_frame.resize? << _false
+	.top_container << top_rc << sw_border_container.new( a_frame,
+						 7,1,
+						 :resize?,_true,
+						 :outer_spacing,10,
+						 :width,400,
+						 :height,350,
+						 :row_spacing,10
+							)
+	
+	top_rc_ch << sw_container.new( top_rc,
+				       1,2,
+				       :col_spacing,20,
+				       :row,1,
+				       :col,1
+				  )
+	
+	
+	.menu_items[:radio_gp] << rg << radio_group.new( top_rc_ch,
+							 :always_one?, _true ,
+							 :model,_self ,
+							 :change_selector, :radio_btn_selection|()|)
+	
+	
+	
+	r1 << sw_toggle_item.new( top_rc_ch,
+				  :label, _self.message(:hot),
+				  :row,1,
+				  :col,1     
+			     )
+	
+	rg.manage_child( r1, :hot)
+	
+	r2 << sw_toggle_item.new( top_rc_ch,
+				  :label, _self.message(:online),
+				  :row,1,
+				  :col,2
+			     )
+	rg.manage_child( r2, :online)
+	
+	_local label1 << sw_label_item.new( top_rc,
+					    _self.message(:source_path),
+					    :row,2,
+					    :col,1,
+					    :col_alignment, :left,
+					    :row_alignment, :fill
+					    
+				       )
+	
+	
+	top_rc_ch2 << sw_container.new( top_rc,
+					1,2,    
+					:col_spacing,15,
+					:row,3,
+					:col,1
+				   )			   
+	
+	
+	.menu_items[:src_path] << sw_text_item.new(top_rc_ch2,
+						   :row,1,
+						   :col,1
+						   #:min_width,100
+					       )
+	
+	_local browse_btn_input << _self.action(:source_folder_browse).place_control_on(top_rc_ch2,:dialog)
+	
+	
+	_local label2 << sw_label_item.new( top_rc,
+					    _self.message(:dest_path),
+					    :row,4,
+					    :col,1,
+					    :col_alignment, :left,
+					    :row_alignment, :fill
+					    
+				       )
+	
+	top_rc_ch3 << sw_container.new( top_rc,
+					1,2,    
+					:col_spacing,15,
+					:row,5,
+					:col,1
+				   )
+	
+	
+	.menu_items[:dest_path] << sw_text_item.new(top_rc_ch3,
+						    :row,1,
+						    :col,1
+						    #:min_width,100
+						)
+	
+	_local browse_btn_input2 << _self.action(:destination_folder_browse).place_control_on(top_rc_ch3,:dialog)
+	
+	.menu_items[:radio_cont] << top_rc_ch4 << sw_border_container.new( top_rc,
+									   1,3,
+									   :label,_self.message(:online),
+									   :col_spacing,15,
+									   :row,6,
+									   :col,1
+								      )
+	
+	
+	.menu_items[:radio_gp2] << rg << radio_group.new( top_rc_ch4,
+							  :always_one?, _true ,
+							  :model,_self 
+							  #:change_selector, :radio_btn_selection|()|
+						     )
+	
+	
+	
+	r1 << sw_toggle_item.new( top_rc_ch4,
+				  :label, _self.message(:start),
+				  :row, 1,
+				  :col, 1
+				  
+			     )
+	
+	rg.manage_child( r1, :start)
+	
+	r2 << sw_toggle_item.new(top_rc_ch4,
+				 :label, _self.message(:iterative),
+				 :row, 1,
+				 :col, 2
+			     )
+	rg.manage_child( r2, :iterative)
+	
+	r3 << sw_toggle_item.new(top_rc_ch4,
+				 :label, _self.message(:final),
+				 :row, 1,
+				 :col, 3
+			     )
+	rg.manage_child( r3, :final)
+	
+	#Added to desable for first time
+	.menu_items[:radio_cont].enabled? << _false
+	
+	top_rc_ch5 << sw_border_container.new( top_rc,
+					       1,3,
+					       :col_spacing,20,
+					       :row,7,
+					       :col,1
+					  )
+	
+	.menu_items[:run_btn] << run_btn << sw_button_item.new( top_rc_ch5,
+								:model, _self,
+								:row,1, :col,1,
+								:col_alignment, :fill,
+								:row_alignment, :fill,
+								:min_width,100,
+								#:enabled?,_false,
+								:selector, :run|()|,
+								:label, _self.message(:run),
+								:tooltip , _self.message(:run)
+							   )
+	
+	.menu_items[:hlp_btn] << hlp_btn << sw_button_item.new( top_rc_ch5,
+								:model, _self,
+								:row,1, :col,2,
+								:col_alignment, :fill,
+								:row_alignment, :fill,
+								:min_width,100,
+								#:enabled?,_false,
+								:selector, :help|()|,
+								:label, _self.message(:help),
+								:tooltip ,_self.message(:help)
+							   )
+	
+	.menu_items[:cnl_btn] << cnl_btn << sw_button_item.new( top_rc_ch5,
+								:model, _self,
+								:row,1, :col,3,
+								:col_alignment, :fill,
+								:row_alignment, :fill,
+								:min_width,100,
+								#:enabled?,_false,
+								:selector, :quit|()|,
+								:label, _self.message(:quit),
+								:tooltip , _self.message(:quit)
+							   )
+	
+	
+	
+
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.post_activation()
+	## 
+	##
+	.menu_items[:src_path].value << ""
+	.menu_items[:dest_path].value << ""
+	_self.framework.set_status_info(_self.message(:ready))
+	
+_endmethod
+$
+
+
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.quit()
+	## 
+	## 
+	_self.framework.close()
+_endmethod
+$
+
+#------------------------- BROWSE METHODS --------------------------------
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.source_folder_browse()
+	## 
+	##
+	
+	_self.activate_source_directory_selection(:excel_file_folder)
+_endmethod
+$
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.activate_source_directory_selection(input)
+	## 
+	##
+	
+	_if input _is _unset _then _return _endif
+	
+
+	_local dialog << file_dialog.new(_self, :source_directory_selected|()|, _unset )
+	dialog.operation << :select_directory
+	dialog.activate()
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.source_directory_selected(p_file_path)
+        ##
+	## Stores the file path when clicked on "Ok" button.
+	##
+	
+	.menu_items[:src_path].value  << p_file_path
+_endmethod 	
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.destination_folder_browse()
+	## 
+	## This method is used to activate the directory selection
+	## dialog on click on the 'Browse' button.
+	## 
+	_self.activate_destination_directory_selection(:destination_directory_folder)	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.activate_destination_directory_selection(input)
+	## 
+	## Description: Method is build the directory selection dialog
+	##
+	
+
+	_if input _is _unset _then _return _endif
+	
+
+	
+	_local dialog << file_dialog.new(_self, :destination_directory_selected|()|, _unset )
+	dialog.operation << :select_directory
+	dialog.activate()
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.destination_directory_selected(p_file_path)
+        ##
+	## Stores the file path when clicked on "Ok" button.
+	##
+	
+	.menu_items[:dest_path].value  << p_file_path
+_endmethod 	
+$
+
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.run()
+	## 
+	##
+	
+	_self.framework.set_status_info(_self.message(:running))
+	
+	_if .menu_items[:src_path].value  _is _unset _orif
+	    .menu_items[:src_path].value = ""
+	_then
+		
+		_self.framework.set_status_info(_self.message(:ready))
+		_self.show_message(_self.message(:source_path_not_entred))
+		#_self.framework.set_status_info("")
+		_return 
+	_endif
+
+	_if .menu_items[:dest_path].value  _is _unset _orif
+	    .menu_items[:dest_path].value = ""
+	_then
+		
+		_self.framework.set_status_info(_self.message(:ready))
+		_self.show_message(_self.message(:dest_path_not_entred))
+		_return
+	_endif
+
+	
+	.menu_items[:run_btn].enabled? << _false
+	.menu_items[:cnl_btn].enabled? << _false
+
+	_if .menu_items[:radio_gp].value = "hot"
+	_then
+		
+		_if _self.show_alert(  _self.message(:confirm_to_compress) ,
+				       _self.message(:ok),
+				       _self.message(:cancel) )
+		_then
+			.engine.compress_hot(.menu_items[:src_path].value, .menu_items[:dest_path].value, _self)
+		_endif
+
+		
+	_endif
+	
+	_if .menu_items[:radio_gp].value = "online"
+	_then
+		_if _self.show_alert(  _self.message(:confirm_to_compress_online) ,
+				       _self.message(:ok),
+				       _self.message(:cancel) )
+		_then
+			
+			_if .menu_items[:radio_gp2].value = "start"
+			_then
+				.engine.compress_online_start(.menu_items[:src_path].value, .menu_items[:dest_path].value, _self)
+				
+			_elif .menu_items[:radio_gp2].value = "iterative"
+			_then
+				
+				.engine.compress_online_iterative(.menu_items[:src_path].value, .menu_items[:dest_path].value, _self)
+			_else
+				
+				.engine.compress_online_final(.menu_items[:src_path].value, .menu_items[:dest_path].value, _self)
+				
+			_endif
+			
+		_endif
+		
+	_endif
+	
+	_self.framework.set_status_info(_self.message(:ready))
+	.menu_items[:run_btn].enabled? << _true
+	.menu_items[:cnl_btn].enabled? << _true
+
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.interrupt()
+	##
+	## Description: This method is used to interrupt the process running.
+	## 
+	## Parameters : <None>
+	## 
+	## Returns    : <Nothing>
+	##
+
+	
+		_if .engine.run_status _is :running _orif
+		    .engine.run_status _is :ready 
+		_then
+			.engine.interrupt_engine()
+			
+			_self.framework.set_status_info(_self.message(:interrupted))
+			
+			.menu_items[:run_btn].enabled? << _true
+			
+			
+		_endif
+	
+	
+	
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.radio_btn_selection()
+	## 
+	## 
+	
+	
+	
+	_if .menu_items[:radio_gp].value = "hot"
+	_then
+		
+		.menu_items[:radio_cont].enabled? << _false
+		
+		
+	_else
+		.menu_items[:radio_cont].enabled? << _true
+		
+	_endif
+	
+	
+	
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.note_change(who,what,data)
+	## 
+	##
+		
+		_if _not (who = .engine)
+		_then
+			_return
+		_endif
+		
+		_if what _is :status
+		_then
+			_self.framework.set_status_info(data)
+			
+		_elif what _is :completed
+		_then
+			_self.framework.set_status_info(_self.message(:completed))
+			
+			
+			.menu_items[:run_btn].enabled? << _true
+			
+		_elif what _is :error
+		_then
+			
+		
+			.menu_items[:run_btn].enabled? << _true
+			
+			_self.show_message(data)
+
+			_self.framework.set_status_info(_self.message(:error_occurred))
+		
+		_endif
+	
+_endmethod
+$
+
+
+_pragma(classify_level=basic, topic={tpsodl_db_compression_gui_plugin})
+_method tpsodl_db_compression_gui_plugin.help()
+	## 
+	## 
+
+	_local l_f_path << "D:\tp_cstm_product\documents"
+	_if _not (system.file_exists? (l_f_path))
+	_then 	
+		system.mkdir(l_f_path)
+	
+	_endif
+
+	_local dir << system.getenv("")
+	_local dialog << file_dialog.new(_self, :path_selected|()|, _unset,:directory, l_f_path)
+	dialog.filter << {"docx","DOCX"}
+	dialog.activate()
+	
+_endmethod
+$

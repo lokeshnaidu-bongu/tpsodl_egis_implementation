@@ -1,0 +1,177 @@
+[Solution Engine]  2022-02-02 15:05:12,482 - bsfdeploy client version: 5.3.0
+[Solution Engine]  2022-02-02 15:05:12,516 - Timezone is: Asia/Kolkata
+[Solution Engine]  2022-02-02 15:05:12,516 - #################################################################################################
+[Solution Engine]  2022-02-02 15:05:12,516 -                                   SOLUTION DEPLOYMENT
+[Solution Engine]  2022-02-02 15:05:12,516 -                 input manifest: nexus_manifest.yaml
+[Solution Engine]  2022-02-02 15:05:12,516 -                         action: apply
+[Solution Engine]  2022-02-02 15:05:12,516 - #################################################################################################
+[Solution Engine]  2022-02-02 15:05:12,516 -  
+[Solution Engine]  2022-02-02 15:05:12,517 -  
+[nexus/bsf-nexus-k8s]  2022-02-02 15:05:12,860 - #################################################################################################
+[nexus/bsf-nexus-k8s]  2022-02-02 15:05:12,861 - Running PDI dtr.predix.io/pwr-smallworld/pdi-nexus:6.0.1, action: plan
+[Solution Engine]      2022-02-02 15:05:12,861 - Attempting to pull PDI: dtr.predix.io/pwr-smallworld/pdi-nexus:6.0.1 ...
+[Solution Engine]      2022-02-02 15:05:16,386 - Pull of PDI dtr.predix.io/pwr-smallworld/pdi-nexus:6.0.1 - was unsuccessful, using local image...
+[Solution Engine]      2022-02-02 15:05:16,681 - ************** PDI [nexus/bsf-nexus-k8s] output:
+[nexus/bsf-nexus-k8s]  valid
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:16,977 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:16,977 - #### Starting PDI, action : plan
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:17,023 -  ***** PLAN: REDEPLOY: product bsf-nexus-k8s on target nexus never deployed
+[Solution Engine]      2022-02-02 15:05:17,317 - ### Dependency Graph
+ + [nexus/bsf-nexus-k8s]
+[Solution Engine]      2022-02-02 15:05:17,317 - READY: nexus/bsf-nexus-k8s
+[Solution Engine]      2022-02-02 15:05:17,472 - STARTING: nexus/bsf-nexus-k8s
+[nexus/bsf-nexus-k8s]  2022-02-02 15:05:17,472 - #################################################################################################
+[nexus/bsf-nexus-k8s]  2022-02-02 15:05:17,473 - Running PDI dtr.predix.io/pwr-smallworld/pdi-nexus:6.0.1, action: apply
+[Solution Engine]      2022-02-02 15:05:17,473 - Attempting to pull PDI: dtr.predix.io/pwr-smallworld/pdi-nexus:6.0.1 ...
+[Solution Engine]      2022-02-02 15:05:20,851 - Pull of PDI dtr.predix.io/pwr-smallworld/pdi-nexus:6.0.1 - was unsuccessful, using local image...
+[Solution Engine]      2022-02-02 15:05:21,130 - ************** PDI [nexus/bsf-nexus-k8s] output:
+[nexus/bsf-nexus-k8s]  valid
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,317 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,317 - #### Starting PDI, action : apply
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,364 -  ***** PLAN: REDEPLOY: product bsf-nexus-k8s on target nexus never deployed
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,404 -  ***** COMMAND RUN: ./run.sh
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,404 -  ***** APPLY: Executing Deployment, PDA output:
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,639 - Release "bsf-nexus" does not exist. Installing it now.
+[nexus/bsf-nexus-k8s]  W0202 09:35:21.855098      19 warnings.go:70] networking.k8s.io/v1beta1 Ingress is deprecated in v1.19+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+[nexus/bsf-nexus-k8s]  W0202 09:35:21.903932      19 warnings.go:70] networking.k8s.io/v1beta1 Ingress is deprecated in v1.19+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,922 - NAME: bsf-nexus
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 - LAST DEPLOYED: Wed Feb  2 09:35:21 2022
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 - NAMESPACE: nexus
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 - STATUS: deployed
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 - REVISION: 1
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 - TEST SUITE: None
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 - NOTES:
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 - - To access Nexus:
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 -   NOTE: It may take a few minutes for the ingress load balancer to become available or the backends to become HEALTHY.
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 -         You can watch the status of the backends by running:
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 -         `kubectl get ingress -o jsonpath='{.items[*].metadata.annotations.ingress\.kubernetes\.io/backends}'`
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,923 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -   To access Nexus you can check:
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -    http://
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 - - Login with the following credentials
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -    username: admin
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -    password: admin123
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 - - Next steps in configuration
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -    Please follow the link below to the README for nexus configuration, usage, backups and DR info:
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,924 -    https://github.com/Oteemo/charts/tree/master/charts/sonatype-nexus#after-installing-the-chart
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:21,933 - Wait for bsf-nexus-sonatype-nexus  900 seconds
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:22,085 - Pod: bsf-nexus-sonatype-nexus 0/1 Pending (Timeout: 900)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:24,220 - Pod: bsf-nexus-sonatype-nexus 0/1 ContainerCreating (Timeout: 898)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:26,361 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 898)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:28,487 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 896)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:30,619 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 894)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:32,753 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 892)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:34,886 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 890)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:37,017 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 888)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:39,153 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 886)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:41,283 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 884)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:43,416 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 882)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:45,547 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 880)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:47,677 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 878)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:49,812 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 876)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:51,948 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 874)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:54,078 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 872)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:56,209 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 870)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:35:58,340 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 868)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:00,480 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 866)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:02,607 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 864)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:04,738 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 862)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:06,870 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 860)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:09,000 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 858)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:11,131 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 856)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:13,262 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 854)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:15,393 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 852)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:17,523 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 850)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:19,651 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 848)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:21,783 - Pod: bsf-nexus-sonatype-nexus 0/1 Running (Timeout: 846)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:23,919 - Pod: bsf-nexus-sonatype-nexus 1/1 Running (Timeout: 844)
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:23,919 - Pod Running: bsf-nexus-sonatype-nexus
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:23,922 - Waiting for port forwarding to begin. Timeout: 10
+[nexus/bsf-nexus-k8s]  wget: can't connect to remote host (127.0.0.1): Connection refused
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:24,011 - Forwarding from 127.0.0.1:7000 -> 8081
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:24,924 - Waiting for port forwarding to begin. Timeout: 9
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:24,924 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,018 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,043 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,341 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,372 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,420 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,488 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,538 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,578 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,622 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,713 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:25,735 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,018 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,153 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,219 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,277 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,339 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,407 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,475 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,542 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,616 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,699 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,782 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,879 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:26,973 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,056 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,138 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,174 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,211 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,254 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,275 - Handling connection for 7000
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,309 - INFO: get current repos
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: remove repos nuget-group
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: remove repos maven-snapshots
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: remove repos maven-central
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: remove repos nuget.org-proxy
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: remove repos maven-releases
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: remove repos nuget-hosted
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: remove repos maven-public
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: creating repo bsf-docker-local
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,310 - INFO: creating repo docker-dtr
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo docker-elastic
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo docker-hub
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo docker-k8s
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo docker-k8s-alt
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo docker-quay
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo predix-dtr
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo bsf-mvn-local
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo bsf-mvn-virtual-proxy
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo bsf-generic-local
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,311 - INFO: creating repo bsf-generic-virtual-proxy
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: creating repo bsf-rpm-local
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: creating repo bsf-rpm-virtual-proxy
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: create group repo bsf-docker-virtual
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: create group repo bsf-mvn-virtual
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: create group repo bsf-generic-virtual
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: create group repo bsf-rpm-virtual
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: updating anonymous access to  true
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,312 - INFO: updating password
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,322 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,322 - last mile Completed
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,322 -
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,383 - secret/nexus-config created
+[nexus/bsf-nexus-k8s]  2022-02-02 09:36:27,404 -  ***** APPLY: Apply completed successfully.
+[Solution Engine]      2022-02-02 15:06:28,537 - SUCCESS: nexus/bsf-nexus-k8s
+[Solution Engine]      2022-02-02 15:06:28,537 - *** Solution successfully deployed, deployed:
+[Solution Engine]      2022-02-02 15:06:28,537 - Deployment events: 
+  2022-02-02 15:05:17.317561 - READY: nexus/bsf-nexus-k8s
+  2022-02-02 15:05:17.472627 - STARTING: nexus/bsf-nexus-k8s
+  2022-02-02 15:06:28.537803 - SUCCESS: nexus/bsf-nexus-k8s
+
+[Solution Engine]      2022-02-02 15:06:28,538 - Deployment result:
+(s) - Succesfully deploy
+(f) - Failed
+(n) - Not started
+### Dependency Graph
+ + [nexus/bsf-nexus-k8s] (s)
+[Solution Engine]      2022-02-02 15:06:28,541 - Stop and remove the container f7d5a688dfc1785a775f086af5da2d6993d36899ca26bf983c777cc374bf8fbc(pdi_bsf-nexus_nexus_bsf-nexus-k8s_cwskc)
+[Solution Engine]      2022-02-02 15:06:28,551 - Stop and remove the container 5807af97c0639a10f97220ae3a0a04241fbbe64a82d93a00c8c868a29e528026(pdi_bsf-nexus_nexus_bsf-nexus-k8s_qozuj)
+[Solution Engine]      2022-02-02 15:06:28,566 - delete the solution volume volume_solution_bsf-nexus
+[Solution Engine]      2022-02-02 15:06:28,606 - Delete local volume volume_local_bsf-nexus_nexus_bsf-nexus-k8s

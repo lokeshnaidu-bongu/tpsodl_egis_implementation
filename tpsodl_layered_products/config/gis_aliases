@@ -1,0 +1,159 @@
+#
+# Smallworld Core Windows Platforms Standard Core Product Aliases
+#
+# The Smallworld Product's standard aliases file should not be edited
+# by hand.  A user can have personal aliases by placing them in a file
+# named `gis_aliases' in his/her home directory, but the alias names
+# must be chosen not to clash with those in the standard aliases file.
+#
+
+eo_suite:
+	title                   = Start Smallworld Electric Office Product Suite Closed
+	session                 = sw_electric_office:eo_suite_closed
+	SW_CONSTRUCTION_PACK_DIR= C:/Temp
+	SW_LAYOUT_DOCUMENT_DIR  = C:/Temp
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m	
+
+eo_suite_open:
+	title                   = Start Smallworld Electric Office Product Suite
+	session                 = sw_electric_office:eo_suite_open
+	SW_ACE_DB_DIR           = %SMALLWORLD_GIS%/../electric_office/example_db/ds/ds_admin
+	SW_CONSTRUCTION_PACK_DIR= C:/Temp
+	SW_LAYOUT_DOCUMENT_DIR  = C:/Temp
+	splash_screen           = %SMALLWORLD_GIS%/../electric_office/resources/base/bitmaps/smallworld_electric_splash.png
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+tp_emacs:
+    EMACSROOT = %SMALLWORLD_GIS%\..\emacs
+    title = TPSODL EO 5 eMacs
+    program = %EMACSROOT%\bin\runemacs.exe
+    icon_file = %EMACSROOT%\bin\runemacs.exe
+    log_file = nul:
+    product = emacs
+    EMACSLOADPATH = %EMACSROOT%\site-lisp;%EMACSROOT%\lisp;%EMACSROOT%\leim
+    PATH = %PATH%;%EMACSROOT%\bin
+    HOME = %HOMEDRIVE%%HOMEPATH%
+tp_open_emacs:
+	EMACSROOT		= %SMALLWORLD_GIS%\..\emacs
+	title			= CSPDCL EO 5 eMacs
+	program			= %EMACSROOT%\bin\runemacs.exe
+	icon_file		= %EMACSROOT%\bin\runemacs.exe
+	log_file		= nul:
+	product			= emacs
+	GIS_COMMAND		= %SMALLWORLD_GIS%\bin\x86\runalias.exe -a %TP_CUSTOM_CONFIG_DIR%gis_aliases tp_custom_open -cli
+	EMACSLOADPATH	= %EMACSROOT%\site-lisp;%EMACSROOT%\lisp;%EMACSROOT%\leim
+	PATH			= %PATH%;%EMACSROOT%\bin
+	HOME			= %HOMEDRIVE%%HOMEPATH%
+
+eo:
+	title                   = Start Smallworld Electric Office Closed
+	session                 = sw_electric_office:eo_closed
+	SW_CONSTRUCTION_PACK_DIR= C:/Temp
+	#SW_ACE_DB_DIR		  =D:\gis_db\ds_admin
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+eo_open:
+	title                   = Start Smallworld Electric Office Application
+	session                 = sw_electric_office:eo_open
+	SW_ACE_DB_DIR           = \\192.168.200.43\f$\gis_live_db\ds_admin
+	#SW_ACE_DB_DIR           = %SMALLWORLD_GIS%/../electric_office/example_db/ds/ds_admin
+	SW_CONSTRUCTION_PACK_DIR= C:/Temp
+	splash_screen           = %SMALLWORLD_GIS%/../electric_office/resources/base/bitmaps/smallworld_electric_splash.png
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+	
+tp_open:
+	title                   = Start Smallworld Electric Office Application
+	session                 = tpsodl_layered_products:tp_open
+	#SW_ACE_DB_DIR           = %SMALLWORLD_GIS%/../electric_office/example_db/ds/ds_admin
+	SW_CONSTRUCTION_PACK_DIR= C:/Temp
+	splash_screen           = %SMALLWORLD_GIS%/../electric_office/resources/base/bitmaps/smallworld_electric_splash.png
+	product                 = tpsodl_layered_products
+	args		        	= -Mextdir %TEMP% -cli -login root
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m	
+
+eo_plotting:
+	title                   = Start Smallworld Electric Office Plotting Closed
+	session                 = sw_electric_office:eo_plotting_closed
+	SW_LAYOUT_DOCUMENT_DIR  = C:/Temp
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+eo_plotting_open:
+	title                   = Start Smallworld Electric Office Plotting Application 
+	session                 = sw_electric_office:eo_plotting_open
+	SW_ACE_DB_DIR           = %SMALLWORLD_GIS%/../electric_office/example_db/ds/ds_admin
+	SW_LAYOUT_DOCUMENT_DIR  = C:/Temp
+	splash_screen           = %SMALLWORLD_GIS%/../electric_office/resources/base/bitmaps/smallworld_electric_splash.png
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+eo_pdf_generator:
+	title                   = Start Smallworld Electric Office PDF Generator Closed
+	session                 = sw_electric_office:eo_pdf_generator_closed
+	SW_LAYOUT_DOCUMENT_DIR  = C:/Temp
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+eo_pdf_generator_open:
+	title                   = Start Smallworld Electric Office PDF Generator Application
+	session                 = sw_electric_office:eo_pdf_generator_open
+	SW_ACE_DB_DIR           = %SMALLWORLD_GIS%/../electric_office/example_db/ds/ds_admin
+	SW_LAYOUT_DOCUMENT_DIR  = C:/Temp
+	splash_screen           = %SMALLWORLD_GIS%/../electric_office/resources/base/bitmaps/smallworld_electric_splash.png	
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+eo_cbyd:
+	title                   = Start Smallworld Electric Office Call Before You Dig Closed
+	session                 = sw_electric_office:eo_cbyd_closed
+	product                 = sw_electric_office
+	args		        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+eo_cbyd_open:
+	title                   = Start Smallworld Electric Office Call Before You Dig Application
+	session                 = sw_electric_office:eo_cbyd_open
+	SW_ACE_DB_DIR           = %SMALLWORLD_GIS%/../electric_office/example_db/ds/ds_admin
+	splash_screen           = %SMALLWORLD_GIS%/../electric_office/resources/base/bitmaps/smallworld_electric_splash.png
+	product                 = sw_electric_office
+	args	     	        = -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+
+eo_job_server:
+	title                   = Start Smallworld Electric Office Job Server
+	session                 = sw_electric_office:eo_job_server
+	product                 = sw_electric_office
+	args		        	= -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+tp_emacs:
+	EMACSROOT		= %SMALLWORLD_GIS%\..\emacs
+	title			= TPSODL EO 5 eMacs
+	program			= %EMACSROOT%\bin\runemacs.exe
+	icon_file		= %EMACSROOT%\bin\runemacs.exe
+	log_file		= nul:
+	product			= emacs
+	EMACSLOADPATH	= %EMACSROOT%\site-lisp;%EMACSROOT%\lisp;%EMACSROOT%\leim
+	PATH			= %PATH%;%EMACSROOT%\bin
+	HOME			= %HOMEDRIVE%%HOMEPATH%
+
+tp_custom_open:
+	title                   = Start Smallworld Electric Office Application
+	session					= tpsodl_layered_products:tp_open	
+	SW_CONSTRUCTION_PACK_DIR= C:/Temp		
+	splash_screen           = %TP_CUSTOM_CONFIG_DIR%\..\resources\base\bitmaps\tpsodl_smallworld_electric_splash.png
+	product                 = tpsodl_layered_products
+	args    				= -Mextdir %TEMP% -cli
+	SW_LAUNCH_JAVA_MEMORY   = -Xmx3000m
+	

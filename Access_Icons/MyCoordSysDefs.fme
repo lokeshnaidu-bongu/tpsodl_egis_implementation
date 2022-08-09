@@ -1,0 +1,280 @@
+# ------------------------------------------------------------------------------
+# My Coordinate System Definitions File
+# 
+# This is a file of user defined coordinate systems, datums, ellipsoids
+# and units.  Note that this file is no longer the preferred location to add
+# custom coordinate systems.  Instead, consider adding them to a Shared Resource
+# Directory (see Worbench Options to view/edit your directories) or a user area
+# like %USER%\Documents\FME\CoordinateSystems.
+# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------
+# The following commented-out definitions provide examples for new coordinate
+# systems, datums, ellipsoids, units, xforms, and paths.
+#
+# *** See LocalCoordSysDefs.fme for important naming guidelines ***
+# ------------------------------------------------------------------------------
+
+	
+COORDINATE_SYSTEM_DEF TPSODL-UTM-45N_MM\
+	DESC_NM "TPSODL Transverse Mercator UTM-45N, millimeter" \
+	PROJ TM\
+	PARM1 87\
+	ORG_LAT 0\
+	GROUP INDIA\
+	UNIT MILLIMETER\
+	DT_NAME WGS84\
+	SCL_RED 0.9996\
+	X_OFF 500000.0\
+	Y_OFF 0.0
+
+COORDINATE_SYSTEM_DEF TPSODL-UTM-45N_M\
+	DESC_NM "TPSODL Transverse Mercator UTM-45N, Meter" \
+	PROJ TM\
+	PARM1 87\
+	ORG_LAT 0\
+	GROUP INDIA\
+	UNIT METER\
+	DT_NAME WGS84\
+	SCL_RED 0.9996\
+	X_OFF 500000.0\
+	Y_OFF 0.0
+	
+#COORDINATE_SYSTEM_DEF US48-DUKE\
+#    DESC_NM  "NAD83 Albers Equal Area, 48 States, Duke Energy, US Foot " \
+#    PROJ AE\
+#    UNIT FOOT\
+#    DT_NAME NAD83\
+#    PARM1 31\
+#    PARM2 41\
+#    ORG_LAT 25\
+#    ORG_LNG -86\
+#    X_OFF  0.0\
+#    Y_OFF  0.0
+
+#COORDINATE_SYSTEM_DEF LL.GABON                       \
+#     DESC_NM "Lat/Long M'poraloko 94 Gabon (Shell) " \
+#     SOURCE "Shell Petroleum"                        \
+#     PROJ LL                                         \
+#     UNIT DEGREE                                     \
+#     DT_NAME Mporaloko94
+
+#COORDINATE_SYSTEM_DEF Miller_Cylindrical_160E         \
+#     DESC_NM   "World Miller Cylindrical 160 E WGS84" \
+#     SOURCE    "Safe Software"                        \
+#     DT_NAME   WGS84                                  \
+#     PROJ      MILLER                                 \
+#     GROUP     "WORLD"                                \
+#     UNIT      METER                                  \
+#     PARM1     160.000000                             \
+#     ORG_LAT   0.0                                    \
+#     X_OFF     0.0                                    \
+#     Y_OFF     0.0
+
+#COORDINATE_SYSTEM_DEF  Mercator_World_M_120W             \
+#   DESC_NM "World Mercator Meter, Central Meridian 120W" \  
+#   SOURCE "Safe Software"                                \
+#   DT_NAME WGS84                                         \
+#   PROJ MRCAT                                            \
+#   GROUP "WORLD"                                         \
+#   UNIT METER                                            \
+#   PARM1 -120.0
+
+#COORDINATE_SYSTEM_DEF NewBrunswick77 \
+#          GROUP CANADA \
+#        DESC_NM "New Brunswick, Canada, ATS77 Datum, Meters" \
+#         SOURCE "Service New Brunswick" \
+#        DT_NAME ATS77 \
+#           PROJ OSTERO \
+#           UNIT METER \
+#        SCL_RED 0.999911999997184 \
+#        ORG_LNG -66.50 \
+#        ORG_LAT 46.50 \
+#          X_OFF 300000.000 \
+#          Y_OFF 800000.000 \
+#           QUAD 1
+
+#COORDINATE_SYSTEM_DEF BRSO_BSP                 \
+#     DESC_NM "Brunei RectSkewOrthomo for BSP"  \
+#     SOURCE "Brunei Shell Petroleum (BSP)"     \
+#     PROJ RSKEW                                \
+#     UNIT METER                                \
+#     DT_NAME TIMBALI1948_BSP                   \
+#     PARM1 115.0000000                         \
+#     PARM2 4.0000000                           \
+#     PARM3 53.3158204722                       \
+#     SCL_RED 0.99984                           \
+#     X_OFF 0                                   \
+#     Y_OFF 0                        
+
+#COORDINATE_SYSTEM_DEF SWEREF_99_TM              \
+#        GROUP EUROPE                            \        
+#      DESC_NM "SWEREF 99 TM"                    \        
+#       SOURCE "National Land Survey of Sweden"  \        
+#      DT_NAME SWEREF99                          \        
+#         PROJ TM                                \        
+#         UNIT METER                             \        
+#        PARM1 15                                \        
+#      SCL_RED 0.9996                            \        
+#      ORG_LAT 0                                 \        
+#        X_OFF 500000                            \        
+#        Y_OFF 0                                          
+
+#COORDINATE_SYSTEM_DEF  Winkel_160E                        \
+#   DESC_NM  "World Winkel-Tripel, Central Meridian 160 E" \ 
+#   SOURCE   "Safe Software"                               \
+#   DT_NAME  WGS84                                         \
+#   PROJ     WINKEL                                        \
+#   GROUP    "WORLD"                                       \
+#   UNIT     METER                                         \
+#   PARM1    50.467                                        \
+#   ORG_LAT  0.0                                           \
+#   ORG_LNG  160.0                                         \
+#   X_OFF    0.0                                           \
+#   Y_OFF    0.0
+
+#DATUM_DEF TIMBALI1948_BSP                      \
+#   DESC_NM    "Timbalai 1948 for BSP"          \
+#   SOURCE     "Brunei Shell Petroleum (BSP)"   \
+#   ELLIPSOID  EVEREST1830M_BSP
+
+#XFORM_DEF TIMBALI1948_BSP_to_WGS84             \
+#   SRC_DTM    TIMBALI1948_BSP                  \
+#   TRG_DTM    WGS84                            \
+#   DESC_NM    "Timbalai 1948 for BSP"          \
+#   SOURCE     "Brunei Shell Petroleum (BSP)"   \
+#   GROUP      ASIA                             \
+#   INVERSE    Yes                              \
+#   MAX_ITR    8                                \
+#   CNVRG_VAL  1e-09                            \
+#   ERROR_VAL  1e-06                            \
+#   METHOD     GEOCENTRIC                       \
+#   DELTA_X    -678.000000                      \
+#   DELTA_Y    670.000000                       \
+#   DELTA_Z    -48.000000
+
+#DATUM_DEF Belgium1972                             \
+#   DESC_NM    "Belgium datum 1972"                \
+#   SOURCE     "Rockware.com"                      \
+#   ELLIPSOID  INTNL
+
+#XFORM_DEF Belgium1972_to_WGS84                    \
+#   SRC_DTM    Belgium1972                         \
+#   TRG_DTM    WGS84                               \
+#   DESC_NM    "Belgium datum 1972, 7 parameter"   \
+#   SOURCE     "Rockware.com"                      \
+#   GROUP      EUROPE                              \
+#   INVERSE    Yes                                 \
+#   MAX_ITR    8                                   \
+#   CNVRG_VAL  1e-09                               \
+#   ERROR_VAL  1e-06                               \
+#   METHOD     7PARAMETER                          \
+#   DELTA_X    -99.059                             \
+#   DELTA_Y    53.322                              \
+#   DELTA_Z    -112.486                            \
+#   BWSCALE    -1.0                                \
+#   ROT_X      -0.419                              \
+#   ROT_Y      0.830                               \
+#   ROT_Z      -1.885
+
+#DATUM_DEF PointeNoire95ELF               \
+#   DESC_NM    "Congo 1995 Pointe Noire"  \
+#   SOURCE     "Shell"                    \
+#   ELLIPSOID  CLRK-IGN
+
+#XFORM_DEF PointeNoire95ELF_to_WGS84      \
+#   SRC_DTM    PointeNoire95ELF           \
+#   TRG_DTM    WGS84                      \
+#   DESC_NM    "Congo 1995 Pointe Noire"  \
+#   SOURCE     "Shell"                    \
+#   GROUP      AFRICA                     \
+#   INVERSE    Yes                        \
+#   MAX_ITR    8                          \
+#   CNVRG_VAL  1e-09                      \
+#   ERROR_VAL  1e-06                      \
+#   METHOD     BURSAWOLF                  \
+#   DELTA_X    -178.26                    \
+#   DELTA_Y    -316.74                    \
+#   DELTA_Z    -131.49                    \
+#   ROT_X      5.278                      \
+#   ROT_Y      6.077                      \
+#   ROT_Z      10.979                     \
+#   BWSCALE    19.166
+
+#ELLIPSOID_DEF EVEREST1830M_BSP                \
+#     DESC_NM "Everest 1830 Modified for BSP"  \
+#     SOURCE "Brunei Shell Petroleum (BSP)"    \
+#     E_RAD 6377298.561                        \
+#     P_RAD 6356097.555
+
+#UNIT_DEF Indian_yard                    \
+#    UNIT_TYPE LENGTH                    \
+#    UNIT_ABBREVIATION Ind_yrd           \
+#    UNIT_FACTOR 0.91439523
+
+#XFORM_DEF ABIDJAN-87_to_WGS84                                 \
+#   SRC_DTM ABIDJAN-87                                         \
+#   TRG_DTM WGS84                                              \
+#   DESC_NM "Abidjan 1987, Ivory Coast (replaces Locodjo)"     \
+#    SOURCE "IGN Paris"                                        \
+#     GROUP AFRICA                                             \
+#   INVERSE Yes                                                \
+#   MAX_ITR 8                                                  \
+# CNVRG_VAL 1e-09                                              \
+# ERROR_VAL 1e-06                                              \
+#    METHOD MOLODENSKY                                         \
+#   DELTA_X -124.76                                            \
+#   DELTA_Y 53.0                                               \
+#   DELTA_Z 466.79
+
+#XFORM_DEF ASTRLA66-Grid_to_GDA94                                          \
+#   SRC_DTM ASTRLA66-Grid                                                  \
+#   TRG_DTM GDA94                                                          \
+#   DESC_NM "Australian Geodetic 1966, Australia (GDA Grid File)"          \
+#    SOURCE "Geocentric Datum of Australia Technical Manual"               \
+#     GROUP AUSNZ                                                          \
+#   INVERSE Yes                                                            \
+#   MAX_ITR 10                                                             \
+# CNVRG_VAL 1e-09                                                          \
+# ERROR_VAL 5e-08                                                          \
+#    METHOD GRID_INTERP                                                    \
+#     GRID_FILE NTv2,Fwd,.\GridData\Australia\A66_National_13_09_01.gsb    \
+#      FALLBACK ASTRLA66-7P_to_WGS84
+
+#PATH_DEF ASTRLA66-Grid_to_WGS84                                           \
+#  SRC_DTM ASTRLA66-Grid                                                   \
+#  TRG_DTM WGS84                                                           \
+#  DESC_NM "Australian Geodetic 1966, Australia (GDA Grid File)"           \
+#   SOURCE "Geocentric Datum of Australia Technical Manual"                \
+#    GROUP AUSNZ                                                           \
+#    XFORM ASTRLA66-Grid_to_GDA94,FWD                                      \
+#    XFORM GDA94_to_WGS84,FWD
+
+# Example of a Molodensky-Badekas transformation.
+#XFORM_DEF MacaoGrid_to_WGS84                                              \
+#   SRC_DTM MacaoGrid                                                      \
+#   TRG_DTM WGS84                                                          \
+#   DESC_NM "MacaoGrid to WGS84 (Macau)"                                   \
+#    SOURCE "Governo da Regiao Administrativa Especial de Macau"           \
+#     GROUP ASIA                                                           \
+#   INVERSE Yes                                                            \
+#   MAX_ITR 8                                                              \
+# CNVRG_VAL 1e-09                                                          \
+# ERROR_VAL 1e-06                                                          \
+#    METHOD MOLOBADEKAS                                                    \
+#   DELTA_X -202.865                                                       \
+#   DELTA_Y -303.990                                                       \
+#   DELTA_Z -155.873                                                       \
+#     ROT_X -34.079                                                        \
+#     ROT_Y 76.126                                                         \
+#     ROT_Z 32.660                                                         \
+#   BWSCALE 6.096                                                          \
+#   XLATE_X -2361554.788                                                   \
+#   XLATE_Y 5417536.177                                                    \
+#   XLATE_Z 2391608.926
+
+
+# ------------------
+# Examples end here.
+# ------------------
+

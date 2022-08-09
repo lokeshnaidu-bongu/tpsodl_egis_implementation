@@ -1,0 +1,64 @@
+{
+  "base": "server_config_solr.json",
+  "externalEndpoints": {
+    "outbound_echo": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 15050,
+        "path": "/mockEchoDataTypesSoap11Binding"
+      },
+      "wsdl": "./wsdl/EchoDataTypesService.wsdl",
+      "soap_version": "soap11"
+    },
+    "outbound_echo_soap12": {
+      "endpoint": {
+        "secure": true,
+        "host": "localhost",
+        "port": 15060,
+        "path": "/mockEchoDataTypesSoap12Binding"
+      },
+      "wsdl": "./wsdl/EchoDataTypesService.wsdl",
+      "soap_version": "soap12"
+    }
+  },
+  "extensions": {
+    "soap": {
+      "enabled": true,
+      "soap_version": "soap12",
+      "validate_soap": true,
+      "inbound_paths": {
+        "/gss/web/services/EchoDataTypesService/EchoWebServiceHttpSoap11Endpoint": {
+          "eis_path": "/gss/web/services/EchoDataTypesService",
+          "wsdl": "./wsdl/EchoDataTypesService.wsdl",
+          "soap_version": "soap11"
+        },
+        "/gss/web/services/EchoDataTypesService/EchoWebServiceHttpSoap12Endpoint": {
+          "eis_path": "/gss/web/services/EchoDataTypesService",
+          "wsdl": "./wsdl/EchoDataTypesService.wsdl"
+        },
+        "/gss/web/services/LocaleGreetingsSoap11Endpoint": {
+          "eis_path": "/gss/web/services/LocaleGreetingsSoap11Endpoint",
+          "wsdl": "./wsdl/LocaleGreetingsService.wsdl",
+          "soap_version": "soap11"
+        },
+        "/gss/web/services/AnyTypeXmlStreamExample/AnyTypeSoap11Endpoint": {
+          "eis_path": "/gss/web/services/AnyTypeXmlStreamExample",
+          "wsdl": "./wsdl/AnyTypeXmlStreamExample.wsdl",
+          "soap_version": "soap11"
+        },
+        "/gss/web/services/AnyTypeXmlStreamExample/AnyTypeSoap12Endpoint": {
+          "eis_path": "/gss/web/services/AnyTypeXmlStreamExample",
+          "wsdl": "./wsdl/AnyTypeXmlStreamExample.wsdl",
+          "soap_version": "soap12"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/gss/web/services/EchoDataTypesService": {
+      "security_roles": ["gss.guest"],
+      "auto_authenticate_client": "client_guest"
+    }
+  }
+}

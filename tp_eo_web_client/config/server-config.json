@@ -1,0 +1,9 @@
+{
+  "GSSServer"    : "/gss",
+  "GSSMapServer" : "/maps",
+  "nativeQuery"  : "/gss/gss/native?service=query",
+  "ogcQuery"     : "/gss/gssogc/ogc",
+  "wfsQuery"     : "/gss/gssogc/ogc?service=WFS",
+  "restServer"   : "/gss/gssrest/rest",
+  "solrQuery"    : "/asset"
+}

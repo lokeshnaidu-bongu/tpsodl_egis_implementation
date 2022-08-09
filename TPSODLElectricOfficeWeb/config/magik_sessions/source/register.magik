@@ -1,0 +1,182 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL EIS Implementation Project
+##
+## Created By:  Sai Kumar Veturi, TCS
+## Date: 21/12/2021
+##
+## Description:
+## Registering Custom Service Provider Sessions for TPSODL EO WEB
+########################################################################
+
+_package sw
+$
+
+!global_auto_declare?! << _true
+$
+
+_block
+	_local set_map_drawing_style_proc <<
+		_proc@set_map_drawing_style_proc()
+			# Set specific options for SOC and advanced rendering
+			# This gets called after the products have been added, but
+			# before the modules have been loaded...
+
+			smallworld_product.enable_gui_on_unix? << _true
+
+			_local b << !map_drawing_style!
+			b[:classic_drawing?]    << _false
+			b[:text_anti_alias?]    << _true
+			b[:anti_alias?]         << _true
+			b[:alpha_blend_washes?] << _true
+
+			system.report_vm_statistics(_true)
+		_endproc
+
+	_local open_database_proc <<
+		_proc@open_database_proc(mi)
+			# We want to start the application (or the application manager)
+			# after all the application procedures have run. So if found,
+			# move it to the end.
+			_for i,ap _over smallworld_product.application_procedures.fast_keys_and_elements()
+			_loop
+				_if ap.name _is :start_application_manager
+				_then
+					smallworld_product.application_procedures.remove_nth(i)
+					smallworld_product.add_startup_procedure(start_application_manager)
+					_LEAVE
+				_endif
+			_endloop
+			mi.open_socs()
+		_endproc
+
+	_local dsst_server_setup_build_proc <<
+		_proc@dsst_server_setup_build_proc(mi)
+			_local found_sam
+
+			smallworld_product.set_startup_option(:authorisation, :none)
+			_for i,ap _over smallworld_product.application_procedures.fast_keys_and_elements()
+			_loop
+				_if ap.name _is :start_application_manager
+				_then
+					found_sam << i
+					_LEAVE
+				_endif
+			_endloop
+			_if found_sam _isnt _unset
+			_then
+				smallworld_product.application_procedures.remove_nth(found_sam)
+			_endif
+		_endproc
+
+	
+	#
+	# Task Management for Electric Office Web
+	#
+	
+#	magik_session.register_new(
+#		"eo_web_tm_closed",
+#		:parent_session, "sw_electric_office:eo_closed",
+#		:add_products,
+#		{
+#			:electric_office_web,
+#			:geojson_sketching,
+#			:gss			
+#		},
+#		:load_modules,
+#		{
+#			:geojson_task_management_application,
+#			:eo_web_tm_application
+#		},
+#		:package, :sw
+#	)
+#
+#	magik_session.register_new(
+#		"eo_web_tm_open",
+#		:parent_session, "eo_web_tm_closed",
+#		:package, :sw,
+#		:startup_proc, :startup_proc_no_cli,
+#		:soc_names, { :electric_dm, :design_config },
+#		:open_database_proc, open_database_proc,
+#		:startup_options,
+#		{
+#			#:authorisation, :singleuser,
+#			:ds_environment_options,
+#			{
+#				:nslots, 10000,
+#				:npcls,  65536
+#			}
+#		}
+#	)
+#
+#	magik_session.register_new(
+#		"eo_web_tm_dsst_server",
+#		:parent_session, "sw_electric_office:eo_closed",
+#		:add_products,
+#		{
+#			:electric_office_web,
+#			:gss,
+#			:geojson_sketching
+#		},
+#		:load_modules,
+#		{
+#			:geojson_task_management_application
+#		},
+#		:soc_names, { :electric_dm },
+#		:pre_build_proc, dsst_server_setup_build_proc,
+#		:package, :sw,
+#		:open_database_proc, open_database_proc,
+#		:startup_proc, :startup_proc_no_cli,
+#		:startup_options,
+#		{
+#			#:authorisation, :singleuser
+#		}
+#	)
+
+	#
+	# TPSODL Electric Office Web using Vert.X
+	#	
+	magik_session.register_new(
+		"tpsodl_eo_web_vertx_closed",
+		:parent_session, "electric_office_web:eo_web_vertx_closed",
+		:pre_build_proc, set_map_drawing_style_proc,
+		:add_products,
+		{
+			:sw_land_office,
+			:tpsodl_layered_products
+		},
+		:optional_products,
+		{
+			
+		},
+		:load_modules,
+		{
+			:cs_land,
+			:tpsodl_eo_web_vertx_server_application
+			
+		},
+		:package, :sw
+	)
+
+	magik_session.register_new(
+		"tpsodl_eo_web_vertx_open",
+		:parent_session, "tpsodl_eo_web_vertx_closed",
+		:pre_build_proc, set_map_drawing_style_proc,
+		:package, :sw,
+		:startup_proc, :startup_proc_no_cli,
+		:soc_names, { :electric_dm, :design_config, :cs_config },
+		:open_database_proc, open_database_proc,
+		:startup_options,
+		{
+			:authorisation, :none,
+			:ds_environment_options,
+			{
+				:nslots, 10000,
+				:npcls,  65536
+			}
+		}
+	)
+
+_endblock
+$

@@ -1,0 +1,17 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Circuit Breaker	10
+Elbow	20
+Fuse	30
+Link	100
+Load Break Switch	40
+Network Protector	110
+Open Point	50
+Recloser	60
+Sectionalizer	70
+Side Break Switch	80
+Switch	90

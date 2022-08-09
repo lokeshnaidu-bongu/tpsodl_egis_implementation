@@ -1,0 +1,41 @@
+#% text_encoding = iso8859_1
+_package user
+
+_block 
+	_local remove_applications << equality_set.new_with(
+						  :dm_cu_user_application,
+						  :dm_cu_admin_application,
+						  :config,
+						  :sweo_dm_user,
+						  :sweo_wm_user )
+
+	_for an_application _over smallworld_product.application_definitions.elements()
+	_loop
+		_if remove_applications.includes?(an_application.application_name)
+		_then
+			
+			smallworld_product.application_definitions.remove(an_application)
+		_endif 
+	_endloop
+
+	smallworld_product.changed(:application_definitions)
+
+_endblock 
+$
+
+smallworld_product.register_application( :tp_eo_application,
+					 :tp_eo_application,
+					 :resource_module_name, :tp_eo_application,
+					 :description, "TPSODL Smallworld Electric Office application",
+					 :dm_application?, _true,
+					 :html_help_file_name, "Default.htm",
+					 :html_help_resource_module_name, :sweo_dm_user_application,
+					 :default_application_coordinate_system_name, :MILLER,
+					 :application_coordinate_system_unit,:mm,
+					 :soc_name, :electric_dm,
+					 :ace_name, :|EO| )
+
+$
+
+# Register this a a known office application
+gis_program_manager.known_office_applications[:electric].add( :tp_eo_application )

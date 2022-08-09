@@ -1,0 +1,40 @@
+#for liner object
+_block
+a_collection   << gis_program_manager.databases[:electric].collection(:eo_cable_segment_inst)
+l_sector << sector.new()
+a_coord1<<smallworld_product.application(:sweo_dm_user).plugin(:maps).current_trail.geometry.an_element()[1]
+l_sector.add(a_coord1)
+a_coord2<<smallworld_product.application(:sweo_dm_user).plugin(:maps).current_trail.geometry.an_element()[2]
+l_sector.add(a_coord2)
+sw_geom<<pseudo_chain.new_with(l_sector)
+sw_geom.world << a_collection.source_view.world
+prop_isolating << property_list.new_with(:network_type,"MV",:status,"Existing",:owner_type,"Company Owned",:owner_name,"GE West",:mounting,"Underground",:route,sw_geom)
+rt << record_transaction.new_insert(a_collection,prop_isolating)
+_local l_rec_trans << rt.run()
+_endblock
+
+
+#for Point object
+_block
+a_collection << gis_program_manager.databases[:electric].collection(:ed_pole)
+ _local sw_geom
+#a_coord<<coordinate.new(x_coord,y_coord)
+a_cord<<smallworld_product.application(:sweo_dm_user).plugin(:maps).current_trail.a_coord()
+sw_geom<<pseudo_point.new_with(a_cord)
+sw_geom.world << a_collection.source_view.world
+prop_isolating <<property_list.new_with(:status,"Existing",:owner_type,"Company Owned",:owner_name,"Electric Utility",:strength,"",:treatment,"Creosote",:location,sw_geom)
+rt << record_transaction.new_insert(a_collection,prop_isolating)
+_local l_rec_trans << rt.run()
+_endblock
+
+
+#for Polygon object
+_block
+a_collection << gis_program_manager.databases[:electric].collection(:sub_substation)
+l_sector << smallworld_product.application(:sweo_dm_user).plugin(:maps).current_map.trail.geometry
+sw_geom<<pseudo_area.new_with(l_sector)
+sw_geom.world << a_collection.source_view.world
+prop_isolating << property_list.new_with(:status,"Existing",:owner_type,"Company Owned",:owner_name,"Electric Utility",:extent,sw_geom)
+rt << record_transaction.new_insert(a_collection,prop_isolating)
+_local l_rec_trans << rt.run()
+_endblock

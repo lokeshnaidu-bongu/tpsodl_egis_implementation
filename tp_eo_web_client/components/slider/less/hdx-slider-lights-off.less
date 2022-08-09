@@ -1,0 +1,17 @@
+@import "hdx-slider.less";
+@import (reference) "hdx-variables-lights-off.less";
+@import "ge-bootstrap/less/hdx-bootstrap-lights-off.less";
+  .slider
+  {
+  
+  .slider-button button:hover {
+	background: @offBlack;
+	}
+	
+  .slider-button button:active,
+  .slider-button button.active,
+  .slider.active .thumb {
+    #gradient > .vertical(@blue, darken(@blue, 11.5%));
+     
+  }
+ }

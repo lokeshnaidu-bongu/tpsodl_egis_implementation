@@ -1,0 +1,133 @@
+//--------------------
+// HDS VARIABLES
+//--------------------
+//
+// All variables in this file overwrite existing Brandkit
+// LESS variables. This file only contains variables which
+// are being overwritten to comply with the HDS aesthetic.
+//
+
+
+@import "hdx-variables.less";
+
+
+// Monochrome Palette
+// -------------------------
+@black:           					#000;
+@offBlack:							#1d1d1d;
+@grayDarkest:     					#2B2B2B;
+@grayDarker:      					#727272; //changed from #333333 during HFVT testing for 1.0
+@grayDark:        					#8E8E8E;
+@gray:            					#acacac;
+@grayLight:       					#b6b6b6;
+@grayLighter:     					#cacaca;
+@grayLightest:    					#dddddd;
+@offWhite:        					#f3f3f3;
+@white:           					#fff;
+
+
+// Accent Palette
+// -------------------------
+@cyan: 								#6092CC;
+@greenLight:						#DAEFAC;
+@orangeDark:      					#BA6400;
+@purpleLight:						#808AC4;
+@blueLight:							#5F92CC;
+@blueDark:							#224A7E;
+@blue:            					#3b73b9;
+@teal:                              #599B7B;
+
+// Scaffolding
+// -------------------------
+@bodyBackground:        			@black;
+@textColor:             			@grayLightest;
+@textColorMuted:                	@grayLighter;
+@borderColor:						@grayDarker;
+
+
+// Links
+// -------------------------
+@linkColor:             			@blueLight;
+@linkColorHover:        			@blueLight;
+
+
+//bootstrap 3 spe3cific change. Overide variabel names here till we agree to a naming convention.
+@link-color:            @linkColor;
+@link-hover-color:      @linkColorHover;
+//Pagination
+//--------------------------
+@paginationActiveBackground:		  @blue;
+@paginationHoverColor:				 @grayLight;
+
+// Tables
+// -------------------------
+@tableBackgroundAccent:             #333333;
+@tableBackgroundHover:              #112034;
+@tableBackgroundSelected:           #90d7ed;
+@tableBorder:                       @grayDarker;
+@tableHeaderBkgndGray:				#333333;
+@datagridBackground:                @offBlack;
+@datatableBackgroundAccent:         #1E4268;
+
+//Bootstrap-3 specfic changes.
+@table-bg-accent:                   @tableBackgroundAccent;
+@table-bg-hover:                    @tableBackgroundHover;
+@table-border-color:				@tableBorder;
+ 
+// Buttons
+// -------------------------
+@btnBackground: 					@grayDarkest;
+@btnBorder:							@grayDarker;
+@btnHoverBackground:				lighten(@black,11.5%);
+@btnIconColor:                      @grayDark;
+
+
+// Forms
+// -------------------------
+@inputBackground:               	@black;
+@inputBorder:                   	@grayDarker;
+@inputDisabledBackground:       	@grayDarkest;
+//BS3 changes.
+@input-bg-disabled :				@black;
+@inputDisabledText: 				@grayDark;
+
+
+// Dropdowns
+// -------------------------
+@dropdownBackground:            	@black;
+
+
+// Sparkline colors
+// -------------------------
+@normalA:           				#42BBE3;//sparkline blue
+@normalB:           				#76B900;//sparkline green
+@normalALight: 						#42BBE3;
+@normalBLight: 						#DAEFAC;
+@normalCLight: 						#D0D9FF;
+@attentionA:                        #FFDE32;
+@attentionALight: 					#FFFFBF;
+@warningALight: 					#F8D599;
+@criticalALight: 					#F7A39C;
+
+//declarative-visualizations
+//------------------------------
+@BarLightsOffGray:	@grayDarker;
+
+//slider
+//------------------------------
+@innerBackgroundColor: #2b2b2b;
+
+//timepicker
+//-----------------------------
+@timepickerBackground : @tableBackgroundAccent;
+@timepickerBorder :     #2a2a2a;
+@timepickerFocusedBorder: #0098d6;
+
+//For labels, badges and alerts
+@importantBackground : #e22b1c;
+
+//*Override used in lights off mode only.
+@mega-btn-bkg-color: #272727;
+
+// overriding bootstrap pagination border  DE589
+@pagination-disabled-border: none;

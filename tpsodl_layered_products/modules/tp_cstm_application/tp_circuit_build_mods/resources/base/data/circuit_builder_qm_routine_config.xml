@@ -1,0 +1,33 @@
+<!--
+Configures quality check routines for circuit_builder_dialog.
+Routines here correspond to circuit_validation group as configured in 
+sweo_base_user_application\resources\base\data\qm_routine_config.xml.
+-->
+
+<config>
+
+  <group name="circuit_build">
+	<routine name="eo_ckt_src_stpr_check_routine"/>
+	<routine name="eo_circuit_builder_routine"/>
+  </group>
+  
+  <group name="post_circuit_build">
+	<routine name="eo_radial_flow_direction_setter_routine"/>
+	<!--Removed this quality check as this is updating wrong voltage levels to cspdcl data 
+	<routine name="eo_voltage_setter_routine"/>-->
+	<routine name="eo_network_loops_check_routine"/>
+	<routine name="eo_unfed_network_routine"/>
+<!--  Following routine was deliberately excluded 
+  <routine name="eo_operational_group_qm_routine"/>    -->
+	<routine name="eo_transformer_association_check_routine"/>
+	<routine name="eo_hypernode_annotation_update_routine"/>
+  </group>
+
+  <activity name="circuit_build" groups="circuit_build">
+  	<source class_name="eo_circuit_builder_dialog_source"/>
+  </activity>
+
+  <activity name="post_circuit_build" groups="post_circuit_build">
+  	<source class_name="eo_qm_circuit_source"/>
+  </activity>
+</config>

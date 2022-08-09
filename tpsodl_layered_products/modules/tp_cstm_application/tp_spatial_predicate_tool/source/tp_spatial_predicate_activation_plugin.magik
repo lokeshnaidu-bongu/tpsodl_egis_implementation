@@ -1,0 +1,85 @@
+################################################################################
+#
+#           Product: tp EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 18-02-2022
+# Creator Name       : S. Haritha Rani, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+################################################################################
+_package user
+$
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+_pragma(classify_level=basic)
+def_slotted_exemplar(:tp_spatial_predicate_activation_plugin,
+	{
+		{:a_fw, _unset}
+	},
+	:plugin )
+$
+#-------------------------------------------------------------------------------
+# Method init()
+#-------------------------------------------------------------------------------
+_pragma(classify_level=basic)
+_method tp_spatial_predicate_activation_plugin.init(f, args )
+	## 
+	## 
+	_super.init(f, args)
+	>> _self
+_endmethod
+$
+#-------------------------------------------------------------------------------
+# Method init_actions()
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic)
+_method tp_spatial_predicate_activation_plugin.init_actions()
+	##
+	##	
+	##
+	
+	_self.add_action(
+		sw_action.new(
+			:activate_spatial_predicate_tool,
+			:caption,         _self.message(:spatial_predicate_tool_caption),
+			:short_help_text, _self.message(:short_help_text),
+			:engine,          _self,
+		
+			:action_message,  :|activate_spatial_predicate_tool()|))
+_endmethod
+$
+#-------------------------------------------------------------------------------
+# Method activate_spatial_predicate_tool()
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic)
+_method tp_spatial_predicate_activation_plugin.activate_spatial_predicate_tool()
+	## 
+	## 
+	_if ( .a_fw << _self.get_dialog(:tp_spatial_predicate_tool)) _is _unset
+	_then 
+		.a_fw << tp_spatial_predicate_framework.new(:tp_spatial_predicate_tool,
+							    _self,
+							    :resource_module_name,_self.module_name,
+							    :config_definition_file_name, "config.xml",
+							    :gui_definition_file_name, "gui.xml",
+							    :title,"Spatial Query Tool",
+							    :maximizable?,_false,
+							    :minimizable?,_true,
+							    :resizable?,_false)
+		
+		_self.cache_dialog( :tp_spatial_predicate_tool, .a_fw )
+	_endif
+	.a_fw.activate()
+	
+_endmethod
+$

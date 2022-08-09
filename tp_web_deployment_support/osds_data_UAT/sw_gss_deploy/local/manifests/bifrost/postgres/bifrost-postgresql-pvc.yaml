@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-storage-class-bifrost-postgres-gss-prod-pvc
+  namespace: gss-prod
+spec:
+  storageClassName: nfs-storage-class
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

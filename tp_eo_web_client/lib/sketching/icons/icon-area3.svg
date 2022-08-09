@@ -1,0 +1,9 @@
+<?xml version='1.0' standalone='no'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg  class="control-icon" width='96px' height='96px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink= 'http://www.w3.org/1999/xlink'>
+<g id="ico_x5F_singlepointroi_x5F_sm" style="stroke-width:3;stroke:black">
+  <path
+  style='fill:{{fill}}; fill-opacity:0.4; stroke:{{color}}; stroke-width:{{strokeWidth}};stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none'
+  d="M 2.4957539,3.4634952 2.6230883,21.264842 21.748712,21.315779 21.774179,3.1833626 12.55517,11.281829 z" />
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<!-- each entry is per rwo type or ANY and contains list of areas rwo types -->
+	<areas_per_rwo>
+		<rwo_areas rwo_name="any" areas_names="co_easement_extent, eo_service_area, eo_map_grid" />
+		<rwo_areas rwo_name="ed_pole" areas_names="eo_crew_area" />
+		<rwo_areas rwo_name="sub_substation" areas_names="eo_crew_area" />
+	</areas_per_rwo>
+
+	<!-- each entry with list of areas returned for given map coordinate -->
+	<areas_for_coordinate>
+		<world_coord_areas world_name="swrefVworldVdatasetZelectricVuniverseZ0VworldZ0"
+			areas_names="co_easement_extent, eo_service_area, eo_crew_area, eo_service_territory, eo_land_management_area, eo_circuit_extent" />
+		<world_coord_areas world_name="swrefVworldVdatasetZdesign_adminVuniverseZ0VworldZ0"
+			areas_names="swg_dsn_project_area" />
+	</areas_for_coordinate>
+ 
+	<!-- each entry with list of installations returned for given map coordinate and optionally back stop value for
+	search radius expressed in a world units-->
+	<nearest_installations>
+		<world_nearest_installation 
+			world_name="swrefVworldVdatasetZelectricVuniverseZ0VworldZ0"
+			objects_names="eo_connector_point_inst, ed_structure_node, eo_cable_segment_inst, sub_substation"
+			max_search_radius="1000000"/> 
+	</nearest_installations>
+</config>

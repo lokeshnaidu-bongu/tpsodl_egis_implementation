@@ -1,0 +1,23 @@
+########################################################################
+#% text_encoding = iso8859_1 
+######################################################################## 
+## 
+## TPSODL Implementation Project 
+## 
+## Created By:  Sai Kumar Veturi
+## Date:  16-02-2022
+##
+## Description:
+## Registering Custom TPSODL EO WEB Vetx application and removing unnecessary applications
+########################################################################
+
+$
+_block
+	external_cache_layer_profile.defined_profiles["NV_WMTS_900913_512"] << external_cache_layer_profile.new(
+										       :projection, "EPSG:900913", 
+										       :nr_of_zoom_levels, 28,
+										       :pix_tile_size_x, 512, 
+										       :pix_tile_size_y, 512,
+										       :max_resolution, 156543.0339280410/2 )
+	
+_endblock

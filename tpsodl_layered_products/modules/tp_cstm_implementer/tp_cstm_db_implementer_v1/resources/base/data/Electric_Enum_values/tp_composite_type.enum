@@ -1,0 +1,22 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+EHV + LV	1
+EHV + HV	2
+HV + LV	3
+EHV + HV + LV	4
+HV + HV	5
+LV	6
+MV + LV	7
+HV + MV	8
+HV + MV + LV	9
+MV	10
+LV + LV	11
+MV + MV	12
+HV	13
+EHV	14
+EHV + HV + MV + LV	15
+EHV + HV + MV	16

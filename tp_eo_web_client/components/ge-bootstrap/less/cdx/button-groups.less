@@ -1,0 +1,18 @@
+// needed because spacing between buttons isn't consistent on IIDX
+// only btn-primary needs the spacing because it's all black unlike
+// the other buttons which have a border to separate them
+.btn-group > .btn {
+  margin-right: 2px;
+}
+
+// Create spacing between split buttons.
+.btn-group > .btn {
+  + .btn-primary,
+  + .btn-success,
+  + .btn-warning,
+  + .btn-info,
+  + .btn-danger {
+    margin-left: -2px;
+    margin-right: 2px;
+  }
+}

@@ -1,0 +1,21 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Combustion Turbine	10
+Customer	15
+Customer/Dist	20
+Customer/Hydro	25
+Distribution	30
+Fee Lot	35
+Fossil	40
+Hydro	45
+Interchange	50
+Microwave Station	55
+N/A	997
+Nuclear	60
+Other	65
+Tap/Transmission	70
+Transmission	80

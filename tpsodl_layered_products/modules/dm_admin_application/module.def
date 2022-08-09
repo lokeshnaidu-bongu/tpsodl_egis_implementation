@@ -1,0 +1,12 @@
+dm_admin_application	1
+
+description
+	Design Manager Admin Application
+end
+
+requires
+	admin_application
+	dm_server_api 1
+	swg_dm_plugin
+	dpc_manager
+end

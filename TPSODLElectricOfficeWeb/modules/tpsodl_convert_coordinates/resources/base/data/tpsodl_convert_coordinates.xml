@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service>
+  <!-- Definitions for the methods -->
+  <method name="transform_coordinate">
+    <request>
+      <element name="source_cs" type="string" required="false">
+      </element>
+      <element name="target_cs" type="string" required="false">
+      </element>
+      <element name="coord" type="list" required="false">
+      </element>
+    </request>
+    <response>
+      <element name="coord" type="list" required="true" >
+	<comment>Transformed coordinate</comment>
+      </element>
+    </response>
+  </method>
+</service>

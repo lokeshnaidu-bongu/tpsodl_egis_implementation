@@ -1,0 +1,100 @@
+
+{
+    "gss": [
+        "alpine",
+        "alpine-curl",
+        "nginx-ingress-controller",
+        "cf-uaac",
+        "sw-uaac",
+        "sws-uaa",
+        "uaa-yml-add-keys",
+        "bifrost",
+        "postgres",
+        "rabbitmq",
+        "elasticsearch",
+        "fluent-bit",
+        "kibana",
+        "es-curator",
+        "gss-base",
+        "gss-basic",
+        "eks-gss-base-pdi",
+        "eks-gss-basic-pdi",
+        "sw-solr",
+        "gdalserver",
+        "pdi-local-provisioner",
+        "pdi-nfs-provisioner",
+        "pdi-nexus",
+        "pdi-ingress-controller",
+        "pdi-ingress-controller-eks",
+        "local-path-provisioner",
+        "nfs-subdir-external-provisioner",
+        "nexus",
+        "defaultbackend",
+        "webapps-base"
+    ],
+    "mew": [
+        "nv",
+        "network-viewer-client",
+        "eks-nv-pdi"
+    ],
+    "nig": [
+        "physical-browser-client",
+        "fault-locator-client",
+        "emaps-client",
+        "nig",
+        "nig-ftth",
+        "nig-bearer",
+        "pni-job-server",
+        "eks-nig-pdi",
+        "eks-nig-bearer-pdi",
+        "eks-nig-ftth-pdi",
+        "job-server-pdi"
+    ],
+    "eo": [
+        "eo-web-client",
+        "eo-web",
+        "eo-job-server",
+        "gis-adapter",
+        "eks-eo-web-pdi",
+        "eks-gisa-pdi",
+        "job-server-pdi"
+    ],
+    "gas": [
+        "gdo-web",
+        "gto-web",
+        "eks-gdo-web-pdi",
+        "eks-gto-web-pdi"
+    ],
+    "me": [
+        "pnissm",
+        "eossm",
+        "gdossm",
+        "eks-pnissm-pdi",
+        "eks-eossm-pdi",
+        "eks-gdossm-pdi"
+    ],
+    "nu": [
+        "network-update-client",
+        "eks-pninu-pdi",
+        "pninu-pdi"
+    ],
+    "sbinw": [
+        "sbinw-base"
+    ],
+    "gss-custom-namespace-poc": [
+        "custom-namespace-poc-pdi",
+        "gss-custom-service"
+    ],
+    "swmfs": [
+        "swmfs",
+        "eks-swmfs-pdi"
+    ],
+    "nrmweb": [
+        "nrm-web",
+        "eks-nrm-web-pdi"
+    ],
+    "sts": [
+        "sts",
+        "sts-pdi"
+    ]
+} 

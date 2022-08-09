@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tpsodl-audit-bookmarks
+  namespace: gss-prod
+spec:
+  selector:
+    matchLabels:
+      app: tpsodl-audit-bookmarks
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tpsodl-audit-bookmarks
+    spec:
+      hostAliases:
+      - ip: "192.168.200.91"
+        hostnames:
+        - "dc-gisuat-webm1"
+      - ip: "192.168.200.86"
+        hostnames:
+        - "dc-gisuat-webw2"
+      - ip: "192.168.200.88"
+        hostnames:
+        - "dc-gisuat-webl2"
+      - ip: "192.168.200.43"
+        hostnames:
+        - "dc-gisdev-db02"
+        - "dc-gisdev-db02.tpsodlcorp.tpsodl.com"
+      imagePullSecrets:
+      - name: regsecret 
+      containers:
+      - name: tpsodl-audit-bookmarks
+        image: pull.dc-gisuat-webm1:30443/tpsodl_audit_bookmarks:SW528-PROD-4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9005
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tpsodl-audit-bookmarks
+  namespace: gss-prod
+spec:
+  selector:
+    app: tpsodl-audit-bookmarks
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 9005
+      targetPort: 9005
+      nodePort: 32060
+

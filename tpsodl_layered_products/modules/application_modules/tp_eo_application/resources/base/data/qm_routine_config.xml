@@ -1,0 +1,66 @@
+<!---
+Configures quality check routines for this application.
+
+Routine groups can be defined directly in this file using <group> elements.
+Routine groups defined elsewhere can be included in this configuration using <group_file> elements.
+Groups can be assigned to roles using <role> elements. 
+-->
+
+<config>
+
+	<group_file name="sweo_base_user_application.qm_routine_config"/>
+
+	<group name="eo_cost_object_checks">
+		<routine name="eo_cost_object_qm_routine"/>
+	</group>
+
+	<!-- examples of how to include groups from other configuration files 
+    <group_file name="quality_control.quality_checks_config"/>
+    <group_file name="land_qm_routines.quality_checks_config"/>
+    -->
+
+	<activity name="eo_qm_electrical_network" groups="circuit_validation,non_design_assurance_circuit_validation,transmission_circuit_validation,equipment_association,conductor_isolating_connectivity">
+		<source class_name="eo_qm_design_source"/>
+		<source class_name="eo_qm_circuit_source"/>
+		<source class_name="eo_qm_select_circuit_components_source"/>
+	</activity>
+
+	<activity name="eo_qm_ev_electrical_network" groups="ev_circuit_validation">
+		<source class_name="eo_qm_design_source"/>
+		<source class_name="eo_qm_circuit_source"/>
+	</activity>
+
+	<activity name="eo_qm_structural" groups="structural">
+		<source class_name="eo_qm_design_source"/>
+		<source class_name="qm_current_selection_source"/>
+		<source class_name="qm_within_trail_source"/>
+		<source class_name="qm_within_trail_visible_only_source"/>
+		<source class_name="qm_current_window_source"/>
+		<source class_name="qm_current_window_visible_only_source"/>
+	</activity>
+
+	<activity name="eo_qm_data_migration" groups="eo_data_integrity,general">
+		<source class_name="eo_qm_design_source"/>
+		<source class_name="qm_current_selection_source"/>
+	</activity>
+
+	<activity name="eo_qm_electrical_objects" groups="object_validation,eo_cost_object_checks">
+		<source class_name="eo_qm_design_source"/>
+		<source class_name="qm_current_selection_source"/>
+		<source class_name="eo_qm_circuit_source"/>
+		<source class_name="eo_qm_select_circuit_components_source"/>
+	</activity>
+
+	<activity name="eo_qm_design_assurance" groups="circuit_validation,equipment_association,conductor_isolating_connectivity,structural,eo_cost_object_checks">
+		<source class_name="eo_qm_design_source"/>
+	</activity>
+
+	<activity name="eo_qm_publish" groups="ev_circuit_validation,equipment_association,conductor_isolating_connectivity,structural">
+		<source class_name="eo_qm_design_source"/>
+	</activity>
+
+	<activity name="eo_qm_schematics" groups="schematics">
+		<source class_name="eo_qm_design_source"/>
+	</activity>
+
+</config>

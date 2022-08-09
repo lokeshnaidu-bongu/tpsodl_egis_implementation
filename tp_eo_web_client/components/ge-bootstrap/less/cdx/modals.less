@@ -1,0 +1,29 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "components/bootstrap/less/modals.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+// Modal
+.modal-dialog, .modal-content {
+	border-color: transparent;
+	.border-radius(0);
+}
+.modal-header {
+	background-color: @grayLightest;
+	.border-radius(0);
+}
+.modal-footer {
+	background-color: transparent;
+	border-top-color: @btnBorder;
+	.border-radius(0);
+}
+button.close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	outline: none;
+}

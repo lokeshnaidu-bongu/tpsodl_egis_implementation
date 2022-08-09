@@ -1,0 +1,40 @@
+.directional-pad
+{
+    .background
+    {
+        .circle,
+        .inner-circle
+        {
+            stroke: @grayDarker;
+            fill: @grayDarkest
+        }
+        
+        .line
+        {
+            stroke: @black;
+        }
+    }
+    
+    .button
+    {
+        .arrow
+        {
+            color: @blue;
+        }
+        
+        &:hover .border
+        {
+            fill: lighten(@black, 11.5);
+            stroke: @blue;
+        }
+        
+        &.pressed
+        {
+            .border
+            {
+                fill: darken(@blue, 11.5%);
+                stroke: darken(@blue, 11.5%);
+            }
+        }
+    }
+}

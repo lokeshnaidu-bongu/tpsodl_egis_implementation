@@ -1,0 +1,12 @@
+{
+  "base": "server_config_ssm.json",
+  "extensions": {
+    "tileCache": {
+      "enabled": true,
+      "useTileCache": true,
+      "rollforward": {
+        "invalidateDesigns": false
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+_package user
+$
+def_slotted_exemplar(:tpsodl_query_builder_framework, 
+	{ },
+	{:gui_framework}
+)
+$
+

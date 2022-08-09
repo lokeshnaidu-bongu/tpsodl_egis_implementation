@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:ns1="http://org.apache.axis2/xsd"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:ax21="http://util.java/xsd"
+                  xmlns:ns="http://echoDataTypes.webservice.gss"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://echoDataTypes.webservice.gss">
+  <wsdl:types>
+    <xs:schema xmlns:ax22="http://util.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://echoDataTypes.webservice.gss">
+      <xs:import namespace="http://util.java/xsd"/>
+      <xs:element name="localeGreeting">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="param0" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="localeGreetingResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="localeRequest">
+    <wsdl:part name="parameters" element="ns:localeGreeting"/>
+  </wsdl:message>
+  <wsdl:message name="localeResponse">
+    <wsdl:part name="parameters" element="ns:localeGreetingResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="LocaleGreetingPortType">
+    <wsdl:operation name="localeGreeting">
+      <wsdl:input message="ns:localeRequest" wsaw:Action="urn:localeGreeting"/>
+      <wsdl:output message="ns:localeResponse" wsaw:Action="urn:localeGreetingResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LocaleGreetingSoap11Binding" type="ns:LocaleGreetingPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="localeGreeting">
+      <soap:operation soapAction="urn:localeGreeting" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LocaleGreetingService">
+    <wsdl:port name="LocaleGreetingSoap11Endpoint" binding="ns:LocaleGreetingSoap11Binding">
+      <soap:address location="http://localhost:3001/gss/web/services/LocaleGreetingsSoap11Endpoint"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

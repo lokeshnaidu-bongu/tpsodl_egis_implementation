@@ -1,0 +1,18 @@
+#% text_encoding = iso8859_1
+##--------------------------------------------------------------
+##
+## 
+## Created By:  
+## Date: 
+## Description: EO application for TPSODL
+##
+##--------------------------------------------------------------
+_package user
+$
+
+_pragma(classify_level=advanced, topic={tp_eo_application})
+## Description: EO application for TPSODL
+##
+def_slotted_exemplar(:tp_eo_application, {
+		     }, @sw:sweo_base_user_application)
+$

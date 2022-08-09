@@ -1,0 +1,25 @@
+// Dependencies
+// --------------------------------------------------
+
+@import "bootstrap/less/code.less";
+
+
+// Bootstrap Overrides
+// --------------------------------------------------
+
+code,
+pre {
+	background-color: @offWhite;
+	border: 1px solid @grayLighter;
+	.border-radius(@baseBorderRadius);
+	font-size: @baseFontSize - 1;
+	//color: @code-color;
+}
+
+pre {
+  white-space: pre-wrap;
+  color: @grayDark;
+  code{
+  border: none;
+  }
+}

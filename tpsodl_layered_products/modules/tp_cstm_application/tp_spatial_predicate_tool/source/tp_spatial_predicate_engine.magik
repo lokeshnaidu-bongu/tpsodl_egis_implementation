@@ -1,0 +1,1825 @@
+
+################################################################################
+#
+#           Product: tp EIS Implementation Project
+#
+#-------------------------------------------------------------------------------
+# Creation Date      : 18-02-2022
+# Creator Name       : S. Haritha Rani, Arya Mukharjee, Sayan Roy, TCS
+# Version No.        : 1.0
+#
+
+# Major changes
+# =============
+# Date          Name               Change description
+# 
+#
+##################################################################################
+_package user
+$
+remex(:tp_spatial_predicate_engine)
+#-------------------------------------------------------------------------------
+# Exemplar definition
+#-------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+def_slotted_exemplar(:tp_spatial_predicate_engine,{
+	{:sweo_items, _unset}
+		     },
+		     :engine_model)
+$
+#-------------------------------------------------------------------------------
+# Slot Access
+#-------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+tp_spatial_predicate_engine.define_slot_access(
+	
+	:sweo_items,
+	:write,
+	:public
+			  )
+$
+#------------------------------------------------------------------------------
+# Shared Constant :log_path
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+tp_spatial_predicate_engine.define_shared_constant(:log_path,"D:",:public)
+$
+#------------------------------------------------------------------------------
+# Shared Constant :tp_obj_wise_geom_flds
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+tp_spatial_predicate_engine.define_shared_constant(:tp_obj_wise_geom_flds,
+	property_list.new_with(:sub_substation,:extent,
+			       :eo_isolating_eqpt_inst,:connector,
+			       :eo_connector_segment_inst,:route,
+			       :eo_meter,:location,
+			       :ed_pole,:location,
+			       :eo_cable_segment_inst,:route,
+			       :eo_connector_point_inst,:location,
+			       :eo_power_xfrmr_inst,:location,
+			       :tp_slum_area,:extent,
+			       :eo_service_point,:location,
+			       :eo_measuring_eqpt_inst,:source_location,
+			       :eo_protective_eqpt_inst,:location,
+			       :eo_light_relay,:location,
+			       :ed_pullbox,:location,
+			       :ed_switchgear,:location,
+			       :eo_energy_source,:location,
+			       :eo_light,:location,
+			       :eo_energy_storage_ins,:location,
+			       :ed_decorative_pole,:location,
+			       :ed_riser,:location,
+			       :ed_handhole,:location,
+			       :eo_comms_device,:location,
+			       :eo_regulating_eqpt_inst,:location,
+			       :eo_energy_consumer,:location,
+			       :ed_cabinet,:location,
+			       :tp_flood_map,:extent,
+			       :lnd_street_segment,:route,
+			       :tp_transit_area,:extent,
+			       :tp_sub_locality,:extent,
+			       :tp_non_builtup,:extent,
+			       :tp_footpath,:extent,
+			       :tp_builtup,:extent,
+			       :lnd_township,:extent,
+			       :tp_tp_building,:extent,
+			       :lnd_country,:extent,
+			       :lnd_address,:location,
+			       :lnd_zip,:extent,
+			       :tp_utility_points,:location,
+			       :lnd_building,:extent,
+			       :lnd_land_management_area,:extent,
+			       :tp_tp_boundary,:extent,
+			       :tp_obstacle,:extent,
+			       :lnd_urban_area,:extent,
+			       :lnd_natural_region,:extent,
+			       :tp_cluster_of_trees,:extent,
+			       :lnd_place,:extent,
+			       :tp_telecom,:location,
+			       :tp_environment,:extent,
+			       :lnd_service_area,:extent,
+			       :tp_division,:extent,
+			       :tp_vehicle_demarcated_boundary,:extent,
+			       :tp_municipal_ward_boundary,:extent,
+			       :lnd_building_floor,:location,
+			       :lnd_land_use_area,:extent,
+			       :tp_tree,:location,
+			       :lnd_service_territory,:extent,
+			       :tp_estate_land_type,:extent,
+			       :tp_village_boundary,:extent,
+			       :lnd_wetland,:extent,
+			       :lnd_state,:extent,
+			       :tp_green,:extent,
+			       :tp_right_of_way,:extent,
+			       :lnd_landmark,:location,
+			       :lnd_railroad,:route,
+			       :tp_circle,:extent,
+			       :lnd_section,:extent,
+			       :tp_shop,:extent,
+			       :lnd_subdivision,:extent,
+			       :lnd_tier,:extent,
+			       :tp_locality_boundary,:extent
+		      )
+	,:public)
+$
+#-------------------------------------------------------------------------------
+# Method : new()
+#-------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.new()
+	## 
+	##
+
+	#.sweo_items[:app] << smallworld_product.applications.an_element()
+	_return _clone.init()
+_endmethod
+$
+#-------------------------------------------------------------------------------
+# Method : init()
+#-------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.init()
+	## 
+	##
+	##
+	.sweo_items << property_list.new()
+	>> _self 
+_endmethod
+$
+#-------------------------------------------------------------------------------
+# Method : init()
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_collection_wise_report(items)
+	##
+	## 
+	##
+
+	.sweo_items << items
+	
+	_self.run_engine(_thisthread.background_priority,
+			 :int!get_collection_wise_report|()|)
+	
+_endmethod
+$
+#-------------------------------------------------------------------------------
+# Method : check_source_getter_type()
+#-------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.check_source_getter_type()
+	## 
+	##
+	
+	_local l_trl_area,l_geom_key,l_bds_area,l_pred,l_all_selected_objs
+	_if .sweo_items[:radio_gp].value _is :trail
+	_then
+		_if .sweo_items[:app] _isnt _unset
+		_then
+			_if _not (l_trail << .sweo_items[:app].plugin(:maps).current_map.trail).closed?
+			_then
+				_self.changed(:error_message,"Please place a Closed TRAIL on MAP")
+				_return _true
+			_else
+				
+				#l_trl_area << pseudo_area.new(l_trail.sectors)
+				#l_trl_area.world << .sweo_items[:electric_view].world
+
+				l_trl_area << pseudo_area.new_for_world(l_trail.sectors,.sweo_items[:electric_view].world)
+				
+				l_geom_key << _self.tp_obj_wise_geom_flds[.sweo_items[:source_object].an_element().source_collection.name]
+				_if (l_geom_key _is _unset)
+				_then
+					_if (l_geom_key << .sweo_items[:special_handled_collections][.sweo_items[:source_object].name]) _is _unset
+					_then
+						_self.changed(:error_message,"Unable to find the CS default geometry field for given Source collections")
+						_return _true 
+					_endif
+					
+				_endif 
+				l_pred << predicate.within(l_geom_key,l_trl_area)
+				.sweo_items[:all_source_object] << .sweo_items[:source_object].select(l_pred)
+				
+				_if .sweo_items[:all_source_object].size = 0
+				_then
+					_self.changed(:error_message,"No Source Object Found in Trail")
+					_return _true
+				_endif
+			_endif
+		_else
+			_self.changed(:error_message,"Application is not open")
+			_return _true
+		_endif
+		
+	_elif .sweo_items[:radio_gp].value _is :map_view
+	_then
+		
+		_if .sweo_items[:app] _isnt _unset
+		_then
+			l_bounds << .sweo_items[:app].plugin(:maps).current_map_view.current_view_bounds
+			l_bds_area << pseudo_area.new(l_bounds)
+			l_bds_area.world << .sweo_items[:electric_view].world
+			l_geom_key << _self.tp_obj_wise_geom_flds[.sweo_items[:source_object].an_element().source_collection.name]
+			_if l_geom_key _is _unset 
+			_then
+				_if (l_geom_key << .sweo_items[:special_handled_collections][.sweo_items[:source_object].name]) _is _unset
+				_then
+					_self.changed(:error_message,"Unable to find the CS default geometry field for given Source collections")
+					_return _true 
+				_endif
+			_endif 
+			l_pred << predicate.interacts(l_geom_key,l_bds_area)
+			.sweo_items[:all_source_object] << .sweo_items[:source_object].select(l_pred)
+			_if .sweo_items[:all_source_object].size = 0
+			_then
+				_self.changed(:error_message,"No Source Object Found in MAP_VIEW")
+				_return _true
+			_endif 
+		_else
+			_self.changed(:error_message,"Application is not open")
+			_return _true
+		_endif
+	_elif .sweo_items[:radio_gp].value _is :map_selection
+	_then
+		_if .sweo_items[:app] _isnt _unset
+		_then
+			l_all_selected_objs << .sweo_items[:app].plugin(:maps).current_map.current_selection			
+		
+			.sweo_items[:all_source_object_geom] << l_all_selected_objs.cs_get_unique_rwo_type(.sweo_items[:source_object].name)
+			.sweo_items[:all_source_object] << rwo_set.new()
+			
+			_for a_rec _over .sweo_items[:all_source_object_geom].fast_elements()
+			_loop
+				.sweo_items[:all_source_object].add(a_rec.rwo)
+			_endloop			
+			
+			_if .sweo_items[:all_source_object].size = 0
+			_then
+				_self.changed(:error_message,"No Source Object Found in MAP_Selection")
+				_return _true
+			_endif 
+		_else
+			_self.changed(:error_message,"Application is not open")
+			_return _true
+		_endif
+	_elif .sweo_items[:radio_gp].value _is :all
+	_then
+		
+		.sweo_items[:all_source_object] << .sweo_items[:source_object]
+		#.sweo_items[:all_source_object] << .sweo_items[:destination_objects]
+	_elif .sweo_items[:radio_gp].value _is :file
+	_then
+		_if .sweo_items[:source_selection_type].value = "Lat-Long"
+		_then					
+			_self.get_lat_long_values_from_file()						
+			_return _false 
+		_endif 
+		
+		_if _self.get_objects_from_fl()
+		_then
+			_return _true
+		_endif
+	_endif
+	
+	_return _false
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_objects_from_fl()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_objects_from_fl()
+	## 
+	##
+	_local l_fl,req_fld,l_fl_hdl,l_log_file_strm,l_log_dir
+	_protect
+		_if (l_fl << .sweo_items[:input_file_path]) _is _unset
+		_then
+			_self.changed(:error_message,"please select any file")
+			_return _true
+		_endif
+		(l_fl_name,l_ip_dir) << system.pathname_components(l_fl)
+		l_fl_name << l_fl_name.substitute_string(".","_")
+		l_log_dir << _self.log_path
+		
+		_if l_log_dir[l_log_dir.size] <> %\ _andif l_log_dir[l_log_dir.size] <> %/
+		_then
+			l_log_dir << write_string(l_log_dir,"\")
+		_endif
+		
+		_local l_dt_Frmt << date_time_format.new_with_properties(:date_format_string,"#d#m#Y#H#M#S")
+		_local l_log_ip_fl_name << write_string(l_log_dir,"Not_Found_",l_fl_name,"_",l_dt_Frmt.format(date_time.now()),".txt")
+		
+		l_log_file_strm << external_text_output_stream.new(l_log_ip_fl_name)
+		l_log_file_strm.write("Object Name,Field Name,Input Value",%newline)
+		l_fl_hdl << external_text_input_stream.new(l_fl)
+		_local a_ln << l_fl_hdl.get_line()
+		_local splt_val << a_ln.split_by(",",_true )
+		_local l_req_fld_ext_nm << a_ln.split_by(",")[1]
+		
+		_if (req_fld << .sweo_items[:source_object].field_for_external_name(l_req_fld_ext_nm)) _is _unset
+		_then
+			_self.changed(:error_message,"Unable to find field with external name ",l_req_fld_ext_nm)
+			_return _true
+		_endif
+
+		
+		_if splt_val.size > 1 _andif .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+		_then
+			_if (dst_fld << .sweo_items[:destination_object].field_for_external_name(splt_val[2])) _is _unset
+			_then
+				_self.changed(:error_message,"Unable to find field with external name ",splt_val[2])
+				_return _true
+			_endif
+		_endif
+		req_set << rwo_set.new()
+		dst_set << rwo_set.new()
+		_loop
+			_if (a_ln << l_fl_hdl.get_line()) _is _unset
+			_then
+				_leave
+			_endif
+			splt_val << a_ln.split_by(",",_true )
+			l_val << a_ln.split_by(",",_true)[1]
+			_if l_val.default("").size > 0
+			_then 
+				c_pred << predicate.eq(req_fld.name,l_val)
+				_if (all_objects << .sweo_items[:source_object].select(c_pred)).size = 0
+				_then
+					_if .sweo_items[:source_object].responds_to?(:external_name)
+					_then 
+						l_log_file_strm.write(write_string(.sweo_items[:source_object].external_name,",",
+										 req_fld.external_name,",",l_val),%newline)
+					_else
+						_if .sweo_items[:source_object].an_element() _isnt _unset _andif
+						    .sweo_items[:source_object].an_element().source.external_name _isnt _unset
+						_then
+							l_log_file_strm.write(write_string(.sweo_items[:source_object].an_element().source.external_name,",",
+										 req_fld.external_name,",",l_val),%newline)
+						_endif
+					_endif
+					
+				_else
+					_for a_rec _over all_objects.fast_elements()
+					_loop
+						req_set.add(a_rec)
+					_endloop 
+				_endif
+			_endif 
+			_if .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+			_then
+				_if (dst_val << splt_val[2]).default("").size > 0
+				_then
+					
+					dst_pred << predicate.eq(dst_fld.name,dst_val)
+					dst_objs << .sweo_items[:destination_object].select(dst_pred)
+
+					_for dst_obj _over dst_objs.fast_elements()
+					_loop
+						
+						dst_set.add(dst_obj)
+					_endloop
+
+					_if dst_objs.an_element() _is _unset
+					_then
+						_if .sweo_items[:destination_object].responds_to?(:external_name)
+						_then
+							l_log_file_strm.write(write_string(.sweo_items[:destination_object].external_name,",",
+											 dst_fld.name,",",dst_val),%newline)
+						_else
+							_if .sweo_items[:destination_object].an_element() _isnt _unset _andif
+							    .sweo_items[:destination_object].an_element().source.external_name.responds_to?(:external_name)
+							_then
+								l_log_file_strm.write(write_string(
+											    .sweo_items[:destination_object].an_element().source.external_name,",",
+											    dst_fld.name,",",dst_val),%newline)
+							_endif
+						_endif
+					_endif
+				_endif 
+			_endif
+			
+		_endloop
+		_if req_set.size = 0
+		_then
+			_self.changed(:error_message,"Unable to get any source objects form file")
+			_return _true
+		_endif
+		.sweo_items[:all_source_object] << req_set
+
+		
+		_if .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+		_then
+			show(dst_set)
+			.sweo_items[:destination_object] << dst_set
+			write("Total Source Objects :- ",.sweo_items[:all_source_object].size)
+			write("Total Destination Objects :- ",.sweo_items[:destination_object].size)
+		_endif
+	
+	_protection
+		_if l_fl_hdl _isnt _unset
+		_then
+			l_fl_hdl.close()
+		_endif
+
+		_if l_log_file_strm _isnt _unset
+		_then
+			l_log_file_strm.close()
+		_endif
+	_endprotect
+	_return _false
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method int!get_collection_wise_report()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.int!get_collection_wise_report()
+	##
+	## 
+	##
+	_local l_all_destination_objects,l_complete_message,l_done_message
+	_local l_st_tme << date_time.now()
+	_self.changed(:status,"Running....")
+	_if _self.check_source_getter_type()
+	_then
+		_self.changed(:status,"Stopped")
+		_return		
+	_endif
+	write("+++ Start Time... +++",%tab,date_time.now())
+	
+	_if .sweo_items[:source_selection_type].value = "Lat-Long"
+	_then
+		l_all_destination_objects << _self.fetch_relvent_data_for_lat_long()
+		l_complete_message << write_string("Done : processed Source objects ",.sweo_items[:req_set].size,
+						 ", got results combinations : ",(.sweo_items[:total_results]-1))
+	_else
+	
+		l_all_destination_objects << _self.fetching_data()
+		_if .sweo_items[:all_source_object] _is _unset 
+		_then
+			#write("No Source Object Found")
+			l_complete_message << write_string("No Source Object Found")
+		_else
+			l_complete_message << write_string("Done : processed Source objects ",.sweo_items[:all_source_object].size,
+						 ", got results combinations : ",(.sweo_items[:total_results]-1))
+		_endif
+		
+	_endif			
+	
+	_self.changed(:status,l_complete_message)
+	l_done_message << "Report Generation Is Completed !Please find the output file at path "+.sweo_items[:output_fl_name]
+	write(l_done_message)
+	_self.changed(:show_message,{l_done_message,.sweo_items[:all_source_object],l_all_destination_objects})
+	write("+++ End Time.. +++",%tab,date_time.now())
+	
+	_self.changed(:complete,l_done_message.default("Completed"))
+
+	write("Time Taken To Completed :- ",date_time.now()-l_st_tme)
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method fetching_data()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.fetching_data()
+	## 
+	##
+	##
+	_local l_all_destination_objects,l_status,l_source_cnt,l_sr_no,l_fld_val
+	_protect
+		_if .sweo_items[:source_operation_type].value <> "Shortest Path" _andif
+		    .sweo_items[:source_operation_type].value <> "Shortest Path(External File)"
+		_then
+			_self.create_output_file()
+		_endif
+		
+		.sweo_items[:src_obj_wise_list] << property_list.new()
+		.sweo_items[:nearest_buff_objs] << property_list.new()
+		
+		l_all_destination_objects << rwo_set.new()
+		
+		l_sr_no << 1
+		_if .sweo_items[:all_source_object] _is _unset 
+		_then
+			_self.show_message("No Source Object Found")
+			_return 
+		_endif
+		l_status << write_string("No of source object : ",.sweo_items[:all_source_object].size)
+		_self.changed(:status,l_status)
+		l_source_cnt << 0
+		
+		_for a_source_obj _over .sweo_items[:all_source_object].fast_elements()
+		_loop				
+			l_source_cnt +<< 1
+			_self.changed(:status,l_status+"--> "+l_source_cnt.write_string+" out of "+.sweo_items[:all_source_object].size.write_string+" is in process")
+			_if .sweo_items[:source_operation_type].value = "Source object field value only"
+			_then
+				
+				.sweo_items[:log_file].write(l_sr_no,",")
+				_for a_fld _over .sweo_items[:output_lst][:source_object].fast_elements()
+				_loop
+					l_fld_val << a_source_obj.perform(a_fld.name).default("").write_string.substitute_string(",","")
+					
+					.sweo_items[:log_file].write(l_fld_val,",")
+				_endloop
+				.sweo_items[:log_file].newline()
+				l_sr_no +<< 1	
+			_else
+				
+				.sweo_items[:all_destination_object] << _self.get_relevent_destination_objects(a_source_obj)
+				
+				_if (l_dst_obj << .sweo_items[:all_destination_object]) _isnt _unset _andif
+				    (l_size << l_dst_obj.size ) > 0
+				_then
+					_if .sweo_items[:source_operation_type].value <> "Shortest Path" _andif
+					    .sweo_items[:source_operation_type].value <> "Shortest Path(External File)"
+					_then
+						
+						_for a_destination_obj _over .sweo_items[:all_destination_object].fast_elements()
+						_loop
+							l_all_destination_objects.add(a_destination_obj)
+							.sweo_items[:log_file].write(l_sr_no,",")
+							_for a_fld _over .sweo_items[:output_lst][:source_object].fast_elements()
+							_loop
+								l_fld_val << a_source_obj.perform(a_fld.name).default("")
+								l_fld_val << l_fld_val.write_string.substitute_string(",","")
+								.sweo_items[:log_file].write(l_fld_val,",")
+							_endloop
+							_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+							_loop
+								l_fld_val << a_destination_obj.perform(b_fld.name).default("")
+								l_fld_val << l_fld_val.write_string.substitute_string(",","")
+								.sweo_items[:log_file].write(l_fld_val,",")
+							_endloop
+							.sweo_items[:log_file].newline()
+							l_sr_no +<< 1
+						_endloop
+					_else
+						
+						##Need To In Method As suggested by daleep
+						#l_sr_no << _self.write_shortest_path_res(a_source_obj,l_sr_no)
+					_endif
+					
+				_endif 
+			_endif
+		_endloop
+		
+		.sweo_items[:total_results] << l_sr_no
+		_if .sweo_items[:source_operation_type].value = "Shortest Path" _orif
+		    .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+		_then
+			
+			l_all_destination_objects << _self.export_shortest_length_among_objs(l_all_destination_objects)
+			
+		_endif
+		
+	_protection	
+		_if .sweo_items[:log_file] _isnt _unset
+		_then
+			.sweo_items[:log_file].close()
+		_endif
+	_endprotect
+
+	_return l_all_destination_objects
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method export_shortest_length_among_objs()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.export_shortest_length_among_objs(p_all_destination_objects)
+	## 
+	##
+	_local l_all_destination_objects << p_all_destination_objects
+	_local l_final_plist << property_list.new()
+	_local l_list_recs << .sweo_items[:nearest_buff_objs]
+	_local l_dt << date_time.now()
+	_local l_df1 << date_time_format.new_with_properties(:date_format_string, "#d_#m_#Y_#H_#M_#S") 
+	_local l_date_time << l_df1.format(l_dt)
+	_local l_output_logpath << .sweo_items[:output_fl_path]
+	_local l_additional_remarks << .sweo_items[:additional_remarks_text].value.write_string
+	_local l_src_object_name << .sweo_items[:source_object].external_name.write_String
+	_local l_dst_nme ,l_file_name
+	_if .sweo_items[:source_operation_type].value <> "Source object field value only"
+	_then
+		_if .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+		_then
+			l_dst_nme << .sweo_items[:destination_object].an_element().source_collection.external_name.write_String
+		_else
+			l_dst_nme << .sweo_items[:destination_object].external_name.write_String
+		
+		_endif
+		l_file_name  << write_string("Length_",l_src_object_name,"_",
+					     .sweo_items[:source_operation_type].value.substitute_string(" ","_"),"_",
+					      l_dst_nme,"_",
+					     system.user_name,"_",
+					     l_additional_remarks,"_",#l_date_time,".txt")
+					     #l_date_time,".csv")
+					     l_date_time,".txt")
+	_else
+		l_file_name  << write_string("Length_",l_src_object_name,"_",
+					     .sweo_items[:radio_gp].value.write_String.substitute_string(" ","_"),"_",
+					     system.user_name,"_",
+					     l_additional_remarks,"_",#l_date_time,".txt")
+					    # l_date_time,".csv")
+					     l_date_time,".txt")
+	_endif 
+	_local l_outputfile_logpath << l_output_logpath+"\"+l_file_name
+	.sweo_items[:output_fl_name] << l_outputfile_logpath
+	_protect 
+		ex_op << external_text_output_stream.new(l_outputfile_logpath)
+		ex_op.write("Sl No,")
+		
+		_for a_fld _over .sweo_items[:output_lst][:source_object].fast_elements()
+		_loop
+			ex_op.write("Source."+a_fld.external_name,",")
+		_endloop
+		
+		_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+		_loop
+			ex_op.write("Destination."+b_fld.external_name,",")
+		_endloop
+
+		ex_op.write("Length(M),Priority",%newline)
+
+		dst_obj_coll << .sweo_items[:destination_object].an_element().source_collection
+		l_sr_no << 0
+		_for dst_id,length_list _over .sweo_items[:src_obj_wise_list].fast_keys_and_elements()
+		_loop
+			dst_obj_rec << dst_obj_coll.select(predicate.eq(:id,dst_id)).an_element()
+			l_all_destination_objects.add(dst_obj_rec)
+			length_list_srted << length_list.sorted_by_key()
+			_if length_list_srted.size = 1
+			_then
+				seq_no << 0
+			_else
+				seq_no << 1
+			_endif
+			
+			_for lngth_ky,src_objs _over length_list_srted.fast_keys_and_elements()
+			_loop
+				_for s_obj _over src_objs.fast_elements()
+				_loop
+					l_sr_no+ << 1
+					ex_op.write(l_sr_no,",")
+					_for a_fld _over .sweo_items[:output_lst][:source_object].fast_elements()
+					_loop
+						l_fld_val << s_obj.perform(a_fld.name).default("")
+						l_fld_val << l_fld_val.write_string.substitute_string(",","")
+						ex_op.write(l_fld_val,",")
+					_endloop
+					
+					_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+					_loop
+						l_fld_val << dst_obj_rec.perform(b_fld.name).default("")
+						l_fld_val << l_fld_val.write_string.substitute_string(",","")
+						ex_op.write(l_fld_val,",")
+					_endloop
+					
+					ex_op.write(lngth_ky,",","P"+seq_no.write_string)
+					ex_op.newline()
+					seq_no+ << 1
+				
+				_endloop
+			_endloop
+		_endloop
+
+		.sweo_items[:total_results] << l_sr_no + 1
+	
+		
+	_protection
+		_if ex_op _isnt _unset
+		_then
+			ex_op.close()
+		_endif
+	_endprotect
+
+	_return l_all_destination_objects
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method write_shortest_path_res()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.write_shortest_path_res(a_source_obj,p_sr_no)
+	##
+	##
+	_local l_sr_no << p_sr_no 
+	_local l_fld_val
+	
+	_for length,a_destination_objs _over .sweo_items[:all_destination_object].fast_keys_and_elements()
+	_loop
+		_for a_destination_obj _over a_destination_objs.fast_elements()
+		_loop
+			.sweo_items[:log_file].write(l_sr_no,",")
+			_for a_fld _over .sweo_items[:output_lst][:source_object].fast_elements()
+			_loop
+				l_fld_val << a_source_obj.perform(a_fld.name).default("").write_string.substitute_string(",","")
+				.sweo_items[:log_file].write(l_fld_val,",")
+			_endloop
+			
+			_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+			_loop
+				l_fld_val << a_destination_obj.perform(b_fld.name).default("").write_string.substitute_string(",","")
+				.sweo_items[:log_file].write(l_fld_val,",")
+			_endloop
+			
+			.sweo_items[:log_file].write(length)
+			.sweo_items[:log_file].newline()
+			l_sr_no +<< 1
+		_endloop 
+	_endloop
+	
+	_return l_sr_no
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_relevent_destination_objects()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_relevent_destination_objects(p_source_obj)
+	## 
+	##
+	_local l_source_obj << p_source_obj
+	_local l_all_destination_obj << rwo_set.new()
+	_local l_geom,l_def_geom,l_geom_key,l_all_req_obj,l_pred,l_dest_length_obj
+	_if _self.tp_obj_wise_geom_flds[l_source_obj.source_collection.name ] _isnt _unset 
+	_then
+		l_geom << _self.tp_obj_wise_geom_flds[l_source_obj.source_collection.name ]
+		l_def_geom << l_source_obj.perform(l_geom)
+	_endif
+
+	_if .sweo_items[:destination_object].an_element() _isnt _unset _andif
+	    .sweo_items[:destination_object].an_element() _isnt _unset 
+	_then
+	_if l_def_geom _isnt _unset
+	_then
+		_if .sweo_items[:source_operation_type].value = "Within" _orif
+		    .sweo_items[:source_operation_type].value = "Interacts" _orif
+		    .sweo_items[:source_operation_type].value = "Overlays" _orif
+		    .sweo_items[:source_operation_type].value = "Overlaps" 
+		_then
+			
+			l_geom_key << _self.tp_obj_wise_geom_flds[.sweo_items[:destination_object].an_element().source_collection.name ]
+			_if l_geom_key _is _unset
+			_then
+				
+				_self.show_message("Unable to find the CS default geometry field for given Destination collections")
+				_leave
+				
+			_endif
+			l_pred << _self.get_predicate( .sweo_items[:source_operation_type].value,l_def_geom,l_geom_key)
+		
+			_if l_pred = _unset
+			_then				
+				_leave
+			_endif
+			
+			l_all_req_obj << .sweo_items[:destination_object].select(l_pred)			
+			l_all_destination_obj.add_all(l_all_req_obj)
+			
+		_elif .sweo_items[:source_operation_type].value = "Object outside source object"
+		_then
+			_self.get_outside_objects(l_source_obj)
+			
+		_elif .sweo_items[:source_operation_type].value ="Buffer"
+		_then
+		
+			l_all_destination_obj << _self.get_objects_within_buffer(l_source_obj)
+		
+		_elif .sweo_items[:source_operation_type].value ="Shortest Path" _orif
+		      .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+		_then
+			
+			_if .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+			_then
+			
+				l_all_destination_obj << .sweo_items[:destination_object]
+			_else
+				
+				l_all_destination_obj << _self.get_objects_within_buffer(l_source_obj)
+				
+				
+			_endif
+			
+			_if l_all_destination_obj _isnt _unset _andif
+			    l_all_destination_obj.an_element().is_kind_of?(eo_meter)
+			_then
+				_if .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+				_then
+					_if .sweo_items[:build_wise_mtrs] _is _unset
+					_then
+						build_wise_mtrs << _self.get_building_wise_meters(l_all_destination_obj)
+						.sweo_items[:build_wise_mtrs] << build_wise_mtrs
+					_else
+						build_wise_mtrs << .sweo_items[:build_wise_mtrs] 
+					_endif
+					
+				_else
+					build_wise_mtrs << _self.get_building_wise_meters(l_all_destination_obj)
+				_endif
+				
+				_local l_all_destination_obj_1 << property_list.new_with()
+				_local l_obj_list_1 << property_list.new_with()
+				_for bld_id,mtrs_lst _over build_wise_mtrs.fast_keys_and_elements()
+				_loop
+				
+					mtr_rec << mtrs_lst.an_element()
+					(dest_length_obj,obj_list) << _self.calculate_for_nearest_lengths(l_source_obj,rwo_set.new_with(mtr_rec))
+					
+					_for ky,val _over dest_length_obj.fast_keys_and_elements()
+					_loop
+						l_all_destination_obj_1[ky] << val
+						
+						mtrs_lst_1 << mtrs_lst.select(predicate.ne(:id,mtr_rec.id))
+						_for mtr_Rec1 _over mtrs_lst_1.fast_elements()
+						_loop
+							l_all_destination_obj_1[ky].add(mtr_Rec1)
+
+							_if .sweo_items[:src_obj_wise_list][mtr_Rec1.id] _is _unset
+							_then
+								.sweo_items[:src_obj_wise_list][mtr_Rec1.id] << property_list.new()
+							_endif
+
+							_if .sweo_items[:src_obj_wise_list][mtr_Rec1.id][ky] _is _unset
+							_then
+								.sweo_items[:src_obj_wise_list][mtr_Rec1.id][ky] << rwo_set.new()
+							_endif
+
+							.sweo_items[:src_obj_wise_list][mtr_Rec1.id][ky].add(l_source_obj)
+						_endloop
+					_endloop
+				
+					_for ky,val _over obj_list.fast_keys_and_elements()
+					_loop
+						l_obj_list_1[ky] << val
+						mtrs_lst_1 << mtrs_lst.select(predicate.ne(:id,mtr_rec.id))
+						_for mtr_Rec1 _over mtrs_lst.fast_elements()
+						_loop
+							l_obj_list_1[mtr_Rec1.id] << {mtr_Rec1,val[2]}
+						_endloop
+					_endloop
+				_endloop
+
+				l_all_destination_obj << l_all_destination_obj_1
+				l_obj_list << l_obj_list_1
+			_else
+				
+				(l_dest_length_obj,l_obj_list) << _self.calculate_for_nearest_lengths(l_source_obj,l_all_destination_obj)
+			
+				l_all_destination_obj << l_dest_length_obj
+
+			_endif
+			.sweo_items[:nearest_buff_objs][l_source_obj.id] << {l_source_obj,l_obj_list}
+		
+		_else
+			write("not yet handled")
+		_endif 
+	_endif
+	_endif
+	
+	_return l_all_destination_obj
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method calculate_for_nearest_lengths()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.calculate_for_nearest_lengths(p_source_obj,p_all_destination_obj)
+	## 
+	##
+	_local l_source_obj << p_source_obj
+	_local l_all_destination_obj<< p_all_destination_obj
+	_local l_src_rd << _self.get_nearest_road_centerline(l_source_obj)
+	_local l_dist_engine
+	_local l_list << property_list.new()
+	_local l_obj_list << property_list.new()
+	_local l_gm,l_crd,l_dst_rd,l_gm1,l_crd_1,l_end_point,l_start_point,l_length,l_link,l_nf
+	_if l_src_rd _isnt _unset
+	_then
+		l_dist_engine << tp!length_of_service_line_engine.new()
+		(l_gm,l_crd) << _self.get_crd_from_obj(l_src_rd,l_source_obj)
+
+		l_start_point << l_dist_engine.get_node_for_coord(l_crd,l_gm,780)
+		_if l_crd _isnt _unset
+		_then 
+			_for dst_obj _over l_all_destination_obj.fast_elements()
+			_loop
+				
+				l_dst_rd << _self.get_nearest_road_centerline(dst_obj)
+				_if l_dst_rd _is _unset _then _continue _endif
+
+				(l_gm_1,l_crd_1) << _self.get_crd_from_obj(l_dst_rd,dst_obj)
+				
+				l_end_point << l_dist_engine.get_node_for_coord(l_crd_1,l_gm_1,780)
+				
+				_if l_start_point _isnt _unset _andif l_end_point _isnt _unset
+				_then
+					l_nf << network_follower.new()
+					( l_link, l_length ) << l_nf.shortest_path( l_start_point, l_end_point )
+				
+					_if l_length _isnt _unset
+					_then
+						l_length << (l_length/1000).as_float
+						l_length << l_length.write_with_decimals(3).as_number()
+						
+						l_obj_list[dst_obj.id] << {dst_obj,l_length }
+
+						_if l_list[l_length] _is _unset
+						_then
+							l_list[l_length] << rwo_set.new()
+						_endif
+
+						_if .sweo_items[:src_obj_wise_list][dst_obj.id] _is _unset
+						_then
+							.sweo_items[:src_obj_wise_list][dst_obj.id] << property_list.new()
+						_endif
+
+						_if .sweo_items[:src_obj_wise_list][dst_obj.id][l_length] _is _unset
+						_then
+							.sweo_items[:src_obj_wise_list][dst_obj.id][l_length] << rwo_set.new()
+						_endif
+
+						.sweo_items[:src_obj_wise_list][dst_obj.id][l_length].add(l_source_obj)
+						
+						l_list[l_length].add(dst_obj)
+					_else
+						_if l_list[0] _is _unset
+						_then
+							l_list[0] << rwo_set.new()
+						_endif
+						
+						l_list[0].add(dst_obj)
+						l_obj_list[dst_obj.id] << {dst_obj,0.0}
+					_endif
+				_endif
+			_endloop
+			
+		_endif 
+	_endif
+	
+	_return l_list,l_obj_list
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_building_wise_meters()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_building_wise_meters(p_all_destination_obj)
+	## 
+	##
+	_local l_all_destination_obj << p_all_destination_obj
+	_local l_land_vw << gis_program_manager.cached_dataset(:land)
+	_local l_build_coll << l_land_vw.collections[:lnd_building]
+	_local l_build_wise_mtrs << property_list.new()
+	_local l_buld_rec,l_psd_pnt
+	_for dst_obj _over l_all_destination_obj.fast_elements()
+	_loop
+		l_psd_pnt << pseudo_point.new_for_world(dst_obj.location,l_land_vw.world)
+		l_buld_rec << l_build_coll.select(predicate.contains(:extent,l_psd_pnt)).an_element()
+		_if l_buld_rec _isnt _unset
+		_then
+			_if l_build_wise_mtrs[l_buld_rec.id] _is _unset
+			_then
+				l_build_wise_mtrs[l_buld_rec.id] << rwo_set.new()
+			_endif
+			l_build_wise_mtrs[l_buld_rec.id].add(dst_obj)
+		_endif
+	_endloop
+
+	_return l_build_wise_mtrs
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_nearest_road_centerline()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_nearest_road_centerline(p_obj)
+	##
+	## return a road centerline nearest to given pole/fp
+	##
+
+	_local l_land_vw << gis_program_manager.cached_dataset(:land)
+	_local l_rd_coll << l_land_vw.collections[:lnd_street_segment]
+	_local l_build_coll << l_land_vw.collections[:lnd_building]
+	_local l_psd_pnt,l_bnd_rec,l_pseudo_buffer,l_rd
+	_for a_range _over range(1,1000)
+	_loop @ buffer
+	     
+	      _if p_obj.field(:route) _isnt _unset _andif
+		  p_obj.route _isnt _unset 
+	      _then
+		      l_pseudo_buffer << p_obj.route.buffer(a_range*1000)
+	      _elif p_obj.field(:location) _isnt _unset _andif
+		    p_obj.location _isnt _unset 
+	      _then
+		      l_pseudo_buffer << p_obj.location.buffer(a_range*1000)
+	      _elif p_obj.field(:extent) _isnt _unset _andif
+		    p_obj.extent _isnt _unset 
+	      _then
+		       l_pseudo_buffer << p_obj.extent.buffer(a_range*1000)
+	      _elif p_obj.field(:area) _isnt _unset _andif
+		    p_obj.area _isnt _unset 
+	      _then
+		       l_pseudo_buffer << p_obj.area.buffer(a_range*1000)
+	      _endif
+
+	      _if p_obj.is_kind_of?(tp!meter)
+	      _then 
+		      l_psd_pnt << pseudo_point.new_for_world(p_obj.location,l_land_vw.world)
+		      l_bnd_rec << l_build_coll.select(predicate.contains(:extent,l_psd_pnt)).an_element()
+		      _if l_bnd_rec _isnt _unset
+		      _then
+			    l_rd << _unset 
+
+			      _if l_rd _is _unset
+			      _then
+				      l_pseudo_buffer << l_bnd_rec.extent.buffer(a_range*1000)
+				      l_pseudo_buffer.world << l_land_vw.world
+				      l_rd << l_rd_coll.select(predicate.interacts(:route,l_pseudo_buffer))
+			      _else
+				      l_rd << l_rd.lnd_street_segments
+				      _if l_rd.an_element() _is _unset
+				      _then
+					      l_pseudo_buffer << l_bnd_rec.extent.buffer(a_range*1000)
+					      l_pseudo_buffer.world << l_land_vw.world
+					      l_rd << l_rd_coll.select(predicate.interacts(:route,l_pseudo_buffer))
+				      _endif
+			      _endif
+		      _else
+			      l_pseudo_buffer.world << l_land_vw.world
+			      l_rd << l_rd_coll.select(predicate.interacts(:route,l_pseudo_buffer))
+		      _endif
+	      _else
+		      l_pseudo_buffer.world << l_land_vw.world
+		      l_rd << l_rd_coll.select(predicate.interacts(:route,l_pseudo_buffer))
+	      _endif
+	      
+	      _if _not l_rd.empty?
+	      _then
+		    _return l_rd.an_element()
+	      _endif
+	     
+	_endloop 
+	
+	_return _unset 
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_crd_from_obj()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_crd_from_obj(a_obj,oth_obj)
+	## 
+	##
+	_local gm
+	_if a_obj.field(:route) _isnt _unset _andif
+	    a_obj.route _isnt _unset
+	_then
+		gm << _unset 
+		_if oth_obj.field(:extent) _isnt _unset _andif oth_obj.extent _isnt _unset 
+		_then
+			gm << oth_obj.extent.bounds.centre
+		_elif oth_obj.field(:area) _isnt _unset _andif oth_obj.area _isnt _unset 
+		_then
+			gm << oth_obj.area.bounds.centre
+		_elif oth_obj.field(:route) _isnt _unset _andif oth_obj.route _isnt _unset 
+		_then
+			gm << oth_obj.route.first_node
+		_elif oth_obj.field(:location) _isnt _unset _andif oth_obj.location _isnt _unset
+		_then
+			gm << oth_obj.location.node
+		_endif
+	
+		_return a_obj.route,a_obj.route.segpoint_location_near(gm)
+	_elif a_obj.field(:area) _isnt _unset _andif
+	      a_obj.area _isnt _unset
+	_then
+		gm << _unset 
+		_if oth_obj.field(:extent) _isnt _unset _andif oth_obj.extent _isnt _unset 
+		_then
+			gm << oth_obj.extent.bounds.centre
+		_elif oth_obj.field(:area) _isnt _unset _andif oth_obj.area _isnt _unset 
+		_then
+			gm << oth_obj.area.bounds.centre
+		_elif oth_obj.field(:route) _isnt _unset _andif oth_obj.route _isnt _unset 
+		_then
+			gm << oth_obj.route.first_node
+		_elif oth_obj.field(:location) _isnt _unset _andif oth_obj.location _isnt _unset
+		_then
+			gm << oth_obj.location.node
+		_endif
+		
+		_return a_obj.area,a_obj.area.segpoint_location_near(gm)
+	_elif a_obj.field(:location) _isnt _unset _andif
+	      a_obj.location _isnt _unset
+	_then
+		gm << _unset 
+		_if oth_obj.field(:extent) _isnt _unset _andif oth_obj.extent _isnt _unset 
+		_then
+			gm << oth_obj.extent.bounds.centre
+		_elif oth_obj.field(:area) _isnt _unset _andif oth_obj.area _isnt _unset 
+		_then
+			gm << oth_obj.area.bounds.centre
+		_elif oth_obj.field(:route) _isnt _unset _andif oth_obj.route _isnt _unset 
+		_then
+			gm << oth_obj.route.first_node
+		_elif oth_obj.field(:location) _isnt _unset _andif oth_obj.location _isnt _unset
+		_then
+			gm << oth_obj.location.node
+		_endif
+		
+		_return a_obj.location,a_obj.location.segpoint_location_near(gm)
+	_elif a_obj.field(:extent) _isnt _unset _andif
+	      a_obj.extent _isnt _unset
+	_then
+		gm << _unset 
+		_if oth_obj.field(:extent) _isnt _unset _andif oth_obj.extent _isnt _unset 
+		_then
+			gm << oth_obj.extent.bounds.centre
+		_elif oth_obj.field(:area) _isnt _unset _andif oth_obj.area _isnt _unset 
+		_then
+			gm << oth_obj.area.bounds.centre
+		_elif oth_obj.field(:route) _isnt _unset _andif oth_obj.route _isnt _unset 
+		_then
+			gm << oth_obj.route.first_node
+		_elif oth_obj.field(:location) _isnt _unset _andif oth_obj.location _isnt _unset
+		_then
+			gm << oth_obj.location.node
+		_endif
+		
+		_return a_obj.extent,a_obj.extent.segpoint_location_near(gm)
+	_endif
+	_return _unset   
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_outside_objects()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_outside_objects(a_source_obj)
+	## 
+	##
+	_local l_sr_no << 1
+	_local l_within_dest_objects << rwo_set.new()
+	_local l_status << write_string("No of source object : ",.sweo_items[:all_source_object].size)
+	_local l_source_cnt << 0
+	l_source_cnt +<< 1
+	_local l_fld_val
+	_self.changed(:status,l_status+"--> "+l_source_cnt.write_string+" out of "+.sweo_items[:all_source_object].size.write_string+" is in process")
+	
+	_local l_pred_key << .sweo_items[:source_operation_type].value.lowercase.as_symbol()
+	_local l_geom_key << _self.tp_obj_wise_geom_flds[a_source_obj.source_collection.name]
+	_if (l_def_geom << a_source_obj.perform(l_geom_key)) _is _unset
+	_then
+		
+		_return 
+	_endif
+	
+	l_geom_key << _self.tp_obj_wise_geom_flds[.sweo_items[:destination_object].an_element().source_collection.name]
+	_if l_geom_key _is _unset _andif
+	    l_geom_key = ""
+	_then
+		_if (l_geom_key << .sweo_items[:special_handled_collections][.sweo_items[:destination_object].name]) _is _unset
+		_then
+			_return 
+		_endif 
+	_endif
+	_local l_pred << _self.get_predicate("Interacts",l_def_geom,l_geom_key)
+	_local l_req_obj << .sweo_items[:destination_object].select(l_pred)
+	l_within_dest_objects.add_all(l_req_obj)
+	_local l_total_estimated_recs << (.sweo_items[:destination_object].size - l_within_dest_objects.size)
+	_self.changed(:status,"Writing Output file..... estmated recs are : ",l_total_estimated_recs)
+	_local l_wtn_recs << 0
+	_for a_wrt_obj _over .sweo_items[:destination_object].fast_elements()
+	_loop
+		_if _not l_within_dest_objects.includes?(a_wrt_obj)
+		_then
+			.sweo_items[:log_file].write(l_sr_no,",")
+			_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+			_loop
+				l_fld_val << a_wrt_obj.perform(b_fld.name).default("")
+				.sweo_items[:log_file].write(l_fld_val,",")
+			_endloop
+			.sweo_items[:log_file].newline()
+			l_sr_no +<< 1	
+		_endif
+		_self.changed(:status,"Total Estmated records are : "+l_total_estimated_recs.write_string+" completed "+(l_sr_no-1).write_string)
+	_endloop
+	_return l_sr_no
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_predicate()
+#------------------------------------------------------------------------------
+
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_predicate(l_pd_type,l_def_geom,dest_goem_fld)
+	## 
+	##
+	_local l_pd
+	
+	_if l_pd_type = "Within"
+	_then
+		l_pd << predicate.within(dest_goem_fld,l_def_geom) 
+	_elif l_pd_type = "Interacts"
+	_then
+		l_pd << predicate.interacts(dest_goem_fld,l_def_geom)
+	_elif l_pd_type = "Overlays"
+	_then
+		l_pd << predicate.overlays(dest_goem_fld,l_def_geom)
+	_elif l_pd_type = "Overlaps" 
+	_then
+		l_pd << predicate.overlaps(dest_goem_fld,l_def_geom)
+	_elif l_pd_type = "Object outside source object"
+	_then 
+		l_pd << predicate.disjoint(dest_goem_fld,l_def_geom)
+	_endif
+	_return l_pd
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_selected_objects_on_map()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_selected_objects_on_map()
+	##
+	##
+	_local l_object
+	.sweo_items[:total_selections] << rope.new()	
+	_if .sweo_items[:app] _is _unset
+	_then
+		_self.show_message("Please Open The Application !")
+		_return
+	_endif
+
+	_local l_current_selections << .sweo_items[:app].plugin(:maps).current_map.current_selection
+	_if l_current_selections.size = 0
+	_then
+		_self.show_message("Please Select the Objects On Map !")		
+		_return
+	_endif
+	_for a_object _over l_current_selections.fast_elements()
+	_loop
+		l_object  << a_object.rwo
+		_if l_object.external_name = .sweo_items[:selected_collection].external_name
+		_then
+			.sweo_items[:total_selections].add(l_object)			
+		_endif 
+	_endloop
+
+	_if .sweo_items[:total_selections].size = 0
+	_then
+		_self.show_message("Please Select The Objetcs On Map Equals To Source Object !")		
+		_return
+	_endif 
+
+	>> .sweo_items[:total_selections]
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method create_output_file()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.create_output_file()
+	##
+	## Output File Creation
+	##
+	_local l_dt << date_time.now()
+	_local l_df1 << date_time_format.new_with_properties(:date_format_string, "#d_#m_#Y_#H_#M_#S") 
+	_local l_date_time << l_df1.format(l_dt)
+	_local l_output_logpath << .sweo_items[:output_fl_path]
+	_local l_additional_remarks << .sweo_items[:additional_remarks_text].value.write_string
+	_local l_src_object_name,l_dst_nme,l_file_name
+	
+	_if .sweo_items[:source_object] = "Lat-Long"
+	_then
+		l_src_object_name << .sweo_items[:source_object]		
+	_else
+		_if .sweo_items[:source_object].is_kind_of?(rwo_set)
+		_then 
+			l_src_object_name << .sweo_items[:source_object].an_element().external_name.write_String
+		_else
+			l_src_object_name << .sweo_items[:source_object].external_name.write_String
+		_endif
+	_endif 
+	
+	_if .sweo_items[:source_operation_type].value <> "Source object field value only"
+	_then
+		
+		_if .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+		_then
+			
+			l_dst_nme << .sweo_items[:destination_object].an_element().source_collection.external_name.write_String
+			
+		_else
+			
+			_if .sweo_items[:destination_object].is_kind_of?(rwo_set)
+			_then 
+				l_dst_nme << .sweo_items[:destination_object].an_element().external_name.write_String
+			_else
+				l_dst_nme << .sweo_items[:destination_object].external_name.write_String
+			_endif
+		_endif
+		
+		l_file_name  << write_string(l_src_object_name,"_",
+					     .sweo_items[:source_operation_type].value.substitute_string(" ","_"),"_",
+					     l_dst_nme,"_",
+					     system.user_name,"_",
+					     l_additional_remarks,"_",
+					     #l_date_time,".csv")
+					     l_date_time,".txt")
+	_else
+		l_file_name  << write_string(l_src_object_name,"_",
+					     .sweo_items[:radio_gp].value.write_String.substitute_string(" ","_"),"_",
+					     system.user_name,"_",
+					     l_additional_remarks,"_",
+					     #l_date_time,".csv")
+					     l_date_time,".txt")
+	_endif
+	
+	_local l_outputfile_logpath << l_output_logpath+"\"+l_file_name
+	.sweo_items[:output_fl_name] << l_outputfile_logpath
+	.sweo_items[:log_file] << external_text_output_stream.new(l_outputfile_logpath)
+	.sweo_items[:log_file].write("Sl No,")
+
+	_for a_key,a_field_list _over .sweo_items[:output_lst].fast_keys_and_elements()
+	_loop
+		_if .sweo_items[:source_operation_type].value = "Object outside source object" _andif
+		    a_key = :source_object
+		_then
+			_continue
+		_endif
+		
+		_if a_key = :source_object
+		_then
+			l_main << "Source"
+		_else
+			l_main << "Destination"
+		_endif 
+		
+		_if .sweo_items[:source_object] = "Lat-Long"# _andif l_main = "Source"
+		_then
+			.sweo_items[:log_file].write(.sweo_items[:input_lat_long_values_header], ",")
+		_endif
+		
+		_for a_field _over a_field_list.fast_elements()
+		_loop
+			_if .sweo_items[a_key].is_kind_of?(rwo_set)
+			_then
+				coll_hand << .sweo_items[a_key].an_Element()
+				l_external_field_name << coll_hand.field(a_field.name).external_name
+				.sweo_items[:log_file].write(l_main,".",coll_hand.external_name.uppercase,".",l_external_field_name,",")
+			_else 
+				l_external_field_name << .sweo_items[a_key].field(a_field.name).external_name
+				.sweo_items[:log_file].write(l_main,".",.sweo_items[a_key].external_name.uppercase,".",l_external_field_name,",")
+			_endif 
+		
+		_endloop
+	_endloop
+
+	_if .sweo_items[:source_operation_type].value = "Shortest Path" _orif
+	    .sweo_items[:source_operation_type].value = "Shortest Path(External File)"
+	_then
+		.sweo_items[:log_file].write("Length(M)")
+	_endif
+
+	.sweo_items[:log_file].newline()
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_objects_on_current_map_view()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_objects_on_current_map_view()
+	##
+	## 
+	_local l_bound_box << .sweo_items[:app].plugin(:maps).current_map_view.current_view_bounds
+	_local l_pseudo_area << pseudo_area.new_with(l_bound_box)
+	l_pseudo_area.world << .sweo_items[:electric_view].world	
+	_local l_total_objects_within_map_view << .sweo_items[:selected_collection].select(predicate.within(:location,l_pseudo_area))
+	
+	_if l_total_objects_within_map_view.size = 0
+	_then
+		_self.show_message("No Object Available On Map View With Source Object !")		
+		_return
+	_endif
+
+	>> l_total_objects_within_map_view
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_objects_within_trails()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_objects_within_trails()
+	##
+	##
+	
+	_local l_current_trail << .sweo_items[:app].plugin(:maps).current_map.trail
+	_if ~l_current_trail.closed?
+	_then
+		_self.show_message("Please Close The Trail")
+		_return _unset 
+	_endif
+
+	_local l_area << pseudo_area.new_for_world(l_current_trail.sectors, .sweo_items[:electric_view].world)
+	
+	_local l_total_objects_within_trail << .sweo_items[:selected_collection].select(predicate.within(:location,l_area))
+
+	_if l_total_objects_within_trail.size = 0
+	_then
+		_self.show_message("No Object Available On Map View With Source Object !")		
+		_return _unset 
+	_endif
+
+	>> l_total_objects_within_trail 	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method writing_into_log()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.writing_into_log(p_objects_list)
+	##
+	## 
+	##
+	_local l_record_cnt << 0
+	_protect 
+		_for a_record _over p_objects_list.fast_elements()
+		_loop
+			l_record_cnt << l_record_cnt + 1		
+			.sweo_items[:log_file].write(l_record_cnt,",")
+			
+			_for a_field _over .sweo_items[:total_fields_list].fast_elements()
+			_loop
+				.sweo_items[:log_file].write(a_record.perform(a_field),",")
+			_endloop
+			
+			.sweo_items[:log_file].newline()
+		_endloop
+	_protection
+		.sweo_items[:log_file].close()
+	_endprotect 
+		
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_total_records_in_database()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_total_records_in_database()
+	##
+	## 
+
+	>> .sweo_items[:selected_collection]
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_objects_from_input_file()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_objects_from_input_file()
+	##
+	## 
+	##
+	
+	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_objects_within_buffer()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_objects_within_buffer(a_rec) # need to change
+	## 
+	## Fetching objects with in buffer value
+	##
+
+	_local l_total_destination_objects << rwo_set.new()
+	_local l_geom_key << _self.tp_obj_wise_geom_flds[.sweo_items[:destination_object].an_element().source_collection.name ]
+	_if l_geom_key _is _unset
+		_then
+	
+		_if (l_geom_key << .sweo_items[:special_handled_collections][.sweo_items[:destination_object].name]) _is _unset
+		_then
+			_self.show_message("Unable to find the CS default geometry field for given Destination collections")
+			_leave
+		_endif
+	_endif
+	write("l_buffer >> ",.sweo_items[:buffer_value_text].value.as_number()*1000)
+	write("Buffer (MM) ",.sweo_items[:buffer_value_text].value.as_number()*1000)
+	_local l_src_geom_key << _self.tp_obj_wise_geom_flds[a_rec.source_collection.name]
+	_if l_src_geom_key _is _unset 
+	_then
+		_self.show_message("Unable to find the CS default geometry field for given Sourece collections")
+		_leave
+		
+	_endif
+	_local l_pseudo_area << a_rec.perform(l_src_geom_key).buffer(.sweo_items[:buffer_value_text].value.as_number()*1000)		
+	l_pseudo_area.world << .sweo_items[:electric_view].world
+	_local l_total_target_objects << .sweo_items[:destination_object].select(predicate.within(l_geom_key,l_pseudo_area))
+	l_total_destination_objects.add_all(l_total_target_objects)
+	
+	>> l_total_destination_objects
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_lat_long_values_from_file()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_lat_long_values_from_file()
+	## Description   : Get Lat Long Values from File and validate
+	## the Input File.
+
+	_try _with cond
+
+	_local l_ev << gis_program_manager.cached_dataset(:electric)
+	_local l_pred1 << predicate.eq(:name, "world_longlat_wgs84_degree")
+	_local l_pred2 << predicate.eq(:name, "orissa_lambert_mm")
+	_local l_wgs84 << ds_coordinate_system. coordinate_system_collection(l_ev).select(l_pred1).an_element()
+	_local l_utm   << ds_coordinate_system. coordinate_system_collection(l_ev).select(l_pred2).an_element()
+	_local l_trans_wgs84_utm << transform.new_converting_cs_to_cs(l_wgs84,l_utm)	
+	_local l_fl,l_fl_hdl,l_src_object_cnt,a_ln,l_lat_val,l_uniq_val,l_long_val,l_coord,l_pseudo_point
+	_protect
+		_if (l_fl << .sweo_items[:input_file_path]) _is _unset
+		_then
+			_self.changed(:error_message,"please select any file")
+			_return _true
+		_endif
+	
+		l_fl_hdl << external_text_input_stream.new(l_fl)		
+		.sweo_items[:req_set] << rope.new()
+		.sweo_items[:input_lat_long_values] << property_list.new()
+		l_src_object_cnt << 0
+		_loop
+			l_src_object_cnt +<< 1
+			
+			_if (a_ln << l_fl_hdl.get_line()) _is _unset
+			_then
+				_leave
+			_endif
+			
+			_if l_src_object_cnt = 1
+			_then
+				.sweo_items[:input_lat_long_values_header] << a_ln
+				_continue
+			_endif
+			
+			_if a_ln.split_by(",").size < 3
+			_then
+				.sweo_items[:input_lat_long_values][l_src_object_cnt-1] << rope.new()
+				_if a_ln.split_by(",").size > 0
+				_then
+					.sweo_items[:input_lat_long_values][l_src_object_cnt-1].add(a_ln.split_by(",")[1])
+					.sweo_items[:req_set].add(_unset )
+				_endif
+				
+				_continue
+			_endif
+			
+			l_uniq_val << a_ln.split_by(",")[1]
+			l_lat_val << a_ln.split_by(",")[2]
+			l_long_val << a_ln.split_by(",")[3]			
+			l_coord << coordinate.new(l_long_val.as_number(),l_lat_val.as_number())					
+			l_coord << l_coord.transformed(l_trans_wgs84_utm)
+			l_pseudo_point << pseudo_point.new_at(l_coord)
+			l_pseudo_point.world << .sweo_items[:electric_view].world
+			.sweo_items[:req_set].add(l_pseudo_point)
+
+			_if .sweo_items[:input_lat_long_values][a_ln.split_by(",")[1].as_number()] _is _unset
+			_then								
+				.sweo_items[:input_lat_long_values][l_src_object_cnt-1] << rope.new()
+
+				.sweo_items[:input_lat_long_values][l_src_object_cnt-1].add(l_uniq_val)
+				.sweo_items[:input_lat_long_values][l_src_object_cnt-1].add(l_lat_val)
+				.sweo_items[:input_lat_long_values][l_src_object_cnt-1].add(l_long_val)
+			_endif
+			
+		_endloop	
+		
+	_protection
+		_if l_fl_hdl _isnt _unset
+		_then
+			l_fl_hdl.close(_true )
+			
+		_endif 		
+	_endprotect
+
+	_when error
+		
+	_endtry	
+
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method fetch_relvent_data_for_lat_long()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.fetch_relvent_data_for_lat_long()
+	##
+	##
+	
+	_protect 
+		_self.create_output_file()
+		_local l_all_destination_objects << rwo_set.new()
+		_local l_sr_no << 1
+		_local l_status << write_string("No of source object : ",.sweo_items[:req_set].size)
+		_self.changed(:status,l_status)		
+		_local l_source_cnt << 0
+		_local l_fld_val
+		_if .sweo_items[:source_operation_type].value = "Buffer" _orif
+		    .sweo_items[:source_operation_type].value = "Interacts"
+		_then						
+			_for a_source_obj _over .sweo_items[:req_set].fast_elements()
+			_loop
+				l_source_cnt +<< 1
+			
+				_self.changed(:status,l_status+"--> "+l_source_cnt.write_string+" out of "+.sweo_items[:req_set].size.write_string+" is in process")
+				
+				_if a_source_obj _isnt _unset
+				_then 
+					.sweo_items[:all_destination_object] <<	_self.get_relevent_destination_objects_lat_long(a_source_obj)			
+				
+					_if .sweo_items[:all_destination_object].size > 0
+					_then
+						_for a_destination_obj _over .sweo_items[:all_destination_object].fast_elements()
+						_loop
+							l_all_destination_objects.add(a_destination_obj)
+							
+							.sweo_items[:log_file].write(l_sr_no,",")
+							
+							_if .sweo_items[:input_lat_long_values][l_source_cnt] _isnt _unset
+							_then							
+								_for a_column _over .sweo_items[:input_lat_long_values][l_source_cnt].fast_elements()
+								_loop								
+									.sweo_items[:log_file].write(a_column,",")
+								_endloop
+							_endif 
+							
+							_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+							_loop
+								l_fld_val << a_destination_obj.perform(b_fld.name).default("")
+								.sweo_items[:log_file].write(l_fld_val,",")
+							_endloop
+							
+							.sweo_items[:log_file].newline()
+							
+							##	l_sr_no +<< 1
+						_endloop
+					_else
+						
+						.sweo_items[:log_file].write(l_sr_no,",")
+						
+						_if .sweo_items[:input_lat_long_values][l_source_cnt] _isnt _unset
+						_then
+							
+							
+							_if .sweo_items[:input_lat_long_values][l_source_cnt].size > 1
+							_then							
+								_for a_column _over .sweo_items[:input_lat_long_values][l_source_cnt].fast_elements()
+								_loop								
+									.sweo_items[:log_file].write(a_column,",")
+								_endloop
+							_elif .sweo_items[:input_lat_long_values][l_source_cnt].size =0
+							_then								
+								.sweo_items[:log_file].write("No Input Val Given,No Input Value given,")
+							_endif
+						_endif
+						
+						_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+						_loop
+							.sweo_items[:log_file].write("No Record Found",",")
+						_endloop
+						
+						.sweo_items[:log_file].newline()
+					_endif
+				
+				_else
+					.sweo_items[:log_file].write(l_sr_no,",")
+					_if .sweo_items[:input_lat_long_values][l_source_cnt] _isnt _unset
+					_then
+						
+						_if .sweo_items[:input_lat_long_values][l_source_cnt].size > 1
+						_then							
+							_for a_column _over .sweo_items[:input_lat_long_values][l_source_cnt].fast_elements()
+							_loop								
+								.sweo_items[:log_file].write(a_column,",")
+							_endloop
+						_else
+							.sweo_items[:log_file].write(.sweo_items[:input_lat_long_values][l_source_cnt].an_element(),",")
+							.sweo_items[:log_file].write("No Input Val Given,No Input Value given,")
+						_endif
+						
+					_endif
+					_for b_fld _over .sweo_items[:output_lst][:destination_object].fast_elements()
+					_loop
+						.sweo_items[:log_file].write("No Record Found",",")
+					_endloop
+					.sweo_items[:log_file].newline()
+				_endif 
+				
+				l_sr_no +<< 1
+			_endloop
+		_endif 
+			
+		.sweo_items[:total_results] << l_sr_no
+		
+	_protection
+		
+		_if .sweo_items[:log_file] _isnt _unset
+		_then
+			.sweo_items[:log_file].close()
+		_endif
+		
+	_endprotect
+
+	_return l_all_destination_objects
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_relevent_destination_objects_lat_long()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_relevent_destination_objects_lat_long(a_source_obj)
+	##
+	## 
+	_local l_all_destination_obj << rwo_set.new()
+	_local l_def_geom << a_source_obj
+	_local l_geom_key,l_all_req_obj,l_pred,l_dst_coll_name
+	
+	_if .sweo_items[:source_operation_type].value = "Interacts" 
+	_then
+		l_dst_coll_name << .sweo_items[:destination_object].an_element().source_collection.name
+		l_geom_key << _self.tp_obj_wise_geom_flds[l_dst_coll_name]
+		_if l_geom_key _is _unset
+		_then
+			_if (l_geom_key << .sweo_items[:special_handled_collections][.sweo_items[:destination_object].name]) _is _unset
+			_then
+				_self.show_message("Unable to find the CS default geometry field for given Destination collections")
+				_leave
+			_endif
+		_endif
+		
+		l_pred << _self.get_predicate( .sweo_items[:source_operation_type].value,l_def_geom,l_geom_key)
+		
+		_if l_pred = _unset
+		_then				
+			_leave
+		_endif
+	
+		l_all_req_obj << .sweo_items[:destination_object].select(l_pred)
+	
+		l_all_destination_obj.add_all(l_all_req_obj)
+		
+	_elif .sweo_items[:source_operation_type].value ="Buffer"
+	_then			
+		l_all_destination_obj << _self.get_objects_within_buffer_lat_long(a_source_obj)
+	_else
+		#write("not yet handled")
+	_endif 
+
+	_return l_all_destination_obj	
+_endmethod
+$
+#------------------------------------------------------------------------------
+# Method get_objects_within_buffer_lat_long()
+#------------------------------------------------------------------------------
+_pragma(classify_level=basic, topic={tp_spatial_predicate_engine})
+_method tp_spatial_predicate_engine.get_objects_within_buffer_lat_long(a_source_obj) 
+	## 
+	## Fetching objects with in buffer value
+	##
+
+	_local l_total_destination_objects << rwo_set.new()
+	_local l_geom_key << _self.tp_obj_wise_geom_flds[.sweo_items[:destination_object].an_element().source_collection.name]
+	_if geom_key _is _unset 
+	_then
+		_if (l_geom_key << .sweo_items[:special_handled_collections][.sweo_items[:destination_object].name]) _is _unset
+		_then
+			_self.show_message("Unable to find the CS default geometry field for given Destination collections")
+			_leave
+		_endif
+	_endif
+
+	_local l_pseudo_area << a_source_obj.buffer(.sweo_items[:buffer_value_text].value.as_number()*1000)	
+	l_pseudo_area.world << .sweo_items[:electric_view].world
+	_local l_total_target_objects << .sweo_items[:destination_object].select(predicate.within(l_geom_key,l_pseudo_area))
+	
+	l_total_destination_objects.add_all(l_total_target_objects)
+	
+	>> l_total_destination_objects	
+_endmethod
+$

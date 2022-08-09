@@ -1,0 +1,227 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: logging
+  labels:
+    k8s-app: fluent-bit
+data:
+  # Configuration files: server, input, filters and output
+  # ======================================================
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    @INCLUDE input-kubernetes.conf
+    @INCLUDE filter-kubernetes.conf
+    @INCLUDE filter-lua.conf
+    @INCLUDE output-elasticsearch.conf
+
+  input-kubernetes.conf: |
+    [INPUT]
+        Name              tail
+        Tag               kube.*
+        Path              /var/log/containers/*.log
+        Parser            docker
+        DB                /var/log/flb_kube.db
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+
+  filter-kubernetes.conf: |
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Merge_Log           On
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude Off
+
+  filter-lua.conf: |
+    [FILTER]
+        Name   lua
+        Match  kube.*
+        script MapBifrostRecord.lua
+        call   map_bifrost_record
+
+  output-elasticsearch.conf: |
+    [OUTPUT]
+        Name            es
+        Match           *
+        Host            elasticsearch
+        Port            9200
+        Logstash_Format On
+        Logstash_Prefix fluent-bit
+        Time_Key        @ts
+        Replace_Dots    On
+        Retry_Limit     False
+
+  parsers.conf: |
+    [PARSER]
+        Name   apache
+        Format regex
+        Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name   apache2
+        Format regex
+        Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^ ]*) +\S*)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name   apache_error
+        Format regex
+        Regex  ^\[[^ ]* (?<time>[^\]]*)\] \[(?<level>[^\]]*)\](?: \[pid (?<pid>[^\]]*)\])?( \[client (?<client>[^\]]*)\])? (?<message>.*)$
+
+    [PARSER]
+        Name   nginx
+        Format regex
+        Regex ^(?<remote>[^ ]*) (?<host>[^ ]*) (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name   json
+        Format json
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name        docker
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
+        # Command      |  Decoder | Field | Optional Action
+        # =============|==================|=================
+
+
+    [PARSER]
+        Name        syslog
+        Format      regex
+        Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
+        Time_Key    time
+        Time_Format %b %d %H:%M:%S
+
+  MapBifrostRecord.lua: |
+    -- Fluent Bit Lua filter script
+    -- This script provides a callback function that is called to modify log messages that
+    -- originate from bifrost. The log messages are modified so that they conform
+    -- to a Smallworld common format.
+    -- If this file changes then test this callback function using testMapBifrostRecord.lua
+
+    function map_bifrost_record(tag, timestamp, record)
+    -- callback function
+    -- If log event is not from bifrost return a code zero which means that the record is not modified.
+    -- If log event is from bifrost than modify the record and return the modified record.
+
+      -- a set of local functions used to modify the record contents.
+      local function get_key(record, key)
+        -- return the value of record[key]
+        return record[key]
+      end
+
+      local function get_subkey(record, key, subkey)
+        -- return the value of record[key][subkey]
+        -- return nil if record[key] is not set
+        if (record[key] == nil) then
+          return nil
+        end
+        return record[key][subkey]
+      end
+
+      local function add_key_if_not_set(record, key, value)
+        if (record[key] ~= nil) then
+          return
+        end
+        record[key] = value
+      end
+
+      local function make_set (list)
+        local set = {}
+        for x, l in ipairs(list) do set[l] = true end
+        return set
+      end
+
+      local function add_key_subkey_if_not_set(record, key, subkey, value)
+        -- handle case of key missing
+        if (record[key] == nil) then
+          record[key] = {}
+        end
+        add_key_if_not_set(record[key],subkey, value)
+      end
+
+      local function remove_key(record, key)
+        -- remove a key
+        record[key] = nil
+      end
+
+      local function remove_key_subkey(record, key, subkey)
+        -- remove a key subkey
+        -- handle case of key missing
+        if (record[key] ~= nil) then
+          record[key][subkey] = nil
+        end
+      end
+
+      local function move_keys_with_exclusions(record, excluded_keys_list, targetKey)
+        -- update record by making all keys except those excluded keys.
+        -- into subkeys of the target key.
+        if (record[targetKey] == nil) then
+          record[targetKey] = {}
+        end
+        excluded_keys_set = make_set(excluded_keys_list)
+        excluded_keys_set[targetKey] = true
+
+        for k,v in pairs(record) do
+          if not excluded_keys_set[k] then
+            record[targetKey][k] = v
+            record[k] = nil
+           end
+        end
+      end
+
+      local is_bifrost_record = false;
+      if record and record.kubernetes and record.kubernetes.labels and record.kubernetes.labels.service == 'bifrost' then
+        is_bifrost_record = true;
+      end
+
+      if not is_bifrost_record then
+        -- record not modified.
+        return 0,0,0;
+      end
+
+      -- map bifrost fields
+      add_key_if_not_set(record,"type","SWLogData");
+
+      --  swlog.session is not set
+      add_key_subkey_if_not_set(record,"sw_log","class",get_key(record,"level"));
+      add_key_subkey_if_not_set(record,"sw_log","module","gss");
+      -- swlog.name is not set
+
+      add_key_subkey_if_not_set(record,"gss","component","bifrost");
+      add_key_subkey_if_not_set(record,"gss","correlation_id",get_subkey(record,"context","correlationId"))
+      remove_key_subkey(record, "context", "correlationId")
+      --  gss.logged_from is not set
+      add_key_subkey_if_not_set(record,"gss","log_message",get_key(record,"message"))
+      remove_key(record, "message")
+      add_key_subkey_if_not_set(record,"gss","message_id",get_key(record,"eventId"))
+
+      move_keys_with_exclusions(record, {'kubernetes','log','@ts','stream','level','time','sw_log', 'type'}, "gss")
+
+      -- return modified record.
+      return 1, timestamp, record
+
+    end
+

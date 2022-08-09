@@ -1,0 +1,59 @@
+// Popover Styles
+// --------------------------------------------------
+
+.popover {
+  background-color: @black;
+  border: 1px solid @grayDarker;
+
+  .popover-inner {
+    background-color: lighten(@grayDarker, 10%);
+  }
+
+  .popover-title {
+    background-color: @btnHoverBackground;
+    .border-top-radius(6px);
+    .border-bottom-radius(0);
+  }
+
+  .popover-content {
+    background-color: @black;
+    .border-top-radius(0);
+    .border-bottom-radius(6px);
+  }
+
+  &.popover-rich {
+    background:none;
+  }
+
+  &.right .arrow {
+    border-right-color: lighten(@grayDarker, 15%);
+
+    &:after {
+      border-right-color: @black;
+    }
+  }
+
+  &.left .arrow {
+    border-left-color: lighten(@grayDarker, 15%);
+
+    &:after {
+      border-left-color: @black;
+    }
+  }
+
+  &.top .arrow {
+    border-top-color: lighten(@grayDarker, 15%);
+
+    &:after {
+      border-top-color: @black;
+    }
+  }
+
+  &.bottom .arrow {
+    border-bottom-color: lighten(@grayDarker, 15%);
+
+    &:after {
+      border-bottom-color: @black;
+    }
+  }
+}

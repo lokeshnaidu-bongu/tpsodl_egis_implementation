@@ -1,0 +1,6 @@
+tp_custome_delete_access	1
+
+description
+	Users having delete permission of particular object can delete that object
+end
+

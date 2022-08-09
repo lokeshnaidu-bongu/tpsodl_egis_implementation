@@ -1,0 +1,25 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Commercial	1	
+Defence Establishments	2
+Educational Areas	3
+Industrial Areas	4
+Institutional	5
+Medical	6
+Mixed	7
+Other	8
+Recreational	9
+Residential	10	
+Residential Individual	11
+Restricted  12
+Rural	 13
+Govt. Buildings	14
+Public service	15
+Entertainment	16
+Sports	17
+Transport	18
+Worship	19

@@ -1,0 +1,2 @@
+/*! ElectricOfficeWeb 5.0.1 2021-06-16 */
+define({load:function(a,b,c,d){"use strict";var e=d.config["server-config"].configFileName?d.config["server-config"].configFileName:"config/server-config.json";b(["text!"+e],function(a){c(JSON.parse(a))})}});

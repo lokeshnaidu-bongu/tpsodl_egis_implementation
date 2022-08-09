@@ -1,0 +1,13 @@
+# Warning - this file is not designed to be edited!
+#
+# If you do edit the file by hand then it is your
+# responsibility to get the format correct.  Incorrect data
+# may give unexpected behaviour.
+#
+Arterial Road	1
+Expressway	2	
+Major Road	3
+Minor Road	4
+National Highway	5
+Others	6
+State Highway	7

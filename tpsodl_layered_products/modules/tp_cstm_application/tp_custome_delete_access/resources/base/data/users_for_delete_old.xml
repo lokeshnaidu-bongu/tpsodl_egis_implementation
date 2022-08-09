@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<users_for_delete>
+<allowed_groups>
+<tpsodl_users>
+ 
+	<group key = "eo_service_point" allowed_user = "root" allowed_operation = "delete"/>
+
+</tpsodl_users>
+</allowed_groups>
+</users_for_delete>

@@ -1,0 +1,1220 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<conflict_resolution_process_engine>
+
+	<resolver class_name="default_conflict_resolver" resolution="parent">
+	        <collections>
+		        <!-- WIRE ASSETS -->
+			<collection name="eo_wire">
+			        <resolution class_name="eo_asset_resolver_cleanup_rule"/>
+			</collection>
+			<!-- CABLE ASSETS -->
+			<collection name="eo_cable">
+			        <resolution class_name="eo_asset_resolver_cleanup_rule"/>
+			</collection>
+			<!-- CROSS SECTION ELEMENTS -->
+			<collection name="eo_cross_section_element">
+			        <resolution class_name="eo_cse_resolver_cleanup_rule"/>
+			</collection>
+			<!--- EO INSTALLATION -->
+			<collection name="eo_wire_segment_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_cable_segment_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_connector_segment_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_isolating_eqpt_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_power_xfrmr_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_3w_power_xfrmr_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_connector_point_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_protective_eqpt_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_regulating_eqpt_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_energy_storage_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+			<collection name="eo_measuring_eqpt_inst">
+			        <resolution class_name="eo_installation_resolver_cleanup_rule"/>
+			</collection>
+		</collections>
+	</resolver>
+
+	<!--Commented below as eo_conflict_resolution_process_reporter is not logging the comments in emacs--> 
+	<!--<reporter class_name="eo_conflict_resolution_process_reporter">-->
+		<!-- to show debugging information remove comments: -->
+		<!-- stream id="output"/>
+		<lowest_recording_level level="debug"/
+	</reporter>-->
+
+	<processes>
+		<process name="attributes" class_name="attribute_combining_resolution_process">
+			<collections change_rule="take_changes" conflict_rule="child">
+			      <!--
+				  SD: Handled pole location update conflict in NSC end-to-end integration
+			      <collection name="ed_pole">
+					<group change_rule="take_changes" conflict_rule="parent">
+						<attribute name="tp_exi_location_lv"/>
+						<attribute name="tp_exi_location_st"/>
+						<attribute name="tp_exi_location_ht"/>
+						<attribute name="tp_exi_location_multi"/>
+						<attribute name="remarks"/>
+					</group>
+				</collection>
+				--> 
+				<collection name="eo_cable">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"></attribute>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+				</collection>
+
+<!-- CABLE ANNOTATION -->
+				<collection name="eo_cable_annotation">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="leader_line"/>
+						<attribute name="type"/>
+					</group>
+				</collection>
+
+<!-- CABLE SEGMENT -->
+				<collection name="eo_cable_segment_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="usage"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="arrangement"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotations"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="actual_length"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="network_type"/>
+						<attribute name="reverse_flow_ind"/>
+						<attribute name="route"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- CIRCUIT -->
+				<collection name="eo_circuit">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="extent_buffer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="colour"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="load_shed_priority"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="ug_exit_ind"/>
+						<attribute name="ug_vented_ind"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="tap_line_ind"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="circuit_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_last_updated"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+				</collection>
+
+<!-- CIRCUIT ANNOTATION -->
+				<collection name="eo_circuit_annotation">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="circuit_id"/>
+						<attribute name="type"/>
+					</group>
+				</collection>
+
+<!-- CIRCUIT EXTENT -->
+                                <collection name="eo_circuit_extent">
+                                  <group change_rule="take_changes">
+                                    <conflict_rule class_name="recalculate_circuit_extent_rule"/>
+                                    <attribute name="extent"/>
+                                  </group>
+                                </collection>
+				
+<!-- CIRCUIT SECTION -->
+				<collection name="eo_circuit_section">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="section_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="circuit_id"/>
+						<attribute name="circuit_section_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_last_updated"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+				</collection>
+
+<!-- CIRCUIT SECTION EXTENT -->
+           			<collection name="eo_circuit_section_extent">
+                                  <group change_rule="take_changes">
+                                    <conflict_rule class_name="recalculate_section_extent_rule"/>
+                                    <attribute name="extent"/>
+                                  </group>
+                                </collection>
+
+
+<!-- CIRCUIT SOURCE -->
+				<collection name="eo_circuit_source">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="circuit_source_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="circuit_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+				</collection>
+
+<!-- CIRCUIT STOPPER -->
+				<collection name="eo_circuit_stopper">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+				</collection>
+
+<!-- COMPOSITE SWITCH -->
+				<collection name="eo_composite_switch">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="design"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_installed"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="phasing"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+
+				</collection>
+
+<!-- CONNECTOR POINT -->
+				<collection name="eo_connector_point">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="serial_number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+				</collection>
+
+<!-- CONNECTOR POINT INSTALLATION -->
+				<collection name="eo_connector_point_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- CONNECTOR SEGMENT -->
+				<collection name="eo_connector_segment">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+				</collection>
+
+<!-- CONNECTOR SEGMENT INSTALLATION -->
+				<collection name="eo_connector_segment_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="reverse_flow_ind"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotations"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="actual_length"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="network_type"/>
+						<attribute name="route"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- ENERGY CONSUMER -->
+				<collection name="eo_energy_consumer">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+						<attribute name="leader_line"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="phasing"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="consumer_class"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="consumer_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="premise_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="meters"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_installed"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location"/>
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- ENERGY SOURCE -->
+				<collection name="eo_energy_source">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="phasing"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="apparent_power_capacity"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="real_power_capacity"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_installed"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- ISOLATING EQUIPMENT -->
+				<collection name="eo_isolating_eqpt">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="serial_number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+				</collection>
+
+<!-- ISOLATING EQUIPMENT INSTALLATION -->
+				<collection name="eo_isolating_eqpt_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mirrored_ind"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="scada_control_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="scada_monitor_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="scada_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+						<attribute name="connector"/>
+						<attribute name="network_type"/>
+						<attribute name="pin1"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- LIGHT -->
+				<collection name="eo_light">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="fixture_quantity"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="fixture_color"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="fixture_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="fixture_style"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="contract_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="agreement_number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="leader_line"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="lamp_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="lamp_voltage"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="lamp_current"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting_support"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting_support_length"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="tennon_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="fixture_usage"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_installed"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="phasing"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location"/>
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- METER -->
+				<collection name="eo_meter">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="phase_count"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="premise_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+						<attribute name="leader_line"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_installed"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="serial_number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location"/>
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- POWER TRANSFORMER -->
+				<collection name="eo_power_xfrmr">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="current_limiting_fuse_ind"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="source_fuse_size"/>
+						<attribute name="source_fuse_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="load_fuse_size"/>
+						<attribute name="load_fuse_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="serial_number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+				</collection>
+
+<!-- POWER TRANSFORMER INSTALLATION -->
+				<collection name="eo_power_xfrmr_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="source_location"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="source_network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="kva_demand"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="special_loading"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="parallel_ind"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="energy_consumers"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="load_location"/>
+						<attribute name="load_network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+						<attribute name="leader_line"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="source_nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="load_nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="total_apparent_power"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="structure_mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="bank_configuration"/>
+						<attribute name="banked_ind"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- PROTECTIVE EQUIPMENT -->
+				<collection name="eo_protective_eqpt">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="serial_number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+				</collection>
+
+<!-- PROTECTIVE EQUIPMENT INSTALLATION -->
+				<collection name="eo_protective_eqpt_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+						<attribute name="protection_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+						<attribute name="leader_line"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="scada_control_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="scada_monitor_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="scada_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location"/>
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- REGULATING EQUIPMENT -->
+				<collection name="eo_regulating_eqpt">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="serial_number"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="device_type"/>
+					</group>
+				</collection>
+
+<!-- REGULATING EQUIPMENT INSTALLATION -->
+				<collection name="eo_regulating_eqpt_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+						<attribute name="leader_line"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location"/>
+						<attribute name="network_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+
+<!-- WIRE -->
+				<collection name="eo_wire">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="asset_id"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_acquired"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="date_manufactured"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="manufacturer"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+					</group>
+				</collection>
+
+<!-- WIRE ANNOTATION -->
+				<collection name="eo_wire_annotation">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="leader_line"/>
+						<attribute name="segment_id"/>
+						<attribute name="type"/>
+					</group>
+				</collection>
+
+<!-- WIRE SEGMENT -->
+				<collection name="eo_wire_segment_inst">
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="mounting"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="phase_order"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="usage"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="arrangement"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="annotations"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="alias"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="existing_phases"/>
+						<attribute name="future_phases"/>
+						<attribute name="past_phases"/>
+						<attribute name="status"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="actual_length"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="location_description"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="name"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="owner_name"/>
+						<attribute name="owner_type"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="remarks"/>
+						<attribute name="remarks_annotation"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="network_type"/>
+						<attribute name="reverse_flow_ind"/>
+						<attribute name="route"/>
+					</group>
+					<group change_rule="take_changes" conflict_rule="operator">
+						<attribute name="nominal_voltage_pp"/>
+					</group>
+					<group change_rule="take_changes">
+						<conflict_rule class_name="style_subcode_conflict_rule"/>
+						<attribute name="style_subcode"/>
+					</group>
+				</collection>
+			</collections>
+		</process>
+	</processes>
+</conflict_resolution_process_engine>

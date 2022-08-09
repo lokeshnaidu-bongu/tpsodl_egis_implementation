@@ -1,0 +1,120 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: populate-solr
+  namespace: gss-prod
+spec:
+  # To run the populate-solr job manually, use this command:
+  # kubectl create job --from=cronjob/populate-solr -n <GSS_NAMESPACE> populate-solr-manual-job
+  # where <GSS_NAMESPACE> is the deployment namespace
+  schedule: "30 1 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          hostAliases:
+          - ip: "192.168.200.91"
+            hostnames:
+            - "dc-gisuat-webm1"
+          - ip: "192.168.200.86"
+            hostnames:
+            - "dc-gisuat-webw2"
+          - ip: "192.168.200.88"
+            hostnames:
+            - "dc-gisuat-webl2"
+          - ip: "192.168.200.43"
+            hostnames:
+            - "dc-gisdev-db02"
+            - "dc-gisdev-db02.tpsodlcorp.tpsodl.com"
+          restartPolicy: Never
+          containers:
+          - name: tpsodl-eo-web-populate-solr
+            image: pull.dc-gisuat-webm1:30443/pwr-smallworld/tpsodl-eo-web:SW528-PROD-2
+            command: [ "/bin/bash"]
+            args: [ "/Smallworld/populate_solr_index.sh" ]
+            env:
+            - name: BIFROST_URL
+              value: https://dc-gisuat-webm1:30443
+            - name: SW_ACE_DB_DIR
+              value: dc-gisdev-db02:/f$/LCC_DB/gis_db_lcc/ds_admin
+            - name: SW_MODELIT_DB_DIR
+              value: 
+            - name: SW_MESSAGE_DB_DIR
+              value: dc-gisdev-db02:/f$/smallworld_registry
+            - name: SW_DB_CONTEXT_DIR
+              value: 
+            - name: EIS_RESOURCES_PATH
+              value: /eis_srv_resources
+            - name: RABBIT_CONFIG_MODULE_NAME
+              value: gss_basic_vertx_application
+            - name: RABBIT_CONFIG_FILE_NAME
+              value: empty_rabbit_config.xml
+            - name: RABBITMQ_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: bifrost-rabbitmq-secret
+                  key: path
+            - name: SOLR_HOST_NAME
+              value: solr-service
+            - name: SW_SOLR_USER
+              valueFrom:
+                secretKeyRef:
+                  name: solr-secret
+                  key: user
+            - name: SW_SOLR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: solr-secret
+                  key: password
+            - name: MAGIK_SESSION_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: magik-user-secret
+                  key: username
+            - name: MAGIK_SESSION_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: magik-user-secret
+                  key: password
+            - name: TEMP
+              value: /eis_logs
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            volumeMounts:
+            - name: eis-config-volume
+              mountPath: /Smallworld/tpsodl_eo/TPSODLElectricOfficeWeb/modules/tpsodl_eo_web_vertx_server_application/resources/base/data
+            - name: db-context-volume
+              mountPath: /Smallworld/db_context/
+            - name: eis-resources-volume
+              mountPath: /eis_srv_resources
+              subPath: eis/resources
+            - name: eis-resources-volume
+              mountPath: /eis_logs
+              subPath:  eis/logs
+            - name: eis-mount
+              mountPath: /Smallworld/tpsodl_eo
+            - name: eis-land-mount
+              mountPath: /Smallworld/tp_cstm_product
+          volumes:
+          - name: eis-config-volume
+            configMap:
+              name: eis-config-cm      
+          - name: db-context-volume
+            hostPath:
+              path: /data/local/empty_dir
+          - name: eis-mount
+            hostPath:
+              path: /var/nfsshare/eis_product/tpsodl_eo          
+          - name: eis-land-mount
+            hostPath:
+              path: /var/nfsshare/eis_product/tp_cstm_product
+          - name: eis-resources-volume
+            persistentVolumeClaim:
+              claimName: nfs-storage-class-tpsodl-eo-web-gss-prod-pvc
+          imagePullSecrets:	
+            - name: regsecret

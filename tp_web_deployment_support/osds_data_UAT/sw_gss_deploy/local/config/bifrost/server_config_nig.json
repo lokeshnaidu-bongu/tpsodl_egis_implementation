@@ -1,0 +1,20 @@
+{
+  "base": "server_config_emaps.json",
+  "root": [
+    {"name": "physical_browser", "path": "http://physical-browser-client-service:3000"}, 
+    {"name": "fault_locator", "path": "http://fault-locator-client-service:3000"}, 
+    {"name": "emaps", "path": "http://emaps-client-service:3000"}
+  ],
+  "paths": {
+    "/physical_browser": {
+      "security_roles": [
+        "gss.user"
+      ]
+    },
+    "/fault_locator": {
+      "security_roles": [
+        "gss.user"
+      ]
+    }
+  }
+}

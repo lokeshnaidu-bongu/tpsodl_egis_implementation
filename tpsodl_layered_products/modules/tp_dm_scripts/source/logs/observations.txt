@@ -1,0 +1,36 @@
+Comms Device- Manufacturer( eo_manufacturer)- Completed
+Cable Spec  Rated Current)  - completed
+conduit - tp_actual_length, tp_conduit_type, ,landmark,mounting -Completed
+connector_point_inst -- tp_submounting - not completed
+connector_Segment_installation- tp_rated_current
+decorative_pole: division_code,division_name,mounting,#street_light_switch#,sub_mounting
+energy_source - ,tp_weight
+energy storage installtion - 
+energy_storage_spec-tp_output_voltage,tp_rated_current
+fibre_optic - Geometric Length,Installation_type,sub_mounting,wardcode
+Isolating_eqpt_inst - rated current duration,sub mounting,Tie
+Measuring Eqpt- Rated Current Rated Voltage
+Measuring Eqpt Inst - Burden,Capacitor Indicator?,Earthing,Nominal Voltage,Pin Code,tp_rated_continuous_current,tp_rated_short_time_current,source voltage,sub_locality,tp_synchronization_indicator?
+
+
+
+Meter- Display condition? spell check, manufacturer,Maximum Demand,Phase,Rated Current
+Pole , earthing,Foundation Level From Mean Sea Level,Manufacturer,Deleteduplicate fielld  No of street Type,No of HV Circuit,Surveyor Remark
+
+
+Power Transfomer - landmark,Maximum Demand,No of Taps, 
+Powwer Transformer Installation- tp_conservator_oil_preserving_system?,maximum demand,No Load Loss,
+Protectve equipment - Earthing?,material
+Protective Equipment Exi Phase- Date of Commissioning, Date of De- Commissioning
+Protective Equipment Installation- City,Division Code, Division Name,fpi communicable?,Indicator Type,Installing Type,Insulating Base?
+Protective Eqpt spec - drain voltage,rated discharge current
+service connection: landmark,Life Cycle Status,Maximum Demand,Owner Name Owner tYPE,Phase
+Service Point- Address,Building Reference Number,Consumer Number,Cyme id,Data Collected by,Data Updated by in Gis,Date of Data Collection,EA Equipment ID,Feeder Name,Function,Landmark,locality,Mounting,Road Name,SCADA CONTROL ID, SCADA MONITOR ID,Sub Locality,Time of Data Collection,Work Order ID, Company ID
+
+Switchfear-mounting
+tower-earthing?
+wire spec- type
+wire segment- material,rated breaking  current,rated current
+
+Substation:mounting
+

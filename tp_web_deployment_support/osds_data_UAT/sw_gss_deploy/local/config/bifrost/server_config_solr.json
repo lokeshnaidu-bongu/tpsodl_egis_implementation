@@ -1,0 +1,17 @@
+{
+  "base": "server_config_base.json",
+  "solrHost": {
+    "host": "${SOLR_HOST_NAME}",
+    "port": 8983,
+    "username": "${SW_SOLR_USER}",
+    "password": "${SW_SOLR_PASSWORD}",
+    "useSSL": false
+  },
+  "paths": {
+    "/asset": {
+      "security_roles": [
+        "gss.user"
+      ]
+    }
+  }
+}

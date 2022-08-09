@@ -1,0 +1,293 @@
+// Todo: Everything in this file that has been commented out is done so to start small for the BS3 upgrade
+// Ideally, we'll refactor and move styles back into navbar.less so we can properly extend
+
+// Dependencies
+// --------------------------------------------------
+@import "ge-bootstrap/less/cdx-bootstrap.less";
+@import "cdx-variables.less";
+@import "cdx-mixins.less";
+//@import "navbar.less";
+
+// Styles
+// --------------------------------------------------
+.navbar {
+  margin-bottom: 0;
+  background-color: @navbarBackground;
+  background-image: none;
+  min-height: 136px;
+  .box-shadow(~"none");
+
+  .primary-brand {
+    font-size: 26px;
+  }
+  .secondary-brand {
+    font-size: 26px;
+  }
+
+  .toolbar-container {
+    margin-top: 17px;
+  }
+
+  .btn.btn-default {
+    background: @white;
+  }
+
+  .container {
+    .navbar-brand {
+      margin: 18px 0 0 -30px;
+      height: 70px;
+      color: @blue;
+    }
+    .ge-logo {
+      margin: -56px 10px 0px 5px;
+    }
+  }
+
+  .navbar-header {
+    min-height: 136px
+  }
+
+  &.navbar-small {
+    min-height: 80px;
+
+    .navbar-header {
+      min-height: 60px;
+    }
+
+    .container {
+      .navbar-brand {
+        margin: 6px 0 0 -30px;
+        height: 70px;
+        color: @blue;
+        .primary-brand {
+          font-size: 26px;
+        }
+        .secondary-brand {
+          font-size: 26px;
+        }
+      }
+      .ge-logo {
+        height: 40px;
+        width: 40px;
+        margin: -6px 10px 0px 0px;
+      }
+      .primary-navbar {
+        margin-left: -15px;
+      }
+      [class*='span'] {
+        margin-bottom: 0px;
+      }
+    }
+  }
+  
+  .btn-toolbar {
+    margin-top: 0;
+  }
+  
+  .btn-navbar {
+    display: none;
+    margin-top: 12px;
+    margin-bottom: @marginBtnBottom;
+    padding: 4px 10px 3px 10px;
+    span {
+      font-size: 0px;
+    }
+    i[class*="icon-ico_menu_lg"] {
+      margin-top: 3px;
+      font-size: @baseFontSize;
+    }
+  }
+
+  // the actual navigation
+  .primary-navbar {
+    background-color: @navbarBackground;
+    height: 40px;
+    .container .nav {
+      margin-left: -25px;
+      > li > a {
+        border: 1px solid transparent;
+        color: @navbarLinkColor;
+        font-weight: bold;
+        outline: 0;
+        padding: 9px 14px 8px;
+        font-size: 14px;
+        &:hover {
+          color: @linkColor;
+        }
+      }
+      > li.active > a {
+        background-color: transparent;
+        color: @linkColor;
+      }
+      > li.dropdown.open > .dropdown-toggle {
+        border: 1px solid @grayLighter;
+        background-color: @white;
+        border-bottom-color: @white;
+        color: @linkColor;
+        margin-bottom: -1px;
+        position: relative;
+        z-index: @zindexDropdown + 1;
+      }
+    }
+    .dropdown-menu {
+      .border-radius(0);
+      border: 1px solid @grayLighter;
+      margin-top: 0;
+      margin-left: 0px;
+      min-width: 100px;
+      padding: 15px;
+      white-space: nowrap;
+      &:before,
+      &:after {
+        display: none !important;
+      }
+      a {
+        color: @grayDarkest;
+        font-weight: bold;
+        margin-right: 30px;
+        padding-left: 0px;
+        padding-right: 0;
+        &:hover {
+          background: transparent;
+          color: @linkColor;
+        }
+        &:active {
+          color: @dropdownLinkColorActive;
+        }
+        &:focus {
+          background-color: @white;
+          background: none;
+          outline: none;
+        }
+      }
+      .open {
+        float: left;
+        min-width: 100px;
+        a {
+          background: none !important;
+        }
+
+        li > a {
+          line-height: 20px;
+          color: @grayDarker;
+          font-weight: normal;
+          margin-left: 0;
+          margin-right: 0;
+          &:hover {
+            color: @linkColor;
+          }
+        }
+      }
+    }
+    .dropdown-menu .active > a,
+    .dropdown-menu .active > a:hover {
+      background: @dropdownLinkBackgroundActive;
+    }
+  }
+
+  //-- Typeahead
+  .navbar .typeahead {
+    margin-top: -10px;
+  }
+  .typeahead-faceted {
+    padding-top: 0;
+    overflow: hidden;
+    background-color: @grayLighter;
+    border: 1px solid @grayLight;
+    width: 350px;
+    margin-top: -21px;
+    ul, ol {
+      margin-top: 0;
+    }
+  }
+  .typeahead-faceted > ul {
+    margin: -1px;
+  }
+  .facet {
+    .clearfix;
+    width: 100%;
+  }
+
+  .facet-name {
+    .box-sizing(border-box);
+    color: @textColor;
+    float: left;
+    line-height: 30px;
+    padding: 0 15px;
+    position: relative;
+    text-align: right;
+    top: 1px;
+    white-space: nowrap;
+    width: 40%;
+  }
+
+  .typeahead-faceted > ul > li:last-child,
+  .facet-results {
+    background-color: @white;
+    border-color: @grayLight;
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+    .box-sizing(border-box);
+    float: right;
+    padding-top: 0;
+    padding-bottom: 3px;
+    width: 60%;
+  }
+  .typeahead-faceted > ul > li:first-child {
+    margin-top: 0;
+    .facet-results {
+      border-top: 0;
+      .border-radius( 0 @baseBorderRadius 0 0 );
+    }
+  }
+  .typeahead-faceted > ul > li:last-child {
+    .border-radius( 0 0 @baseBorderRadius 0 );
+    margin-bottom: -4px;
+  }
+
+  // IE8 won't apply the rules specified after :last-child, above.
+  .lt-ie9 .facet-results,
+  .lt-ie9 .typeahead-faceted > ul > li.last {
+    background-color: @white;
+    border-color: @btnBorder;
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+    .box-sizing(border-box);
+    float: right;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 60%;
+  }
+
+  .lt-ie9 .typeahead-faceted > ul > li.last {
+    .border-radius( 0 0 @baseBorderRadius 0 );
+    margin-bottom: -4px;
+  }
+
+
+
+  @media (min-width: @grid-float-breakpoint) {
+    float: none;
+  }
+
+  @media (max-width: @grid-float-breakpoint-max) {
+    .toolbar-container {
+      margin-top: 0;
+      margin-bottom: 10px;
+      float: none !important;
+    }
+    .navbar-search {
+      float: none !important;
+    }
+    .navbar-brand {
+      margin-left: 10px !important;
+    }
+    .navbar-toggle {
+      position: absolute;
+      top: 17px;
+      right: 15px;
+    }
+  }
+}
+
+ 

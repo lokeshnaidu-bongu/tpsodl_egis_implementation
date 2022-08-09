@@ -1,0 +1,13 @@
+tp_mis_circle
+tp_mis_division
+tp_mis_subdivision
+tp_mis_section
+tp_mis_gss
+tp_mis_pss
+tp_mis_dss
+tp_mis_dt
+tp_mis_feeder
+tp_consumer_consumption_data
+tp_consumer_consumption_data_archive
+tp_primary_meter_reading_data
+tp_primary_meter_reading_data_archive

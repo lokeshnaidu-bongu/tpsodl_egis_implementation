@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="Windows-1252" ?>
+<tp_collections>
+<!-- Define the xml files for specific collections -->
+<collection collection_name = "tp_gate" >
+<fields field_name = "route" external_name = "Route" mandatory = "false" field_type="chain" field_size ="" unset_value="" default_value ="" field_index="No" mode ="insert"/>
+</collection>
+</tp_collections>

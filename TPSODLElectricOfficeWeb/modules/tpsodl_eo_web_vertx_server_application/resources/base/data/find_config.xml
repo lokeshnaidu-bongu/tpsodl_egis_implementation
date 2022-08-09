@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<search_config>
+<query name="coordinate_query" class="coordinate_find_component" />
+  <query name="asset_id_query" class="fields_find_component">
+    <collection name="eo_isolating_eqpt" /> 
+    <collection name="eo_power_xfrmr" /> 
+    <collection name="eo_3w_power_xfrmr" /> 
+    <collection name="eo_protective_eqpt" /> 
+    <collection name="eo_composite_switch" /> 
+    <field name="asset_id" /> 
+    <field name="device_type" /> 
+  </query>
+  <query name="circuit_query" class="fields_find_component">
+    <collection name="eo_circuit" /> 
+    <field name="circuit_id" /> 
+    <field name="name" /> 
+    <field name="number" /> 
+    <field name="originating_substations" join_field_name="name" /> 
+    <field name="operating_company" />
+  </query>
+  <query name="isolating_equipment_query" class="fields_find_component">
+    <collection name="eo_isolating_eqpt_inst" /> 
+    <field name="device_type" /> 
+    <field name="circuit_id" /> 
+    <field name="name" /> 
+    <field name="normal_status" />
+  </query>
+  <query name="power_xfrm_query" class="fields_find_component">
+    <collection name="eo_power_xfrmr_inst" /> 
+    <field name="device_type" /> 
+    <field name="circuit_id" /> 
+    <field name="name" /> 
+  </query>
+  <query name="protective_eqpt_query" class="fields_find_component">
+    <collection name="eo_protective_eqpt_inst" /> 
+    <field name="device_type" /> 
+    <field name="circuit_id" /> 
+    <field name="name" /> 
+  </query>
+  <query name="sub_substation_query" class="fields_find_component">
+    <collection name="sub_substation" /> 
+    <field name="name" /> 
+    <field name="number" /> 
+    <field name="type" /> 
+    <field name="class" /> 
+    <field name="date_installed" query_type="date_range"/> 
+  </query>
+</search_config>

@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sws-uaa-deployment
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: uaa-service
+    service: uaa-uaa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predix
+      service-cluster: uaa-service
+      service: uaa-uaa
+  template:
+    metadata:
+      labels:
+        app: predix
+        service-cluster: uaa-service
+        service: uaa-uaa
+    spec:
+      containers:
+      - name: uaa-uaa
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/sws-uaa:2.1.0-dev.73
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 5Gi
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - name: uaa-config-volume
+            mountPath: /usr/local/uaa-config
+          - name: uaa-logging-volume
+            mountPath: /usr/local/uaa-logging
+        env:
+          - name: ISSUER_URI
+            value: https://dc-gisuat-webm1:30443/uaa
+          - name: UAA_CONFIG_PATH
+            value: /usr/local/uaa-config
+          - name: UAA_CONFIG_YAML
+            valueFrom:
+              secretKeyRef:
+                name: uaa-overrides-secret
+                key: uaa-overrides-secret
+          - name: JAVA_OPTIONS
+            value: >
+              -Dlogging.config=/usr/local/uaa-logging/log4j2.properties
+              -Djava.security.egd=file:/dev/urandom
+        livenessProbe:
+          httpGet:
+            path: /uaa/token_key
+            port: 8080
+          initialDelaySeconds: 70
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /uaa/token_key
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 7
+      initContainers:
+      - name: nslookup-uaa-postgresql-svc
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/alpine:3.12.0
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nslookup uaa-postgresql-svc; do echo waiting for uaa-postgresql-svc; sleep 2; done;']
+      - name: init-uaa-postgresql-svc
+        image: pull.dc-gisuat-webm1:30443/pwr-smallworld/postgres:10.17.0-debian-10_0.1.0
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsUser: 0
+        command: ['sh', '-c', 'until pg_isready -h uaa-postgresql-svc -d uaadb; do echo waiting for uaa-postgresql-svc; sleep 2; done;']
+      volumes:
+        - name: uaa-config-volume
+          configMap:
+            name: uaa-config
+        - name: uaa-logging-volume
+          configMap:
+            name: uaa-logging
+      imagePullSecrets:
+      - name: regsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uaa-service
+  namespace: gss-prod
+  labels:
+    app: predix
+    service-cluster: uaa-service
+    service: uaa-uaa
+spec:
+  selector:
+    app: predix
+    service-cluster: uaa-service
+    service: uaa-uaa
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800

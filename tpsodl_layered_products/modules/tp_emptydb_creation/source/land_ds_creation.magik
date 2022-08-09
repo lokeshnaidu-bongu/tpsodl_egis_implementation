@@ -1,0 +1,25 @@
+_block 
+## Adding Product
+sw_module_dialog.open()
+product_path << "E:\EO_528\land_office"
+smallworld_product.add_product(product_path)
+## Loading Dependent Modules
+smallworld_product.load_module(:cs_land)
+smallworld_product.load_module(:land_ds_install)
+smallworld_product.load_module(:cs_land_trace_engine)
+smallworld_product.load_module(:cs_map_grid_generator)
+smallworld_product.load_module(:cs_raster)
+smallworld_product.load_module(:street_management)
+smallworld_product.load_module(:swo_geocoding_gui)
+smallworld_product.load_module(:swo_street_name_management_tool)
+smallworld_product.load_module(:us_landbase_plugin)
+## Fetching Upgradable Implementers
+mmm << sw_module_manager.module(:land_ds_install)
+imps << mmm.datamodel_implementers()
+## compile in this code
+de << datamodel_engine.new(:implementers,imps)
+de.print_installation_status()
+## should see version number in list as installable
+de.install_case_database_changes()
+de.install_database_changes()
+_endblock 

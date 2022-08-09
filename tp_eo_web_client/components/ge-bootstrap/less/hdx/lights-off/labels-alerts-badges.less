@@ -1,0 +1,48 @@
+.label,
+.badge,
+.alert {
+  #gradient > .vertical(@btnBackground, darken(@grayDarkest, 3.5%));
+
+  &.label,
+  &.badge,
+  &.alert{
+	  &-info {
+      #gradient > .vertical(@blue, darken(@blue, 11.5%));
+	  }
+
+	  &-inverse {
+		  background: @black;
+		  border-color: @grayDarker;
+		  color: @white;
+	  }
+
+	  &-success {
+		  #gradient > .vertical(@green, darken(@green, 10%));
+	  }
+
+	  &-warning {
+		  #gradient > .vertical(@orange, darken(@orange, 10%));
+	  }
+  }
+}
+
+.label.label {
+	&-inverse,
+	&-default {
+		text-transform: capitalize;
+	}
+}
+
+
+.label.label-important,
+.badge.badge-important,
+.alert.alert-important,
+.alert.alert-danger,
+.alert.alert-error {
+	#gradient > .vertical(@importantBackground, darken(@importantBackground, 10%));
+}
+
+.alert {
+	#gradient > .vertical(@orange, darken(@orange, 10%));
+}
+

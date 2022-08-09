@@ -1,0 +1,9 @@
+tpsodl_features_within_buffer_service  1
+
+description
+
+end
+
+requires
+	service_provider_framework
+end

@@ -1,0 +1,490 @@
+_package user
+$
+remex(:tpsodl_query_builder_gui_plugin)
+$
+
+def_slotted_exemplar( :tpsodl_query_builder_gui_plugin,
+	{
+		{ :top_container, _unset },
+		{ :menu_items, _unset }
+		
+	},
+	:plugin )
+$
+tpsodl_query_builder_gui_plugin.define_slot_access( :menu_items, :write, :public )
+$
+_pragma(classify_level=basic, topic={tpsodl_query_builder_gui_plugin})
+_method tpsodl_query_builder_gui_plugin.init(name, framework)
+	## 
+	## 
+	_super.init(name,framework)
+	.menu_items << property_list.new()
+	>> _self 
+_endmethod
+$
+_pragma(classify_level=basic, topic={tpsodl_query_builder_gui_plugin})
+_method tpsodl_query_builder_gui_plugin.build_gui( a_frame )
+	## 
+	## 
+	.top_container << top_rcl << rowcol.new( a_frame,
+						 16, 16,
+						 :pixel,
+						 :style, :top_level,
+						 :min_width,100,
+						 :min_height,100,     
+						 :top_spacing,20,
+						 :left_spacing,10,
+						 :right_spacing,10,
+						 :bottom_spacing,10,
+						 :row_spacing,10,
+						 :border?,_true )
+	grp1 << group_box.new(top_rcl,"",
+			      :row, 1,
+			      :col,1,
+			      :col_alignment,:fill)
+
+	gb1 << rowcol.new( grp1,
+			   2,2,
+			   :pixel,
+			
+			   # :row,1,:col,1,
+			   :col_spacing, 10,
+			   :border?,_true,
+		           :style, :group_box,
+			   :row_spacing, 0 ) 
+		      
+	_local label1_1 << label_item.new( gb1,
+					 "Destination Object Type",
+					 :row,1,:col,1,
+					 :min_width,250
+					 )
+				    
+	.menu_items[:tc1] << text_choice_item.new(gb1, "",
+						  
+						  :items,{"","A","B","C"}, 
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,2,
+						  :min_width,300,
+						  :row_spacing, 10)
+
+	_local label1_2 << label_item.new( gb1,
+					 "Source Object Type",
+					 :row,2,:col,1,
+					 :min_width,250
+					 )
+				    
+	.menu_items[:tc1] << text_choice_item.new(gb1, "",
+						  
+						  :items,{"","X","Y","Z"}, 
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 2, :col,2,
+						  :min_width,300,
+						  :row_spacing, 10)
+					      
+	.menu_items[:tc1] << image_toggle_item.new(grp1, "D:\tp_cstm_product\modules\Custom_Application\TCPL.png",
+						  #:model,_self,
+						  #:col_alignment, :fill,
+						  :row, 1, :col,1,
+						  :col_alignment, :center,
+						  :min_height,150,
+						  :min_width,200
+				       )
+	
+# __________________________________________________________________________________________________________
+
+	grp2 << group_box.new(top_rcl,"",
+			      :row, 2,
+			      :col,1,
+			      :col_alignment,:fill)
+	
+	gb2 << rowcol.new( grp2,
+			   1,8,
+			   :pixel,
+			
+			   # :row,1,:col,1,
+			   :col_spacing, 10,
+			   :border?,_true,
+		           :style, :group_box,
+			   :row_spacing, 0 ) 
+		      
+	_local label2_1 << label_item.new( gb2,
+					 "Operation Type",
+					 :row,1,:col,1)
+				    
+	.menu_items[:tc1] << text_choice_item.new(gb2, "",
+						  
+						  :items,{"","Point","Polyogn","Linear"},# 
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,2,
+						  :min_width,100)
+
+	_local label2_2 << label_item.new( gb2,
+					 "Operation Category",
+					 :row,1,:col,3)
+				    
+	.menu_items[:tc1] << text_choice_item.new(gb2, "",
+						  
+						  :items,{"","Point","Polyogn","Linear"},# 
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,4,
+						  :min_width,100)
+	
+	.menu_items[:tc1] << toggle_item.new(gb2, "",
+						  #:model,_self,
+						  # :col_alignment, :fill,
+						  :enabled?, _true,
+						  :row, 1, :col,5,
+						  :min_width,100
+					      )
+
+	_local label2_3 << label_item.new( gb2,
+					 "Input Type",
+					 :row,1,:col,5)
+				   
+	.menu_items[:tc1] << text_choice_item.new(gb2, "",
+						  
+						  :items,{"","Point","Polyogn","Linear"},# 
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,6,
+						  :min_width,100)
+
+	.menu_items[:tc1] << toggle_item.new(gb2, "",
+						  #:model,_self,
+						  # :col_alignment, :fill,
+						  :enabled?, _false,
+						  :row, 1, :col,8,
+						  :min_width,5
+					      )
+#___________________________________________________________________________________________________________
+
+	grp3 << group_box.new(top_rcl,"Attribute selection",
+			      :row, 3,
+			      :col,1,
+			      :col_alignment,:fill)
+	
+		gb3 << rowcol.new( grp3,
+				   10,2,
+				   :pixel,
+			    #:row,4,:col,1,
+				   :col_spacing, 0,
+				   :border?,_true,
+				   :style, :group_box)
+		
+		_local label3_1 << label_item.new( gb3,
+					 "Destination Attribute Names",
+					 :row,3,:col,1)
+
+		.menu_items[:tc1] << sw_tree.new( gb3,
+					      :row,3, :col, 1,
+					      #:model, _self,
+					      :outer_spacing,2,
+					      :min_width,550,
+					      :min_height,150,
+					      #:row_alignment, :top,
+					      #:col_alignment, :fill,
+					      :aspect, :refresh_tree)
+
+		.menu_items[:tc1] << sw_tree.new( gb3,
+					      :row,3, :col, 2,
+					      #:model, _self,
+					      :outer_spacing,2,
+					      :min_width,450,
+					      :min_height,150,
+					      #:row_alignment, :top,
+					      #:col_alignment, :fill,
+					      :aspect, :refresh_tree)
+
+#_____________________________________________________________________________________________________________
+
+	grp4 << group_box.new(top_rcl,"Filter values",
+			      :row, 4,
+			      :col,1,
+			      :col_alignment,:fill)
+	
+		gb4 << rowcol.new( grp4,
+				   2,7,
+				   :pixel,
+			    #:row,4,:col,1,
+				   :col_spacing, 0,
+				   :border?,_true,
+				   :style, :group_box)
+	
+		_local label4_1 << label_item.new( gb4,
+					 "Source attribute value",
+					 :row,1,:col,1
+
+						    )
+			
+						    
+			.menu_items[:tc1] << text_item.new(gb4, "",
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,2,
+						  :min_width,5
+						       )
+		.menu_items[:tc1] << text_choice_item.new(gb4, "",
+						  :items,{"","square","Polyogn","Linear"},
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :enabled?, _false,
+						  :row, 1, :col,3,
+						  :min_width,5
+							      )
+						    
+			.menu_items[:tc1] << text_item.new(gb4, "Deviation attribute value",
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,5,
+						  :min_width,5
+						       )
+			.menu_items[:tc1] << text_choice_item.new(gb4, "",
+						  :items,{"","square","Polyogn","Linear"},
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :enabled?, _false,
+						  :row, 1, :col,6,
+						  :min_width,5
+							      )
+	
+
+
+#______________________________________________________________________________________________________________
+
+	grp5 << group_box.new(top_rcl,"query type",
+			      :row, 5,
+			      :col,1,
+			      :col_alignment,:fill)
+	
+	gb5<< rowcol.new( grp5,
+			   2,8,
+			   :pixel,
+			   # :row,1,:col,1,
+			   :col_spacing, 10,
+			   :border?,_true,
+		           :style, :group_box,
+			   :row_spacing, 0  
+		      )
+		_local label5_1 << label_item.new( gb5,
+					 "query type",
+					 :row,1,:col,1
+				    )
+		.menu_items[:tc1] << text_choice_item.new( gb5, "",
+						  
+						  :items,{"","square","Polyogn","Linear"},
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,2,
+						  :min_width,100
+						      )
+			_local label5_2 << label_item.new( gb5,
+					 "query name",
+					 :row,1,:col,3
+						    )
+			.menu_items[:tc1] << text_item.new(gb5, "",
+						  #:model,_self,
+						  :col_alignment, :fill,
+						  :row, 1, :col,4,
+						  :min_width,5
+						       )
+			.menu_items[:quit] << button_item.new( gb5,
+					       "Add to query",
+					       :col_alignment, :right,
+					       :enabled?, _true,
+					       :min_width, 120,
+					       :row, 1, :col, 5 )
+			.menu_items[:quit] << button_item.new( gb5,
+					       "Add to query",
+					       :col_alignment, :right,
+					       :enabled?, _false,
+					       :min_width, 120,
+					       :row, 1, :col, 6 )
+			.menu_items[:quit] << button_item.new( gb5,
+					       "Add to query",
+					       :col_alignment, :right,
+					       :enabled?, _false,
+					       :min_width, 120,
+					       :row, 1, :col, 7 )
+			.menu_items[:quit] << button_item.new( gb5,
+					       "update quality",
+					       :col_alignment, :right,
+					       :enabled?, _true,
+					       :min_width, 120,
+					       :row, 1, :col, 8 )
+			.menu_items[:quit] << button_item.new( gb5,
+					       "input query",
+					       :col_alignment, :right,
+					       :enabled?, _true,
+					       :min_width, 120,
+					       :row, 2, :col, 5 )
+			.menu_items[:quit] << button_item.new( gb5,
+					       "Add to query",
+					       :col_alignment, :right,
+					       :enabled?, _false,
+					       :min_width, 120,
+					       :row, 2, :col, 6 )
+			.menu_items[:quit] << button_item.new( gb5,
+					       "input duplicate query",
+					       :col_alignment, :right,
+					       :enabled?, _true,
+					       :min_width, 120,
+					       :row, 2, :col, 7 )
+#______________________________________________________________________________________________________________
+
+	grp6 << group_box.new(top_rcl,"",
+			      :row, 6,
+			      :col,1,
+			      :col_alignment,:fill)
+	
+		gb6<< rowcol.new( grp6,
+			   2,8,
+			   :pixel,
+			   :row,1,:col,1,
+			   :col_spacing, 10,
+			   :border?,_true,
+		           :style, :group_box,
+			   :row_spacing, 0  
+				     )
+				grp6_1 << group_box.new(gb6, "",
+				      
+				     			 :row, 1,
+				      			 :col, 1,
+				      			 :col_alignment,:fill)
+				grp6_2<< group_box.new(gb6, "",
+				      
+				      :row, 1,
+				      :col, 2,
+				      :col_alignment,:fill)
+						
+					gb6_1<< rowcol.new( grp6_1,
+			   1,1,
+			   :pixel,
+			   :row,1,:col,1,
+			   :col_spacing, 10,
+			   :border?,_true,
+		           :style, :group_box,
+			   :row_spacing, 0  
+					    )
+				gb6_2<< rowcol.new( grp6_2,
+			   1,1,
+			   :pixel,
+			   :row,1,:col,1,
+			   :col_spacing, 10,
+			   :border?,_true,
+		           :style, :group_box,
+			   :row_spacing, 0  
+					     )
+			
+							_local label6_1 << label_item.new( gb6_1,
+								 "Name",
+					 				:row,1,:col,1
+						  			  )
+			
+				
+			
+							_local label6_2 << label_item.new( gb6_2,
+								 "String Name",
+									 :row,1,:col,1
+						   			 )
+			grp6_3<< group_box.new(gb6, "",
+				      
+				      :row, 2,
+				      :col, 1,
+				      :col_alignment,:fill)
+				gb6_3<< rowcol.new( grp6_3,
+			   1,8,
+			   :pixel,
+			   :row,1,:col,1,
+			   :col_spacing, 10,
+			   :border?,_true,
+		           :style, :group_box,
+			   :row_spacing, 0  
+					     )
+			
+			.menu_items[:quit] << text_item.new( gb6_3,
+					       "",
+					       #:col_alignment, :left,
+					       :enabled?, _true,
+					       :min_width, 1000,
+					       :min_height, 100,
+					       :row, 1, :col, 1 )
+	
+#_____________________________________________________________________________________________________________
+
+	grp7 << group_box.new(top_rcl, "",
+				      :row, 7,
+				      :col, 1,
+				      :col_alignment,:fill,
+				      :row_spacing, 10
+					  )
+	
+#			gb7 << rowcol.new( grp7,
+#					   1,8,
+#					   :pixel,
+#					   # :row,4,:col,1,
+#					   :col_spacing, 0,
+#					   :border?,_true,
+#					   :style, :group_box)
+
+
+			.menu_items[:quit] << button_item.new( grp7,
+						       "Quit",
+						       _self,:quit|()|,
+						       :col_alignment, :right,
+						       :enabled?, _false,
+						       :min_width, 120,
+						       :row, 1, :col,1)
+			.menu_items[:quit] << button_item.new( grp7,
+						       "Quit",
+						       _self,:quit|()|,
+						       :col_alignment, :right,
+						       :enabled?, _false,
+						       :min_width, 120,
+						       :row, 1, :col,2)
+			.menu_items[:quit] << button_item.new( grp7,
+						       "Quit",
+						       _self,:quit|()|,
+						       :col_alignment, :right,
+						       :enabled?, _false,
+						       :min_width, 120,
+						       :row, 1, :col,3)
+			.menu_items[:quit] << button_item.new( grp7,
+						       "Quit",
+						       _self,:quit|()|,
+						       :col_alignment, :right,
+						       :enabled?, _false,
+						       :min_width, 120,
+						       :row, 1, :col,4)
+			.menu_items[:quit] << button_item.new( grp7,
+						       "Edit",
+						       _self,:quit|()|,
+						       :col_alignment, :right,
+						       :enabled?, _true,
+						       :min_width, 120,
+						       :row, 1, :col,5)
+			.menu_items[:quit] << button_item.new( grp7,
+						       "Reset",
+						       _self,:quit|()|,
+						       :col_alignment, :right,
+						       :enabled?, _true,
+						       :min_width, 120,
+						       :row, 1, :col,6) 
+	
+	
+
+		
+		
+_endmethod
+$
+
+_pragma(classify_level=basic, topic={tpsodl_query_builder_gui_plugin})
+_method tpsodl_query_builder_gui_plugin.quit()
+	## 
+	## 
+	_self.framework.close()
+_endmethod
+$

@@ -1,0 +1,11 @@
+{
+  "base": "server_config_solr.json",
+  "root":  [{"name": "eo_web", "path": "http://eo-web-client-service:3000"}],
+  "paths": {
+    "/eo_web": {
+      "security_roles": [
+        "gss.user", "gss.admin"
+      ]
+    }
+  }
+}

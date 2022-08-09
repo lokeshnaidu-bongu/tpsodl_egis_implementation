@@ -1,0 +1,93 @@
+#% text_encoding = iso8859_1
+########################################################################
+##
+## TPSODL Project
+##
+## Created By:  Haritha Rani Shanamgari TCS Pvt Ltd...
+## Date: 395/3939/3903939
+##
+## Description:
+##      This implemeneter is used to add Physical & Enumerator Fields for the object lnd_county
+## 
+
+_package sw
+$
+
+# A datamodel implementer to tag existing databases as version 39
+
+tp_cstm_land_db_implementer.register(:datamodel_name, "tp_cstm_land_db_imp_v42", 
+				:version, 42,
+				:implementer_comment,        "Add New fields to County",
+				:upgrade?, _false,
+				:case_change_method,         :|v42_adding_new_field_to_county()|,
+				:case_change_results_method, :|v42_county_case_change_results()|,
+				:dataset_names, {{:land_case, :land}})
+$
+
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v42_adding_new_field_to_county(p_target_case_view)
+	## 
+	##
+
+	_local l_case_manager << case_model.new(p_target_case_view)
+	_if (l_coll << p_target_case_view.get_case_object(:lnd_county)) _is _unset
+	_then		
+		write("lnd_building does not exist in the case")
+		_return 
+	_endif
+	#Start copy this
+	l_fld_map_val << _self.tp_fld_mandatory_mapping_val
+	l_fld_su_map_val << _self.tp_fld_stored_unit_mapping_val
+	#end Copy
+	l_coll_name << :lnd_county
+	l_building_fields <<_self.tp_read_flds_from_xml(l_coll_name)
+	_for  a_prop_val_key , l_prop_fields _over l_building_fields.fast_keys_and_elements() 
+	_loop
+		#Start copy this Rename to l_prop_list
+		l_mode << l_prop_fields[:mode].as_symbol()
+		l_fld_name << l_prop_fields[:field_name].as_symbol()
+		
+		l_mandatory <<  l_prop_fields[:mandatory].default("").lowercase.as_symbol()
+	
+		l_fld_mand << l_fld_map_val[l_mandatory]
+		
+		_if l_mode _is :update
+		_then
+		
+			l_fld << l_coll.get_field(l_fld_name)
+			l_fld.set_property( :mandatory?, l_fld_mand )
+			
+		_endif
+	
+	_endloop
+
+_endmethod
+$
+
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.v42_county_case_change_results()
+	## 
+	## 
+	_local ccr_for_dd_extension << case_change_result.new()
+   	ccr_for_dd_extension.add_new(:lnd_county)
+	>> {ccr_for_dd_extension}
+	
+_endmethod
+$
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_case_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
+
+_pragma(classify_level=restricted)
+_method tp_cstm_land_db_implementer.test_user_dataset_installed?()
+	## 
+	## 
+	
+_endmethod
+$
